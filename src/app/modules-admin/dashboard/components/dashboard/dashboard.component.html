@@ -1,0 +1,25 @@
+<div class="sticky-top">
+  <lib-nav
+    (onClick)="makeLogout($event)"
+    [navbarNavigationUrl]="''"
+    [title]="checkTitle()"
+    [logoWidth]="128"
+    [navbarLogo]="''"
+    [navbarStyle]="NavbarTheme.Primary"
+    [showLeftTitle]="false"
+    [sidebarItems]="sidebarItems"
+  ></lib-nav>
+</div>
+
+<div class="wrapper">
+  <lib-twentyfive-sidebar [sidebarItems]="sidebarItems" (onClick)="makeLogout($event)"></lib-twentyfive-sidebar>
+
+  <div class="container-fluid g-0 h-100">
+    <!-- id is used as [id] in other projects -->
+    <div id="content">
+      <router-outlet></router-outlet>
+      <div class="d-flex d-md-none" style="height: 20%"></div>
+      <div class="d-md-flex d-none" style="height: 15%"></div>
+    </div>
+  </div>
+</div>
