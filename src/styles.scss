@@ -1,1 +1,27 @@
-/* You can add global styles to this file, and also import other style files */
+// solve in future update the relative path to ../node_modules/ -> node_modules/
+@import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import '../node_modules/bootstrap-icons/font/bootstrap-icons.css';
+@import '../node_modules/twentyfive-style/src/assets/styles';
+@import '../node_modules/twentyfive-style/src/assets/variables';
+@import 'ngx-toastr/toastr';
+
+
+@media (max-width: 991px) {
+  .web-element-modal {
+    display: none!important;
+  }
+}
+
+@media (min-width: 992px) {
+  .mobile-element-modal{
+    display: none!important;
+  }
+  .show-more{
+    display: none!important;
+  }
+
+}
+
+ngb-modal-window {
+  pointer-events: none !important;
+}
