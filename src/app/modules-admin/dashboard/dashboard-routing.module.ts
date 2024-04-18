@@ -1,7 +1,7 @@
 import {NgModule} from "@angular/core";
 import {RouterModule, Routes} from "@angular/router";
 import {DashboardComponent} from "./components/dashboard/dashboard.component";
-import {OrderComponent} from "./pages/order/order.component";
+import {OrderListComponent} from "./pages/order-list/order-list.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'ordini', pathMatch: 'full'},
@@ -9,7 +9,7 @@ const routes: Routes = [
   path: '',
   component: DashboardComponent,
   children: [
-    {path: 'ordini', component: OrderComponent, data: {title: 'Ordini'}},
+    {path: 'ordini', component: OrderListComponent, data: {title: 'Ordini'}},
   ]
 }];
 

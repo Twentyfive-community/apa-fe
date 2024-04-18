@@ -1,11 +1,13 @@
 export const environment = {
   production: true,
-  clientid: 'auth-server',
-
+  keycloakurl: 'http://80.211.123.141:8080',
+  realmname: 'Antica-Pasticceria',
+  clientid: 'apa-app',
   redirecturi: '',
   backendUrl: '',
 
-  twentyfiveCentralUrl: 'https://paybolt.it/twentyfive-apps-api-layer',
+  showCookiePopup: true,
+  cookieKey: 'cookieResponse',
 
   ftpUrl: 'http://80.211.123.141:8087/TwentyfiveMediaManager/twentyfiveserver',
   ftpDownloadUrl: 'http://80.211.123.141:8087/TwentyfiveMediaManager/twentyfiveserver/downloadkkk/twentyfive-thub/profile/_'

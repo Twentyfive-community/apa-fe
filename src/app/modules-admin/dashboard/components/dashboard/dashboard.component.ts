@@ -3,6 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {TwentyfiveModalService} from "twentyfive-modal";
 import {filter, map, mergeMap} from "rxjs";
 import { NavbarTheme } from 'twentyfive-style';
+import {SigningKeycloakService} from "twenty-signin";
 
 @Component({
   selector: 'app-dashboard',
@@ -33,7 +34,7 @@ export class DashboardComponent implements OnInit{
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
               private modalService: TwentyfiveModalService,
-              // private keycloakService: SigningKeycloakService,
+              private keycloakService: SigningKeycloakService,
   ) { }
 
   ngOnInit(): void {
@@ -74,8 +75,8 @@ export class DashboardComponent implements OnInit{
   }
   //
   exit() {
-    // this.keycloakService.signout();
-    // this.router.navigate(['/home']);
+    this.keycloakService.signout();
+    this.router.navigate(['/dashboard']);
   }
 
 

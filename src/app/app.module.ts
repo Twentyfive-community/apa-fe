@@ -4,19 +4,25 @@ import { BrowserModule, provideClientHydration } from '@angular/platform-browser
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {provideSigningModule} from "twenty-signin";
+import {environment} from "../environments/environment";
+import { HomeComponent } from './components/home/home.component';
+import {HttpClientModule} from "@angular/common/http";
 
 @NgModule({
   declarations: [
     AppComponent,
+    HomeComponent,
 
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    provideSigningModule(environment),
+    HttpClientModule
   ],
   providers: [
-    provideClientHydration()
   ],
   bootstrap: [AppComponent]
 })
