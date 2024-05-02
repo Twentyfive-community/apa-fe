@@ -8,6 +8,7 @@ import {provideSigningModule} from "twenty-signin";
 import {environment} from "../environments/environment";
 import { HomeComponent } from './components/home/home.component';
 import {HttpClientModule} from "@angular/common/http";
+import {provideToastr, ToastrModule} from "ngx-toastr";
 
 @NgModule({
   declarations: [
@@ -20,9 +21,15 @@ import {HttpClientModule} from "@angular/common/http";
     BrowserAnimationsModule,
     AppRoutingModule,
     provideSigningModule(environment),
-    HttpClientModule
+    HttpClientModule,
+    ToastrModule.forRoot()
   ],
   providers: [
+    provideToastr({
+      timeOut: 4000,
+      positionClass: 'toast-top-right',
+      preventDuplicates: true,
+    }),
   ],
   bootstrap: [AppComponent]
 })

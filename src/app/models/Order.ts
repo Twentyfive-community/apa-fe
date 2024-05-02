@@ -1,0 +1,20 @@
+import {BundleInPurchase} from "./Bundle";
+import {ProductInPurchase} from "./Product";
+
+export class Order {
+  id: string;
+  firstName: string;
+  lastName: string;
+  pickupDate: string;
+  pickupTime: string;
+  price: number;
+  status: string;
+}
+
+export class OrderDetails {
+  id: string;
+  products: ProductInPurchase[];
+  bundles: BundleInPurchase[];
+  email: string;
+  phoneNumber: string;
+}

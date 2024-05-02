@@ -14,9 +14,9 @@ export class DashboardComponent implements OnInit{
 
   sidebarItems: any[] = [
     {
-      title: "Ordini",
-      icon: "bi bi-card-list",
-      navigationUrl: "ordini",
+      title: "Clienti",
+      icon: "bi bi-person-lines-fill",
+      navigationUrl: "clienti",
       disableClick: false,
       labelColor: ""
     },
