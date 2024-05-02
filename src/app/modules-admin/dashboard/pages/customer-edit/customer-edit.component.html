@@ -39,6 +39,7 @@
       labelText="Email"
       placeholder="Email"
       [value]="customer.email"
+      [readOnly]="customerId != null"
       (input)="onInputChange($event, 'email')"
     ></lib-twentyfive-input>
   </div>
