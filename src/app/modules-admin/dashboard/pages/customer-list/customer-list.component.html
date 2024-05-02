@@ -1,0 +1,35 @@
+<div class="row mt-2 ms-lg-3 me-lg-3">
+
+  <div class="col-12 pb-3">
+    <lib-generic-button-text-with-icon
+      buttonText="Crea cliente"
+      suffixIcon="bi bi-plus-circle"
+      [buttonSize]="ButtonSizeTheme.ExtraLarge"
+      [buttonStyle]="ButtonTheme.Primary"
+      [iconLeft]="false"
+      routerLink='/dashboard/editingClienti'
+    ></lib-generic-button-text-with-icon>
+  </div>
+
+  <div class="mt-4 row ">
+    <div class="col-12">
+      <lib-twentyfive-table
+        [maxWidthValue]="'6vw'"
+        [headers]="headers"
+        [sortable]="true"
+        [tableHeadStyle]="TableHeadTheme.Primary"
+        [tableStyle]="TableTheme.Web"
+        [actions]="tableActions"
+        [showActions]="true"
+        [rows]="customers"
+        (rowClicked)="goToDetails($event)"
+        [pageSize]="pageSize"
+        [collectionSize]="maxSize"
+        [maxSize]="maxSize"
+        [model]="pageSize"
+        [isPaginated]="true"
+      >
+      </lib-twentyfive-table>
+    </div>
+  </div>
+</div>
