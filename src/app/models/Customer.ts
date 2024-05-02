@@ -1,5 +1,6 @@
 export class Customer{
-  id: string;                // Unique identifier for the customer
+  id: string;// Unique identifier for the customer
+  idKeycloak: string;
   firstName: string;         // First name of the customer
   lastName: string;          // Last name of the customer
   email: string;             // Email address of the customer
@@ -10,6 +11,7 @@ export class Customer{
 
 export class CustomerDetails{
   id: string                // Unique identifier for the customer
+  idKeycloak: string
   firstName: string         // First name of the customer
   lastName: string          // Last name of the customer
   email: string             // Email address of the customer
