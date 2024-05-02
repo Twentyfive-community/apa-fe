@@ -2,18 +2,20 @@ import {NgModule} from "@angular/core";
 import {DashboardComponent} from "./components/dashboard/dashboard.component";
 import {DashboardRoutingModule} from "./dashboard-routing.module";
 import {SharedModule} from "../../shared/shared.module";
-import {OrderListComponent} from "./pages/order-list/order-list.component";
-import {GenericButtonModule} from "generic-buttons";
+import {CustomerListComponent} from "./pages/customer-list/customer-list.component";
+import { CustomerDetailsComponent } from './pages/customer-details/customer-details.component';
+import { CustomerEditComponent } from './pages/customer-edit/customer-edit.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
-    OrderListComponent,
+    CustomerListComponent,
+    CustomerDetailsComponent,
+    CustomerEditComponent,
   ],
   imports: [
     DashboardRoutingModule,
     SharedModule,
-    GenericButtonModule,
   ]
 })
 export class DashboardModule {

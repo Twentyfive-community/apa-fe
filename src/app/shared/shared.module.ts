@@ -4,6 +4,9 @@ import {TwentyfiveNavbarModule} from "twentyfive-nav";
 import {TwentyfiveSidebarModule} from "twentyfive-sidebar";
 import {TwentyfiveAccordionTableModule} from "twentyfive-accordion-table";
 import {CollapseModule} from "ngx-bootstrap/collapse";
+import {TwentyfiveTableModule} from "twentyfive-table";
+import {TwentyfiveInputModule} from "twentyfive-input";
+import {GenericButtonModule} from "generic-buttons";
 
 @NgModule({
   declarations: [],
@@ -13,6 +16,10 @@ import {CollapseModule} from "ngx-bootstrap/collapse";
     TwentyfiveSidebarModule,
     TwentyfiveAccordionTableModule,
     CollapseModule,
+    TwentyfiveTableModule,
+    TwentyfiveInputModule,
+    GenericButtonModule,
+
   ],
   exports: [
     CommonModule,
@@ -20,6 +27,9 @@ import {CollapseModule} from "ngx-bootstrap/collapse";
     TwentyfiveSidebarModule,
     TwentyfiveAccordionTableModule,
     CollapseModule,
+    TwentyfiveTableModule,
+    TwentyfiveInputModule,
+    GenericButtonModule,
   ]
 })
 export class SharedModule {
