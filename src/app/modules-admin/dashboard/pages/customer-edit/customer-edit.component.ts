@@ -75,6 +75,8 @@ export class CustomerEditComponent implements OnInit{
     if(this.customerId!=null){
       this.customerService.getCustomerDetails(this.customerId).subscribe( (res:any) =>{
         this.customer = res
+        console.log(res);
+        console.log(this.customer);
       })
     }
   }
