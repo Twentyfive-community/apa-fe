@@ -28,6 +28,13 @@ export class DashboardComponent implements OnInit{
       labelColor: ""
     },
     {
+      title: "Clienti",
+      icon: "bi bi-person-lines-fill",
+      navigationUrl: "clienti",
+      disableClick: false,
+      labelColor: ""
+    },
+    {
       title: "Logout",
       icon: "bi bi-box-arrow-right",
       disableClick: true,

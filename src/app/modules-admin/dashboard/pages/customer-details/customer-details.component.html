@@ -1,0 +1,128 @@
+<div class="row mt-2 ">
+
+  <div class="row mb-4">
+    <div class="col-12 col-lg-3">
+      <lib-generic-button-text-with-icon
+      routerLink="/dashboard/clienti"
+      buttonText="Torna Indietro"
+      [iconLeft]="true"
+      prefixIcon="bi bi-arrow-left"
+      [buttonStyle]="ButtonTheme.OnlyText"
+      ></lib-generic-button-text-with-icon>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="row mb-4 mt-4">
+    <h3>Informazioni</h3>
+  </div>
+
+  <div class="row">
+    <div class="col-3">
+      <p class="mb-1"><b>Nome</b></p>
+      <p>{{customer.firstName}}</p>
+    </div>
+    <div class="col-3">
+      <p class="mb-1"><b>Cognome</b></p>
+      <p>{{customer.lastName}}</p>
+    </div>
+    <div class="col-3">
+      <p class="mb-1"><b>Email</b></p>
+      <p>{{customer.email}}</p>
+    </div>
+    <div class="col-3">
+      <p class="mb-1"><b>Numero di Telefono</b></p>
+      <p>{{customer.phoneNumber}}</p>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class="row mt-4">
+    <h5>Ordini Effettuati</h5>
+  </div>
+
+  <div class="mt-4 row ">
+    <div class="col-12">
+      <lib-twentyfive-table
+        [maxWidthValue]="'6vw'"
+        [headers]="headersTotals"
+        [sortable]="false"
+        [tableHeadStyle]="TableHeadTheme.Primary"
+        [tableStyle]="TableTheme.Web"
+        [showActions]="false"
+        [isPaginated]="false"
+        [rows]="details"
+      ></lib-twentyfive-table>
+    </div>
+
+
+    <div class="mt-4 row ">
+      <div class="col-12">
+        <twentyfive-accordion-table
+          [headers]="headersOrders"
+          [isSortable]="true"
+          [data]="completedOrders"
+          [extras]="extras"
+          [dataDetails]="dataDetails"
+          (detailsEmitter)="getOrderDetails($event)"
+          [singleOpen]="true"
+          [templateRef]="templateRef"
+          [page]="currentPage"
+          [pageSize]="pageSize"
+          [collectionSize]="collectionSize"
+          [maxSize]="maxSize"
+
+          [dropdownElements]="paginationElements"
+        ></twentyfive-accordion-table>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<ng-template #templateRef>
+  <div>
+    <div class=" m-2 mt-0 mb-0" *ngFor="let product of orderDetails.products">
+      <h3 class="mb-4">{{product.name.toUpperCase()}}</h3>
+      <p><b>Peso:</b> {{ product.weight }} Kg</p>
+      <p><b>Quantità:</b> {{ product.quantity }}</p>
+      <p><b>Forma:</b> {{ product.shape }}</p>
+
+
+      <p><b>Personalizazioni:</b></p>
+      <ul *ngFor="let item of product.customization | keyvalue">
+        <li><b>{{ item.key }}:</b> {{ item.value }}</li>
+      </ul>
+
+      <p><b>Chocolate Chips:</b> {{ product.chocolateChips }}</p>
+      <p><b>NOTE:</b> {{ product.text }}</p>
+      <p><b>Delivery Date:</b> {{ product.deliveryDate }}</p>
+      <p><b>Total Price:</b> {{ product.totalPrice }} €</p>
+
+      <p><b>ALLEGATO:</b></p>
+      <p>{{ product.attachment }}</p>
+    </div>
+  </div>
+
+  <div>
+    <div class=" m-2 mt-0 mb-0" *ngFor="let bundle of orderDetails.bundles">
+      <h4 class="mb-4">{{bundle.name.toUpperCase()}}</h4>
+      <p><b>Peso:</b> {{ bundle.measure.label }} Kg</p>
+      <p><b>Quantità:</b> {{ bundle.quantity }}</p>
+      <p><b>Total Price:</b> {{ bundle.totalPrice }} €</p>
+    </div>
+  </div>
+
+  <hr/>
+
+  <div class=" m-2 mt-0 mb-0">
+    <h4 class="mb-4">Info Contatto:</h4>
+    <p><b>E-mail:</b> {{ orderDetails.email }}</p>
+    <p><b>Numero di Telefono:</b> {{ orderDetails.phoneNumber }}</p>
+  </div>
+</ng-template>
