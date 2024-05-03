@@ -15,7 +15,19 @@ export class OrderService {
 
   getAll(page: number, size: number) {
     let p = Utils.createHttpParams({'page': page, 'size': size});
-    return this.http.get(`${this.baseUrl}`, {params: p});
+    return this.http.get(`${this.baseUrl}/getAll`, {params: p});
+  }
+
+  getOrderDetails(id: string) {
+    return this.http.get(`${this.baseUrl}/details/${id}`)
+  }
+
+  completeOrder(id: string) {
+    return this.http.post(`${this.baseUrl}/complete/${id}`, null)
+  }
+
+  cancelOrder(id: string) {
+    return this.http.post(`${this.baseUrl}/cancel/${id}`,null)
   }
 
 }

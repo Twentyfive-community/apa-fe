@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-// import {CustomAuthGuard} from "twenty-signin";
 import {HomeComponent} from "./components/home/home.component";
 import {CustomAuthGuard} from "twenty-signin";
 

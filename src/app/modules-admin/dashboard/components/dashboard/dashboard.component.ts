@@ -21,6 +21,13 @@ export class DashboardComponent implements OnInit{
       labelColor: ""
     },
     {
+      title: "Ordini Completati",
+      icon: "bi bi-clipboard-check",
+      navigationUrl: "ordini-completati",
+      disableClick: false,
+      labelColor: ""
+    },
+    {
       title: "Logout",
       icon: "bi bi-box-arrow-right",
       disableClick: true,
@@ -76,7 +83,7 @@ export class DashboardComponent implements OnInit{
   //
   exit() {
     this.keycloakService.signout();
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['../home']);
   }
 
 
