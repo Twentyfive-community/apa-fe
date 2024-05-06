@@ -13,17 +13,17 @@
     <div class="col-12 m-0">
       <twentyfive-accordion-table
            [data]="data"
-           [isSortable]="true"
-           (sortableEmitter)="sortingColumn($event)"
            [headers]="headers"
            [isPaginated]="true"
+
+           [isSortable]="true"
+           (sortableEmitter)="sortingColumn($event)"
 
            [showActions]="true"
            [actions]="tableActions"
 
            [extras]="extras"
            [dataDetails]="dataDetails"
-           (detailsEmitter)="getOrderDetails($event)"
 
            [singleOpen]="true"
            [templateRef]="templateRef"
@@ -34,6 +34,7 @@
            [collectionSize]="collectionSize"
 
            (changePageEmitter)="changePage($event)"
+           (detailsEmitter)="getOrderDetails($event)"
            (selectEmitter)="selectSize($event)"
            [dropdownElements]="paginationElements"
          ></twentyfive-accordion-table>

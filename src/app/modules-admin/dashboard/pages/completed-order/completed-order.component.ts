@@ -20,14 +20,16 @@ export class CompletedOrderComponent implements OnInit{
   maxSize: number = 5;
   collectionSize: number = 0;
 
+  sortColumn: string = '';
+  sortDirection: string = '';
+
   headers: any[] = [
-    {name: 'ID', value: 'id'},
-    {name: 'Cognome', value: 'lastName'},
-    {name: 'Nome', value: 'firstName'},
-    {name: 'Data Ritiro', value: 'pickupDate'},
-    {name: 'Ora Ritiro', value: 'pickupTime'},
-    {name: 'Prezzo', value: 'price'},
-    {name: 'Status', value: 'status'}
+    {name: 'ID', value: 'id', sortable: true},
+    {name: 'Cognome', value: 'lastName', sortable: true},
+    {name: 'Nome', value: 'firstName', sortable: true},
+    {name: 'Data Ritiro', value: 'formattedPickupDate', sortable: true},
+    {name: 'Prezzo', value: 'price', sortable: true},
+    {name: 'Status', value: 'status', sortable: true}
   ];
   data: Order[] = []
 
@@ -82,16 +84,13 @@ export class CompletedOrderComponent implements OnInit{
   }
 
   ngOnInit() {
-    console.log('ngOnInit() called'); // Aggiungi questo log per monitorare quando viene chiamato il metodo ngOnInit()
     this.getAll();
   }
 
-  getAll() {
-    console.log('getAll() called'); // Aggiungi questo log per monitorare quando viene chiamata la funzione getAll()
-    this.completedOrderService.getAll(this.currentPage, this.pageSize).subscribe((res: any) => {
+  getAll(page?: number) {
+    this.completedOrderService.getAll(page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection).subscribe((res: any) => {
       this.data = res.content
       this.collectionSize = res.totalElements;
-      console.log(this.collectionSize)
     })
   }
 
@@ -99,15 +98,13 @@ export class CompletedOrderComponent implements OnInit{
     let orderId = $event.id
     this.completedOrderService.getOrderDetails(orderId).subscribe((res: any) => {
       this.orderDetails = res
-      console.log(res)
     })
   }
 
   restoreOrder(id: string) {
     this.completedOrderService.restoreOrder(id).subscribe({
-      error: (err) => {
+      error: () => {
         this.toastrService.error("Impossibile riattivare l'ordine!")
-        console.log(err)
       },
       complete: () => {
         this.toastrService.success("Ordine Riattivato!")
@@ -117,9 +114,16 @@ export class CompletedOrderComponent implements OnInit{
 
   }
 
+  sortingColumn(event: any) {
+    this.sortColumn = event.sortColumn;
+    this.sortDirection = event.sortDirection;
+
+    this.getAll(this.currentPage-1)
+  }
+
   changePage(event: number) {
-    this.currentPage = event - 1;
-    this.getAll();
+    this.currentPage = event;
+    this.getAll(this.currentPage-1);
   }
 
   selectSize(event: any) {

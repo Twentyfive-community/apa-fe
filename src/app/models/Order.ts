@@ -5,10 +5,11 @@ export class Order {
   id: string;
   firstName: string;
   lastName: string;
-  pickupDate: string;
-  pickupTime: string;
+  // pickupDate: string;
+  // pickupTime: string;
   price: number;
   status: string;
+  formattedPickupDate: string;
 }
 
 export class OrderDetails {

@@ -23,14 +23,16 @@ export class OrderListComponent implements OnInit{
   maxSize: number = 5;
   collectionSize: number = 0;
 
+  sortColumn: string = '';
+  sortDirection: string = '';
+
   headers: any[] = [
-    {name: 'ID', value: 'id'},
-    {name: 'Cognome', value: 'lastName'},
-    {name: 'Nome', value: 'firstName'},
-    {name: 'Data Ritiro', value: 'pickupDate'},
-    {name: 'Ora Ritiro', value: 'pickupTime'},
-    {name: 'Prezzo', value: 'price'},
-    {name: 'Status', value: 'status'}
+    {name: 'ID', value: 'id', sortable: true},
+    {name: 'Cognome', value: 'lastName', sortable: true},
+    {name: 'Nome', value: 'firstName', sortable: true},
+    {name: 'Data Ritiro', value: 'formattedPickupDate', sortable: true},
+    {name: 'Prezzo', value: 'price', sortable: true},
+    {name: 'Status', value: 'status', sortable: true}
   ];
   data: Order[] = []
 
@@ -140,10 +142,9 @@ export class OrderListComponent implements OnInit{
   }
 
   getAll(page?: number) {
-    this.orderService.getAll(page ? page : 0 , this.pageSize).subscribe((res: any) => {
+    this.orderService.getAll(page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection).subscribe((res: any) => {
       this.data = res.content;
       this.collectionSize = res.totalElements;
-      console.log(res)
     })
   }
 
@@ -151,7 +152,6 @@ export class OrderListComponent implements OnInit{
     let orderId = $event.id
     this.orderService.getOrderDetails(orderId).subscribe((res: any) => {
       this.orderDetails = res
-      console.log(res)
     })
   }
 
@@ -186,16 +186,10 @@ export class OrderListComponent implements OnInit{
   }
 
   sortingColumn(event: any) {
-    console.log(event)
-    const sortColumn = event.sortColumn;
-    const sortDirection = event.sortDirection;
+    this.sortColumn = event.sortColumn;
+    this.sortDirection = event.sortDirection;
 
-    // if (sortDirection === 'asc') {
-    //   this.data.sort((a, b) => a[sortColumn] - b[sortColumn]);
-    // } else if (sortDirection === 'desc') {
-    //   this.data.sort((a, b) => b[sortColumn] - a[sortColumn]);
-    // }
-
+    this.getAll(this.currentPage-1)
   }
 
   changePage(event: number) {

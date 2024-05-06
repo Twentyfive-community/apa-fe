@@ -1,16 +1,19 @@
-<div class="mt-4 row web-table">
+<div *ngIf="data.length > 0" class="mt-4 row web-table">
   <div class="col-12 m-0">
     <twentyfive-accordion-table
       [data]="data"
-      [isSortable]="true"
       [headers]="headers"
+      [isPaginated]="true"
+
+      [isSortable]="true"
+      (sortableEmitter)="sortingColumn($event)"
 
       [showActions]="true"
       [actions]="tableActions"
 
-      [isPaginated]="true"
       [extras]="extras"
       [dataDetails]="dataDetails"
+
       [singleOpen]="true"
       [templateRef]="templateRef"
 

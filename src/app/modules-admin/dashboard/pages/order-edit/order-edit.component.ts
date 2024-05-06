@@ -22,14 +22,12 @@ export class OrderEditComponent implements OnInit{
   ngOnInit() {
     this.orderId = this.activatedRouteRoute.snapshot.paramMap.get('id');
     this.getOrder();
-    console.log(this.orderId)
   }
 
   getOrder() {
     if (this.orderId !== null) {
       this.orderService.getOrderDetails(this.orderId).subscribe((res: any) => {
         this.order = res
-        console.log(this.order)
       })
     }
   }
