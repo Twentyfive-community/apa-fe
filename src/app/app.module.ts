@@ -10,12 +10,10 @@ import { HomeComponent } from './components/home/home.component';
 import {HttpClientModule} from "@angular/common/http";
 import {provideToastr, ToastrModule} from "ngx-toastr";
 import {CommonModule} from "@angular/common";
-
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
-
+    HomeComponent
   ],
   imports: [
     BrowserModule,

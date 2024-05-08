@@ -10,6 +10,11 @@ const routes: Routes = [
     loadChildren: () => import('./modules-admin/dashboard/dashboard.module').then(m => m.DashboardModule),
     canActivate: [CustomAuthGuard]
   },
+  {
+    path: 'catalogue',
+    loadChildren: () => import('./modules-client/catalogue/catalogue.module').then(m => m.CatalogueModule),
+    canActivate: [CustomAuthGuard]
+  },
   {path: 'home', component: HomeComponent},
   {path: '', redirectTo: 'home', pathMatch: 'full'},
 ];
