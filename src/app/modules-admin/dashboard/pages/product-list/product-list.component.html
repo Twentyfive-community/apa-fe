@@ -1,0 +1,150 @@
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li *ngFor="let category of navCategories" class="nav-item" role="presentation" ngbDropdown>
+    <div (click)="setActiveTab(category)" class="nav-link" id="{{category.id}}-tab" data-bs-toggle="tab" [attr.data-bs-target]="'#'+category.id" role="tab" [class.active]="activeTab === category.id" [attr.aria-controls]="category.id" aria-selected="true">
+      {{category.name}}
+      <span ngbDropdownToggle class="dropdown-toggle" data-bs-toggle="dropdowns" role="button" aria-expanded="false"></span>
+    </div>
+    <ul ngbDropdownMenu class="dropdown-menu">
+      <li><a class="dropdown-item">Modifica</a></li>
+      <li><a class="dropdown-item">Elimina</a></li>
+    </ul>
+  </li>
+</ul>
+
+<div class="tab-content mt-4" id="myTabContent">
+  <ng-container *ngFor="let category of navCategories">
+    <div *ngIf="activeTab === category.id" class="tab-pane fade show active" id="{{category.id}}-tab" role="tabpanel" [attr.aria-labelledby]="category.id + '-tab'">
+      <div class="col-12 m-0">
+        <!-- Contenuto dinamico della scheda -->
+        <ng-container [ngSwitch]="category.type">
+          <div *ngSwitchCase="'productKg'">
+            <twentyfive-accordion-table
+              [data]="productListKg"
+              [isSortable]="true"
+              [headers]="headersKg"
+              [showActions]="true"
+              [checkedField]="'active'"
+              [actions]="tableActions"
+              [isPaginated]="true"
+              [extras]="extras"
+              [dataDetails]="dataDetailsKg"
+              [singleOpen]="true"
+              [showSwitch]="true"
+              [detailsTemplateRef]="templateRefProduct"
+              [page]="currentPage"
+              [pageSize]="pageSize"
+              [maxSize]="maxSize"
+              [collectionSize]="collectionSize"
+              [dropdownElements]="paginationElements"
+              (detailsEmitter)="getProductDetails($event)"
+              (changePageEmitter)="changePage($event)"
+              (selectEmitter)="selectSize($event)"
+              (sortableEmitter)="sortingColumn($event)"
+              (changeSwitchValue)="switch($event)"
+            ></twentyfive-accordion-table>
+          </div>
+          <div *ngSwitchCase="'productWeighted'">
+            <twentyfive-accordion-table
+              [data]="productListWeighted"
+              [isSortable]="true"
+              [headers]="headersWeighted"
+              [showActions]="true"
+              [actions]="tableActions"
+              [isPaginated]="true"
+              [extras]="extras"
+              [dataDetails]="dataDetailsWeighted"
+              [singleOpen]="true"
+              [detailsTemplateRef]="templateRefProduct"
+              [page]="currentPage"
+              [pageSize]="pageSize"
+              [maxSize]="maxSize"
+              [collectionSize]="collectionSize"
+              [dropdownElements]="paginationElements"
+              (detailsEmitter)="getProductDetails($event)"
+              (changePageEmitter)="changePage($event)"
+              (selectEmitter)="selectSize($event)"
+            ></twentyfive-accordion-table>
+          </div>
+          <div *ngSwitchCase="'tray'">
+            <twentyfive-accordion-table
+              [data]="trayList"
+              [isSortable]="true"
+              [headers]="headersTray"
+              [showActions]="true"
+              [actions]="tableActions"
+              [isPaginated]="true"
+              [extras]="extras"
+              [dataDetails]="dataDetailsTrays"
+              [singleOpen]="true"
+              [detailsTemplateRef]="templateRefTray"
+              [page]="currentPage"
+              [pageSize]="pageSize"
+              [maxSize]="maxSize"
+              [collectionSize]="collectionSize"
+              [dropdownElements]="paginationElements"
+              (detailsEmitter)="getProductDetails($event)"
+              (changePageEmitter)="changePage($event)"
+              (selectEmitter)="selectSize($event)"
+            ></twentyfive-accordion-table>          </div>
+          <ng-template #templateRefProduct>
+            <div class="m-2 mt-0 mb-0">
+              <h5 class="mb-4">Allergeni</h5>
+              <ng-container *ngFor="let allergen of productDetails.allergens">
+                <li>{{ allergen.name }}</li>
+              </ng-container>
+              <hr>
+              <h5 class="mb-4 mt-4">Ingredienti</h5>
+              <ng-container *ngFor="let ingredient of productDetails.ingredients">
+                <li>{{ ingredient }}</li>
+              </ng-container>
+              <hr>
+              <div *ngSwitchCase="'productKg'">
+                <h5 class="mb-4 mt-4">Prezzo/Kg</h5>
+                <li>{{productDetails.pricePerKg}}</li>
+                <hr>
+              </div>
+              <div *ngSwitchCase="'productWeighted'">
+                <h5 class="mb-4 mt-4">Peso</h5>
+                <li>{{productDetails.weight}}</li>
+                <hr>
+              </div>
+              <h5 class="mb-4 mt-4">Immagine</h5>
+              <div class="d-flex align-items-center">
+      <span class="me-4">
+        <lib-generic-button-only-icon
+          [buttonStyle]="ButtonTheme.PrimaryOnlyIconSquareSmall"
+          icon="bi bi-image-fill"
+          tooltipText="Stampa Allegato"
+          placement="right"
+          [disabled]="false"
+        ></lib-generic-button-only-icon>
+      </span>
+                <span>{{ productDetails.imageUrl }}</span> <!-- Aggiunto margine a sinistra -->
+              </div>
+            </div>
+          </ng-template>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #templateRefTray>
+    <div class="m-2 mt-0 mb-0">
+      <h5 class="mb-4">Tipologia</h5>
+      <span>{{ trayDetails.customized }}</span>
+      <hr>
+      <h5 class="mb-4 mt-4">Misure</h5>
+      <span>{{ trayDetails.measures }}</span>
+      <hr>
+      <h5 class="mb-4 mt-4">Descrizione</h5>
+      <span>{{ trayDetails.description }}</span>
+    </div>
+  </ng-template>
+</div>
+
+
+
+
+
+
+
