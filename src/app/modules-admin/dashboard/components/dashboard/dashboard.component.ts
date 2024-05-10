@@ -14,6 +14,20 @@ export class DashboardComponent implements OnInit{
 
   sidebarItems: any[] = [
     {
+      title: "Ordini",
+      icon: "bi bi-card-list",
+      navigationUrl: "ordini",
+      disableClick: false,
+      labelColor: ""
+    },
+    {
+      title: "Ordini Completati",
+      icon: "bi bi-clipboard-check",
+      navigationUrl: "ordini-completati",
+      disableClick: false,
+      labelColor: ""
+    },
+    {
       title: "Clienti",
       icon: "bi bi-person-lines-fill",
       navigationUrl: "clienti",
@@ -83,7 +97,7 @@ export class DashboardComponent implements OnInit{
   //
   exit() {
     this.keycloakService.signout();
-    this.router.navigate(['/dashboard']);
+    this.router.navigate(['../home']);
   }
 
 

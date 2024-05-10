@@ -1,0 +1,99 @@
+<div>
+  <div class="col-12 mb-3">
+    <lib-generic-button-text-with-icon
+      [buttonStyle]="ButtonTheme.Primary"
+      [buttonSize]="ButtonSizeTheme.ExtraLarge"
+      buttonText='Crea ordine'
+      suffixIcon='bi bi-plus-circle'
+      routerLink="/dashboard/modifica-ordine"
+      [iconLeft]="false"
+    ></lib-generic-button-text-with-icon>
+  </div>
+  <div *ngIf="data.length > 0" class="mt-4 row web-table">
+    <div class="col-12 m-0">
+      <twentyfive-accordion-table
+           [data]="data"
+           [headers]="headers"
+           [isPaginated]="true"
+
+           [isSortable]="true"
+           (sortableEmitter)="sortingColumn($event)"
+
+           [showActions]="true"
+           [actions]="tableActions"
+
+           [extras]="extras"
+           [dataDetails]="dataDetails"
+
+           [singleOpen]="true"
+           [templateRef]="templateRef"
+
+           [page]="currentPage"
+           [pageSize]="pageSize"
+           [maxSize]="maxSize"
+           [collectionSize]="collectionSize"
+
+           (changePageEmitter)="changePage($event)"
+           (detailsEmitter)="getOrderDetails($event)"
+           (selectEmitter)="selectSize($event)"
+           [dropdownElements]="paginationElements"
+         ></twentyfive-accordion-table>
+    </div>
+  </div>
+
+  <ng-template #templateRef>
+    <div>
+      <div class=" m-2 mt-0 mb-0" *ngFor="let product of orderDetails.products">
+        <h3 class="mb-4">{{ product.name.toUpperCase() }}</h3>
+        <p><b>Peso:</b> {{ product.weight }} Kg</p>
+        <p><b>Quantità:</b> {{ product.quantity }}</p>
+        <p><b>Forma:</b> {{ product.shape }}</p>
+
+
+        <p><b>Personalizazioni:</b></p>
+        <ul *ngFor="let item of product.customization | keyvalue">
+          <li><b>{{ item.key }}:</b> {{ item.value }}</li>
+        </ul>
+
+        <p><b>Chocolate Chips:</b> {{ product.chocolateChips }}</p>
+        <p><b>NOTE:</b> {{ product.text }}</p>
+        <p><b>Delivery Date:</b> {{ product.deliveryDate }}</p>
+        <p><b>Total Price:</b> {{ product.totalPrice }} €</p>
+
+
+        <p class="flex-grow-1"><b>ALLEGATO:</b></p>
+        <div class="d-flex align-items-center">
+          <p class="me-3">{{ product.attachment }}</p>
+          <p>
+            <lib-generic-button-only-icon
+              [buttonStyle]="ButtonTheme.PrimaryOnlyIconCircularSmall"
+              icon="bi bi-printer-fill"
+              tooltipText="Stampa Allegato"
+              placement="right"
+              [disabled]="false"
+            ></lib-generic-button-only-icon>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class=" m-2 mt-0 mb-0" *ngFor="let bundle of orderDetails.bundles">
+        <h4 class="mb-4">{{ bundle.name.toUpperCase() }}</h4>
+        <p><b>Peso:</b> {{ bundle.measure.label }} Kg</p>
+        <p><b>Quantità:</b> {{ bundle.quantity }}</p>
+        <p><b>Total Price:</b> {{ bundle.totalPrice }} €</p>
+      </div>
+    </div>
+
+    <hr/>
+
+    <div class=" m-2 mt-0 mb-0">
+      <h4 class="mb-4">Info Contatto:</h4>
+      <p><b>E-mail:</b> {{ orderDetails.email }}</p>
+      <p><b>Numero di Telefono:</b> {{ orderDetails.phoneNumber }}</p>
+    </div>
+  </ng-template>
+</div>
+
+

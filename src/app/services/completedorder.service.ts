@@ -1,14 +1,14 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from "@angular/core";
 import {environment} from "../../environments/environment";
-import {HttpClient} from "@angular/common/http";
 import {Utils} from "../shared/utils/utils";
+import {HttpClient} from "@angular/common/http";
 
 @Injectable({
   providedIn: 'root'
 })
-export class OrderService {
+export class CompletedorderService {
 
-  private baseUrl: string = `${environment.backendUrl}/orders`;
+  private baseUrl: string = `${environment.backendUrl}/completed_orders`;
 
   constructor(private http: HttpClient) {
   }
@@ -19,15 +19,11 @@ export class OrderService {
   }
 
   getOrderDetails(id: string) {
-    return this.http.get(`${this.baseUrl}/details/${id}`)
+    return this.http.get(`${this.baseUrl}/${id}`)
   }
 
-  completeOrder(id: string) {
-    return this.http.post(`${this.baseUrl}/complete/${id}`, null)
-  }
-
-  cancelOrder(id: string) {
-    return this.http.post(`${this.baseUrl}/cancel/${id}`,null)
+  restoreOrder(id: string) {
+    return this.http.post(`${this.baseUrl}/restore/${id}`, null)
   }
 
 }
