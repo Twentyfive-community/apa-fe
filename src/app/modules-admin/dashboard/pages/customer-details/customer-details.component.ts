@@ -29,7 +29,7 @@ export class CustomerDetailsComponent implements OnInit{
   maxSize: number = 5;
   pageSize: number = 5;
   currentPage: number=0;
-  collectionSize: number = 0;
+  collectionSize: number = 5;
 
   headersTotals: any[] = [
     { name:'Totale Ordini', value:'orderCount'},
@@ -94,6 +94,16 @@ export class CustomerDetailsComponent implements OnInit{
       this.details.push(response)
 
     })
+  }
+
+  selectSize(event: any) {
+    this.pageSize = event;
+    this.getOrders();
+  }
+
+  changePage(event: number) {
+    this.currentPage = event - 1;
+    this.getOrders();
   }
 
 

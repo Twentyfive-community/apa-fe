@@ -14,8 +14,11 @@ export class IngredientToSave{
   allergenNames: string[];
   categoryId: string;
   description: string;
-  active: boolean = true;
+  active: boolean;
   alcoholic: boolean = false;
+  status: string;
+  alcoholicString: string;
+
 }
 
 export class Allergen {

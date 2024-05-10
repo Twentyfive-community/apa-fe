@@ -1,0 +1,57 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 *ngIf="!categoryId" class="modal-title">Aggiungi Categoria</h5>
+    <h5 *ngIf="categoryId" class="modal-title">Modifica Categoria</h5>
+    <button type="button" class="btn-close" (click)="close()"></button>
+  </div>
+
+  <div class="col-3">
+    <div class="row mt-4 ms-1">
+      <lib-twentyfive-input
+        labelText="Nome"
+        placeholder="Nome"
+        [value]="category.name"
+        (input)="onInputChange($event, 'name')"
+      ></lib-twentyfive-input>
+    </div>
+    <div *ngIf="categoryId" class="row mt-4 ms-1">
+      <lib-twentyfive-input
+        labelText="Tipo"
+        placeholder="Tipo"
+        [value]="category.type"
+        [readOnly]="true"
+      ></lib-twentyfive-input>
+    </div>
+    <div *ngIf="!categoryId" class="row mt-4 ms-1">
+      <lib-twentyfive-input
+        labelText="Tipo"
+        placeholder="Tipo"
+        [value]="'ingredienti'"
+        [readOnly]="true"
+      ></lib-twentyfive-input>
+    </div>
+  </div>
+
+  <div class="row mt-5">
+    <hr>
+  </div>
+
+  <div class=" row mb-1 ms-1" *ngIf="!categoryId">
+    <lib-generic-button
+      buttonText="Crea"
+      (click)="saveNewCategory()"
+      [buttonSize]="ButtonSizeTheme.Medium"
+      [buttonStyle]="ButtonTheme.Primary"
+    ></lib-generic-button>
+  </div>
+  <div class=" row mb-1 ms-1" *ngIf="categoryId">
+    <lib-generic-button
+      buttonText="Modifica"
+      (click)="saveNewCategory()"
+      [buttonSize]="ButtonSizeTheme.Medium"
+      [buttonStyle]="ButtonTheme.Primary"
+    ></lib-generic-button>
+  </div>
+
+
+</div>

@@ -7,9 +7,13 @@ import {CollapseModule} from "ngx-bootstrap/collapse";
 import {TwentyfiveTableModule} from "twentyfive-table";
 import {TwentyfiveInputModule} from "twentyfive-input";
 import {GenericButtonModule} from "generic-buttons";
+import { CategoryEditComponent } from './category-edit/category-edit.component';
+import {TwentyfiveModalGenericComponentModule} from "twentyfive-modal-generic-component";
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    CategoryEditComponent
+  ],
   imports: [
     CommonModule,
     TwentyfiveNavbarModule,
@@ -19,7 +23,7 @@ import {GenericButtonModule} from "generic-buttons";
     TwentyfiveTableModule,
     TwentyfiveInputModule,
     GenericButtonModule,
-
+    TwentyfiveModalGenericComponentModule
   ],
   exports: [
     CommonModule,

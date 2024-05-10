@@ -3,6 +3,7 @@ import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Utils} from "../shared/utils/utils";
 import {Customer} from "../models/Customer";
+import {Category} from "../models/Category";
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,21 @@ export class CategoryService {
     let p = Utils.createHttpParams({'types': types});
     return this.http.get(`${this.baseUrl}/getAll`, {params: p});
   }
+
+  saveCategory(category: Category) {
+    return this.http.post(`${this.baseUrl}/save`, category);
+  }
+
+  getCategory(id: string){
+    return this.http.get(`${this.baseUrl}/getById/${id}`);
+  }
+
+  disableCategory(id: string){
+    return this.http.get(`${this.baseUrl}/disableById/${id}`);
+  }
+
+
+
 
 
 }

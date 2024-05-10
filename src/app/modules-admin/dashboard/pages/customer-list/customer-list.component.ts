@@ -16,9 +16,11 @@ export class CustomerListComponent implements OnInit{
   protected readonly TableHeadTheme = TableHeadTheme
   protected readonly TableTheme = TableTheme
 
-
-  maxSize: number = 2;
-  pageSize: number = 20;
+  currentPage: number = 0;
+  maxSize: number = 5;
+  pageSize: number = 5;
+  sortColumn: string='';
+  sortDirection: string='';
 
 
   headers: any[] = [
@@ -45,7 +47,7 @@ export class CustomerListComponent implements OnInit{
       }
     },
     {
-      icon:'bi bi-person-x-fill',
+      icon:'bi bi-toggle-on',
       action:async (myRow: any) =>{
         this.modalService.openModal(
           'Sei sicuro di voler disabilitare questo cliente?',
@@ -68,7 +70,7 @@ export class CustomerListComponent implements OnInit{
       }
     },
     {
-      icon:'bi bi-person-plus-fill',
+      icon:'bi bi-toggle-off',
       action:async (myRow: any) =>{
         this.modalService.openModal(
           'Sei sicuro di voler abilitare questo cliente?',
@@ -95,15 +97,16 @@ export class CustomerListComponent implements OnInit{
 
 
 
-  constructor(private customerService: CustomerService, private router: Router, private modalService: TwentyfiveModalService) {
-  }
+  constructor(private customerService: CustomerService,
+              private router: Router,
+              private modalService: TwentyfiveModalService) {}
 
   ngOnInit(): void {
         this.getAll()
   }
 
   getAll(page?: number){
-    this.customerService.getAll(page? page : 0, this.pageSize).subscribe((response: any) => {
+    this.customerService.getAll(page? page : 0, this.pageSize, this.sortColumn, this.sortDirection).subscribe((response: any) => {
         this.customers = response.content;
         this.maxSize = response.totalElements;
     })
@@ -119,6 +122,23 @@ export class CustomerListComponent implements OnInit{
         this.getAll();
       })
     });
+  }
+
+  selectSize(event: any){
+    this.pageSize=event;
+    this.getAll()
+  }
+
+
+  changePage(event: number){
+    this.currentPage = event;
+    this.getAll(this.currentPage-1);
+  }
+
+  sortingColumn(event: any){
+    this.sortColumn = event.sortColumn;
+    this.sortDirection = event.sortDirection;
+    this.getAll()
   }
 
 
