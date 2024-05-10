@@ -17,8 +17,8 @@ export class CustomerService {
   constructor(private http: HttpClient) {
   }
 
-  getAll(page: number, size: number) {
-    let p = Utils.createHttpParams({'page': page, 'size': size});
+  getAll(page: number, size: number, column: string, direction: string) {
+    let p = Utils.createHttpParams({'page': page, 'size': size, 'sortColumn': column, 'sortDirection': direction});
     return this.http.get(`${this.getAllUrl}`, {params: p});
   }
 

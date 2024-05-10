@@ -63,6 +63,7 @@
         <twentyfive-accordion-table
           [headers]="headersOrders"
           [isSortable]="true"
+          [isPaginated]="true"
           [data]="completedOrders"
           [extras]="extras"
           [dataDetails]="dataDetails"
@@ -74,6 +75,8 @@
           [collectionSize]="collectionSize"
           [maxSize]="maxSize"
 
+          (changePageEmitter)="changePage($event)"
+          (selectEmitter)="selectSize($event)"
           [dropdownElements]="paginationElements"
         ></twentyfive-accordion-table>
       </div>

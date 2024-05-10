@@ -35,6 +35,13 @@ export class DashboardComponent implements OnInit{
       labelColor: ""
     },
     {
+      title: "Ingredienti",
+      icon: "bi bi-egg",
+      navigationUrl: "ingredienti",
+      disableClick: false,
+      labelColor: ""
+    },
+    {
       title: "Logout",
       icon: "bi bi-box-arrow-right",
       disableClick: true,

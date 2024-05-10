@@ -28,6 +28,9 @@
         [maxSize]="maxSize"
         [model]="pageSize"
         [isPaginated]="true"
+        (sortableChange)="sortingColumn($event)"
+        (pageChange)="changePage($event)"
+        (modelChange)="selectSize($event)"
       >
       </lib-twentyfive-table>
     </div>
