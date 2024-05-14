@@ -81,7 +81,7 @@
     <div>
       <div class=" m-2 mt-0 mb-0" *ngFor="let bundle of orderDetails.bundles">
         <h4 class="mb-4">{{ bundle.name.toUpperCase() }}</h4>
-        <p><b>Peso:</b> {{ bundle.measure.label }} Kg</p>
+        <p><b>Peso:</b> {{ bundle.measure.weight }} Kg</p>
         <p><b>Quantità:</b> {{ bundle.quantity }}</p>
         <p><b>Total Price:</b> {{ bundle.totalPrice }} €</p>
       </div>
