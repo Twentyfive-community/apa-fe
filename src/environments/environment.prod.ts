@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  keycloakurl: 'http://80.211.123.141:8080',
+  keycloakurl: 'http://80.211.123.141:9001',
   realmname: 'Antica-Pasticceria',
   clientid: 'apa-app',
   redirecturi: '',
