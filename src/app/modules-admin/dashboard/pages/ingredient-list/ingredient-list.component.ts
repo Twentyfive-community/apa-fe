@@ -35,6 +35,20 @@ export class IngredientListComponent implements OnInit{
     { name:'Descrizione', value:'note'},
     { name:'Alcolico', value:'alcoholicString'}
   ]
+  paginationElements: any[] = [
+    {
+      actionName: '5',
+      value: '5'
+    },
+    {
+      actionName: '10',
+      value: '10'
+    },
+    {
+      actionName: '25',
+      value: '25'
+    }
+  ];
 
   ingredients: Ingredient[] = []
   categories: Category[] = []
@@ -129,7 +143,7 @@ export class IngredientListComponent implements OnInit{
   disableStatus(id: string){
     this.ingredientService.disableIngredient(id).subscribe({
       next: (() => {
-        this.getAll(this.activeTab,this.currentPage);
+        this.getAll(this.activeTab,this.currentPage-1);
       })
     });
   }
@@ -150,14 +164,14 @@ export class IngredientListComponent implements OnInit{
   }
 
   changePage(event: number){
-    this.currentPage = event-1;
-    this.getAll(this.activeTab, this.currentPage);
+    this.currentPage = event;
+    this.getAll(this.activeTab,this.currentPage-1);
   }
 
   sortingColumn(event: any){
     this.sortColumn = event.sortColumn;
     this.sortDirection = event.sortDirection;
-    this.getAll(this.activeTab)
+    this.getAll(this.activeTab,this.currentPage-1);
   }
 
 

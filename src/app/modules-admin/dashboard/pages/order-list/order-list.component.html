@@ -50,7 +50,7 @@
         <p><b>Forma:</b> {{ product.shape }}</p>
 
 
-        <p><b>Personalizazioni:</b></p>
+        <p><b>Personalizzazioni:</b></p>
         <ul *ngFor="let item of product.customization | keyvalue">
           <li><b>{{ item.key }}:</b> {{ item.value }}</li>
         </ul>
@@ -74,6 +74,7 @@
             ></lib-generic-button-only-icon>
           </p>
         </div>
+        <hr/>
       </div>
     </div>
 
@@ -86,7 +87,6 @@
       </div>
     </div>
 
-    <hr/>
 
     <div class=" m-2 mt-0 mb-0">
       <h4 class="mb-4">Info Contatto:</h4>

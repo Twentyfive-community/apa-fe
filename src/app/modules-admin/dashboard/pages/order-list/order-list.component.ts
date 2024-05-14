@@ -110,7 +110,7 @@ export class OrderListComponent implements OnInit{
       icon: 'bi bi-x',
       action: async (myRow: any) => {
         this.modalService.openModal(
-          'Sei sicuro di voler anullare questo ordine?',
+          'Sei sicuro di voler annullare questo ordine?',
           'Annulla Ordine',
           'Annulla',
           'Conferma',

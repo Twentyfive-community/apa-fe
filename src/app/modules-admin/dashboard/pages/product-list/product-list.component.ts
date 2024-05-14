@@ -166,8 +166,8 @@ export class ProductListComponent implements OnInit{
     }
   }
   changePage(event: number) {
-    this.currentPage = event-1;
-    this.getAll(this.currentPage);
+    this.currentPage = event;
+    this.getAll(this.currentPage-1);
   }
 
   selectSize(event: any) {
@@ -188,8 +188,6 @@ export class ProductListComponent implements OnInit{
     this.sortDirection = event.sortDirection;
     this.getAll(this.currentPage-1);
   }
-  protected readonly ButtonTheme = ButtonTheme;
-
   switch(event: any) {
     switch (this.categoryActive) {
       case 'productKg':
@@ -197,20 +195,20 @@ export class ProductListComponent implements OnInit{
           this.productService.disableByIdKg(event.id).subscribe({
             error: () => {
               this.toastrService.error("Errore nel disattivare questo prodotto!");
-              this.getAll(this.currentPage);
+              this.getAll(this.currentPage-1);
             },
             complete: () => {
-              this.getAll(this.currentPage);
+              this.getAll(this.currentPage-1);
             }
           });
         } else {
           this.productService.activateByIdKg(event.id).subscribe({
             error: () => {
               this.toastrService.error("Errore nell\'attivare questo prodotto!");
-              this.getAll(this.currentPage);
+              this.getAll(this.currentPage-1);
             },
             complete: () => {
-              this.getAll(this.currentPage);
+              this.getAll(this.currentPage-1);
             }
           });
         }
@@ -220,20 +218,20 @@ export class ProductListComponent implements OnInit{
           this.productService.disableByIdWeighted(event.id).subscribe({
             error: () => {
               this.toastrService.error("Errore nel disattivare questo prodotto!");
-              this.getAll(this.currentPage);
+              this.getAll(this.currentPage-1);
             },
             complete: () => {
-              this.getAll(this.currentPage);
+              this.getAll(this.currentPage-1);
             }
           });
         } else {
           this.productService.activateByIdWeighted(event.id).subscribe({
             error: () => {
               this.toastrService.error("Errore nell\'attivare questo prodotto!");
-              this.getAll(this.currentPage);
+              this.getAll(this.currentPage-1);
             },
             complete: () => {
-              this.getAll(this.currentPage);
+              this.getAll(this.currentPage-1);
             }
           });
         }
@@ -242,10 +240,10 @@ export class ProductListComponent implements OnInit{
         this.productService.activateOrDisableTray(event.id).subscribe({
           error: () => {
             this.toastrService.error("Errore nell\'attivare o disattivare questo vassoio!");
-            this.getAll(this.currentPage);
+            this.getAll(this.currentPage-1);
           },
           complete: () => {
-            this.getAll(this.currentPage);
+            this.getAll(this.currentPage-1);
           }
         });
         break;
@@ -287,8 +285,9 @@ export class ProductListComponent implements OnInit{
   }
 
   goToEdit() {
-    this.router.navigate(['/dashboard/editingProdotti'], { queryParams: { categoryId: this.activeTab } });
+    this.router.navigate(['/dashboard/editingProdotti'], {queryParams: {categoryId: this.activeTab}});
   }
 
+  protected readonly ButtonTheme = ButtonTheme;
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
 }

@@ -24,6 +24,7 @@
         [actions]="tableActions"
         [showActions]="true"
         [rows]="customers"
+        (rowClicked)="goToDetails($event)"
         [pageSize]="pageSize"
         [collectionSize]="maxSize"
         [maxSize]="maxSize"
