@@ -4,7 +4,7 @@ export const environment = {
   keycloakurl: 'http://80.211.123.141:9001',
   realmname: 'Antica-Pasticceria',
   clientid: 'apa-app',
-  redirecturi: 'https://localhost:4200',
+  redirecturi: 'http://80.211.123.141:5553/dashboard/ordini',
   backendUrl: 'http://80.211.123.141:8104/apa-api-layer',
   //backendUrl: 'http://localhost:8080',
 
