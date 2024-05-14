@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {ButtonSizeTheme, ButtonTheme, ChipTheme} from "twentyfive-style";
 import {TwentyfiveModalService} from "twentyfive-modal";
@@ -16,9 +16,13 @@ import {Measure} from "../../../../models/Measure";
   styleUrl: './product-edit.component.scss'
 })
 export class ProductEditComponent implements OnInit{
+  @ViewChild('dropZone') dropZoneRef!: ElementRef;
+  @ViewChild('fileInput') fileInputRef!: ElementRef;
 
   categoryId: string | null;
   productId:string | null;
+
+  file: File | null;
 
   category: Category = new Category();
 
@@ -259,6 +263,36 @@ export class ProductEditComponent implements OnInit{
     }
   }
 
+  handleDragOver(event: DragEvent) {
+    event.preventDefault(); // Impedisce il comportamento predefinito del browser
+  }
+
+  handleDrop(event: DragEvent) {
+    event.preventDefault(); // Impedisce il comportamento predefinito del browser
+    const files = event.dataTransfer?.files;
+    if (files) {
+      this.handleFiles(files);
+    }
+  }
+
+  handleFileSelect(event: Event) {
+    const target = event.target as HTMLInputElement;
+    const files = target.files;
+    if (files) {
+      this.handleFiles(files);
+    }
+  }
+
+  handleFiles(files: FileList) {
+    this.file = files[0];
+  }
+
+  removeFile(event: Event) {
+    event.stopPropagation();
+    this.file = null;
+    // Reimposta il valore dell'input del file a null per consentire la selezione dello stesso file
+    this.fileInputRef.nativeElement.value = '';
+  }
   protected readonly ButtonTheme = ButtonTheme;
   protected readonly ChipTheme = ChipTheme;
   protected readonly ButtonSizeTheme = ButtonSizeTheme;

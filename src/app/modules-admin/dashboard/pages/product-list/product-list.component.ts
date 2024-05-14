@@ -193,11 +193,64 @@ export class ProductListComponent implements OnInit{
   protected readonly ButtonTheme = ButtonTheme;
 
   switch(event: any) {
-    console.log(event);
     switch (this.categoryActive) {
       case 'productKg':
-        if (event){
+        if (event.active) {
+          this.productService.disableByIdKg(event.id).subscribe({
+            error: () => {
+              this.toastrService.error("Errore nel disattivare questo prodotto!");
+              this.getAll();
+            },
+            complete: () => {
+              this.getAll();
+            }
+          });
+        } else {
+          this.productService.activateByIdKg(event.id).subscribe({
+            error: () => {
+              this.toastrService.error("Errore nell\'attivare questo prodotto!");
+              this.getAll();
+            },
+            complete: () => {
+              this.getAll();
+            }
+          });
         }
+        break;
+      case 'productWeighted':
+        if (event.active) {
+          this.productService.disableByIdWeighted(event.id).subscribe({
+            error: () => {
+              this.toastrService.error("Errore nel disattivare questo prodotto!");
+              this.getAll();
+            },
+            complete: () => {
+              this.getAll();
+            }
+          });
+        } else {
+          this.productService.activateByIdWeighted(event.id).subscribe({
+            error: () => {
+              this.toastrService.error("Errore nell\'attivare questo prodotto!");
+              this.getAll();
+            },
+            complete: () => {
+              this.getAll();
+            }
+          });
+        }
+        break;
+      case 'tray':
+        this.productService.activateOrDisableTray(event.id).subscribe({
+          error: () => {
+            this.toastrService.error("Errore nell\'attivare o disattivare questo vassoio!");
+            this.getAll();
+          },
+          complete: () => {
+            this.getAll();
+          }
+        });
+        break;
     }
   }
   editCategoryToModify(){

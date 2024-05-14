@@ -27,13 +27,11 @@ export class ProductService {
   }
 
   disableByIdKg(id:string){
-    let p = Utils.createHttpParams({'id':id});
-    return this.http.get(`${this.baseKgUrl}/disableById`,{params: p});
+    return this.http.get(`${this.baseKgUrl}/disableById/${id}`);
   }
 
   activateByIdKg(id:string){
-    let p = Utils.createHttpParams({'id':id});
-    return this.http.get(`${this.baseKgUrl}/activateById`,{params: p});
+    return this.http.get(`${this.baseKgUrl}/activateById/${id}`);
   }
   getAllWeighted(idCategory: string,page: number, size: number,sortColumn: string,sortDirection:string) {
     let p = Utils.createHttpParams({'idCategory': idCategory,'page': page, 'size': size,'sortColumn': sortColumn,'sortDirection': sortDirection});
@@ -43,12 +41,23 @@ export class ProductService {
   getByIdWeighted(id:string){
     return this.http.get(`${this.baseWeightedUrl}/getById/${id}`);
   }
+  disableByIdWeighted(id:string){
+    return this.http.get(`${this.baseWeightedUrl}/disableById/${id}`);
+  }
+
+  activateByIdWeighted(id:string){
+    return this.http.get(`${this.baseWeightedUrl}/activateById/${id}`);
+  }
   getAllTrays(idCategory:string,page: number, size: number,sortColumn: string,sortDirection:string){
     let p = Utils.createHttpParams({'idCategory':idCategory,'page': page, 'size': size,'sortColumn': sortColumn,'sortDirection': sortDirection});
     return this.http.get(`${this.baseTrayUrl}/getAll`, {params: p});
   }
   getByIdTray(id:string){
     return this.http.get(`${this.baseTrayUrl}/getById/${id}`);
+  }
+
+  activateOrDisableTray(id:string){
+    return this.http.get(`${this.baseTrayUrl}/activateOrDisable/${id}`);
   }
 
   saveWeighted(product:ProductToEdit){

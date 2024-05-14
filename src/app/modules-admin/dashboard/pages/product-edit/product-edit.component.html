@@ -192,21 +192,27 @@
   <div class="row mt-4 mb-2">
     <h4>Immagine</h4>
   </div>
-<div class="col-6 drop-zone rounded mb-2 mt-3" id="drop-zone">
+<div class="col-8 drop-zone rounded mb-2 mt-3" #dropZone (drop)="handleDrop($event)" (dragover)="handleDragOver($event)" (click)="fileInput.click()">
   <div class="row">
     <div class="mb-4 text-purple">
-      Trascina o clicca qui per selezionare il file da dividere
+      Trascina qui il file da caricare o clicca per selezionare un file
     </div>
   </div>
-
-  <div class="d-flex justify-content-center row">
-    <!-- Flex container for icon and text -->
-    <div class="d-flex align-items-center justify-content-center">
-      <i class="bi bi-file-earmark me-2 text-purple"></i>
-      <span class="text-purple fw-semibold" id="file-name">Nome file</span>
+  <div *ngIf="file" class="row">
+    <div class="col-10">
+      <span>{{ file.name }}</span>
+    </div>
+    <div class="col-2">
+      <button class="btn btn-link text-dark" (click)="removeFile($event)">
+        <i class="bi bi-trash"></i>
+      </button>
     </div>
   </div>
 </div>
+<input type="file" #fileInput style="display: none;" (change)="handleFileSelect($event)">
+
+
+
 <hr>
 <div class="col-12 d-flex justify-content-end">
   <lib-generic-button
