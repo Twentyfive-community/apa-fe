@@ -1,0 +1,17 @@
+::ng-deep lib-twentyfive-input label {
+  display: block; /* Assicurati che l'etichetta occupi l'intera larghezza */
+  font-size: 1.25rem !important; /* Imposta la dimensione del font simile a un h5 */
+  font-weight: 500; /* Assicurati che l'etichetta abbia un peso del carattere simile a un h5 */
+}
+::ng-deep lib-twentyfive-checkbox label {
+   display: block; /* Assicurati che l'etichetta occupi l'intera larghezza */
+   font-size: 1.25rem !important; /* Imposta la dimensione del font simile a un h5 */
+   font-weight: 500; /* Assicurati che l'etichetta abbia un peso del carattere simile a un h5 */
+ }
+.drop-zone {
+  border: 2px dashed #ccc; /* Bordo tratteggiato grigio */
+  padding: 20px; /* Spaziatura interna */
+  background-color: #f0f0f0; /* Sfondo grigio */
+  font-weight: bold; /* Testo in grassetto */
+}
+

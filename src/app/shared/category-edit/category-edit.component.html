@@ -22,7 +22,7 @@
         [readOnly]="true"
       ></lib-twentyfive-input>
     </div>
-    <div *ngIf="!categoryId" class="row mt-4 ms-1">
+    <div *ngIf="!categoryId && !categoryType" class="row mt-4 ms-1">
       <lib-twentyfive-input
         labelText="Tipo"
         placeholder="Tipo"
@@ -30,6 +30,21 @@
         [readOnly]="true"
       ></lib-twentyfive-input>
     </div>
+    <div *ngIf="categoryType && categoryType.length > 0" class="row mt-4 ms-1">
+      <div ngbDropdown class="nav-item" role="presentation">
+        <div ngbDropdownToggle class="nav-link" id="dropdownMenuButton" role="button" aria-expanded="false">
+          Seleziona una categoria
+        </div>
+        <ul ngbDropdownMenu aria-labelledby="dropdownMenuButton" class="dropdown-menu">
+          <li *ngFor="let category of categoryType">
+            <a class="dropdown-item" (click)="setActiveCategory(category)">
+              {{ category }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div *ngIf="selectedCategoryName" class="row mt-4 ms-3">{{ selectedCategoryName }}</div>
   </div>
 
   <div class="row mt-5">

@@ -19,7 +19,9 @@ export class CategoryService {
     let p = Utils.createHttpParams({'types': types});
     return this.http.get(`${this.baseUrl}/getAll`, {params: p});
   }
-
+  getById(id:string){
+    return this.http.get(`${this.baseUrl}/getById/${id}`);
+  }
   saveCategory(category: Category) {
     return this.http.post(`${this.baseUrl}/save`, category);
   }

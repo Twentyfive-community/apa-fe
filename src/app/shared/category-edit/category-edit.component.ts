@@ -14,7 +14,9 @@ import {ToastrService} from "ngx-toastr";
 export class CategoryEditComponent implements OnInit{
 
   categoryId: string | '';
+  categoryType: string[] | null;
   category: Category = new Category();
+  selectedCategoryName: string;
 
   constructor(private modalService: TwentyfiveModalGenericComponentService,
               private categoryService: CategoryService,
@@ -48,7 +50,7 @@ export class CategoryEditComponent implements OnInit{
 
 
   saveNewCategory(){
-    if(this.categoryId=='')
+    if(this.categoryId=='' && !this.categoryType)
       this.category.type="ingredienti"
     this.categoryService.saveCategory(this.category).subscribe({
       error:() =>{
@@ -56,6 +58,7 @@ export class CategoryEditComponent implements OnInit{
         this.close()
       },
       complete:() =>{
+        console.log(this.category);
         this.toastrService.success("Category salvata con successo");
         this.close()
       }
@@ -65,4 +68,9 @@ export class CategoryEditComponent implements OnInit{
 
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
   protected readonly ButtonTheme = ButtonTheme;
+
+  setActiveCategory(category: string) {
+    this.selectedCategoryName=category;
+    this.category.type=this.selectedCategoryName;
+  }
 }

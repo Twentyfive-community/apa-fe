@@ -4,8 +4,9 @@ import {IngredientService} from "../../../../services/ingredient.service";
 import {ActivatedRoute, Router} from "@angular/router";
 import {TwentyfiveModalService} from "twentyfive-modal";
 import {ToastrService} from "ngx-toastr";
-import {Allergen, Ingredient, IngredientToSave} from "../../../../models/Ingredient";
+import {Ingredient, IngredientToSave} from "../../../../models/Ingredient";
 import {AllergenService} from "../../../../services/allergen.service";
+import {Allergen} from "../../../../models/Allergen";
 
 @Component({
   selector: 'app-ingredient-edit',

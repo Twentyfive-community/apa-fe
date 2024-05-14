@@ -9,22 +9,26 @@ import {TwentyfiveInputModule} from "twentyfive-input";
 import {GenericButtonModule} from "generic-buttons";
 import { CategoryEditComponent } from './category-edit/category-edit.component';
 import {TwentyfiveModalGenericComponentModule} from "twentyfive-modal-generic-component";
+import {NgbDropdown, NgbDropdownMenu, NgbDropdownToggle} from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
   declarations: [
     CategoryEditComponent
   ],
-  imports: [
-    CommonModule,
-    TwentyfiveNavbarModule,
-    TwentyfiveSidebarModule,
-    TwentyfiveAccordionTableModule,
-    CollapseModule,
-    TwentyfiveTableModule,
-    TwentyfiveInputModule,
-    GenericButtonModule,
-    TwentyfiveModalGenericComponentModule
-  ],
+    imports: [
+        CommonModule,
+        TwentyfiveNavbarModule,
+        TwentyfiveSidebarModule,
+        TwentyfiveAccordionTableModule,
+        CollapseModule,
+        TwentyfiveTableModule,
+        TwentyfiveInputModule,
+        GenericButtonModule,
+        TwentyfiveModalGenericComponentModule,
+        NgbDropdown,
+        NgbDropdownMenu,
+        NgbDropdownToggle
+    ],
   exports: [
     CommonModule,
     TwentyfiveNavbarModule,

@@ -38,9 +38,15 @@ export class IngredientService {
     return this.http.post(`${this.baseUrl}/save`,ingredient);
   }
 
+  getAllByTypeCategories(types: string[]){
+    let p = Utils.createHttpParams({'types': types});
+    return this.http.get(`${this.baseUrl}/getAllByTypeCategories`, {params: p});
+  }
 
-
-
+  getByName(name: string) {
+    let p= Utils.createHttpParams({'name':name});
+    return this.http.get(`${this.baseUrl}/getByName`,{params: p});
+  }
 
 
 

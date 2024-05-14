@@ -99,10 +99,17 @@ export class CustomerListComponent implements OnInit{
 
   constructor(private customerService: CustomerService,
               private router: Router,
-              private modalService: TwentyfiveModalService) {}
+              private modalService: TwentyfiveModalService
+  ) {
+  }
 
   ngOnInit(): void {
-        this.getAll()
+
+    this.getAll();
+    /*this.subscriptionText = this.rxStompService.watch('/apa_order').subscribe((message: any) => {
+      this.textMessage = message.body;
+      this.toastr.success(message.body);
+    });*/
   }
 
   getAll(page?: number){

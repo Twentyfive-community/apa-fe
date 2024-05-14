@@ -1,0 +1,219 @@
+<div class="row mb-4">
+  <div class="col-12 col-lg-3">
+    <lib-generic-button-text-with-icon
+      buttonText="Torna Indietro"
+      [iconLeft]="true"
+      prefixIcon="bi bi-arrow-left"
+      [buttonStyle]="ButtonTheme.OnlyText"
+      (click)="close()"
+    ></lib-generic-button-text-with-icon>
+  </div>
+</div>
+
+<hr>
+
+<div class="row mb-4 mt-4">
+  <h3 *ngIf="!productId">Crea </h3>
+  <h3 *ngIf="productId">Modifica {{category?.name}}</h3>
+</div>
+
+<div class="col-3">
+  <div class="row mt-4 mb-2">
+    <lib-twentyfive-input
+      labelText="Nome"
+      placeholder="Nome"
+      [value]="productToAdd.name"
+      (input)="onInputChangeProduct($event, 'name')"
+    ></lib-twentyfive-input>
+  </div>
+</div>
+
+<div class="col-6 row mt-4 mb-2">
+  <lib-twentyfive-input
+    labelText="Descrizione"
+    placeholder="Descrizione"
+    inputType="textArea"
+    [value]="productToAdd.description"
+    (input)="onInputChangeProduct($event, 'description')"
+  ></lib-twentyfive-input>
+</div>
+
+<div *ngIf="category.type!='tray'">
+  <div class="row mt-4">
+    <h5>Ingredienti</h5>
+    <div class="col-12">
+      <p style="font-size: 0.8em;">NB. La scelta degli ingredienti crea automaticamente la lista degli allergeni, visibile nella pagina dei prodotti</p>
+    </div>
+  </div>
+  <div class="row mb-4" *ngIf="ingredientNames.length > 0">
+    <div class="col-12">
+      <div ngbDropdown class="dropdown mt-2">
+        <button ngbDropdownToggle class="btn btn-outline-dark" type="button" id="ingredientDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          Seleziona ingredienti
+        </button>
+
+        <ul ngbDropdownMenu class="dropdown-menu" aria-labelledby="ingredientDropdown" style="max-height: 200px; overflow-y: auto;">
+          <li *ngFor="let ingredient of ingredientNames" class="dropdown-item" (click)="toggleIngredient(ingredient)">
+            <div class="form-check">
+              <input type="checkbox" [checked]="selectedIngredients.includes(ingredient)" style="display: none;">
+              <label class="form-check-label" style="cursor: pointer;">
+                {{ ingredient.name }}
+              </label>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="col-9">
+    <div class="row mt-3">
+      <div class="d-flex flex-wrap">
+        <div *ngFor="let ingredient of selectedIngredients; let i = index" class="me-2 mb-2">
+          <lib-twentyfive-chip [chipText]="ingredient" [showIcon]=false [chipStyle]="ChipTheme.Secondary"
+                               (closeChip)="closeIconClicked(i)"></lib-twentyfive-chip>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="col-1 mb-4">
+  <div *ngIf="category.type=='productWeighted'" class="row mt-4 mb-2">
+    <lib-twentyfive-input
+      labelText="Peso (Kg)"
+      placeholder="Peso"
+      inputType="number"
+      [value]="weight.toString()"
+      (input)="onInputChangeProduct($event, 'weight')"
+    ></lib-twentyfive-input>
+  </div>
+</div>
+
+  <div class="col-1 mb-4">
+    <div *ngIf="category.type=='productKg' || category.type=='tray'">
+      <div class="row mt-4 mb-2">
+        <lib-twentyfive-checkbox
+          checkboxText="Personalizzato"
+          (click)="changeCustomized()"
+          [value]="productToAdd.customized"
+        ></lib-twentyfive-checkbox>
+      </div>
+
+      <div class="row mt-4 mb-2">
+        <lib-twentyfive-input
+          labelText="Prezzo/kg"
+          placeholder="Peso"
+          inputType="number"
+          [value]="pricePerKg.toString()"
+          (input)="onInputChangeProduct($event, 'pricePerKg')"
+        ></lib-twentyfive-input>
+      </div>
+    </div>
+  </div>
+
+<div *ngIf="category.type=='tray'" class="row-cols-8 mt-4 mb-2">
+  <h5>Misure</h5>
+
+  <div *ngFor="let measure of productToAdd.measures;let j=index" class="col-4 mb-3">
+    <div class="d-flex align-items-center">
+      <lib-twentyfive-input
+        placeholder="Etichetta"
+        [value]="measure.label"
+        (input)="onInputChangeProduct($event, 'labelMeasure', j)"
+        style="margin-right: 10px;"
+      ></lib-twentyfive-input>
+      <lib-twentyfive-input
+        placeholder="Peso (kg)"
+        inputType="number"
+        [value]="measure.weight.toString()"
+        (input)="onInputChangeProduct($event, 'weightMeasure', j)"
+        style="margin-right: 5px;"
+      ></lib-twentyfive-input>
+      <button class="btn btn-link text-dark" (click)="deleteMeasureValue(j)">
+        <i class="bi bi-trash-fill"></i>
+      </button>
+    </div>
+  </div>
+
+  <div class="col-4 mb-3">
+    <div class="d-flex align-items-center">
+      <lib-twentyfive-input
+        placeholder="Etichetta"
+        [value]="measure[i].label"
+        (input)="onInputChangeProduct($event, 'labelMeasure', i)"
+        style="margin-right: 10px;"
+      ></lib-twentyfive-input>
+      <lib-twentyfive-input
+        placeholder="Peso (kg)"
+        inputType="number"
+        [value]="measure[i].weight.toString()"
+        (input)="onInputChangeProduct($event, 'weightMeasure', i)"
+        style="margin-right: 5px;"
+      ></lib-twentyfive-input>
+      <button class="btn btn-link text-dark" (click)="clearMeasureValue()">
+        <i class="bi bi-trash-fill"></i>
+      </button>
+    </div>
+  </div>
+
+  <lib-generic-button-text-with-icon
+    buttonText="Aggiungi Misura"
+    [iconLeft]="false"
+    suffixIcon="bi bi-plus-circle"
+    (click)="addMeasure()"
+    [buttonStyle]="ButtonTheme.Primary"
+  ></lib-generic-button-text-with-icon>
+</div>
+
+
+
+
+<div *ngIf="category.type=='productKg'" class="row mt-4 mb-2">
+        <div class="col-1 me-3">
+          <lib-twentyfive-input
+            labelText="Peso MIN (kg)"
+            placeholder="Peso MIN (kg)"
+            inputType="number"
+            [value]="minWeight.toString()"
+            (input)="onInputChangeProduct($event, 'minWeight')"
+          ></lib-twentyfive-input>
+        </div>
+        <div class="col-1 ms-3">
+          <lib-twentyfive-input
+            labelText="Peso MAX (kg)"
+            placeholder="Peso MAX (kg)"
+            inputType="number"
+            [value]="maxWeight.toString()"
+            (input)="onInputChangeProduct($event, 'maxWeight')"
+          ></lib-twentyfive-input>
+        </div>
+      </div>
+
+  <div class="row mt-4 mb-2">
+    <h4>Immagine</h4>
+  </div>
+<div class="col-6 drop-zone rounded mb-2 mt-3" id="drop-zone">
+  <div class="row">
+    <div class="mb-4 text-purple">
+      Trascina o clicca qui per selezionare il file da dividere
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-center row">
+    <!-- Flex container for icon and text -->
+    <div class="d-flex align-items-center justify-content-center">
+      <i class="bi bi-file-earmark me-2 text-purple"></i>
+      <span class="text-purple fw-semibold" id="file-name">Nome file</span>
+    </div>
+  </div>
+</div>
+<hr>
+<div class="col-12 d-flex justify-content-end">
+  <lib-generic-button
+    [type]="'submit'"
+    (click)="saveNewProduct()"
+    [buttonSize]="ButtonSizeTheme.Large"
+    [buttonStyle]="ButtonTheme.Primary"
+    buttonText="Crea">
+    ></lib-generic-button>
+</div>

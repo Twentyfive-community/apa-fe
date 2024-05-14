@@ -1,3 +1,5 @@
+import {Allergen} from "./Allergen";
+
 export class Ingredient {
   id: string;
   name: string;
@@ -19,10 +21,4 @@ export class IngredientToSave{
   status: string;
   alcoholicString: string;
 
-}
-
-export class Allergen {
-  id: string;
-  name: string;
-  iconUrl: string;
 }

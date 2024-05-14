@@ -5,16 +5,31 @@
       <span ngbDropdownToggle class="dropdown-toggle" data-bs-toggle="dropdowns" role="button" aria-expanded="false"></span>
     </div>
     <ul ngbDropdownMenu class="dropdown-menu">
-      <li><a class="dropdown-item">Modifica</a></li>
-      <li><a class="dropdown-item">Elimina</a></li>
+      <li><a class="dropdown-item" (click)="editCategoryToModify()">Modifica</a></li>
+      <li><a class="dropdown-item" (click)="disableCategory()">Elimina</a></li>
     </ul>
   </li>
+  <i class="align-content-center ms-2 bi bi-plus-circle fs-6"
+     (click)="editCategory()"
+  ></i>
 </ul>
 
 <div class="tab-content mt-4" id="myTabContent">
   <ng-container *ngFor="let category of navCategories">
     <div *ngIf="activeTab === category.id" class="tab-pane fade show active" id="{{category.id}}-tab" role="tabpanel" [attr.aria-labelledby]="category.id + '-tab'">
       <div class="col-12 m-0">
+
+        <div class="col-12 pb-3 mt-4">
+          <lib-generic-button-text-with-icon
+            buttonText="Crea {{category.name}}"
+            suffixIcon="bi bi-plus-circle"
+            (click) = "goToEdit()"
+            [buttonSize]="ButtonSizeTheme.ExtraLarge"
+            [buttonStyle]="ButtonTheme.Primary"
+            [iconLeft]="false"
+          ></lib-generic-button-text-with-icon>
+        </div>
+
         <!-- Contenuto dinamico della scheda -->
         <ng-container [ngSwitch]="category.type">
           <div *ngSwitchCase="'productKg'">
@@ -49,11 +64,13 @@
               [isSortable]="true"
               [headers]="headersWeighted"
               [showActions]="true"
+              [checkedField]="'active'"
               [actions]="tableActions"
               [isPaginated]="true"
               [extras]="extras"
               [dataDetails]="dataDetailsWeighted"
               [singleOpen]="true"
+              [showSwitch]="true"
               [detailsTemplateRef]="templateRefProduct"
               [page]="currentPage"
               [pageSize]="pageSize"
@@ -63,6 +80,7 @@
               (detailsEmitter)="getProductDetails($event)"
               (changePageEmitter)="changePage($event)"
               (selectEmitter)="selectSize($event)"
+              (changeSwitchValue)="switch($event)"
             ></twentyfive-accordion-table>
           </div>
           <div *ngSwitchCase="'tray'">
@@ -71,9 +89,11 @@
               [isSortable]="true"
               [headers]="headersTray"
               [showActions]="true"
+              [checkedField]="'active'"
               [actions]="tableActions"
               [isPaginated]="true"
               [extras]="extras"
+              [showSwitch]="true"
               [dataDetails]="dataDetailsTrays"
               [singleOpen]="true"
               [detailsTemplateRef]="templateRefTray"
@@ -85,7 +105,9 @@
               (detailsEmitter)="getProductDetails($event)"
               (changePageEmitter)="changePage($event)"
               (selectEmitter)="selectSize($event)"
-            ></twentyfive-accordion-table>          </div>
+              (changeSwitchValue)="switch($event)"
+            ></twentyfive-accordion-table>
+          </div>
           <ng-template #templateRefProduct>
             <div class="m-2 mt-0 mb-0">
               <h5 class="mb-4">Allergeni</h5>
@@ -131,7 +153,7 @@
   <ng-template #templateRefTray>
     <div class="m-2 mt-0 mb-0">
       <h5 class="mb-4">Tipologia</h5>
-      <span>{{ trayDetails.customized }}</span>
+      <span>{{ trayDetails.personalized }}</span>
       <hr>
       <h5 class="mb-4 mt-4">Misure</h5>
       <span>{{ trayDetails.measures }}</span>

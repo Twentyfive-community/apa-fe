@@ -5,6 +5,7 @@ import {Order, OrderDetails} from "../../../../models/Order";
 import {ToastrService} from "ngx-toastr";
 import {ActivatedRoute, Router} from "@angular/router";
 import {TwentyfiveModalService} from "twentyfive-modal";
+import {RxStompServiceService} from "../../../../services/rxstomp/rx-stomp-service.service";
 
 @Component({
   selector: 'app-order',
@@ -25,6 +26,8 @@ export class OrderListComponent implements OnInit{
 
   sortColumn: string = '';
   sortDirection: string = '';
+
+  subscriptionText: any;
 
   headers: any[] = [
     {name: 'ID', value: 'id', sortable: true},
@@ -133,11 +136,17 @@ export class OrderListComponent implements OnInit{
                private toastrService: ToastrService,
                private activatedRouteRoute: ActivatedRoute,
                private modalService: TwentyfiveModalService,
+               private rxStompService: RxStompServiceService,
+               private toastr: ToastrService
              ) {
   }
 
 
   ngOnInit(): void {
+    this.subscriptionText = this.rxStompService.watch('/apa_order').subscribe((message: any) => {
+      this.getAll();
+      this.toastr.success(message.body);
+    });
     this.getAll();
   }
 

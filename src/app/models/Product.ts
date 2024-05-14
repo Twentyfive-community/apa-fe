@@ -1,4 +1,5 @@
 import {Allergen} from "./Allergen";
+import {Measure} from "./Measure";
 
 export class ProductKg {
   id: string;
@@ -18,7 +19,7 @@ export class ProductWeighted {
   imageUrl: string;
   active: boolean;
 }
-export class ProductWeightedToEdit {
+export class ProductToEdit {
   id: string;
   name: string;
   ingredientIds: string[];
@@ -27,12 +28,15 @@ export class ProductWeightedToEdit {
   imageUrl: string;
   active: boolean;
   weight: number;
-  price: number;
+  pricePerKg: number;
+  weightRange:WeightRange = new WeightRange();
+  customized: boolean;
+  measures: Measure[] = []
 }
 export class Tray {
   id: string;
   name: string;
-  customized: boolean;
+  personalized: boolean;
   measures: string;
   description: string;
   active: boolean;
@@ -40,8 +44,10 @@ export class Tray {
 export class TrayDetails {
   id: string;
   name: string;
-  customized: boolean;
+  customized:boolean;
+  personalized: boolean;
   measures: string;
+  measuresList: Measure[] =[]
   description: string;
 }
 export class ProductWeightedDetails{
@@ -61,8 +67,11 @@ export class ProductDetails {
   ingredients:string[];
   pricePerKg:string;
   weight:string;
-  imageUrl:string[];
+  imageUrl:string;
   active:boolean;
+  description:string;
+  weightRange:WeightRange = new WeightRange();
+  customized: boolean;
 }
 
 export class ProductInPurchase {
@@ -77,4 +86,8 @@ export class ProductInPurchase {
   attachment: string;
   deliveryDate: string;
   totalPrice: number;
+}
+export class WeightRange {
+  minWeight:number;
+  maxWeight:number;
 }

@@ -16,6 +16,9 @@ import {TwentyfiveDropdownModule} from "twentyfive-dropdown";
 import {FormsModule} from "@angular/forms";
 import {TwentyfiveChipModule} from "twentyfive-chip";
 import {TwentyfiveCheckboxModule} from "twentyfive-checkbox";
+import { ProductListComponent } from './pages/product-list/product-list.component';
+import {NgbDropdownModule} from "@ng-bootstrap/ng-bootstrap";
+import { ProductEditComponent } from './pages/product-edit/product-edit.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +29,8 @@ import {TwentyfiveCheckboxModule} from "twentyfive-checkbox";
     CustomerListComponent,
     CustomerDetailsComponent,
     CustomerEditComponent,
+    ProductListComponent,
+    ProductEditComponent,
     IngredientListComponent,
     IngredientEditComponent,
   ],
@@ -33,13 +38,14 @@ import {TwentyfiveCheckboxModule} from "twentyfive-checkbox";
         DashboardRoutingModule,
         SharedModule,
         NgbDropdown,
-        NgbDropdownToggle,
+      NgbDropdownModule,
+      NgbDropdownToggle,
         NgbDropdownMenu,
         TwentyfiveDropdownModule,
         FormsModule,
         TwentyfiveChipModule,
         TwentyfiveCheckboxModule,
-    ]
+    ],
 })
 export class DashboardModule {
 }

@@ -12,8 +12,13 @@ import {
 } from "../../../../models/Product";
 import {ToastrService} from "ngx-toastr";
 import {TwentyfiveModalService} from "twentyfive-modal";
-import {ButtonTheme} from "twentyfive-style";
+import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
 import {ActivatedRoute, Router} from "@angular/router";
+import {CategoryEditComponent} from "../../../../shared/category-edit/category-edit.component";
+import {
+  TwentyfiveModalGenericComponentModule,
+  TwentyfiveModalGenericComponentService
+} from "twentyfive-modal-generic-component";
 
 @Component({
   selector: 'app-product-list',
@@ -26,14 +31,14 @@ export class ProductListComponent implements OnInit{
     {name: 'Allergeni', value: 'allergens.iconUrl'},
     {name: 'Ingredienti', value: 'ingredients'},
     {name: 'Prezzo/Kg', value: 'pricePerKg',sortable: true},
-    {name: 'status', value:'enable',sortable: true}
+    {name: 'status', value:'active',sortable: true}
   ];
   headersWeighted: any[] = [
     {name: 'Nome', value: 'name',sortable: true},
     {name: 'Allergeni', value: 'allergens.iconUrl'},
     {name: 'Ingredienti', value: 'ingredients'},
     {name: 'Peso', value: 'weight',sortable: true},
-    {name: 'status', value:'enable'}
+    {name: 'status', value:'active'}
   ];
   headersTray: any[] = [
     {name: 'Nome', value: 'name',sortable: true},
@@ -103,7 +108,8 @@ export class ProductListComponent implements OnInit{
               private toastrService: ToastrService,
               private modalService: TwentyfiveModalService,
               private categoryService:CategoryService,
-              private productService:ProductService) {}
+              private productService:ProductService,
+              private genericModalService:TwentyfiveModalGenericComponentService) {}
   ngOnInit(): void {
     this.getCategories();
   }
@@ -133,7 +139,7 @@ export class ProductListComponent implements OnInit{
         })
         break;
       case 'tray':
-        this.productService.getAllTrays(page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection).subscribe((res: any) => {
+        this.productService.getAllTrays(this.activeTab,page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection).subscribe((res: any) => {
           this.trayList = res.content
           this.collectionSize = res.totalElements;
         })
@@ -173,6 +179,7 @@ export class ProductListComponent implements OnInit{
   setActiveTab(category: Category) {
     this.sortDirection='';
     this.sortColumn='';
+    this.collectionSize = 90;
     this.activeTab = category.id;
     this.categoryActive = category.type;
     this.getAll();
@@ -189,6 +196,48 @@ export class ProductListComponent implements OnInit{
     console.log(event);
     switch (this.categoryActive) {
       case 'productKg':
+        if (event){
+        }
     }
   }
+  editCategoryToModify(){
+    let r = this.genericModalService.open(CategoryEditComponent, "lg", {});
+    r.componentInstance.categoryId = this.activeTab;
+    r.result.finally(() => {
+      this.getCategories()
+    })
+  }
+
+  disableCategory(){
+    this.modalService.openModal(
+      'Sei sicuro di voler cancellare questa categoria?',
+      'Abilita',
+      'Annulla',
+      'Conferma',
+      {
+        showIcon: true,
+        size: 'md',
+        onConfirm: (() => {
+          this.categoryService.disableCategory(this.activeTab).subscribe({
+            next: (() =>{
+              this.getCategories();
+            })
+          });
+        })
+      });
+  }
+
+  editCategory() {
+    let r = this.genericModalService.open(CategoryEditComponent, "lg", {});
+    r.componentInstance.categoryType=this.categoryType;
+    r.result.finally(() => {
+      this.getCategories()
+    })
+  }
+
+  goToEdit() {
+    this.router.navigate(['/dashboard/editingProdotti'], { queryParams: { categoryId: this.activeTab } });
+  }
+
+  protected readonly ButtonSizeTheme = ButtonSizeTheme;
 }
