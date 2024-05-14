@@ -50,9 +50,10 @@ export class ProductEditComponent implements OnInit{
     if(this.categoryId){
       this.categoryService.getById(this.categoryId).subscribe((response:any) =>{
         this.category=response;
-        this.productToAdd.categoryId=this.categoryId;
         if (this.productId){
           this.getProductDetails(this.productId);
+        } else {
+          this.productToAdd.categoryId=this.categoryId;
         }
         if (!(this.category.type=="tray")){
           this.getAllIngredients();
@@ -70,6 +71,7 @@ export class ProductEditComponent implements OnInit{
       case 'productKg':
         this.productService.getByIdKg(event).subscribe((response:any) =>{
           this.productToAdd=response;
+          this.productToAdd.categoryId=this.categoryId;
           this.pricePerKg=parseFloat(response.pricePerKg.replace('€ ', ''));
           this.productToAdd.pricePerKg =this.pricePerKg;
           this.minWeight=this.productToAdd.weightRange.minWeight;
@@ -80,6 +82,7 @@ export class ProductEditComponent implements OnInit{
       case 'productWeighted':
         this.productService.getByIdWeighted(event).subscribe((response:any) =>{
           this.productToAdd=response;
+          this.productToAdd.categoryId=this.categoryId;
           this.weight=parseFloat(response.weight.replace('Kg ', ''));
           this.productToAdd.weight =this.weight;
           this.selectedIngredients=response.ingredients;
@@ -88,6 +91,7 @@ export class ProductEditComponent implements OnInit{
       case 'tray':
         this.productService.getByIdTray(event).subscribe((response:any) =>{
           this.productToAdd=response;
+          this.productToAdd.categoryId=this.categoryId;
           this.productToAdd.measures=response.measuresList;
           this.measure = this.productToAdd.measures.slice();
           this.i = this.measure.length;
@@ -222,7 +226,8 @@ export class ProductEditComponent implements OnInit{
             this.toastrService.success("Prodotto salvato con successo");
             this.router.navigate(['../dashboard/prodotti']);
           }
-        })    }
+        })
+    }
   }
 
   changeCustomized() {
