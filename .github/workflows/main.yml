@@ -1,0 +1,56 @@
+name: deploy
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: latest
+
+      - run: npm install --legacy-peer-deps
+      - run: npm run build
+
+      - name: Install SSH Key
+        uses: shimataro/ssh-key-action@v2
+        with:
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          known_hosts: unnecessary
+
+      - name: Adding Known Hosts
+        run: ssh-keyscan -p ${{ secrets.SSH_PORT }} -H ${{ secrets.SSH_HOST }}  >> ~/.ssh/known_hosts
+
+      - name: Create dist_angular folder
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd ..
+            mkdir -p actions
+            cd actions
+            mkdir -p dist_angular
+            cd dist_angular
+            mkdir -p ${{ secrets.SSH_PROJECT_NAME }}
+            cd ${{ secrets.SSH_PROJECT_NAME }}
+
+      - name: Move build to server with rsync
+        run: rsync -avz -e "ssh -p ${{ secrets.SSH_PORT }}" ./dist/. ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/actions/dist_angular/
+
+      - name: Move data inside Nginx Container
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            cd /actions/dist_angular/${{ secrets.SSH_PROJECT_NAME }}
+            docker cp ./. ${{ secrets.SSH_CONTAINER }}:/var/www/html
+            docker restart ${{ secrets.SSH_CONTAINER }}
