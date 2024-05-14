@@ -148,7 +148,6 @@ export class OrderListComponent implements OnInit{
       this.toastr.success(message.body);
     });
     this.getAll();
-    console.log(this.paginationElements);
   }
 
   getAll(page?: number) {
