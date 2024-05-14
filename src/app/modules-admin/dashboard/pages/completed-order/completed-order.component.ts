@@ -83,9 +83,7 @@ export class CompletedOrderComponent implements OnInit{
 
   constructor(private toastrService: ToastrService,
               private modalService: TwentyfiveModalService,
-              private completedOrderService: CompletedorderService,
-              private rxStompService: RxStompServiceService,
-              private toastr: ToastrService) {
+              private completedOrderService: CompletedorderService) {
   }
 
   ngOnInit() {
