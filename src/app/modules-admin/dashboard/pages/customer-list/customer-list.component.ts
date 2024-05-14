@@ -27,9 +27,7 @@ export class CustomerListComponent implements OnInit{
     { name:'Cognome', value:'lastName'},
     { name:'Nome',    value:'firstName'},
     { name:'Email',   value:'email'},
-    { name:'Numero di telefono', value:'phoneNumber'},
-    { name:'Status', value:'enabled'}
-
+    { name:'Numero di telefono', value:'phoneNumber'}
   ]
 
   customers: Customer[] = []
@@ -44,52 +42,6 @@ export class CustomerListComponent implements OnInit{
       toolTipText:'Modifica',
       placement: 'top',
       showFunction: () => {
-      }
-    },
-    {
-      icon:'bi bi-toggle-on',
-      action:async (myRow: any) =>{
-        this.modalService.openModal(
-          'Sei sicuro di voler disabilitare questo cliente?',
-          'Disabilita',
-          'Annulla',
-          'Conferma',
-          {
-            showIcon: true,
-            size: 'md',
-            onConfirm: (() => {
-              this.changeStatus(myRow.id);
-            })
-          });
-      },
-      actionName: 'Disabilita',
-      tooltipText: 'Disabilita',
-      placement: 'top',
-      showFunction: (myRow: any) => {
-        return myRow.enabled==true;
-      }
-    },
-    {
-      icon:'bi bi-toggle-off',
-      action:async (myRow: any) =>{
-        this.modalService.openModal(
-          'Sei sicuro di voler abilitare questo cliente?',
-          'Abilita',
-          'Annulla',
-          'Conferma',
-          {
-            showIcon: true,
-            size: 'md',
-            onConfirm: (() => {
-              this.changeStatus(myRow.id);
-            })
-          });
-      },
-      actionName: 'Abilita',
-      tooltipText: 'Abilita',
-      placement: 'top',
-      showFunction: (myRow: any) => {
-        return myRow.enabled==false;
       }
     }
   ]
@@ -106,10 +58,6 @@ export class CustomerListComponent implements OnInit{
   ngOnInit(): void {
 
     this.getAll();
-    /*this.subscriptionText = this.rxStompService.watch('/apa_order').subscribe((message: any) => {
-      this.textMessage = message.body;
-      this.toastr.success(message.body);
-    });*/
   }
 
   getAll(page?: number){
@@ -123,10 +71,10 @@ export class CustomerListComponent implements OnInit{
     this.router.navigate(['/dashboard/dettagliClienti', event.id])
   }
 
-  changeStatus(id: string){
-    this.customerService.changeStatusCustomer(id).subscribe({
+  changeStatus(event: any){
+    this.customerService.changeStatusCustomer(event.id).subscribe({
       next: (() => {
-        this.getAll();
+        this.getAll(this.currentPage);
       })
     });
   }
@@ -138,8 +86,8 @@ export class CustomerListComponent implements OnInit{
 
 
   changePage(event: number){
-    this.currentPage = event;
-    this.getAll(this.currentPage-1);
+    this.currentPage = event-1;
+    this.getAll(this.currentPage);
   }
 
   sortingColumn(event: any){

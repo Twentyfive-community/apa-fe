@@ -30,15 +30,13 @@ export class ProductListComponent implements OnInit{
     {name: 'Nome', value: 'name',sortable: true},
     {name: 'Allergeni', value: 'allergens.iconUrl'},
     {name: 'Ingredienti', value: 'ingredients'},
-    {name: 'Prezzo/Kg', value: 'pricePerKg',sortable: true},
-    {name: 'status', value:'active',sortable: true}
+    {name: 'Prezzo/Kg', value: 'pricePerKg',sortable: true}
   ];
   headersWeighted: any[] = [
     {name: 'Nome', value: 'name',sortable: true},
     {name: 'Allergeni', value: 'allergens.iconUrl'},
     {name: 'Ingredienti', value: 'ingredients'},
-    {name: 'Peso', value: 'weight',sortable: true},
-    {name: 'status', value:'active'}
+    {name: 'Peso', value: 'weight',sortable: true}
   ];
   headersTray: any[] = [
     {name: 'Nome', value: 'name',sortable: true},
@@ -168,8 +166,8 @@ export class ProductListComponent implements OnInit{
     }
   }
   changePage(event: number) {
-    this.currentPage = event;
-    this.getAll(this.currentPage-1);
+    this.currentPage = event-1;
+    this.getAll(this.currentPage);
   }
 
   selectSize(event: any) {
@@ -199,20 +197,20 @@ export class ProductListComponent implements OnInit{
           this.productService.disableByIdKg(event.id).subscribe({
             error: () => {
               this.toastrService.error("Errore nel disattivare questo prodotto!");
-              this.getAll();
+              this.getAll(this.currentPage);
             },
             complete: () => {
-              this.getAll();
+              this.getAll(this.currentPage);
             }
           });
         } else {
           this.productService.activateByIdKg(event.id).subscribe({
             error: () => {
               this.toastrService.error("Errore nell\'attivare questo prodotto!");
-              this.getAll();
+              this.getAll(this.currentPage);
             },
             complete: () => {
-              this.getAll();
+              this.getAll(this.currentPage);
             }
           });
         }
@@ -222,20 +220,20 @@ export class ProductListComponent implements OnInit{
           this.productService.disableByIdWeighted(event.id).subscribe({
             error: () => {
               this.toastrService.error("Errore nel disattivare questo prodotto!");
-              this.getAll();
+              this.getAll(this.currentPage);
             },
             complete: () => {
-              this.getAll();
+              this.getAll(this.currentPage);
             }
           });
         } else {
           this.productService.activateByIdWeighted(event.id).subscribe({
             error: () => {
               this.toastrService.error("Errore nell\'attivare questo prodotto!");
-              this.getAll();
+              this.getAll(this.currentPage);
             },
             complete: () => {
-              this.getAll();
+              this.getAll(this.currentPage);
             }
           });
         }
@@ -244,10 +242,10 @@ export class ProductListComponent implements OnInit{
         this.productService.activateOrDisableTray(event.id).subscribe({
           error: () => {
             this.toastrService.error("Errore nell\'attivare o disattivare questo vassoio!");
-            this.getAll();
+            this.getAll(this.currentPage);
           },
           complete: () => {
-            this.getAll();
+            this.getAll(this.currentPage);
           }
         });
         break;

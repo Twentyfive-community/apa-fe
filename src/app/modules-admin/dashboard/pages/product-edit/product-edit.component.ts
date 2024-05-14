@@ -81,6 +81,7 @@ export class ProductEditComponent implements OnInit{
           this.minWeight=this.productToAdd.weightRange.minWeight;
           this.maxWeight=this.productToAdd.weightRange.maxWeight;
           this.selectedIngredients=response.ingredients;
+          console.log(this.selectedIngredients);
         })
         break;
       case 'productWeighted':
@@ -90,6 +91,7 @@ export class ProductEditComponent implements OnInit{
           this.weight=parseFloat(response.weight.replace('Kg ', ''));
           this.productToAdd.weight =this.weight;
           this.selectedIngredients=response.ingredients;
+          console.log(this.selectedIngredients);
         })
         break;
       case 'tray':

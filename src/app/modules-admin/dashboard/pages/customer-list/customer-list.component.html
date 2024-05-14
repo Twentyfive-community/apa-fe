@@ -16,13 +16,14 @@
       <lib-twentyfive-table
         [maxWidthValue]="'6vw'"
         [headers]="headers"
+        [showSwitch]="true"
+        [checkedField]="'enabled'"
         [sortable]="true"
         [tableHeadStyle]="TableHeadTheme.Primary"
         [tableStyle]="TableTheme.Web"
         [actions]="tableActions"
         [showActions]="true"
         [rows]="customers"
-        (rowClicked)="goToDetails($event)"
         [pageSize]="pageSize"
         [collectionSize]="maxSize"
         [maxSize]="maxSize"
@@ -31,6 +32,7 @@
         (sortableChange)="sortingColumn($event)"
         (pageChange)="changePage($event)"
         (modelChange)="selectSize($event)"
+        (switchClick)="changeStatus($event)"
       >
       </lib-twentyfive-table>
     </div>

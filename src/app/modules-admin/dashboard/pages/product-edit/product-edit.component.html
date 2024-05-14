@@ -220,6 +220,6 @@
     (click)="saveNewProduct()"
     [buttonSize]="ButtonSizeTheme.Large"
     [buttonStyle]="ButtonTheme.Primary"
-    buttonText="Crea">
-    ></lib-generic-button>
+    [buttonText]="productId ? 'Modifica ' + (category?.name || '') : 'Crea'"
+  ></lib-generic-button>
 </div>

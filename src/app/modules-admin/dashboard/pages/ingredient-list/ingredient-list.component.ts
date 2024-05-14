@@ -33,14 +33,13 @@ export class IngredientListComponent implements OnInit{
     { name:'Nome',    value:'name'},
     { name:'Allergeni',   value:'allergens.iconUrl'},
     { name:'Descrizione', value:'note'},
-    { name:'Alcolico', value:'alcoholicString'},
-    { name:'Status', value:'status'}
+    { name:'Alcolico', value:'alcoholicString'}
   ]
 
   ingredients: Ingredient[] = []
   categories: Category[] = []
 
-  /*
+
   tableActions: any[]=[
     {
       icon:'bi bi-pencil-square',
@@ -52,55 +51,9 @@ export class IngredientListComponent implements OnInit{
       placement: 'top',
       showFunction: () => {
       }
-    },
-    {
-      icon:'bi bi-toggle-on',
-      action:async (myRow: any) =>{
-        this.modalService.openModal(
-          'Sei sicuro di voler disabilitare questo ingrediente?',
-          'Disabilita',
-          'Annulla',
-          'Conferma',
-          {
-            showIcon: true,
-            size: 'md',
-            onConfirm: (() => {
-              this.disableStatus(myRow.id);
-            })
-          });
-      },
-      actionName: 'Disabilita',
-      tooltipText: 'Disabilita',
-      placement: 'top',
-      showFunction: (myRow: any) => {
-        return myRow.active==true;
-      }
-    },
-    {
-      icon:'bi bi-toggle-off',
-      action:async (myRow: any) =>{
-        this.modalService.openModal(
-          'Sei sicuro di voler abilitare questo ingrediente?',
-          'Abilita',
-          'Annulla',
-          'Conferma',
-          {
-            showIcon: true,
-            size: 'md',
-            onConfirm: (() => {
-              this.activateStatus(myRow.id);
-            })
-          });
-      },
-      actionName: 'Abilita',
-      tooltipText: 'Abilita',
-      placement: 'top',
-      showFunction: (myRow: any) => {
-        return myRow.active==false;
-      }
     }
   ]
-*/
+
   constructor(private ingredientService: IngredientService,
               private categoryService: CategoryService,
               private router: Router,
@@ -176,7 +129,7 @@ export class IngredientListComponent implements OnInit{
   disableStatus(id: string){
     this.ingredientService.disableIngredient(id).subscribe({
       next: (() => {
-        this.getAll(this.activeTab);
+        this.getAll(this.activeTab,this.currentPage);
       })
     });
   }
@@ -197,8 +150,8 @@ export class IngredientListComponent implements OnInit{
   }
 
   changePage(event: number){
-    this.currentPage = event;
-    this.getAll(this.activeTab, this.currentPage-1);
+    this.currentPage = event-1;
+    this.getAll(this.activeTab, this.currentPage);
   }
 
   sortingColumn(event: any){
@@ -215,11 +168,6 @@ export class IngredientListComponent implements OnInit{
     else{
       this.activateStatus(event.id)
     }
-
-  }
-
-  modifyIngredient(event: any){
-    this.router.navigate(['/dashboard/editingIngredienti', event.id],{ queryParams: { activeTab: this.activeTab } })
   }
 
 }
