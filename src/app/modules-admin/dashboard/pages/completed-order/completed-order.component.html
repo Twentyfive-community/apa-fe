@@ -1,4 +1,4 @@
-<div *ngIf="data.length > 0" class="mt-4 row web-table">
+<div class="mt-4 row web-table">
   <div class="col-12 m-0">
     <twentyfive-accordion-table
       [data]="data"
@@ -15,7 +15,7 @@
       [dataDetails]="dataDetails"
 
       [singleOpen]="true"
-      [templateRef]="templateRef"
+      [detailsTemplateRef]="templateRef"
 
       [page]="currentPage"
       [pageSize]="pageSize"
@@ -39,7 +39,7 @@
       <p><b>Forma:</b> {{ product.shape }}</p>
 
 
-      <p><b>Personalizazioni:</b></p>
+      <p><b>Personalizzazioni:</b></p>
       <ul *ngFor="let item of product.customization | keyvalue">
         <li><b>{{ item.key }}:</b> {{ item.value }}</li>
       </ul>
@@ -69,7 +69,7 @@
   <div>
     <div class=" m-2 mt-0 mb-0" *ngFor="let bundle of orderDetails.bundles">
       <h4 class="mb-4">{{ bundle.name.toUpperCase() }}</h4>
-      <p><b>Peso:</b> {{ bundle.measure.label }} Kg</p>
+      <p><b>Peso:</b> {{ bundle.measure.weight }} Kg</p>
       <p><b>Quantità:</b> {{ bundle.quantity }}</p>
       <p><b>Total Price:</b> {{ bundle.totalPrice }} €</p>
     </div>

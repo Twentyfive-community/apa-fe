@@ -63,17 +63,20 @@
         <twentyfive-accordion-table
           [headers]="headersOrders"
           [isSortable]="true"
+          [isPaginated]="true"
           [data]="completedOrders"
           [extras]="extras"
           [dataDetails]="dataDetails"
           (detailsEmitter)="getOrderDetails($event)"
           [singleOpen]="true"
-          [templateRef]="templateRef"
+          [detailsTemplateRef]="templateRef"
           [page]="currentPage"
           [pageSize]="pageSize"
           [collectionSize]="collectionSize"
           [maxSize]="maxSize"
 
+          (changePageEmitter)="changePage($event)"
+          (selectEmitter)="selectSize($event)"
           [dropdownElements]="paginationElements"
         ></twentyfive-accordion-table>
       </div>
@@ -94,7 +97,7 @@
       <p><b>Forma:</b> {{ product.shape }}</p>
 
 
-      <p><b>Personalizazioni:</b></p>
+      <p><b>Personalizzazioni:</b></p>
       <ul *ngFor="let item of product.customization | keyvalue">
         <li><b>{{ item.key }}:</b> {{ item.value }}</li>
       </ul>

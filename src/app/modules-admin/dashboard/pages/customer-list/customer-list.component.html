@@ -16,6 +16,8 @@
       <lib-twentyfive-table
         [maxWidthValue]="'6vw'"
         [headers]="headers"
+        [showSwitch]="true"
+        [checkedField]="'enabled'"
         [sortable]="true"
         [tableHeadStyle]="TableHeadTheme.Primary"
         [tableStyle]="TableTheme.Web"
@@ -28,6 +30,10 @@
         [maxSize]="maxSize"
         [model]="pageSize"
         [isPaginated]="true"
+        (sortableChange)="sortingColumn($event)"
+        (pageChange)="changePage($event)"
+        (modelChange)="selectSize($event)"
+        (switchClick)="changeStatus($event)"
       >
       </lib-twentyfive-table>
     </div>

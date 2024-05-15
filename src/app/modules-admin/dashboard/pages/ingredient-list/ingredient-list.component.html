@@ -1,0 +1,66 @@
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li *ngFor="let category of categories" class="nav-item" role="presentation" ngbDropdown>
+    <div (click)="setActiveTab(category.id)" class="nav-link" id="{{category.id}}-tab" data-bs-toggle="tab" [attr.data-bs-target]="'#'+category.id" role="tab" [class.active]="activeTab === category.id" [attr.aria-controls]="category.id" aria-selected="true">
+      {{category.name}}
+      <span ngbDropdownToggle class="dropdown-toggle" data-bs-toggle="dropdowns" role="button" aria-expanded="false"></span>
+    </div>
+    <ul ngbDropdownMenu class="dropdown-menu">
+      <li><a class="dropdown-item"
+      (click)="editCategoryToModify()">Modifica</a></li>
+      <li><a class="dropdown-item"
+      (click)="disableCategory()">Elimina</a></li>
+    </ul>
+  </li>
+  <i class="align-content-center ms-2 bi bi-plus-circle fs-6"
+    (click)="editCategory()"
+  ></i>
+</ul>
+
+<div class="tab-content" id="myTabContent">
+  <div *ngFor="let category of categories" [ngClass]="['tab-pane', 'fade', category.id === 'home' ? 'show active' : '']" id="{{category.id}}" role="tabpanel" [attr.aria-labelledby]="category.id + '-tab'"></div>
+</div>
+
+
+
+<div class="row mt-5 ms-lg-3 me-lg-3">
+
+  <div class="col-12 pb-3">
+    <lib-generic-button-text-with-icon
+      buttonText="Crea ingrediente"
+      suffixIcon="bi bi-plus-circle"
+      (click)="goToEdit()"
+      [buttonSize]="ButtonSizeTheme.ExtraLarge"
+      [buttonStyle]="ButtonTheme.Primary"
+      [iconLeft]="false"
+    ></lib-generic-button-text-with-icon>
+  </div>
+
+  <div class="mt-4 row ">
+    <div class="col-12">
+      <lib-twentyfive-table
+        [showSwitch]="true"
+        (switchClick)="activeOrDisable($event)"
+        [maxWidthValue]="'6vw'"
+        [headers]="headers"
+        [actions]="tableActions"
+        [dropdownElements]="paginationElements"
+        [checkedField]="'active'"
+        [rows]= "ingredients"
+        [rotate]="true"
+        [sortable]="true"
+        [tableHeadStyle]="TableHeadTheme.Primary"
+        [tableStyle]="TableTheme.Web"
+        [showActions]="true"
+        [pageSize]="pageSize"
+        [collectionSize]="maxSize"
+        [maxSize]="maxSize"
+        [model]="pageSize"
+        [isPaginated]="true"
+        [paginationStyle]="TableTheme.Web"
+        (pageChange)="changePage($event)"
+        (sortableChange)="sortingColumn($event)"
+        (modelChange)="selectSize($event)"
+      ></lib-twentyfive-table>
+    </div>
+  </div>
+</div>

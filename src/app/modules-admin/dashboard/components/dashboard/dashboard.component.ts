@@ -28,6 +28,20 @@ export class DashboardComponent implements OnInit{
       labelColor: ""
     },
     {
+      title: "Ingredienti",
+      icon: "bi bi-egg",
+      navigationUrl: "ingredienti",
+      disableClick: false,
+      labelColor: ""
+    },
+    {
+      title: "Prodotti",
+      icon: "bi bi-cake-fill",
+      navigationUrl: "prodotti",
+      disableClick: false,
+      labelColor: ""
+    },
+    {
       title: "Clienti",
       icon: "bi bi-person-lines-fill",
       navigationUrl: "clienti",

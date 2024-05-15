@@ -4,6 +4,8 @@ import {ButtonTheme} from "twentyfive-style";
 import {Order, OrderDetails} from "../../../../models/Order";
 import {ToastrService} from "ngx-toastr";
 import {TwentyfiveModalService} from "twentyfive-modal";
+import {RxStompServiceService} from "../../../../services/rxstomp/rx-stomp-service.service";
+import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-completed-order',
@@ -77,6 +79,7 @@ export class CompletedOrderComponent implements OnInit{
       value: '25'
     }
   ];
+  private subscriptionText: any;
 
   constructor(private toastrService: ToastrService,
               private modalService: TwentyfiveModalService,
