@@ -1,0 +1,27 @@
+.custom-button {
+  color: white;
+  padding: 15px 30px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.button-bottom {
+  position: absolute;
+  bottom:0;
+}
+
+.save-button{
+  margin-bottom: 100px;
+}
+
+.cancel-button {
+  background-color: #6c757d; /* Bootstrap gray color */
+  border-color: #6c757d; /* Same color for the border */
+  color: white; /* White text color */
+  margin-bottom: 40px;
+}
+
+.cancel-button:hover {
+  background-color: #5a6268; /* Slightly darker gray on hover */
+  border-color: #545b62; /* Matching darker border color */
+}

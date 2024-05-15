@@ -1,0 +1,68 @@
+<div class="profile-container">
+
+  <div class="row justify-content-center mt-3 mb-3">
+    <div class="col-10">
+      <button
+        class="btn btn-secondary btn-full-width custom-button">
+        <i class="bi bi-box-seam icon-size pe-2 custom-icon"></i>
+        I tuoi ordini
+      </button>
+    </div>
+  </div>
+
+
+
+    <section class="customer-data">
+      <div class="row">
+        <div class="d-flex align-content-around">
+        <h2 class="me-5">Anagrafica</h2>
+        <p>
+          <i class="bi bi-pencil-fill" style="cursor: pointer;" (click)="goToEdit()"></i>
+
+        </p>
+        </div>
+
+      </div>
+      <p class="mb-0"><strong>Nome:</strong></p>
+      <p>{{ customer.firstName }}</p>
+      <p class="mb-0"><strong>Cognome:</strong> </p>
+      <p>{{ customer.lastName }}</p>
+      <p class="mb-0"><strong>Email:</strong></p>
+      <p>{{ customer.email }}</p>
+      <p class="mb-0"><strong>Telefono:</strong></p>
+      <p>{{ customer.phoneNumber }}</p>
+    </section>
+
+    <hr>
+
+    <section >
+
+      <h2 class="mb-3">Gestione</h2>
+
+        <div class="col-12 col-lg-3">
+          <lib-generic-button-text-with-icon
+            routerLink=""
+            buttonText="Reset password"
+            [iconLeft]="true"
+            prefixIcon="bi bi-arrow-counterclockwise"
+            [buttonStyle]="ButtonTheme.OnlyText"
+          ></lib-generic-button-text-with-icon>
+        </div>
+
+    </section>
+
+  <div class="col-12 mb-3">
+    <div class="w-100 d-flex justify-content-center">
+    <lib-generic-button class="w-25 h-100"
+      routerLink=""
+      buttonText="LOGOUT"
+      [buttonSize]="ButtonSize.FullWidth"
+      [buttonStyle]="ButtonTheme.Primary"
+    ></lib-generic-button>
+    </div>
+  </div>
+
+
+
+
+</div>
