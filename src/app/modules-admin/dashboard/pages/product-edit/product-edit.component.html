@@ -14,7 +14,7 @@
 
 <div class="row mb-4 mt-4">
   <h3 *ngIf="!productId">Crea </h3>
-  <h3 *ngIf="productId">Modifica {{category?.name}}</h3>
+  <h3 *ngIf="productId">Modifica {{category.name}}</h3>
 </div>
 
 <div class="col-3">
@@ -220,6 +220,6 @@
     (click)="saveNewProduct()"
     [buttonSize]="ButtonSizeTheme.Large"
     [buttonStyle]="ButtonTheme.Primary"
-    [buttonText]="productId ? 'Modifica ' + (category?.name || '') : 'Crea'"
+    [buttonText]="productId ? 'Modifica ' + (category.name || '') : 'Crea'"
   ></lib-generic-button>
 </div>
