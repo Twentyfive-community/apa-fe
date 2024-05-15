@@ -30,6 +30,21 @@ export class CustomerListComponent implements OnInit{
     { name:'Numero di telefono', value:'phoneNumber'}
   ]
 
+  paginationElements: any[] = [
+    {
+      actionName: '5',
+      value: '5'
+    },
+    {
+      actionName: '10',
+      value: '10'
+    },
+    {
+      actionName: '25',
+      value: '25'
+    }
+  ];
+
   customers: Customer[] = []
 
   tableActions: any[]=[

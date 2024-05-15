@@ -52,7 +52,7 @@
     "twentyfive-checkbox": "^0.0.7",
     "twentyfive-style": "^0.0.104",
     "twentyfive-switch": "^0.0.9",
-    "twentyfive-table": "^0.0.99",
+    "twentyfive-table": "^0.0.100",
     "zone.js": "~0.14.3"
   },
   "devDependencies": {

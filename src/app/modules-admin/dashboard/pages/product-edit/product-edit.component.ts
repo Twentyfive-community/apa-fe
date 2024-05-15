@@ -66,7 +66,7 @@ export class ProductEditComponent implements OnInit{
     }
   }
   getAllIngredients(){
-    this.ingredientService.getAllByTypeCategories(['ingredienti']).subscribe((response:any) => {
+    this.ingredientService.getAllByTypeCategories('ingredienti').subscribe((response:any) => {
       this.ingredientNames=response;
     });
   }

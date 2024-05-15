@@ -38,8 +38,8 @@ export class IngredientService {
     return this.http.post(`${this.baseUrl}/save`,ingredient);
   }
 
-  getAllByTypeCategories(types: string[]){
-    let p = Utils.createHttpParams({'types': types});
+  getAllByTypeCategories(type: string){
+    let p = Utils.createHttpParams({'type': type});
     return this.http.get(`${this.baseUrl}/getAllByTypeCategories`, {params: p});
   }
 
