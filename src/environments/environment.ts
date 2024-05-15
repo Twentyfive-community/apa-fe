@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
 
   keycloakurl: 'http://80.211.123.141:9001',
   realmname: 'Antica-Pasticceria',
