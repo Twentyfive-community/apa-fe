@@ -3,7 +3,7 @@ export const environment = {
   realmname: 'Antica-Pasticceria',
   clientid: 'apa-app',
   redirecturi: '',
-  backendUrl: 'http://80.211.123.141:8104',
+  backendUrl: 'http://80.211.123.141:8104/apa-api-layer',
 
   showCookiePopup: true,
   cookieKey: 'cookieResponse',
