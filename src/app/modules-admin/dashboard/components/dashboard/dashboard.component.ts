@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {TwentyfiveModalService} from "twentyfive-modal";
 import {filter, map, mergeMap} from "rxjs";
 import { NavbarTheme } from 'twentyfive-style';
-import {SigningKeycloakService} from "twenty-signin";
+import {SigningKeycloakService} from "twentyfive-keycloak-new";
 
 @Component({
   selector: 'app-dashboard',

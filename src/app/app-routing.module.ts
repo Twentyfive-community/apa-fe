@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {HomeComponent} from "./components/home/home.component";
-import {CustomAuthGuard} from "twenty-signin";
+import {CustomAuthGuard} from "twentyfive-keycloak-new";
 
 const routes: Routes = [
 

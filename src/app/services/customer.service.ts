@@ -3,6 +3,7 @@ import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Utils} from "../shared/utils/utils";
 import {Customer} from "../models/Customer";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -26,14 +27,21 @@ export class CustomerService {
     return this.http.get(`${this.baseUrl}/${id}`);
   }
 
+  getCustomerByKeycloakId(kcId:string){
+    return this.http.get(`${this.baseUrl}/details/byKeycloakId/${kcId}`)
+  }
+
   saveCustomer(customer: Customer) {
     return this.http.post(`${this.saveUrl}`, customer);
+  }
+
+  saveCustomerClient(id:string,firstName:string, lastName:string, phoneNumber: string){
+    return this.http.post(`${this.saveUrl}/client`, {"id":id,"firstName":firstName,"lastName":lastName, "phoneNumber":phoneNumber});
   }
 
   changeStatusCustomer(id: string){
     return this.http.get(`${this.changeStatusUrl}/${id}`);
   }
-
 
 
 }
