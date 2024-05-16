@@ -40,6 +40,7 @@ export class Tray {
   measures: string;
   description: string;
   active: boolean;
+
 }
 export class TrayDetails {
   id: string;

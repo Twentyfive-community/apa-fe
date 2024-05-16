@@ -91,15 +91,8 @@
 
   <div class="col-1 mb-4">
     <div *ngIf="category.type=='productKg' || category.type=='tray'">
-      <div class="row mt-4 mb-2">
-        <lib-twentyfive-checkbox
-          checkboxText="Personalizzato"
-          (click)="changeCustomized()"
-          [value]="productToAdd.customized"
-        ></lib-twentyfive-checkbox>
-      </div>
 
-      <div class="row mt-4 mb-2">
+      <div class="row mt-4 mb-2" style="min-width: 100px">
         <lib-twentyfive-input
           labelText="Prezzo/kg"
           placeholder="Peso"
@@ -168,8 +161,8 @@
 
 
 
-<div *ngIf="category.type=='productKg'" class="row mt-4 mb-2">
-        <div class="col-1 me-3">
+<div *ngIf="category.type=='productKg'" class="row mt-4 mb-2" >
+        <div class="col-1 me-3" style="min-width: 100px">
           <lib-twentyfive-input
             labelText="Peso MIN (kg)"
             placeholder="Peso MIN (kg)"
@@ -178,7 +171,7 @@
             (input)="onInputChangeProduct($event, 'minWeight')"
           ></lib-twentyfive-input>
         </div>
-        <div class="col-1 ms-3">
+        <div class="col-1 ms-3" style="min-width: 100px">
           <lib-twentyfive-input
             labelText="Peso MAX (kg)"
             placeholder="Peso MAX (kg)"

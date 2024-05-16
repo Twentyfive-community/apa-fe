@@ -6,7 +6,16 @@
     </div>
     <ul ngbDropdownMenu class="dropdown-menu">
       <li><a class="dropdown-item" (click)="editCategoryToModify()">Modifica</a></li>
-      <li><a class="dropdown-item" (click)="disableCategory()">Elimina</a></li>
+      <li><a class="dropdown-item" (click)="disableCategory()">Disattiva</a></li>
+    </ul>
+  </li>
+  <li *ngFor="let category of disabledCategories" class="nav-item" role="presentation" ngbDropdown>
+    <div class="nav-link disattivo">
+      {{category.name}}
+      <span ngbDropdownToggle class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"></span>
+    </div>
+    <ul ngbDropdownMenu class="dropdown-menu">
+      <li><a class="dropdown-item" (click)="enableCategory(category.id)">Riattiva</a></li>
     </ul>
   </li>
   <i class="align-content-center ms-2 bi bi-plus-circle fs-6"
@@ -133,17 +142,11 @@
                 <hr>
               </div>
               <h5 class="mb-4 mt-4">Immagine</h5>
-              <div class="d-flex align-items-center">
-      <span class="me-4">
-        <lib-generic-button-only-icon
-          [buttonStyle]="ButtonTheme.PrimaryOnlyIconSquareSmall"
-          icon="bi bi-image-fill"
-          tooltipText="Stampa Allegato"
-          placement="right"
-          [disabled]="false"
-        ></lib-generic-button-only-icon>
-      </span>
-                <span>{{ productDetails.imageUrl }}</span> <!-- Aggiunto margine a sinistra -->
+              <div *ngIf="productDetails.imageUrl"class="d-flex align-items-center">
+                <img (click)="openImage()" [src]="productDetails.imageUrl" style="max-width: 120px; height: auto; cursor: pointer; position: relative;">
+              </div>
+              <div *ngIf="!productDetails.imageUrl"class="d-flex align-items-center">
+                <span>Immagine non disponibile</span>
               </div>
             </div>
           </ng-template>

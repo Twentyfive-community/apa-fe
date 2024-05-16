@@ -44,24 +44,17 @@
         <li><b>{{ item.key }}:</b> {{ item.value }}</li>
       </ul>
 
-      <p><b>Chocolate Chips:</b> {{ product.chocolateChips }}</p>
+      <p><b>Gocce di cioccolato:</b> {{ product.chocolateChips }}</p>
       <p><b>NOTE:</b> {{ product.text }}</p>
-      <p><b>Delivery Date:</b> {{ product.deliveryDate }}</p>
-      <p><b>Total Price:</b> {{ product.totalPrice }} €</p>
+      <p><b>Prezzo totale:</b> {{ product.totalPrice }} €</p>
 
 
       <p class="flex-grow-1"><b>ALLEGATO:</b></p>
-      <div class="d-flex align-items-center">
-        <p class="me-3">{{ product.attachment }}</p>
-        <p>
-          <lib-generic-button-only-icon
-            [buttonStyle]="ButtonTheme.PrimaryOnlyIconCircularSmall"
-            icon="bi bi-printer-fill"
-            tooltipText="Stampa Allegato"
-            placement="right"
-            [disabled]="false"
-          ></lib-generic-button-only-icon>
-        </p>
+      <div *ngIf="product.attachment"class="d-flex align-items-center">
+        <img (click)="openImage(product.attachment)" [src]="product.attachment" style="max-width: 120px; height: auto; cursor: pointer; position: relative;">
+      </div>
+      <div *ngIf="!product.attachment"class="d-flex align-items-center">
+        <span>Allegato non disponibile</span>
       </div>
     </div>
   </div>
@@ -71,7 +64,7 @@
       <h4 class="mb-4">{{ bundle.name.toUpperCase() }}</h4>
       <p><b>Peso:</b> {{ bundle.measure.weight }} Kg</p>
       <p><b>Quantità:</b> {{ bundle.quantity }}</p>
-      <p><b>Total Price:</b> {{ bundle.totalPrice }} €</p>
+      <p><b>Prezzo totale:</b> {{ bundle.totalPrice }} €</p>
     </div>
   </div>
 

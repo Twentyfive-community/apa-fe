@@ -52,6 +52,7 @@ export class IngredientListComponent implements OnInit{
 
   ingredients: Ingredient[] = []
   categories: Category[] = []
+  disabledCategories: Category[] = [];
 
 
   tableActions: any[]=[
@@ -100,8 +101,8 @@ export class IngredientListComponent implements OnInit{
 
   disableCategory(){
     this.modalService.openModal(
-      'Sei sicuro di voler abilitare questo ingrediente?',
-      'Abilita',
+      'Sei sicuro di voler disabilitare questa categoria?',
+      'Disabilita categoria',
       'Annulla',
       'Conferma',
       {
@@ -109,6 +110,25 @@ export class IngredientListComponent implements OnInit{
         size: 'md',
         onConfirm: (() => {
           this.categoryService.disableCategory(this.activeTab).subscribe({
+            next: (() =>{
+              this.getCategories();
+            })
+          });
+        })
+      });
+  }
+
+  enableCategory(id:string){
+    this.modalService.openModal(
+      'Sei sicuro di voler abilitare questa categoria?',
+      'Abilita categoria',
+      'Annulla',
+      'Conferma',
+      {
+        showIcon: true,
+        size: 'md',
+        onConfirm: (() => {
+          this.categoryService.enableCategory(id).subscribe({
             next: (() =>{
               this.getCategories();
             })
@@ -130,6 +150,9 @@ export class IngredientListComponent implements OnInit{
       this.categories = response
       this.activeTab = this.categories[0].id;
       this.getAll(this.activeTab)
+    })
+    this.categoryService.getAllDisabled(["ingredienti"]).subscribe((response: any) => {
+      this.disabledCategories = response;
     })
   }
 

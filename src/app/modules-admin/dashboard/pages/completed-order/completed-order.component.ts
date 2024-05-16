@@ -26,7 +26,7 @@ export class CompletedOrderComponent implements OnInit{
   sortDirection: string = '';
 
   headers: any[] = [
-    {name: 'ID', value: 'id', sortable: true},
+    {name: 'ID', value: 'id', sortable: false},
     {name: 'Cognome', value: 'lastName', sortable: true},
     {name: 'Nome', value: 'firstName', sortable: true},
     {name: 'Data Ritiro', value: 'formattedPickupDate', sortable: true},
@@ -136,6 +136,10 @@ export class CompletedOrderComponent implements OnInit{
 
   switchClick(event: any) {
     console.log(event)
+  }
+
+  openImage(url: string) {
+    window.open(url, '_blank');
   }
 
   protected readonly ButtonTheme = ButtonTheme;
