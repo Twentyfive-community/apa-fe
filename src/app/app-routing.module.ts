@@ -13,7 +13,7 @@ const routes: Routes = [
   },
   {
     path: 'catalogo',
-    loadChildren: () => import('./modules-client/catalog/catalog.module').then(m => m.CatalogModule),
+    loadChildren: () => import('./modules-client/dashboard-client/dashboard-client.module').then(m => m.DashboardClientModule),
     canActivate: [CustomAuthGuard]
   },
   {path: 'home', component: HomeComponent},
