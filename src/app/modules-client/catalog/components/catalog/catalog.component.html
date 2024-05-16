@@ -1,0 +1,37 @@
+<div class="sticky-top">
+  <lib-nav class="d-none d-lg-block"
+           [navbarNavigationUrl]="''"
+           [logoWidth]="128"
+           [navbarLogo]="'assets/images/apa-full-white.svg'"
+           [navbarStyle]="NavbarTheme.Secondary"
+           [showLeftTitle]="true"
+           [logoCentered]="false"
+           [onlyIcon]="true"
+           [showInlineElements]="true"
+           [sidebarItems]="navbarItems"
+  ></lib-nav>
+
+  <lib-nav class="d-block d-lg-none"
+           [navbarNavigationUrl]="''"
+           [logoWidth]="128"
+           [navbarLogo]="'assets/images/apa-full-white.svg'"
+           [navbarStyle]="NavbarTheme.Secondary"
+           [showLeftTitle]="true"
+           [logoCentered]="true"
+           [onlyIcon]="true"
+           [showSideMenu]="false"
+           [showInlineElements]="true"
+           [sidebarItems]="navbarItems"
+  ></lib-nav>
+</div>
+
+<div class="wrapper">
+  <div class="container-fluid g-0 h-100">
+    <!-- id is used as [id] in other projects -->
+    <div id="content">
+      <router-outlet></router-outlet>
+      <div class="d-flex d-md-none" style="height: 20%"></div>
+      <div class="d-md-flex d-none" style="height: 15%"></div>
+    </div>
+  </div>
+</div>

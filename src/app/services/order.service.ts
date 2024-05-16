@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient} from "@angular/common/http";
 import {Utils} from "../shared/utils/utils";
+import {Order} from "../models/Order";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -13,9 +15,9 @@ export class OrderService {
   constructor(private http: HttpClient) {
   }
 
-  getAll(page: number, size: number, column: string, direction: string) {
+  getAll(page: number, size: number, column: string, direction: string): Observable<Order[]> {
     let p = Utils.createHttpParams({'page': page, 'size': size, 'sortColumn': column, 'sortDirection': direction});
-    return this.http.get(`${this.baseUrl}/getAll`, {params: p});
+    return this.http.get<Order[]>(`${this.baseUrl}/getAll`, {params: p});
   }
 
   getOrderDetails(id: string) {
@@ -27,7 +29,7 @@ export class OrderService {
   }
 
   cancelOrder(id: string) {
-    return this.http.post(`${this.baseUrl}/cancel/${id}`,null)
+    return this.http.post(`${this.baseUrl}/adminCancel/${id}`,null)
   }
 
 }

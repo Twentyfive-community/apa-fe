@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {HomeComponent} from "./components/home/home.component";
+import {roleAuthGuard} from "./guard/role-auth.guard";
 import {CustomAuthGuard} from "twentyfive-keycloak-new";
 
 const routes: Routes = [
@@ -8,11 +9,11 @@ const routes: Routes = [
   {
     path: 'dashboard',
     loadChildren: () => import('./modules-admin/dashboard/dashboard.module').then(m => m.DashboardModule),
-    canActivate: [CustomAuthGuard]
+    canActivate: [CustomAuthGuard, roleAuthGuard]
   },
   {
-    path: 'catalogue',
-    loadChildren: () => import('./modules-client/catalogue/catalogue.module').then(m => m.CatalogueModule),
+    path: 'catalogo',
+    loadChildren: () => import('./modules-client/catalog/catalog.module').then(m => m.CatalogModule),
     canActivate: [CustomAuthGuard]
   },
   {path: 'home', component: HomeComponent},

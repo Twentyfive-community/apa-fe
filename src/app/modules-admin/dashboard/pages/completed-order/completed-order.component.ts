@@ -134,5 +134,9 @@ export class CompletedOrderComponent implements OnInit{
     this.getAll();
   }
 
+  switchClick(event: any) {
+    console.log(event)
+  }
+
   protected readonly ButtonTheme = ButtonTheme;
 }

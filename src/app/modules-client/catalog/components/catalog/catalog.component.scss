@@ -1,0 +1,23 @@
+.wrapper {
+  display: flex;
+  max-width: 100vw;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+#content {
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  overflow-x: scroll;
+  overflow-y: scroll;
+  transition: all 0.3s;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  #content {
+    max-width: 100vw;
+  }
+}
