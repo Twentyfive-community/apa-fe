@@ -14,22 +14,7 @@
         (input)="onInputChange($event, 'name')"
       ></lib-twentyfive-input>
     </div>
-    <div *ngIf="categoryId" class="row mt-4 ms-1">
-      <lib-twentyfive-input
-        labelText="Tipo"
-        placeholder="Tipo"
-        [value]="category.type"
-        [readOnly]="true"
-      ></lib-twentyfive-input>
-    </div>
-    <div *ngIf="!categoryId && !categoryType" class="row mt-4 ms-1">
-      <lib-twentyfive-input
-        labelText="Tipo"
-        placeholder="Tipo"
-        [value]="'ingredienti'"
-        [readOnly]="true"
-      ></lib-twentyfive-input>
-    </div>
+
     <div *ngIf="categoryType && categoryType.length > 0" class="row mt-4 ms-1">
       <div ngbDropdown class="nav-item" role="presentation">
         <div ngbDropdownToggle class="nav-link" id="dropdownMenuButton" role="button" aria-expanded="false">
@@ -44,29 +29,48 @@
         </ul>
       </div>
     </div>
-    <div *ngIf="selectedCategoryName" class="row mt-4 ms-3">{{ selectedCategoryName }}</div>
+
+  <div class="row mt-4 ms-1" *ngIf="categoryType || categoryId">
+      <lib-twentyfive-input
+        labelText="Tipo"
+        placeholder="Tipo"
+        [disabled]="true"
+        [value]="category.type"
+        [readOnly]="true"
+      ></lib-twentyfive-input>
+    </div>
+
+    <div *ngIf="!categoryId && !categoryType" class="row mt-4 ms-1">
+      <lib-twentyfive-input
+        labelText="Tipo"
+        placeholder="Tipo"
+        [disabled]="true"
+        [value]="'ingredienti'"
+        [readOnly]="true"
+      ></lib-twentyfive-input>
+    </div>
   </div>
 
-  <div class="row mt-5">
+  <div class="row mt-3">
     <hr>
   </div>
 
-  <div class=" row mb-1 ms-1" *ngIf="!categoryId">
-    <lib-generic-button
-      buttonText="Crea"
-      (click)="saveNewCategory()"
-      [buttonSize]="ButtonSizeTheme.Medium"
-      [buttonStyle]="ButtonTheme.Primary"
-    ></lib-generic-button>
+  <div class="d-flex justify-content-end mb-2 me-2" >
+    <div  *ngIf="!categoryId">
+      <lib-generic-button
+        buttonText="Crea"
+        (click)="saveNewCategory()"
+        [buttonSize]="ButtonSizeTheme.Medium"
+        [buttonStyle]="ButtonTheme.Primary"
+      ></lib-generic-button>
+    </div>
+    <div class=" row mb-2 me-3" *ngIf="categoryId">
+      <lib-generic-button
+        buttonText="Modifica"
+        (click)="saveNewCategory()"
+        [buttonSize]="ButtonSizeTheme.Medium"
+        [buttonStyle]="ButtonTheme.Primary"
+      ></lib-generic-button>
+    </div>
   </div>
-  <div class=" row mb-1 ms-1" *ngIf="categoryId">
-    <lib-generic-button
-      buttonText="Modifica"
-      (click)="saveNewCategory()"
-      [buttonSize]="ButtonSizeTheme.Medium"
-      [buttonStyle]="ButtonTheme.Primary"
-    ></lib-generic-button>
-  </div>
-
-
 </div>

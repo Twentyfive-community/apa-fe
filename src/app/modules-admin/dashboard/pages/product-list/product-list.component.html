@@ -23,12 +23,11 @@
   ></i>
 </ul>
 
-<div class="tab-content mt-4" id="myTabContent">
+<div class="tab-content row mt-5 ms-lg-3 me-lg-3" id="myTabContent">
   <ng-container *ngFor="let category of navCategories">
     <div *ngIf="activeTab === category.id" class="tab-pane fade show active" id="{{category.id}}-tab" role="tabpanel" [attr.aria-labelledby]="category.id + '-tab'">
-      <div class="col-12 m-0">
 
-        <div class="col-12 pb-3 mt-4">
+        <div class="pb-3 mb-3">
           <lib-generic-button-text-with-icon
             buttonText="Crea {{category.name}}"
             suffixIcon="bi bi-plus-circle"
@@ -152,7 +151,6 @@
           </ng-template>
         </ng-container>
       </div>
-    </div>
   </ng-container>
 
   <ng-template #templateRefTray>
