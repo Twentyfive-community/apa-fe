@@ -2,18 +2,18 @@ import {Allergen} from "./Allergen";
 
 export class ProductKg {
   id: string;
-  nome: string;
+  name: string;
   allergens: Allergen[];
-  ingredients: string;
+  ingredients: string[];
   pricePerKg: string;
   imageUrl: string;
   active: boolean;
 }
 export class ProductWeighted {
   id: string;
-  nome: string;
+  name: string;
   allergens: Allergen[];
-  ingredients: string;
+  ingredients: string[];
   weight: string;
   imageUrl: string;
   active: boolean;
@@ -36,6 +36,7 @@ export class Tray {
   measures: string;
   description: string;
   active: boolean;
+  pricePerKg: number;
 }
 export class TrayDetails {
   id: string;
@@ -43,6 +44,7 @@ export class TrayDetails {
   customized: boolean;
   measures: string;
   description: string;
+  pricePerKg: number;
 }
 export class ProductWeightedDetails{
   id:string;

@@ -33,8 +33,8 @@ export class ProductService {
   getByIdWeighted(id:string){
     return this.http.get(`${this.baseWeightedUrl}/getById/${id}`);
   }
-  getAllTrays(page: number, size: number,sortColumn: string,sortDirection:string){
-    let p = Utils.createHttpParams({'page': page, 'size': size,'sortColumn': sortColumn,'sortDirection': sortDirection});
+  getAllTrays(idCategory: string, page: number, size: number,sortColumn: string,sortDirection:string){
+    let p = Utils.createHttpParams({'idCategory': idCategory, 'page': page, 'size': size,'sortColumn': sortColumn,'sortDirection': sortDirection});
     return this.http.get(`${this.baseTrayUrl}/getAll`, {params: p});
   }
   getByIdTray(id:string){

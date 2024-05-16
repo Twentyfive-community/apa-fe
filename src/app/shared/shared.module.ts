@@ -9,10 +9,12 @@ import {TwentyfiveInputModule} from "twentyfive-input";
 import {GenericButtonModule} from "generic-buttons";
 import { CategoryEditComponent } from './category-edit/category-edit.component';
 import {TwentyfiveModalGenericComponentModule} from "twentyfive-modal-generic-component";
+import { GenericCardComponent } from './generic-card/generic-card.component';
 
 @NgModule({
   declarations: [
-    CategoryEditComponent
+    CategoryEditComponent,
+    GenericCardComponent,
   ],
   imports: [
     CommonModule,
@@ -34,6 +36,7 @@ import {TwentyfiveModalGenericComponentModule} from "twentyfive-modal-generic-co
     TwentyfiveTableModule,
     TwentyfiveInputModule,
     GenericButtonModule,
+    GenericCardComponent,
   ]
 })
 export class SharedModule {
