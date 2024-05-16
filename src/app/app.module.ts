@@ -12,6 +12,7 @@ import {provideToastr, ToastrModule} from "ngx-toastr";
 import {RxStompServiceService} from "./services/rxstomp/rx-stomp-service.service";
 import {rxStompServiceFactory} from "./services/rxstomp/stomp-factory";
 import {CommonModule} from "@angular/common";
+
 @NgModule({
   declarations: [
     AppComponent,

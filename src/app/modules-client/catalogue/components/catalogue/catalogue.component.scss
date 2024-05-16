@@ -1,0 +1,13 @@
+
+.nav-link {
+  color: black !important; /* Imposta il colore del testo a nero */
+  text-decoration: none !important; /* Rimuove la sottolineatura dei link */
+}
+
+.tab-container {
+  display: flex; /* Utilizza il layout flessibile per mantenere le schede allineate */
+  flex-wrap: nowrap; /* Impedisce il riavvolgimento delle schede su più righe */
+  overflow-x: auto; /* Abilita lo scorrimento orizzontale se le schede non si adattano */
+  overflow-y:hidden;
+  -webkit-overflow-scrolling: touch; /* Abilita lo scorrimento fluido su dispositivi mobili */
+}

@@ -1,0 +1,63 @@
+<ul class="nav nav-tabs tab-container flex-grow-0 " id="myTab" role="tablist">
+  <li *ngFor="let category of categories" class="nav-item" role="presentation" ngbDropdown>
+    <ng-container *ngIf="category.type !== 'productWeighted'">
+    <div (click)="setActiveTab(category)"  class="nav-link" id="{{category.id}}-tab" data-bs-toggle="tab" [attr.data-bs-target]="'#'+category.id" role="tab" [class.active]="activeTab === category.id" [attr.aria-controls]="category.id" aria-selected="true">
+      {{category.name}}
+    </div>
+    </ng-container>
+  </li>
+</ul>
+
+<div class="tab-content" id="myTabContent">
+  <ng-container *ngFor="let category of categories">
+    <div *ngIf="activeTab === category.id" class="tab-pane fade show active" id="{{category.id}}-tab" role="tabpanel" [attr.aria-labelledby]="category.id + '-tab'">
+        <!-- Bottone "Torta Personalizzata" o "Vassoio Personalizzato" -->
+        <div class="row mt-5 mb-5">
+          <div class="col-12 ">
+            <lib-generic-button-text-with-icon *ngIf="category.name === 'Le Nostre Torte'"
+                                               buttonText="Torta Personalizzata"
+                                               suffixIcon="bi bi-plus-circle"
+                                               [buttonSize]="ButtonSizeTheme.FullWidth"
+                                               [buttonStyle]="ButtonTheme.Secondary"
+                                               [iconLeft]="false"
+            ></lib-generic-button-text-with-icon>
+            <lib-generic-button-text-with-icon *ngIf="category.name === 'Vassoi'"
+                                               buttonText="Vassoio Personalizzato"
+                                               suffixIcon="bi bi-plus-circle"
+                                               [buttonSize]="ButtonSizeTheme.FullWidth"
+                                               [buttonStyle]="ButtonTheme.Secondary"
+                                               [iconLeft]="false"
+            ></lib-generic-button-text-with-icon>
+          </div>
+        </div>
+        <!-- Contenuto dinamico della scheda -->
+        <div class="row ">
+            <ng-container  [ngSwitch]="category.type">
+              <ng-container *ngSwitchCase="'productKg'">
+                <ng-container  *ngFor="let product of productListKg">
+                  <div class="col-12 col-md-6 col-lg-4"  >
+                    <app-generic-card class="w-100"
+                      [title]="product.name"
+                      [ingredientList]="product.ingredients"
+                      [price]="product.pricePerKg+'/kg'"
+                      [imageUrl]="product.imageUrl">
+                    </app-generic-card>
+                  </div>
+                </ng-container>
+              </ng-container>
+              <ng-container *ngSwitchCase="'tray'">
+                <ng-container *ngFor="let tray of trayList">
+                  <div class="col-12 col-md-6 col-lg-4"  >
+                    <app-generic-card class="w-100"
+                      [title]="tray.name"
+                      [description]="tray.description"
+                      [price]="'€'+tray.pricePerKg+'/kg'">
+                    </app-generic-card>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+        </div>
+      </div>
+  </ng-container>
+</div>
