@@ -214,7 +214,6 @@ export class OrderListComponent implements OnInit, AfterViewInit{
   }
 
   checkComplete(myRow:any){
-    console.log(myRow);
       this.modalService.openModal(
         'Vuoi segnare questo ordine come completato?',
         'Completa Ordine',
