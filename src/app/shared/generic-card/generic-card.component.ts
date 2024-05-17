@@ -26,14 +26,9 @@ export class GenericCardComponent implements OnInit{
   @Input()
   price: string;
 
-  // Proprietà per mantenere la lista di ingredienti troncata
-  displayedIngredients?: string;
 
   ngOnInit(): void {
-    // Se la lista ingredienti ha più di 3 elementi, la tronchiamo e aggiungiamo i tre puntini
-    this.displayedIngredients = this.ingredientList && this.ingredientList.length > 3 ?
-      this.ingredientList.slice(0, 3).join(', ') + '...' :
-      this.ingredientList?.join(', ');
+
   }
 
 }
