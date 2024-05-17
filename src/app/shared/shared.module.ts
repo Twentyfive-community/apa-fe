@@ -10,10 +10,12 @@ import {GenericButtonModule} from "generic-buttons";
 import { CategoryEditComponent } from './category-edit/category-edit.component';
 import {TwentyfiveModalGenericComponentModule} from "twentyfive-modal-generic-component";
 import {NgbDropdown, NgbDropdownMenu, NgbDropdownToggle} from "@ng-bootstrap/ng-bootstrap";
+import { GenericCardComponent } from './generic-card/generic-card.component';
 
 @NgModule({
   declarations: [
-    CategoryEditComponent
+    CategoryEditComponent,
+    GenericCardComponent,
   ],
     imports: [
         CommonModule,
@@ -38,6 +40,7 @@ import {NgbDropdown, NgbDropdownMenu, NgbDropdownToggle} from "@ng-bootstrap/ng-
     TwentyfiveTableModule,
     TwentyfiveInputModule,
     GenericButtonModule,
+    GenericCardComponent,
   ]
 })
 export class SharedModule {

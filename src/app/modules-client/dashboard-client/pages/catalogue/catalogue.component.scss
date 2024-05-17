@@ -1,0 +1,31 @@
+.nav-tabs {
+  display: flex; /* Utilizza il layout flessibile per mantenere le schede allineate */
+  flex-wrap: nowrap; /* Impedisce il riavvolgimento delle schede su più righe */
+  scrollbar-width: none; /* Nasconde la barra di scorrimento su Firefox */
+  -ms-overflow-style: none; /* Nasconde la barra di scorrimento su Internet Explorer e Edge */
+  padding-inline-start: 0; /* Rimuove il padding predefinito sul lato sinistro */
+}
+
+.nav-tabs::-webkit-scrollbar {
+  display: none; /* Nasconde la barra di scorrimento su Chrome e Safari */
+}
+
+.nav-link {
+  color: #b6b6b6 !important; /* Imposta il colore del testo a grigio */
+  text-decoration: none !important; /* Rimuove la sottolineatura dei link */
+  width: 12rem; /* Imposta la larghezza su 100% della viewport width */
+  height: 4rem; /* Imposta l'altezza desiderata */
+  line-height: 40px; /* Centra il testo verticalmente */
+}
+
+.nav-link.active {
+  color: #cdbb6d !important; /* Imposta il colore della tab attiva a dorato */
+}
+
+.tab-container {
+  display: flex; /* Utilizza il layout flessibile per mantenere le schede allineate */
+  flex-wrap: nowrap; /* Impedisce il riavvolgimento delle schede su più righe */
+  overflow-x: auto; /* Abilita lo scorrimento orizzontale se le schede non si adattano */
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch; /* Abilita lo scorrimento fluido su dispositivi mobili */
+}

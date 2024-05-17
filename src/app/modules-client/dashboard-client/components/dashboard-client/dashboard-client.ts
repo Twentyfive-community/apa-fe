@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 import {NavbarTheme} from "twentyfive-style";
 
 @Component({
-  selector: 'app-catalog',
-  templateUrl: './catalog.component.html',
-  styleUrl: './catalog.component.scss'
+  selector: 'app-dashboard-client',
+  templateUrl: './dashboard-client.html',
+  styleUrl: './dashboard-client.scss'
 })
-export class CatalogComponent {
+export class DashboardClient {
 
   navbarItems: any[] = [
     {
