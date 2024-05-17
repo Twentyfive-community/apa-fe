@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {ButtonSizeTheme, ButtonTheme, ChipTheme} from "twentyfive-style";
+import {ButtonSizeTheme, ButtonTheme, ChipTheme, InputTheme, LabelTheme} from "twentyfive-style";
 import {TwentyfiveModalService} from "twentyfive-modal";
 import {Category} from "../../../../models/Category";
 import {CategoryService} from "../../../../services/category.service";
@@ -9,6 +9,7 @@ import {ProductDetails, ProductToEdit, TrayDetails, WeightRange} from "../../../
 import {IngredientService} from "../../../../services/ingredient.service";
 import {ToastrService} from "ngx-toastr";
 import {Measure} from "../../../../models/Measure";
+import {environment} from "../../../../../environments/environment";
 
 @Component({
   selector: 'app-product-edit',
@@ -19,10 +20,13 @@ export class ProductEditComponent implements OnInit{
   @ViewChild('dropZone') dropZoneRef!: ElementRef;
   @ViewChild('fileInput') fileInputRef!: ElementRef;
 
+
   categoryId: string | null;
   productId:string | null;
 
   file: File | null;
+
+  test: string = '';
 
   category: Category = new Category();
 
@@ -45,7 +49,7 @@ export class ProductEditComponent implements OnInit{
               private activatedRoute: ActivatedRoute,
               private productService: ProductService,
               private categoryService: CategoryService,
-              private ingredientService: IngredientService) {
+              public ingredientService: IngredientService) {
   }
 
   ngOnInit(): void {
@@ -81,7 +85,6 @@ export class ProductEditComponent implements OnInit{
           this.minWeight=this.productToAdd.weightRange.minWeight;
           this.maxWeight=this.productToAdd.weightRange.maxWeight;
           this.selectedIngredients=response.ingredients;
-          console.log(this.selectedIngredients);
         })
         break;
       case 'productWeighted':
@@ -91,7 +94,6 @@ export class ProductEditComponent implements OnInit{
           this.weight=parseFloat(response.weight.replace('Kg ', ''));
           this.productToAdd.weight =this.weight;
           this.selectedIngredients=response.ingredients;
-          console.log(this.selectedIngredients);
         })
         break;
       case 'tray':
@@ -160,15 +162,16 @@ export class ProductEditComponent implements OnInit{
   }
 
   toggleIngredient(ingredient: any) {
-    if(!this.selectedIngredients.includes(ingredient.name)){
-      const index = this.selectedIngredients.indexOf(ingredient);
+    if(!this.selectedIngredients.includes(ingredient.item.value)){
+      const index = this.selectedIngredients.indexOf(ingredient.item);
       if (index !== -1) {
         this.selectedIngredients.splice(index, 1);
       } else {
-        this.selectedIngredients.push(ingredient.name);
+        this.selectedIngredients.push(ingredient.item.value);
       }
     }
   }
+
   async insertIngredientFoundByName(): Promise<string[]> {
     const promises = this.selectedIngredients.map(name => {
       return new Promise<string>((resolve, reject) => {
@@ -182,7 +185,6 @@ export class ProductEditComponent implements OnInit{
         );
       });
     });
-
     try {
       const ingredientIds = await Promise.all(promises);
       return ingredientIds;
@@ -192,13 +194,35 @@ export class ProductEditComponent implements OnInit{
     }
   }
 
+  uploadImage() {
+  this.productService.uploadPic(this.file!).subscribe();
+  this.productToAdd.imageUrl = `${environment.ftpDownloadUrl}${this.file!.name}`;
+}
+
 
   async saveNewProduct() {
-    switch(this.category.type){
-      case 'productWeighted':
-        if (this.isValid()) {
+    if (this.isValid()) {
+      if (this.file) {
+        await this.uploadImage();
+      }
+      switch (this.category.type) {
+        case 'productWeighted':
+          if (this.isValid()) {
+            this.productToAdd.ingredientIds = await this.insertIngredientFoundByName();
+            this.productService.saveWeighted(this.productToAdd).subscribe({
+              error: () => {
+                this.toastrService.error("Errore nel salvataggio del prodotto!");
+              },
+              complete: () => {
+                this.toastrService.success("Prodotto salvato con successo");
+                this.router.navigate(['../dashboard/prodotti']);
+              }
+            })
+          }
+          break;
+        case 'productKg':
           this.productToAdd.ingredientIds = await this.insertIngredientFoundByName();
-          this.productService.saveWeighted(this.productToAdd).subscribe({
+          this.productService.saveKg(this.productToAdd).subscribe({
             error: () => {
               this.toastrService.error("Errore nel salvataggio del prodotto!");
             },
@@ -207,41 +231,77 @@ export class ProductEditComponent implements OnInit{
               this.router.navigate(['../dashboard/prodotti']);
             }
           })
-        } else {
-          this.toastrService.error("Non tutti i campi sono validi!");
-        }
-        break;
-      case 'productKg':
-        this.productToAdd.ingredientIds=await this.insertIngredientFoundByName();
-        this.productService.saveKg(this.productToAdd).subscribe({
-          error: () => {
-            this.toastrService.error("Errore nel salvataggio del prodotto!");
-          },
-          complete: () => {
-            this.toastrService.success("Prodotto salvato con successo");
-            this.router.navigate(['../dashboard/prodotti']);
-          }
-        })
-        break;
-      case 'tray':
-        this.productService.saveTray(this.productToAdd).subscribe({
-          error: () => {
-            this.toastrService.error("Errore nel salvataggio del prodotto!");
-          },
-          complete: () => {
-            this.toastrService.success("Prodotto salvato con successo");
-            this.router.navigate(['../dashboard/prodotti']);
-          }
-        })
+          break;
+        case 'tray':
+          this.productService.saveTray(this.productToAdd).subscribe({
+            error: () => {
+              this.toastrService.error("Errore nel salvataggio del prodotto!");
+            },
+            complete: () => {
+              this.toastrService.success("Prodotto salvato con successo");
+              this.router.navigate(['../dashboard/prodotti']);
+            }
+          })
+          break;
+      }
     }
   }
 
-  changeCustomized() {
-    this.productToAdd.customized=!this.productToAdd.customized;
-  }
-
   private isValid(){
-    return this.productToAdd.name && this.selectedIngredients.length>0 && this.productToAdd.weight>0;
+    if (!this.productToAdd.name){
+      this.toastrService.error("Inserire un nome valido al prodotto!");
+      return false;
+    }
+    switch(this.category.type){
+      case "productKg":
+        if (!(this.selectedIngredients.length>0)){
+          this.toastrService.error("Inserire almeno un ingrediente!");
+          return false;
+        }
+        if (!(this.productToAdd.pricePerKg) || this.productToAdd.pricePerKg<=0){
+          this.toastrService.error("Il prezzo non può essere inferiore o uguale a 0!");
+          return false;
+        }
+        if (!(this.productToAdd.weightRange.minWeight) || this.productToAdd.weightRange.minWeight<=0){
+          this.toastrService.error("Il peso minimo non può essere inferiore o uguale a 0!");
+          return false;
+        }
+        if (!(this.productToAdd.weightRange.maxWeight) || this.productToAdd.weightRange.maxWeight<this.productToAdd.weightRange.minWeight){
+          this.toastrService.error("Il peso massimo non può essere inferiore al peso minimo!");
+          return false;
+        }
+        break;
+      case "productWeighted":
+        if (!(this.selectedIngredients.length>0)){
+          this.toastrService.error("Inserire almeno un ingrediente!");
+          return false;
+        }
+        if (!(this.productToAdd.weight) || this.productToAdd.weight<=0){
+          this.toastrService.error("Il peso non può essere minore o uguale a 0!");
+        }
+        break;
+      case "tray":
+        if (!(this.productToAdd.pricePerKg) || this.productToAdd.pricePerKg<=0){
+          this.toastrService.error("Il prezzo non può essere inferiore o uguale a 0!");
+          return false;
+        }
+        if (!(this.productToAdd.measures) || this.productToAdd.measures.length==0){
+          this.toastrService.error("Inserire almeno una misura!");
+          return false;
+        }
+        for (let i=0;i<this.productToAdd.measures.length;i++){
+          if(this.productToAdd.measures[i].label==''){
+            this.toastrService.error("Una delle misure ha un nome incompleto!");
+            return false;
+          }
+          if(this.productToAdd.measures[i].weight<=0){
+            this.toastrService.error("Una delle misure ha il peso minore o uguale a 0!");
+            return false;
+          }
+        }
+        break;
+    }
+    return true;
   }
 
   addMeasure() {
@@ -282,7 +342,6 @@ export class ProductEditComponent implements OnInit{
     const files = target.files;
     if (files) {
       this.handleFiles(files);
-      console.log(files);
     }
   }
 
@@ -293,10 +352,20 @@ export class ProductEditComponent implements OnInit{
   removeFile(event: Event) {
     event.stopPropagation();
     this.file = null;
+    this.productToAdd.imageUrl='';
     // Reimposta il valore dell'input del file a null per consentire la selezione dello stesso file
     this.fileInputRef.nativeElement.value = '';
   }
+
+  handleIngredientSelect(event: any) {
+
+  }
+
   protected readonly ButtonTheme = ButtonTheme;
   protected readonly ChipTheme = ChipTheme;
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
+  protected readonly LabelTheme = LabelTheme;
+  protected readonly InputTheme = InputTheme;
+
+
 }

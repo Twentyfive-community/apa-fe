@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import {Utils} from "../shared/utils/utils";
 import {Customer} from "../models/Customer";
 import {Ingredient, IngredientToSave} from "../models/Ingredient";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -48,6 +49,10 @@ export class IngredientService {
     return this.http.get(`${this.baseUrl}/getByName`,{params: p});
   }
 
+  search(search: string): Observable<any> {
+    let p = Utils.createHttpParams({'value': search});
+    return this.http.get(`${this.baseUrl}/get/autocomplete`, {params: p});
+  }
 
 
 
