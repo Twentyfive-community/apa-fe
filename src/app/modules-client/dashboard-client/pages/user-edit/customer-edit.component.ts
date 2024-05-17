@@ -5,8 +5,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 
 import { TwentyfiveModalService } from "twentyfive-modal";
 import { ToastrService } from "ngx-toastr";
-import {Customer} from "../../../../../models/Customer";
-import {CustomerService} from "../../../../../services/customer.service";
+import {Customer} from "../../../../models/Customer";
+import {CustomerService} from "../../../../services/customer.service";
 
 @Component({
   selector: 'app-customer-edit',
