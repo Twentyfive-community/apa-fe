@@ -91,6 +91,7 @@ export class ProductListComponent implements OnInit{
   categoryType=['productKg','productWeighted','tray'];
   categoryActive: string = '';
   navCategories: Category[]=[];
+  disabledCategories: Category[] = [];
   productListKg: ProductKg[]=[];
   productListWeighted: ProductWeighted[]=[];
   trayList: Tray[]=[];
@@ -112,6 +113,7 @@ export class ProductListComponent implements OnInit{
     this.getCategories();
   }
 
+
   getCategories(){
     this.categoryService.getAll(this.categoryType).subscribe((response: any) => {
       this.navCategories = response;
@@ -120,6 +122,9 @@ export class ProductListComponent implements OnInit{
         this.categoryActive = this.navCategories[0].type;
         this.getAll();
       }
+    })
+    this.categoryService.getAllDisabled(this.categoryType).subscribe((response: any) => {
+      this.disabledCategories = response;
     })
   }
   getAll(page?: number){
@@ -276,6 +281,24 @@ export class ProductListComponent implements OnInit{
       });
   }
 
+  enableCategory(id:string){
+    this.modalService.openModal(
+      'Sei sicuro di voler abilitare questa categoria?',
+      'Abilita categoria',
+      'Annulla',
+      'Conferma',
+      {
+        showIcon: true,
+        size: 'md',
+        onConfirm: (() => {
+          this.categoryService.enableCategory(id).subscribe({
+            next: (() =>{
+              this.getCategories();
+            })
+          });
+        })
+      });
+  }
   editCategory() {
     let r = this.genericModalService.open(CategoryEditComponent, "lg", {});
     r.componentInstance.categoryType=this.categoryType;
@@ -290,4 +313,8 @@ export class ProductListComponent implements OnInit{
 
   protected readonly ButtonTheme = ButtonTheme;
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
+
+  openImage() {
+    window.open(this.productDetails.imageUrl, '_blank');
+  }
 }

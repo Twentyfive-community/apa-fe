@@ -1,4 +1,4 @@
-import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ButtonSizeTheme, ButtonTheme, TableHeadTheme, TableTheme} from 'twentyfive-style';
 import {OrderService} from "../../../../services/order.service";
 import {Order, OrderDetails} from "../../../../models/Order";
@@ -6,19 +6,22 @@ import {ToastrService} from "ngx-toastr";
 import {ActivatedRoute, Router} from "@angular/router";
 import {TwentyfiveModalService} from "twentyfive-modal";
 import {RxStompServiceService} from "../../../../services/rxstomp/rx-stomp-service.service";
+import {SettingService} from "../../../../services/setting.service";
 
 @Component({
   selector: 'app-order',
   templateUrl: './order-list.component.html',
   styleUrl: './order-list.component.scss'
 })
-export class OrderListComponent implements OnInit{
+export class OrderListComponent implements OnInit, AfterViewInit{
 
   @ViewChild('templateRef', { static: true }) templateRef!: TemplateRef<any>;
+  @ViewChild('templateColumnRef', {static: true}) templateColumnRef!: TemplateRef<any>;
 
   dataDetails: any[] = [new OrderDetails()]
   orderDetails: OrderDetails = new OrderDetails();
 
+  columnTemplateRefs: {[key: string]: TemplateRef<any>} = {};
   currentPage: number = 0;
   pageSize: number = 5
   maxSize: number = 5;
@@ -29,13 +32,17 @@ export class OrderListComponent implements OnInit{
 
   subscriptionText: any;
 
+  isAlertOn: boolean;
+  audio:HTMLAudioElement;
+
   headers: any[] = [
-    {name: 'ID', value: 'id', sortable: true},
+    {name: 'ID', value: 'id', sortable: false},
     {name: 'Cognome', value: 'lastName', sortable: true},
     {name: 'Nome', value: 'firstName', sortable: true},
     {name: 'Data Ritiro', value: 'formattedPickupDate', sortable: true},
     {name: 'Prezzo', value: 'price', sortable: true},
-    {name: 'Status', value: 'status', sortable: true}
+    {name: 'Status', value: 'status', sortable: true},
+    {name: 'Completo', value: 'complete'}
   ];
   data: Order[] = []
 
@@ -84,29 +91,6 @@ export class OrderListComponent implements OnInit{
       }
     },
     {
-      icon: 'bi bi-check2',
-      action: async (myRow: any) => {
-        this.modalService.openModal(
-          'Vuoi segnare questo ordine come Completato?',
-          'Completa Ordine',
-          'Annulla',
-          'Conferma',
-          {
-            showIcon: true,
-            size: 'md',
-            onConfirm: (() => {
-              this.completeOrder(myRow.id)
-            })
-          });
-      },
-      actionName: 'Completato',
-      tooltipText: 'Completa Ordine',
-      placement: 'top',
-      showFunction: () => {
-        return true;
-      }
-    },
-    {
       icon: 'bi bi-x',
       action: async (myRow: any) => {
         this.modalService.openModal(
@@ -137,17 +121,31 @@ export class OrderListComponent implements OnInit{
                private activatedRouteRoute: ActivatedRoute,
                private modalService: TwentyfiveModalService,
                private rxStompService: RxStompServiceService,
-               private toastr: ToastrService
+               private toastr: ToastrService,
+               private settingService: SettingService
              ) {
+    this.audio = new Audio();
+    this.audio.src = 'assets/sounds/order-arrived.mp3';
   }
 
 
   ngOnInit(): void {
+    this.settingService.isAlertOn().subscribe((response: any) => {
+      this.isAlertOn=response;
+    });
     this.subscriptionText = this.rxStompService.watch('/apa_order').subscribe((message: any) => {
-      this.getAll();
+      if(this.isAlertOn){
+        this.playNotificationSound();
+      }
       this.toastr.success(message.body);
+      this.getAll();
     });
     this.getAll();
+  }
+
+  ngAfterViewInit() {
+    this.columnTemplateRefs['complete'] = this.templateColumnRef;
+
   }
 
   getAll(page?: number) {
@@ -211,6 +209,28 @@ export class OrderListComponent implements OnInit{
     this.getAll(this.currentPage-1);
   }
 
+  openImage(url:string) {
+    window.open(url, '_blank');
+  }
+
+  checkComplete(myRow:any){
+    console.log(myRow);
+      this.modalService.openModal(
+        'Vuoi segnare questo ordine come completato?',
+        'Completa Ordine',
+        'Annulla',
+        'Conferma',
+        {
+          showIcon: true,
+          size: 'md',
+          onConfirm: (() => {
+            this.completeOrder(myRow)
+          })
+        });
+  }
+  private playNotificationSound() {
+    this.audio.play();
+  }
   protected readonly ButtonTheme = ButtonTheme;
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
 }

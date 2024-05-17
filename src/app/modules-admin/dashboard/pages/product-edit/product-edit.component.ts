@@ -282,6 +282,7 @@ export class ProductEditComponent implements OnInit{
     const files = target.files;
     if (files) {
       this.handleFiles(files);
+      console.log(files);
     }
   }
 

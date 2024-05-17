@@ -19,6 +19,10 @@ export class CategoryService {
     let p = Utils.createHttpParams({'types': types});
     return this.http.get(`${this.baseUrl}/getAll`, {params: p});
   }
+  getAllDisabled(types: string[]) {
+    let p = Utils.createHttpParams({'types': types});
+    return this.http.get(`${this.baseUrl}/getAllDisabled`, {params: p});
+  }
   getById(id:string){
     return this.http.get(`${this.baseUrl}/getById/${id}`);
   }
@@ -33,6 +37,10 @@ export class CategoryService {
   disableCategory(id: string){
     return this.http.get(`${this.baseUrl}/disableById/${id}`);
   }
+  enableCategory(id: string){
+    return this.http.get(`${this.baseUrl}/activateById/${id}`);
+  }
+
 
 
 

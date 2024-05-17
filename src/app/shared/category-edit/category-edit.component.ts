@@ -54,23 +54,22 @@ export class CategoryEditComponent implements OnInit{
       this.category.type="ingredienti"
     this.categoryService.saveCategory(this.category).subscribe({
       error:() =>{
-        this.toastrService.error("Errore nel salvare la category");
+        this.toastrService.error("Errore nel salvare la categoria");
         this.close()
       },
       complete:() =>{
         console.log(this.category);
-        this.toastrService.success("Category salvata con successo");
+        this.toastrService.success("Categoria salvata con successo");
         this.close()
       }
     });
   }
 
-
-  protected readonly ButtonSizeTheme = ButtonSizeTheme;
-  protected readonly ButtonTheme = ButtonTheme;
-
   setActiveCategory(category: string) {
     this.selectedCategoryName=category;
     this.category.type=this.selectedCategoryName;
   }
+
+  protected readonly ButtonSizeTheme = ButtonSizeTheme;
+  protected readonly ButtonTheme = ButtonTheme;
 }
