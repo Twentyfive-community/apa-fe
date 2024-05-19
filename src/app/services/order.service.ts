@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {environment} from "../../environments/environment";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Utils} from "../shared/utils/utils";
 import {Order} from "../models/Order";
 import {Observable} from "rxjs";
@@ -32,4 +32,9 @@ export class OrderService {
     return this.http.post(`${this.baseUrl}/adminCancel/${id}`,null)
   }
 
-}
+  print(id: string): Observable<Blob> {
+    const headers = new HttpHeaders({
+      'Accept': 'application/pdf'
+    });
+    return this.http.get(`${this.baseUrl}/print/${id}`, { headers: headers, responseType: 'blob' });
+  }}
