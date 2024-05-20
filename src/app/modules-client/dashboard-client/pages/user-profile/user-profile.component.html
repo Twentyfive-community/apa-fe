@@ -1,7 +1,7 @@
 
 <section>
   <div class="row">
-    <div class="col-11">
+    <div class="col-10">
       <h3>Anagrafica</h3>
     </div>
     <div class="col-1">
@@ -11,20 +11,20 @@
 
 
   <div class="column mt-2">
-    <div class="col-11 padded-left">
+    <div class="col-11 ms-2">
       <h6>Nome</h6>
       <p style="color: gray; ">{{ customer.firstName }}</p>
 
     </div>
-    <div class="col-11 padded-left">
+    <div class="col-11 ms-2">
       <h6>Cognome</h6>
       <p style="color: gray;">{{ customer.lastName }}</p>
     </div>
-    <div class="col-11 padded-left">
+    <div class="col-11 ms-2">
       <h6>Email</h6>
       <p style="color: gray;">{{ customer.email }}</p>
     </div>
-    <div class="col-11 padded-left">
+    <div class="col-11 ms-2">
       <h6>Telefono</h6>
       <p style="color: gray;">{{ customer.phoneNumber }}</p>
     </div>
@@ -92,7 +92,7 @@
   </div>
 </section>
 
-<div class="row float-end mt-5 padded-right" *ngIf="customerIdkc">
+<div class="row float-start ms-5 mt-5" *ngIf="customerIdkc">
   <lib-generic-button
     buttonText="LOGOUT"
     (click)="this.makeLogout()"
