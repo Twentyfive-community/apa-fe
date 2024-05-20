@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
-import {Customer} from "../../../../../models/Customer";
+import {Customer, CustomerDetails} from "../../../../../models/Customer";
 import {KeycloakCustomService} from "../../../../../services/keycloak.services";
 import {CustomerService} from "../../../../../services/customer.service";
 import {TwentyfiveModalService} from "twentyfive-modal";
@@ -13,7 +13,7 @@ import {ActivatedRoute, Router} from "@angular/router";
   styleUrl: './user-profile.component.scss'
 })
 export class UserProfileComponent implements OnInit{
-  customer:Customer =new Customer()
+  customer:CustomerDetails =new CustomerDetails()
   customerIdkc :string =''
 
   constructor(private keycloakService: SigningKeycloakService,
@@ -61,5 +61,15 @@ export class UserProfileComponent implements OnInit{
 
   goToEdit() {
     this.router.navigate(['../catalogo/userEdit',this.customerIdkc]);
+  }
+
+  goToActiveOrders() {
+    this.router.navigate(['../catalogo/ordini_utente',this.customerIdkc],{queryParams:{activeOrders:true}});
+
+  }
+
+  goToCompletedOrders() {
+    this.router.navigate(['../catalogo/ordini_utente',this.customerIdkc],{queryParams:{activeOrders:false}});
+
   }
 }
