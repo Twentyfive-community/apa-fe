@@ -112,7 +112,7 @@ export class OrderListComponent implements OnInit, AfterViewInit{
       showFunction: () => {
         return true;
       }
-    },
+    }
   ]
 
   constructor( private router: Router,
