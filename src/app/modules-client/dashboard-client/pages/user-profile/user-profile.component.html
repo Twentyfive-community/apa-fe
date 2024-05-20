@@ -1,0 +1,102 @@
+
+<section>
+  <div class="row">
+    <div class="col-10">
+      <h3>Anagrafica</h3>
+    </div>
+    <div class="col-1">
+      <i class="bi bi-pencil-fill" (click)="goToEdit()"></i>
+    </div>
+  </div>
+
+
+  <div class="column mt-2">
+    <div class="col-11 ms-2">
+      <h6>Nome</h6>
+      <p style="color: gray; ">{{ customer.firstName }}</p>
+
+    </div>
+    <div class="col-11 ms-2">
+      <h6>Cognome</h6>
+      <p style="color: gray;">{{ customer.lastName }}</p>
+    </div>
+    <div class="col-11 ms-2">
+      <h6>Email</h6>
+      <p style="color: gray;">{{ customer.email }}</p>
+    </div>
+    <div class="col-11 ms-2">
+      <h6>Telefono</h6>
+      <p style="color: gray;">{{ customer.phoneNumber }}</p>
+    </div>
+  </div>
+
+
+</section>
+
+<hr>
+
+<section >
+  <h3 class="mb-2">I tuoi ordini</h3>
+  <div class="row">
+    <div class="col-9 padded-left d-flex align-items-center">
+      <lib-generic-button-text-with-icon
+        buttonText="In corso"
+        (click)="goToActiveOrders()"
+        [iconLeft]="true"
+        prefixIcon="bi bi-hourglass-split"
+        [buttonStyle]="ButtonTheme.OnlyText"
+      ></lib-generic-button-text-with-icon>
+      <span class="ms-2 small-text">( {{ customer.activeOrdersCount }} )</span>
+    </div>
+    <div class="col-1">
+      <i class="bi bi-chevron-right small-icon"></i>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-9 padded-left d-flex align-items-center">
+      <lib-generic-button-text-with-icon
+        buttonText="Effettuati"
+        (click)="goToCompletedOrders()"
+        [iconLeft]="true"
+        prefixIcon="bi bi-clipboard-check"
+        [buttonStyle]="ButtonTheme.OnlyText"
+      ></lib-generic-button-text-with-icon>
+      <span class="ms-2 small-text">( {{ customer.completedOrdersCount }} )</span>
+    </div>
+    <div class="col-1">
+      <i class="bi bi-chevron-right small-icon"></i>
+    </div>
+  </div>
+</section>
+
+
+
+<hr>
+
+
+<section>
+  <h3 class="mb-2">Gestione</h3>
+  <div class="row">
+    <div class="col-9 padded-left">
+      <lib-generic-button-text-with-icon
+        buttonText="Reset password"
+        [iconLeft]="true"
+        prefixIcon="bi bi-arrow-counterclockwise"
+        [buttonStyle]="ButtonTheme.OnlyText"
+      ></lib-generic-button-text-with-icon>
+    </div>
+    <div class="col-1">
+      <i class="bi bi-chevron-right small-icon"></i>
+    </div>
+  </div>
+</section>
+
+<div class="row float-start ms-5 mt-5" *ngIf="customerIdkc">
+  <lib-generic-button
+    buttonText="LOGOUT"
+    (click)="this.makeLogout()"
+    [buttonSize]="ButtonSizeTheme.Medium"
+    [buttonStyle]="ButtonTheme.Primary"
+  ></lib-generic-button>
+</div>
