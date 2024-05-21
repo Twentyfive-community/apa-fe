@@ -1,0 +1,96 @@
+
+<div class="order-details-container">
+  <div class="row mb-4">
+    <div class="col-12 col-lg-3">
+      <lib-generic-button-text-with-icon
+        buttonText="Torna Indietro"
+        [iconLeft]="true"
+        prefixIcon="bi bi-arrow-left"
+        [buttonStyle]="ButtonTheme.OnlyText"
+        (click)="close()"
+      ></lib-generic-button-text-with-icon>
+    </div>
+  </div>
+  <hr>
+
+  <div class="orders-container">
+
+    <div *ngFor="let product of orderDetails.products" class="product-details card mt-2">
+
+      <div class="column mt-2 ms-2">
+        <h4 class="mb-2">{{ product.name }}</h4>
+        <div class="col-11 ms-2 mb-2">
+          <h6 class="mb-0">Quantità:</h6>
+          <p style="color: gray; ">{{ product.quantity  }}</p>
+        </div>
+        <div class="col-11 ms-2">
+          <h6 class="mb-0">Peso:</h6>
+          <p style="color: gray;"> {{ product.weight }} kg</p>
+        </div>
+        <div class="col-11 ms-2">
+          <h6 class="mb-0">Forma:</h6>
+          <p style="color: gray;">{{ product.shape  }}</p>
+        </div>
+        <div class="col-11 ms-2">
+          <h6 class="mb-0">Personalizzazioni:</h6>
+          <p style="color: gray;">{{ product.customization | json }}</p>
+        </div>
+        <div class="col-11 ms-2">
+          <h6 class="mb-0">Cioccolato:</h6>
+          <p style="color: gray;">{{ product.chocolateChips ? 'Sì' : 'No' }}</p>
+        </div>
+        <div class="col-11 ms-2">
+          <h6 class="mb-0">Note:</h6>
+          <p style="color: gray;">{{ product.text }}</p>
+        </div>
+        <div class="col-11 ms-2">
+          <h6 class="mb-0">Prezzo del prodotto:</h6>
+          <p style="color: gray;">€ {{ product.totalPrice }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div *ngFor="let bundle of orderDetails.bundles" class="product-details card">
+      <div class="column mt-2 ms-2">
+        <h4 class="mb-2">{{ bundle.name }}</h4>
+        <div class="col-11 ms-2 mb-2">
+          <h6 class="mb-0">Quantità:</h6>
+          <p style="color: gray; ">{{ bundle.quantity }}</p>
+        </div>
+        <div class="col-11 ms-2 mb-2">
+          <h6 class="mb-0">Misura:</h6>
+          <p style="color: gray; ">{{ bundle.measure.label }}</p>
+        </div>
+        <div class="col-11 ms-2">
+          <h6 class="mb-0">Prezzo del prodotto:</h6>
+          <p style="color: gray;">€ {{ bundle.totalPrice }}</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <div class="sized-box"></div>
+
+
+
+  <div class="sticky-bottom sticky-bottom">
+    <div class="row mt-2 ms-2 d-flex align-content-center">
+      <h6 >Data e ora ritiro:</h6>
+      <p class="ms-2">{{ orderDetails.pickupDateTime }}</p>
+    </div>
+    <div class="row ms-2">
+      <h6>Totale da pagare:</h6>
+      <p class="ms-2">{{ orderDetails.totalPrice}} €</p>
+    </div>
+
+    <div class="row float-end me-5">
+      <lib-generic-button
+        class=""
+        buttonText="Contattaci"
+        [buttonSize]="ButtonSizeTheme.Medium"
+        [buttonStyle]="ButtonTheme.Primary"
+      ></lib-generic-button>
+    </div>
+  </div>
+
+</div>

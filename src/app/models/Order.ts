@@ -18,4 +18,7 @@ export class OrderDetails {
   bundles: BundleInPurchase[];
   email: string;
   phoneNumber: string;
+  pickupDateTime: string;
+  totalPrice: number;
+
 }
