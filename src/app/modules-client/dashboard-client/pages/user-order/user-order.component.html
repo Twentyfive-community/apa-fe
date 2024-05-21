@@ -1,1 +1,33 @@
-<p>user-order works!</p>
+<div class="row mb-4">
+  <div class="col-12 col-lg-3">
+    <lib-generic-button-text-with-icon
+      buttonText="Torna Indietro"
+      [iconLeft]="true"
+      prefixIcon="bi bi-arrow-left"
+      [buttonStyle]="ButtonTheme.OnlyText"
+      (click)="close()"
+    ></lib-generic-button-text-with-icon>
+  </div>
+</div>
+<hr>
+<div class="row mt-2 mb-3">
+  <div class="col-10">
+    <div *ngIf="activeOrders=='true'; else elseBlock">
+      <h3>Ordini in corso</h3>
+    </div>
+    <ng-template #elseBlock>
+      <h3>Ordini completati</h3>
+    </ng-template>
+  </div>
+</div>
+<div class="orders-container">
+  <div *ngFor="let order of orders">
+    <div class="mt-2">
+      <app-generic-card
+        [title]="'#' + order.id"
+        [description]="'Data e ora ritiro: ' + order.formattedPickupDate"
+        [price]="'' + order.price">
+      </app-generic-card>
+    </div>
+  </div>
+</div>

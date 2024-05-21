@@ -62,12 +62,12 @@ export class UserProfileComponent implements OnInit{
   }
 
   goToActiveOrders() {
-    this.router.navigate(['../catalogo/ordini',this.customerIdkc],{queryParams:{activeOrders:true}});
+    this.router.navigate(['../catalogo/ordini',this.customer.id],{queryParams:{activeOrders:true}});
 
   }
 
   goToCompletedOrders() {
-    this.router.navigate(['../catalogo/ordini',this.customerIdkc],{queryParams:{activeOrders:false}});
+    this.router.navigate(['../catalogo/ordini',this.customer.id],{queryParams:{activeOrders:false}});
 
   }
 }
