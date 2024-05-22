@@ -4,6 +4,10 @@ import {DashboardClient} from "./components/dashboard-client/dashboard-client";
 import {DashboardClientRoutingModule} from "./dashboard-client-routing.module";
 import {NgbDropdown, NgbDropdownMenu, NgbDropdownToggle} from "@ng-bootstrap/ng-bootstrap";
 import {CatalogueComponent} from "./pages/catalogue/catalogue.component";
+import { UserProfileComponent } from './pages/user-profile/user-profile.component';
+import {UserEditComponent} from "./pages/user-edit/user-edit.component";
+import { UserOrderComponent } from './pages/user-order/user-order.component';
+import { UserOrderDetailComponent } from './pages/user-order-detail/user-order-detail.component';
 import {ProductDetailsComponent} from "./pages/product-details/product-details.component";
 import {TwentyfiveDropdownModule} from "twentyfive-dropdown";
 import {FormsModule} from "@angular/forms";
@@ -14,6 +18,10 @@ import {TwentyfiveTimepickerModule} from "twentyfive-timepicker";
   declarations: [
     DashboardClient,
     CatalogueComponent,
+    UserProfileComponent,
+    UserEditComponent,
+    UserOrderComponent,
+    UserOrderDetailComponent,
     ProductDetailsComponent
   ],
   imports: [

@@ -91,8 +91,8 @@
     </div>
   </ng-template>
 
-  <ng-template #templateColumnRef>
-    <input type="checkbox" (click)="checkComplete($event)">
+  <ng-template #templateColumnRef let-product>
+    <input type="checkbox" (click)="checkComplete(product.id)">
   </ng-template>
 </div>
 

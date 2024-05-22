@@ -19,6 +19,7 @@ import {TwentyfiveCheckboxModule} from "twentyfive-checkbox";
 import { ProductListComponent } from './pages/product-list/product-list.component';
 import {NgbDropdownModule} from "@ng-bootstrap/ng-bootstrap";
 import { ProductEditComponent } from './pages/product-edit/product-edit.component';
+import {TwentyfiveAutocompleteSyncAsyncModule} from "twentyfive-autocomplete-sync-async";
 
 @NgModule({
   declarations: [
@@ -35,16 +36,17 @@ import { ProductEditComponent } from './pages/product-edit/product-edit.componen
     IngredientEditComponent,
   ],
     imports: [
-      DashboardRoutingModule,
-      SharedModule,
-      NgbDropdown,
-      NgbDropdownModule,
-      NgbDropdownToggle,
-      NgbDropdownMenu,
-      TwentyfiveDropdownModule,
-      FormsModule,
-      TwentyfiveChipModule,
-      TwentyfiveCheckboxModule,
+        DashboardRoutingModule,
+        SharedModule,
+        NgbDropdown,
+        NgbDropdownModule,
+        NgbDropdownToggle,
+        NgbDropdownMenu,
+        TwentyfiveDropdownModule,
+        FormsModule,
+        TwentyfiveChipModule,
+        TwentyfiveCheckboxModule,
+        TwentyfiveAutocompleteSyncAsyncModule,
     ],
 })
 export class DashboardModule {

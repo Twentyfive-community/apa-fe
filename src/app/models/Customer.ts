@@ -16,7 +16,8 @@ export class CustomerDetails{
   lastName: string          // Last name of the customer
   email: string             // Email address of the customer
   phoneNumber: string       // Phone number of the customer
-  orderCount: string           // Number of orders the customer has made
+  activeOrdersCount: string           // Number of orders the customer has made
+  completedOrdersCount: string           // Number of orders the customer has made
   totalSpent: string
 
 }

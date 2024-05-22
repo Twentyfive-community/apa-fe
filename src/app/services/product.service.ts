@@ -4,6 +4,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Utils} from "../shared/utils/utils";
 import {Customer} from "../models/Customer";
 import {ProductToEdit} from "../models/Product";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class ProductService {
   private baseWeightedUrl: string = `${environment.backendUrl}/productsWeighted`;
   private baseTrayUrl: string = `${environment.backendUrl}/trays`;
   private uploadProPicUrl = `${environment.ftpUrl}/uploadkkk/`;
+
 
   constructor(private http: HttpClient) {
   }
@@ -76,12 +78,14 @@ export class ProductService {
   }
   saveKg(product:ProductToEdit){
     return this.http.post(`${this.baseKgUrl}/save`,product);
-
   }
 
   saveTray(product:ProductToEdit){
     return this.http.post(`${this.baseTrayUrl}/save`,product);
+ }
 
+  getImageUrlByIdTray(id: string): Observable<string> {
+    return this.http.get<string>(`${this.baseTrayUrl}/imageById/${id}`, { responseType: 'text' as 'json' });
   }
 
   uploadPic(file: File) {
@@ -91,6 +95,14 @@ export class ProductService {
     let h = new HttpHeaders();
     h.append('Content-type', 'multipart/form-data')
     return this.http.post(`${this.uploadProPicUrl}${path}`, formData, {headers: h, responseType: 'text'});
+  }
+
+
+  getImageUrlByIdKg(id: string): Observable<string> {
+    return this.http.get<string>(`${this.baseKgUrl}/imageById/${id}`, { responseType: 'text' as 'json' });
+  }
+  getImageUrlByIdWeighted(id: string): Observable<string> {
+    return this.http.get<string>(`${this.baseWeightedUrl}/imageById/${id}`, { responseType: 'text' as 'json' });
   }
 
 }
