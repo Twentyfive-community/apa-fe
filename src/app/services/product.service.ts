@@ -80,9 +80,9 @@ export class ProductService {
     return this.http.post(`${this.baseKgUrl}/save`,product);
   }
 
-  saveTray(product:ProductToEdit){
-    return this.http.post(`${this.baseTrayUrl}/save`,product);
- }
+  saveTray(product:ProductToEdit) {
+    return this.http.post(`${this.baseTrayUrl}/save`, product);
+  }
 
   getImageUrlByIdTray(id: string): Observable<string> {
     return this.http.get<string>(`${this.baseTrayUrl}/imageById/${id}`, { responseType: 'text' as 'json' });
