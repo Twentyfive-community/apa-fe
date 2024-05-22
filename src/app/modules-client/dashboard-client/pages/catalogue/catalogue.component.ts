@@ -6,6 +6,9 @@ import {TwentyfiveModalGenericComponentService} from "twentyfive-modal-generic-c
 import {ProductService} from "../../../../services/product.service";
 import {ProductDetails, ProductKg, ProductWeighted, Tray, TrayDetails} from "../../../../models/Product";
 import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
+import {CategoryEditComponent} from "../../../../shared/category-edit/category-edit.component";
+import {ProductDetailsComponent} from "../product-details/product-details.component";
+import {response} from "express";
 
 @Component({
   selector: 'app-catalogue',
@@ -17,6 +20,7 @@ export class CatalogueComponent implements OnInit{
   categories: Category[] = []
   categoryType=['productKg','productWeighted','tray'];
   categoryActive: string = '';
+  categoryName: string = '';
   productListKg: ProductKg[]=[];
   productListWeighted: ProductWeighted[]=[];
   trayList: Tray[]=[];
@@ -43,6 +47,7 @@ export class CatalogueComponent implements OnInit{
       this.categories = response
       this.activeTab = this.categories[0].id;
       this.categoryActive = this.categories[0].type;
+      this.categoryName = this.categories[0].name;
       this.getAll()
     })
   }
@@ -52,55 +57,35 @@ export class CatalogueComponent implements OnInit{
   setActiveTab(category: Category) {
     this.activeTab = category.id; // Imposta l'ID della tab attiva quando viene cliccata
     this.categoryActive = category.type;
-    console.log(this.activeTab)
+    this.categoryName = category.name;
     this.getAll()
   }
 
   getAll(){
     switch (this.categoryActive) {
       case 'productKg':
-        this.productService.getAllKg(this.activeTab,0,5, '','').subscribe((res: any) => {
-          this.productListKg = res.content
-        })
-        break;
-      case 'productWeighted':
-        this.productService.getAllWeighted(this.activeTab,0,5,'','').subscribe((res: any) => {
-          this.productListWeighted = res.content
+        this.productService.getAllKgActive(this.activeTab).subscribe((res: any) => {
+          this.productListKg = res
         })
         break;
       case 'tray':
-        this.productService.getAllTrays(this.activeTab,0, 5,'','').subscribe((res: any) => {
-          this.trayList = res.content
-          console.log("SUUUUUS")
-          console.log(this.trayList)
+        this.productService.getAllTraysActive(this.activeTab).subscribe((res: any) => {
+          this.trayList = res
         })
         break;
     }
   }
 
-  getProductDetails(event: any) {
-    switch (this.categoryActive) {
-      case 'productKg':
-        this.productService.getByIdKg(event.id).subscribe((response:any) =>{
-          this.productDetails=response;
-        })
-        break;
-      case 'productWeighted':
-        this.productService.getByIdWeighted(event.id).subscribe((response:any) =>{
-          this.productDetails=response;
-        })
-        break;
-      case 'tray':
-        this.productService.getByIdTray(event.id).subscribe((response:any) =>{
-          this.trayDetails=response;
-        })
-        break;
-    }
+  modalProduct(productId: string){
+    let r = this.genericModalService.open(ProductDetailsComponent, "s", {});
+    r.componentInstance.productId = productId;
+    r.componentInstance.categoryType= this.categoryActive;
+    r.componentInstance.categoryName= this.categoryName;
+    r.result.finally(() => {
+      this.getAll()
+    })
   }
 
-  getIngredientListOfProduct(idProd: string){
-
-  }
 
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
   protected readonly ButtonTheme = ButtonTheme;
