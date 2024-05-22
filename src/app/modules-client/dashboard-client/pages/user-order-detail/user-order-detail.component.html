@@ -18,6 +18,7 @@
     <div *ngFor="let product of orderDetails.products" class="product-details card mt-2">
 
       <div class="column mt-2 ms-2">
+        <img [src]="getImageOfProduct(product)">
         <h4 class="mb-2">{{ product.name }}</h4>
         <div class="col-11 ms-2 mb-2">
           <h6 class="mb-0">Quantità:</h6>
@@ -27,17 +28,11 @@
           <h6 class="mb-0">Peso:</h6>
           <p style="color: gray;"> {{ product.weight }} kg</p>
         </div>
-        <div class="col-11 ms-2">
-          <h6 class="mb-0">Forma:</h6>
-          <p style="color: gray;">{{ product.shape  }}</p>
-        </div>
-        <div class="col-11 ms-2">
-          <h6 class="mb-0">Personalizzazioni:</h6>
-          <p style="color: gray;">{{ product.customization | json }}</p>
-        </div>
-        <div class="col-11 ms-2">
-          <h6 class="mb-0">Cioccolato:</h6>
-          <p style="color: gray;">{{ product.chocolateChips ? 'Sì' : 'No' }}</p>
+        <div class="col-11 ms-2 mb-2">
+          <h6 class="mb-2">Personalizzazioni:</h6>
+          <ul *ngFor="let item of product.customization | keyvalue" class="mt-0 mb-0">
+            <li><b>{{ item.key }}:</b> {{ item.value }}</li>
+          </ul>
         </div>
         <div class="col-11 ms-2">
           <h6 class="mb-0">Note:</h6>
@@ -51,6 +46,7 @@
     </div>
 
     <div *ngFor="let bundle of orderDetails.bundles" class="product-details card">
+      <img [src]="getImageOfBundle(bundle)">
       <div class="column mt-2 ms-2">
         <h4 class="mb-2">{{ bundle.name }}</h4>
         <div class="col-11 ms-2 mb-2">

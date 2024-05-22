@@ -13,7 +13,7 @@ export class Bundle {
 export class BundleInPurchase {
   name: string;
   measure: Measure;
-  bundleId: string;
+  id: string;
   quantity: number;
   totalPrice: number;
 }

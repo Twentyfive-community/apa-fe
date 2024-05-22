@@ -4,6 +4,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Utils} from "../shared/utils/utils";
 import {Customer} from "../models/Customer";
 import {ProductToEdit} from "../models/Product";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -81,4 +82,16 @@ export class ProductService {
     h.append('Content-type', 'multipart/form-data')
     return this.http.post(`${this.uploadProPicUrl}${path}`, formData, {headers: h,responseType: 'text'})
   }
+
+  getImageUrlByIdTray(id: string): Observable<string> {
+    return this.http.get<string>(`${this.baseTrayUrl}/imageById/${id}`, { responseType: 'text' as 'json' });
+  }
+
+  getImageUrlByIdKg(id: string): Observable<string> {
+    return this.http.get<string>(`${this.baseKgUrl}/imageById/${id}`, { responseType: 'text' as 'json' });
+  }
+  getImageUrlByIdWeighted(id: string): Observable<string> {
+    return this.http.get<string>(`${this.baseWeightedUrl}/imageById/${id}`, { responseType: 'text' as 'json' });
+  }
+
 }
