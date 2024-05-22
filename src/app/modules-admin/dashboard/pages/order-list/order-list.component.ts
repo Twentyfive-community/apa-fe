@@ -81,7 +81,7 @@ export class OrderListComponent implements OnInit, AfterViewInit{
     {
       icon: 'bi bi-printer-fill',
       action: async (myRow: any) => {
-        this.toastrService.info("FUNZIONE STAMPA DA AGGIUNGERE")
+        this.downloadPdf(myRow.id)
       },
       actionName: 'Stampa',
       tooltipText: 'Stampa Ordine',
@@ -214,7 +214,6 @@ export class OrderListComponent implements OnInit, AfterViewInit{
   }
 
   checkComplete(myRow:any){
-    console.log(myRow);
       this.modalService.openModal(
         'Vuoi segnare questo ordine come completato?',
         'Completa Ordine',
@@ -230,6 +229,19 @@ export class OrderListComponent implements OnInit, AfterViewInit{
   }
   private playNotificationSound() {
     this.audio.play();
+  }
+
+  downloadPdf(id: string) {
+    this.orderService.print(id).subscribe(response => {
+      const url = window.URL.createObjectURL(response);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${id}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    });
   }
   protected readonly ButtonTheme = ButtonTheme;
   protected readonly ButtonSizeTheme = ButtonSizeTheme;

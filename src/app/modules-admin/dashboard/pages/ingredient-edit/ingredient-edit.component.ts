@@ -116,16 +116,19 @@ export class IngredientEditComponent implements OnInit {
     this.ingredientToSave.alcoholic = this.ingredient.alcoholic;
     this.ingredientToSave.active = this.ingredient.active;
     this.ingredientToSave.allergenNames = this.selectedAllergensNames;
-    console.log(this.ingredientToSave);
-    this.ingredientService.saveIngredient(this.ingredientToSave).subscribe({
-      error: () => {
-        this.toastrService.error("Errore nel salvare l'ingrediente");
-      },
-      complete: () => {
-        this.toastrService.success("Ingrediente salvato con successo");
-        this.router.navigate(['../dashboard/ingredienti']);
-      }
-    });
+    if(this.isValid()) {
+      this.ingredientService.saveIngredient(this.ingredientToSave).subscribe({
+        error: () => {
+          this.toastrService.error("Errore nel salvare l'ingrediente");
+        },
+        complete: () => {
+          this.toastrService.success("Ingrediente salvato con successo");
+          this.router.navigate(['../dashboard/ingredienti']);
+        }
+      });
+    } else {
+      this.toastrService.error("Non tutti i campi sono validi!");
+    }
   }
 
   toggleAllergen(allergen: any) {
@@ -153,6 +156,9 @@ export class IngredientEditComponent implements OnInit {
       JSON.stringify(this.selectedAllergensNames) !== JSON.stringify(this.originalIngredient.allergens.map(a => a.name));
   }
 
+  private isValid(): boolean {
+    return this.ingredientToSave.name!='';
+  }
   protected readonly ButtonTheme = ButtonTheme;
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
   protected readonly ChipTheme = ChipTheme;

@@ -45,25 +45,18 @@
       <p style="font-size: 0.8em;">NB. La scelta degli ingredienti crea automaticamente la lista degli allergeni, visibile nella pagina dei prodotti</p>
     </div>
   </div>
-  <div class="row mb-4" *ngIf="ingredientNames.length > 0">
-    <div class="col-12">
-      <div ngbDropdown class="dropdown mt-2">
-        <button ngbDropdownToggle class="btn btn-outline-dark" type="button" id="ingredientDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-          Seleziona ingredienti
-        </button>
-
-        <ul ngbDropdownMenu class="dropdown-menu" aria-labelledby="ingredientDropdown" style="max-height: 200px; overflow-y: auto;">
-          <li *ngFor="let ingredient of ingredientNames" class="dropdown-item" (click)="toggleIngredient(ingredient)">
-            <div class="form-check">
-              <input type="checkbox" [checked]="selectedIngredients.includes(ingredient)" style="display: none;">
-              <label class="form-check-label" style="cursor: pointer;">
-                {{ ingredient.name }}
-              </label>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
+  <div class="col-6 row mb-2">
+    <lib-twentyfive-autocomplete
+      (onElementSelected)='toggleIngredient($event)'
+      [placeholder]="'Seleziona Ingredienti'"
+      [value]="test"
+      [labelStyle]="LabelTheme.LabelMedium"
+      [inputStyle]="InputTheme.Primary"
+      [showLabel]="true"
+      [isAsync]="true"
+      [textToShowField]="'value'"
+      [service]="ingredientService"
+    ></lib-twentyfive-autocomplete>
   </div>
   <div class="col-9">
     <div class="row mt-3">
@@ -191,9 +184,9 @@
       Trascina qui il file da caricare o clicca per selezionare un file
     </div>
   </div>
-  <div *ngIf="file" class="row">
+  <div *ngIf="file || productToAdd.imageUrl" class="row">
     <div class="col-10">
-      <span>{{ file.name }}</span>
+      <span>Immagine</span>
     </div>
     <div class="col-2">
       <button class="btn btn-link text-dark" (click)="removeFile($event)">
@@ -202,7 +195,7 @@
     </div>
   </div>
 </div>
-<input type="file" #fileInput style="display: none;" (change)="handleFileSelect($event)">
+<input type="file" #fileInput style="display: none;" (change)="handleFileSelect($event)" accept=".png, .jpg, .jpeg">
 
 
 

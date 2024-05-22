@@ -77,7 +77,7 @@ export class ProductDetails {
 }
 
 export class ProductInPurchase {
-  productId: string;
+  id: string;
   name: string;
   weight: number;
   quantity: number;

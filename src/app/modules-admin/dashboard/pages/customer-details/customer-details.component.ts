@@ -32,7 +32,7 @@ export class CustomerDetailsComponent implements OnInit{
   collectionSize: number = 5;
 
   headersTotals: any[] = [
-    { name:'Totale Ordini', value:'orderCount'},
+    { name:'Totale Ordini', value:'completedOrdersCount'},
     { name:'Totale Speso',    value:'totalSpent'}
   ]
 
@@ -92,7 +92,6 @@ export class CustomerDetailsComponent implements OnInit{
     this.customerService.getCustomerDetails(this.id).subscribe((response: any) =>{
       this.customer=response
       this.details.push(response)
-
     })
   }
 

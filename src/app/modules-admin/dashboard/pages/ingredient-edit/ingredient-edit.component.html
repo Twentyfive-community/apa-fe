@@ -69,12 +69,13 @@
 
 <div class="row mt-3">
   <lib-twentyfive-input
+    [customStyles]="{'height': '100px', 'align-content': 'top'}"
     labelText="Descrizione"
     placeholder="Descrizione"
     [value]="ingredient.note"
     (input)="onInputChange($event, 'note')"
-    [customCssClass]="'custom-textarea'"
   ></lib-twentyfive-input>
+
 </div>
 
 <div class="row mt-4">

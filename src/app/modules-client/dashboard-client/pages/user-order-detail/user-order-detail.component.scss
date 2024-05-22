@@ -1,0 +1,33 @@
+.card {
+  background-color: white;  /* Imposta il colore di sfondo delle card a bianco */
+  border-radius: 8px;       /* Arrotonda gli angoli delle card */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Aggiunge un'ombreggiatura leggera per un effetto elevato */
+  padding: 20px;            /* Aggiunge spazio all'interno della card */
+  margin-bottom: 20px;      /* Distanza tra una card e l'altra */
+  transition: box-shadow 0.3s; /* Transizione fluida per l'ombreggiatura */
+}
+
+.card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Aumenta l'ombreggiatura quando il mouse passa sopra la card */
+}
+
+.sticky-bottom {
+  position: fixed;
+  background-color: white; /* opzionale, a seconda del design */
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.3); /* opzionale, per un effetto visivo di separazione */
+  z-index: 10; /* Assicurati che sia sopra altri contenuti */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 25%;
+}
+
+.sized-box {
+  width: 200px;  /* Larghezza del box */
+  height: 150px; /* Altezza del box */
+  display: flex; /* Utilizzo Flexbox per centrare il contenuto all'interno */
+  justify-content: center; /* Centra orizzontalmente il contenuto interno */
+  align-items: center; /* Centra verticalmente il contenuto interno */
+}
+
