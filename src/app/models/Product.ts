@@ -46,11 +46,12 @@ export class TrayDetails {
   id: string;
   name: string;
   customized:boolean;
-  personalized: boolean;
+  personalized: string;
   measures: string;
   measuresList: Measure[] =[]
   description: string;
-  pricePerKg: number;
+  imageUrl: string;
+  pricePerKg: number
 }
 export class ProductWeightedDetails{
   id:string;
@@ -84,7 +85,7 @@ export class ProductInPurchase {
   shape: string;
   customization: Map<string, string>;
   chocolateChips: boolean;
-  text: string;
+  notes: string;
   attachment: string;
   deliveryDate: string;
   totalPrice: number;

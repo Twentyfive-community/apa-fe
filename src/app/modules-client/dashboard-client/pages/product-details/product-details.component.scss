@@ -1,0 +1,38 @@
+::ng-deep lib-twentyfive-input label {
+  font-size: 1.2rem !important; /* Imposta la dimensione del font simile a un h5 */
+  font-weight: 400; /* Assicurati che l'etichetta abbia un peso del carattere simile a un h5 */
+}
+
+::ng-deep ngb-datepicker {
+  .bg-primary {
+    background-color: #CDBB6D !important;
+  }
+}
+
+::ng-deep {
+  .btn.datepicker-button-primary.bi.bi-calendar-week {
+    background-color: #CDBB6D !important;
+  }
+}
+
+.drop-zone {
+  border: 2px dashed #ccc; /* Bordo tratteggiato grigio */
+  padding: 20px; /* Spaziatura interna */
+  background-color: #f0f0f0; /* Sfondo grigio */
+  font-weight: bold; /* Testo in grassetto */
+}
+
+.img-fluid {
+  max-height: 300px;
+  max-width: 300px;
+  border-radius: 0.5rem;
+}
+
+/* Media query per schermi di dimensioni maggiori */
+@media screen and (min-width: 768px) {
+  .img-fluid {
+    max-height: 400px;
+    max-width: 400px;
+  }
+}
+

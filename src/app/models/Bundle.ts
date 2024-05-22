@@ -4,7 +4,7 @@ export class Bundle {
   id: string;
   name: string;
   type: string;
-  measures: any[];
+  measures: Measure[];
   description: string;
   imageUrl: string;
   pricePerKg: number;

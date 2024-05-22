@@ -1,0 +1,170 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <button type="button" class="btn-close" (click)="close()"></button>
+  </div>
+
+    <div class="row mt-4 ms-2 me-2 mb-2">
+      <div class="d-flex justify-content-center">
+        <ng-container *ngIf="categoryName != 'Vassoi'">
+        <img src="{{ productDetails.imageUrl }}" class="img-fluid">
+        </ng-container>
+        <ng-container *ngIf="categoryName === 'Vassoi'">
+          <img src="{{ trayDetails.imageUrl }}" class="img-fluid">
+        </ng-container>
+      </div>
+    </div>
+
+  <div class="row m-2">
+    <ng-container *ngIf="categoryName != 'Vassoi'">
+    <h4>{{ productDetails.name }}</h4>
+    </ng-container>
+    <ng-container *ngIf="categoryName === 'Vassoi'">
+      <h4>{{ trayDetails.name }}</h4>
+    </ng-container>
+  </div>
+
+  <div class="row m-1">
+    <ng-container *ngIf="categoryName != 'Vassoi'">
+    <p style="font-size: medium; color: grey;">{{ productDetails.pricePerKg+'/kg' }}</p>
+    </ng-container>
+    <ng-container *ngIf="categoryName === 'Vassoi'">
+      <p style="font-size: medium; color: grey;">{{ '€ ' +trayDetails.pricePerKg+'/kg' }}</p>
+    </ng-container>
+  </div>
+
+  <div class="row m-1">
+    <ng-container *ngIf="categoryName != 'Vassoi'">
+    <p class="mb-1" style="font-size: large">Ingredienti</p>
+      <p style="font-size: small; color: grey;">{{productDetails.ingredients}}</p>
+    </ng-container>
+    <ng-container *ngIf="categoryName === 'Vassoi'">
+      <p class="mb-1" style="font-size: large">Descrizione</p>
+      <p style="font-size: small; color: grey;">{{trayDetails.description}}</p>
+    </ng-container>
+  </div>
+
+  <ng-container *ngIf="categoryName != 'Vassoi'">
+  <div class="row m-1">
+    <p class="mb-1" style="font-size: large">Allergeni</p>
+    <p style="font-size: small; color: grey;">{{getAllergensNames()}}</p>
+  </div>
+  </ng-container>
+
+  <ng-container *ngIf="categoryName != 'Vassoi'">
+  <div class="row m-1">
+    <p class="mb-1" style="font-size: large">Peso</p>
+    <div ngbDropdown class="dropdown">
+      <button class="btn btn-outline-dark" ngbDropdownToggle id="weightDropdown">
+        {{ selectedWeight }} kg
+      </button>
+      <ul ngbDropdownMenu aria-labelledby="weightDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
+        <li *ngFor="let weight of weightOptions" class="dropdown-item" (click)="selectWeight(weight)">
+          {{ weight }} kg
+        </li>
+      </ul>
+    </div>
+  </div>
+  </ng-container>
+
+  <ng-container *ngIf="categoryName === 'Vassoi'">
+    <div class="row m-1">
+      <p class="mb-1" style="font-size: large">Misura</p>
+      <div ngbDropdown class="dropdown">
+        <button class="btn btn-outline-dark" ngbDropdownToggle id="measureDropdown">
+          {{selectedMeasureLabel}} ({{ selectedMeasure }} kg)
+        </button>
+        <ul ngbDropdownMenu aria-labelledby="measureDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
+          <li *ngFor="let measure of measureOptions" class="dropdown-item" (click)="selectMeasure(measure)">
+            {{measure.label}} ({{ measure.weight }} kg)
+          </li>
+        </ul>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="categoryName === 'Le Nostre Torte' || categoryName === 'Semifreddi'">
+  <div class="row ms-1 mt-3 me-1 mb-3">
+    <lib-twentyfive-input
+      labelText="Aggiungi una frase"
+      placeholder="Tanti Auguri!"
+      inputType="textArea"
+      [value]="productInPurchase.notes"
+      (input)="onInputChange($event)"
+    ></lib-twentyfive-input>
+  </div>
+  </ng-container>
+
+  <ng-container *ngIf="categoryName === 'Le Nostre Torte'">
+  <div class="row ms-2 mt-2 me-3">
+    <p style="font-size:larger ">Immagine</p>
+    <div class="drop-zone rounded  ms-1 mb-2 mt-1" #dropZone (drop)="handleDrop($event)" (dragover)="handleDragOver($event)" (click)="fileInput.click()">
+      <div class="row">
+        <div class="mb-4 text-purple">
+          Trascina qui il file da caricare o clicca per selezionare un file
+        </div>
+      </div>
+      <div *ngIf="file" class="row">
+        <div class="col-10">
+          <span>{{ file.name }}</span>
+        </div>
+        <div class="col-2">
+          <button class="btn btn-link text-dark" (click)="removeFile($event)">
+            <i class="bi bi-trash"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <input type="file" #fileInput style="display: none;" (change)="handleFileSelect($event)">
+  </ng-container>
+
+  <ng-container *ngIf="categoryName != 'Vassoi'">
+  <div class="row ms-1 mt-3 me-1 mb-3">
+    <lib-twentyfive-datepicker
+      [showLabel]="true"
+      [labelStyle]="LabelTheme.LabelMedium"
+      [labelText]="'Data ritiro'"
+      [datePickerStyle]="DatePickerTheme.Primary"
+      (dateSelected)="onSelectDate($event)"
+      [selectedDate]="deliveryDate"
+      [setMinDateToToday]="true"
+    ></lib-twentyfive-datepicker>
+  </div>
+
+  <div class="row ms-1 mt-3 me-1 mb-3">
+    <lib-twentyfive-generic-timepicker
+      [showLabel]="true"
+      [labelStyle]="LabelTheme.LabelMedium"
+      [labelText]="'Ora ritiro'"
+    ></lib-twentyfive-generic-timepicker>
+  </div>
+  </ng-container>
+
+  <hr>
+
+  <div class="row ms-1 mt-3 me-1 mb-3">
+    <span class="col-6 d-flex justify-content-start">
+      Prezzo
+    </span>
+    <span class="col-6 d-flex justify-content-end">
+      {{getRealPrice()}}
+    </span>
+  </div>
+
+  <div class="row ms-1 mt-5 me-1 mb-5">
+      <lib-generic-button
+        [type]="'submit'"
+        (click)="saveNewProductInPurchase()"
+        [buttonSize]="ButtonSizeTheme.FullWidth"
+        [buttonStyle]="ButtonTheme.Primary"
+        [buttonText]="'Aggiungi al carrello'"
+      ></lib-generic-button>
+  </div>
+
+
+
+
+
+
+</div>
