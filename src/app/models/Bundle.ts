@@ -4,7 +4,7 @@ export class Bundle {
   id: string;
   name: string;
   type: string;
-  measures: any[];
+  measures: Measure[];
   description: string;
   imageUrl: string;
   pricePerKg: number;
@@ -13,7 +13,7 @@ export class Bundle {
 export class BundleInPurchase {
   name: string;
   measure: Measure;
-  bundleId: string;
+  id: string;
   quantity: number;
   totalPrice: number;
 }

@@ -6,7 +6,13 @@ import {NgbDropdown, NgbDropdownMenu, NgbDropdownToggle} from "@ng-bootstrap/ng-
 import {CatalogueComponent} from "./pages/catalogue/catalogue.component";
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 import {UserEditComponent} from "./pages/user-edit/user-edit.component";
-import { UserOrderComponent } from './pages/user-orders/user-order.component';
+import { UserOrderComponent } from './pages/user-order/user-order.component';
+import { UserOrderDetailComponent } from './pages/user-order-detail/user-order-detail.component';
+import {ProductDetailsComponent} from "./pages/product-details/product-details.component";
+import {TwentyfiveDropdownModule} from "twentyfive-dropdown";
+import {FormsModule} from "@angular/forms";
+import {TwentyfiveDatepickerModule} from "twentyfive-datepicker";
+import {TwentyfiveTimepickerModule} from "twentyfive-timepicker";
 
 @NgModule({
   declarations: [
@@ -15,13 +21,19 @@ import { UserOrderComponent } from './pages/user-orders/user-order.component';
     UserProfileComponent,
     UserEditComponent,
     UserOrderComponent,
+    UserOrderDetailComponent,
+    ProductDetailsComponent
   ],
   imports: [
     DashboardClientRoutingModule,
     SharedModule,
     NgbDropdown,
     NgbDropdownMenu,
-    NgbDropdownToggle
+    NgbDropdownToggle,
+    TwentyfiveDropdownModule,
+    FormsModule,
+    TwentyfiveDatepickerModule,
+    TwentyfiveTimepickerModule
   ]
 })
 export class DashboardClientModule {

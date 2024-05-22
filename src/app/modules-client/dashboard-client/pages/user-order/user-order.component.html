@@ -22,11 +22,12 @@
 </div>
 <div class="orders-container">
   <div *ngFor="let order of orders">
-    <div class="mt-2">
+    <div class="mt-4">
       <app-generic-card
         [title]="'#' + order.id"
         [description]="'Data e ora ritiro: ' + order.formattedPickupDate"
-        [price]="'' + order.price">
+        [price]="'' + order.price"
+        (click)="goToDetail(order.id)">
       </app-generic-card>
     </div>
   </div>

@@ -4,6 +4,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Utils} from "../shared/utils/utils";
 import {Customer} from "../models/Customer";
 import {ProductToEdit} from "../models/Product";
+import {Observable} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,11 @@ export class ProductService {
   getAllKg(idCategory: string,page: number, size: number,sortColumn: string,sortDirection:string) {
     let p = Utils.createHttpParams({'idCategory': idCategory,'page': page, 'size': size,'sortColumn': sortColumn,'sortDirection': sortDirection});
     return this.http.get(`${this.baseKgUrl}/getAll`, {params: p});
+  }
+
+  getAllKgActive(idCategory: string){
+    let p = Utils.createHttpParams({'idCategory': idCategory});
+    return this.http.get(`${this.baseKgUrl}/getAllActive`, {params: p});
   }
 
   getByIdKg(id:string){
@@ -54,6 +60,11 @@ export class ProductService {
     let p = Utils.createHttpParams({'idCategory':idCategory,'page': page, 'size': size,'sortColumn': sortColumn,'sortDirection': sortDirection});
     return this.http.get(`${this.baseTrayUrl}/getAll`, {params: p});
   }
+
+  getAllTraysActive(idCategory: string){
+    let p = Utils.createHttpParams({'idCategory':idCategory});
+    return this.http.get(`${this.baseTrayUrl}/getAllActive`, {params: p});
+  }
   getByIdTray(id:string){
     return this.http.get(`${this.baseTrayUrl}/getById/${id}`);
   }
@@ -69,8 +80,12 @@ export class ProductService {
     return this.http.post(`${this.baseKgUrl}/save`,product);
   }
 
-  saveTray(product:ProductToEdit){
-    return this.http.post(`${this.baseTrayUrl}/save`,product);
+  saveTray(product:ProductToEdit) {
+    return this.http.post(`${this.baseTrayUrl}/save`, product);
+  }
+
+  getImageUrlByIdTray(id: string): Observable<string> {
+    return this.http.get<string>(`${this.baseTrayUrl}/imageById/${id}`, { responseType: 'text' as 'json' });
   }
 
   uploadPic(file: File) {
@@ -79,6 +94,15 @@ export class ProductService {
     formData.append('file', file)
     let h = new HttpHeaders();
     h.append('Content-type', 'multipart/form-data')
-    return this.http.post(`${this.uploadProPicUrl}${path}`, formData, {headers: h,responseType: 'text'})
+    return this.http.post(`${this.uploadProPicUrl}${path}`, formData, {headers: h, responseType: 'text'});
   }
+
+
+  getImageUrlByIdKg(id: string): Observable<string> {
+    return this.http.get<string>(`${this.baseKgUrl}/imageById/${id}`, { responseType: 'text' as 'json' });
+  }
+  getImageUrlByIdWeighted(id: string): Observable<string> {
+    return this.http.get<string>(`${this.baseWeightedUrl}/imageById/${id}`, { responseType: 'text' as 'json' });
+  }
+
 }

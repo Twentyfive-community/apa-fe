@@ -27,12 +27,13 @@ export class UserOrderComponent implements OnInit {
     this.activeOrders = this.activatedRoute.snapshot.queryParamMap.get('activeOrders');
     this.customerId = this.activatedRoute.snapshot.paramMap.get('id')!;
     this.orders=[]
-    if(this.activeOrders=='true'){
-      this.loadActiveOrders();
+    if(this.customerId) {
+      if (this.activeOrders == 'true') {
+        this.loadActiveOrders();
 
+      } else
+        this.loadCompletedOrders();
     }
-    else
-      this.loadCompletedOrders();
   }
 
   private loadCompletedOrders(): void {
@@ -64,4 +65,9 @@ export class UserOrderComponent implements OnInit {
   }
 
   protected readonly ButtonTheme = ButtonTheme;
+
+  goToDetail(orderId:string) {
+    this.router.navigate(['../catalogo/dettaglio-ordine',orderId],{queryParams:{activeOrders:this.activeOrders,customerId:this.customerId}});
+
+  }
 }
