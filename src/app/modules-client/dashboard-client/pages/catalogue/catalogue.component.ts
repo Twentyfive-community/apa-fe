@@ -9,16 +9,17 @@ import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
 import {CategoryEditComponent} from "../../../../shared/category-edit/category-edit.component";
 import {ProductDetailsComponent} from "../product-details/product-details.component";
 import {response} from "express";
+import {TrayCustomizedComponent} from "../tray-customized/tray-customized.component";
 
 @Component({
   selector: 'app-catalogue',
   templateUrl: './catalogue.component.html',
   styleUrl: './catalogue.component.scss'
 })
-export class CatalogueComponent implements OnInit{
+export class CatalogueComponent implements OnInit {
 
   categories: Category[] = []
-  categoryType=['productKg','productWeighted','tray'];
+  categoryType = ['productKg', 'productWeighted', 'tray'];
   categoryActive: string = '';
   categoryName: string = '';
   productListKg: ProductKg[]=[];
@@ -29,12 +30,11 @@ export class CatalogueComponent implements OnInit{
   trayDetails: TrayDetails = new TrayDetails();
 
 
-
   constructor(private categoryService: CategoryService,
               private router: Router,
               private genericModalService: TwentyfiveModalGenericComponentService,
               private productService: ProductService
-              ) {
+  ) {
   }
 
 
@@ -42,7 +42,7 @@ export class CatalogueComponent implements OnInit{
     this.getCategories()
   }
 
-  getCategories(){
+  getCategories() {
     this.categoryService.getAll(this.categoryType).subscribe((response: any) => {
       this.categories = response
       this.activeTab = this.categories[0].id;
@@ -61,7 +61,7 @@ export class CatalogueComponent implements OnInit{
     this.getAll()
   }
 
-  getAll(){
+  getAll() {
     switch (this.categoryActive) {
       case 'productKg':
         this.productService.getAllKgActive(this.activeTab).subscribe((res: any) => {
@@ -76,17 +76,44 @@ export class CatalogueComponent implements OnInit{
     }
   }
 
-  modalProduct(productId: string){
+  modalProduct(productId: string) {
     let r = this.genericModalService.open(ProductDetailsComponent, "s", {});
     r.componentInstance.productId = productId;
-    r.componentInstance.categoryType= this.categoryActive;
-    r.componentInstance.categoryName= this.categoryName;
+    r.componentInstance.categoryType = this.categoryActive;
+    r.componentInstance.categoryName = this.categoryName;
     r.result.finally(() => {
       this.getAll()
     })
   }
+  getIngredientListOfProduct(idProd: string) {
+
+  }
 
 
+  customizedTray() {
+    let r = this.genericModalService.open(TrayCustomizedComponent, "l", {});
+  }
+
+  getProductDetails(event: any) {
+    switch (this.categoryActive) {
+      case 'productKg':
+        this.productService.getByIdKg(event.id).subscribe((response: any) => {
+          this.productDetails = response;
+        })
+        break;
+      case 'productWeighted':
+        this.productService.getByIdWeighted(event.id).subscribe((response: any) => {
+          this.productDetails = response;
+        })
+        break;
+      case 'tray':
+        this.productService.getByIdTray(event.id).subscribe((response: any) => {
+          this.trayDetails = response;
+        })
+        break;
+    }
+  }
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
   protected readonly ButtonTheme = ButtonTheme;
+
 }

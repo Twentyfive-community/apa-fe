@@ -6,6 +6,7 @@ import {NgbDropdown, NgbDropdownMenu, NgbDropdownToggle} from "@ng-bootstrap/ng-
 import {CatalogueComponent} from "./pages/catalogue/catalogue.component";
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 import {UserEditComponent} from "./pages/user-edit/user-edit.component";
+import { TrayCustomizedComponent } from './pages/tray-customized/tray-customized.component';
 import { UserOrderComponent } from './pages/user-order/user-order.component';
 import { UserOrderDetailComponent } from './pages/user-order-detail/user-order-detail.component';
 import {ProductDetailsComponent} from "./pages/product-details/product-details.component";
@@ -22,7 +23,8 @@ import {TwentyfiveTimepickerModule} from "twentyfive-timepicker";
     UserEditComponent,
     UserOrderComponent,
     UserOrderDetailComponent,
-    ProductDetailsComponent
+    ProductDetailsComponent,
+    TrayCustomizedComponent
   ],
   imports: [
     DashboardClientRoutingModule,

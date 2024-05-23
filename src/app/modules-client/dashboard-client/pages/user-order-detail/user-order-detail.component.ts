@@ -7,7 +7,7 @@ import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
 import {OrderDetails} from "../../../../models/Order";
 import {CompletedorderService} from "../../../../services/completedorder.service";
 import {ProductService} from "../../../../services/product.service";
-import {BundleInPurchase} from "../../../../models/Bundle";
+import {BundleInPurchase, BundleInPurchaseDetails} from "../../../../models/Bundle";
 
 @Component({
   selector: 'app-user-order-detail',
@@ -124,7 +124,7 @@ export class UserOrderDetailComponent implements OnInit {
     return this.productImages.at(n);
   }
 
-  getImageOfBundle(bundle:BundleInPurchase) {
+  getImageOfBundle(bundle:BundleInPurchaseDetails) {
 
     let n = this.orderDetails.bundles.indexOf(bundle);
     return this.bundleImages.at(n);

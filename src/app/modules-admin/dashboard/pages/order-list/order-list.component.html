@@ -80,6 +80,15 @@
         <p><b>Peso:</b> {{ bundle.measure.weight }} Kg</p>
         <p><b>Quantità:</b> {{ bundle.quantity }}</p>
         <p><b>Prezzo totale:</b> {{ bundle.totalPrice }} €</p>
+        <div *ngIf="bundle.weightedProducts">
+          <p><b>Mignon:</b></p>
+          <ul *ngFor="let weightedProduct of bundle.weightedProducts">
+            <li>
+              <p><b>x{{weightedProduct.quantity}}</b> {{weightedProduct.name}}</p>
+            </li>
+          </ul>
+          <p><b>Peso Totale Mignon scelti:</b>  {{bundle.totalWeight}} kg</p>
+        </div>
       </div>
     </div>
 

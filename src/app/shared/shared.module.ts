@@ -11,6 +11,7 @@ import { CategoryEditComponent } from './category-edit/category-edit.component';
 import {TwentyfiveModalGenericComponentModule} from "twentyfive-modal-generic-component";
 import {NgbDropdown, NgbDropdownMenu, NgbDropdownToggle} from "@ng-bootstrap/ng-bootstrap";
 import { GenericCardComponent } from './generic-card/generic-card.component';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { GenericCardComponent } from './generic-card/generic-card.component';
         TwentyfiveModalGenericComponentModule,
         NgbDropdown,
         NgbDropdownMenu,
-        NgbDropdownToggle
+        NgbDropdownToggle,
+        FormsModule
     ],
   exports: [
     CommonModule,

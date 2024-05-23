@@ -361,10 +361,6 @@ export class ProductEditComponent implements OnInit {
     this.fileInputRef.nativeElement.value = '';
   }
 
-  handleIngredientSelect(event: any) {
-
-  }
-
   protected readonly ButtonTheme = ButtonTheme;
   protected readonly ChipTheme = ChipTheme;
   protected readonly ButtonSizeTheme = ButtonSizeTheme;

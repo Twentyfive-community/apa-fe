@@ -1,0 +1,29 @@
+.sized-box {
+  height: 50px; /* Puoi modificare l'altezza per aggiungere più spazio */
+}
+.back-white {
+  background-color: white;
+}
+.modal-body {
+  background-color: #f5f5f5;
+}
+.sticky-box {
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  padding: 10px; /* Aumenta il padding */
+  margin-top: 20px; /* Margine superiore per separare dal contenuto precedente */
+  margin-bottom: 0;
+  z-index: 1000; /* Assicurati che sia sopra gli altri elementi */
+  min-height: 200px; /* Imposta un'altezza minima per assicurarti che il contenuto sia visibile */
+}
+
+.gray-text {
+  color: lightgray;
+}
+.gray-span {
+  color: lightgray;
+  font-size: 0.75em;
+}

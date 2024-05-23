@@ -3,5 +3,16 @@
   height: 160px; /* Imposta l'altezza della card */
   padding: 20px; /* Imposta il padding interno della card */
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3); /* Aggiungi un'ombra */
+}
 
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
 }
