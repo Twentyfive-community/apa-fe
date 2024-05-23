@@ -1,4 +1,4 @@
-import {BundleInPurchase} from "./Bundle";
+import {BundleInPurchase, BundleInPurchaseDetails} from "./Bundle";
 import {ProductInPurchase} from "./Product";
 
 export class Order {
@@ -15,7 +15,7 @@ export class Order {
 export class OrderDetails {
   id: string;
   products: ProductInPurchase[]=[];
-  bundles: BundleInPurchase[]=[];
+  bundles: BundleInPurchaseDetails[]=[];
   email: string;
   phoneNumber: string;
   pickupDateTime: string;

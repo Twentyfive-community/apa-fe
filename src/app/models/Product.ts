@@ -15,9 +15,11 @@ export class ProductWeighted {
   name: string;
   allergens: Allergen[];
   ingredients: string[];
+  realWeight: number;
   weight: string;
   imageUrl: string;
   active: boolean;
+  quantity:number;
 }
 export class ProductToEdit {
   id: string;
@@ -41,6 +43,7 @@ export class Tray {
   description: string;
   active: boolean;
   pricePerKg: number;
+  imageUrl: string;
 }
 export class TrayDetails {
   id: string;
@@ -61,6 +64,7 @@ export class ProductWeightedDetails{
   weight:string;
   imageUrl:string[];
   active:boolean;
+  quantity:number;
 }
 export class ProductDetails {
 
@@ -90,6 +94,7 @@ export class ProductInPurchase {
   deliveryDate: string;
   totalPrice: number;
 }
+
 export class WeightRange {
   minWeight:number;
   maxWeight:number;

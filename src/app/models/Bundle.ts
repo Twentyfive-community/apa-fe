@@ -11,9 +11,36 @@ export class Bundle {
 }
 
 export class BundleInPurchase {
+  id: string;
   name: string;
   measure: Measure;
+  totalWeight: number;
+  quantity: number = 1;
+  totalPrice: number;
+  weightedProducts:PieceInPurchase[] = [];
+}
+
+export class BundleInPurchaseDetails{
+  id: string;
+  name: string;
+  measure: Measure;
+  totalWeight: number;
+  quantity: number = 1;
+  totalPrice: number;
+  weightedProducts:PieceInPurchaseDetails[] = [];
+}
+export class PieceInPurchaseDetails{
+  id: string;
+  name: string;
+  weight: number;
+  quantity: number;
+}
+export class PieceInPurchase {
   id: string;
   quantity: number;
-  totalPrice: number;
+
+  constructor(id:string, quantity:number){
+    this.id=id;
+    this.quantity=quantity;
+  }
 }
