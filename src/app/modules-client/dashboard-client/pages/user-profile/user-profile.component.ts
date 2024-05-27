@@ -4,7 +4,9 @@ import {TwentyfiveModalService} from "twentyfive-modal";
 import {CustomerService} from "../../../../services/customer.service";
 import {Router} from "@angular/router";
 import {SigningKeycloakService} from "twentyfive-keycloak-new";
-import {CustomerDetails} from "../../../../models/Customer";
+import {Customer, CustomerDetails} from "../../../../models/Customer";
+import {KeycloakCustomService} from "../../../../services/keycloak.services";
+import {KeycloakPasswordRecoveryService} from "../../../../services/passwordrecovery.service";
 
 @Component({
   selector: 'app-user-profile',
@@ -15,8 +17,9 @@ export class UserProfileComponent implements OnInit{
   customer:CustomerDetails =new CustomerDetails()
   customerIdkc :string =''
 
-  constructor(private keycloakService: SigningKeycloakService,
+  constructor(private signingKeycloakService: SigningKeycloakService,
               private router: Router,
+              private passwordRecoveryService: KeycloakPasswordRecoveryService,
               private customerService:CustomerService,
               private modalService: TwentyfiveModalService) {
   }
@@ -28,7 +31,7 @@ export class UserProfileComponent implements OnInit{
   protected readonly ButtonTheme = ButtonTheme;
 
   private getCustomer() {
-    let keycloackService=(this.keycloakService)as any;
+    let keycloackService=(this.signingKeycloakService)as any;
     this.customerIdkc=keycloackService.keycloakService._userProfile.id;
     if(this.customerIdkc!=null){
       this.customerService.getCustomerByKeycloakId(this.customerIdkc).subscribe( (res:any) =>{
@@ -52,7 +55,7 @@ export class UserProfileComponent implements OnInit{
   }
   //
   exit() {
-    this.keycloakService.signout();
+    this.signingKeycloakService.signout();
   }
 
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
@@ -68,6 +71,29 @@ export class UserProfileComponent implements OnInit{
 
   goToCompletedOrders() {
     this.router.navigate(['../catalogo/ordini',this.customer.id],{queryParams:{activeOrders:false}});
+
+  }
+
+  resetPassword() {
+    this.modalService.openModal(
+      'Se continui verrà inviata una e-mail a '+this.customer.email+' con un link da cui potrai cambiare la password relativa al tuo account. Vuoi procedere?',
+      'Reset Password',
+      'Annulla',
+      'Conferma',
+      {
+        size: 'md',
+        onConfirm: (() => {
+          this.router.navigate(['../catalogo/profilo']);
+          this.passwordRecoveryService.sendPasswordResetEmail(this.customerIdkc).subscribe({
+            next: () => {
+              console.log('Email di recupero password inviata con successo.');
+            },
+            error: (error) => {
+              console.log('Errore durante l\'invio dell\'email di recupero.');
+            }
+          });
+        })
+      });
 
   }
 }
