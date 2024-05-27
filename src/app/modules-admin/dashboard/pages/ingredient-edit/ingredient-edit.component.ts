@@ -15,7 +15,7 @@ import { Allergen } from "../../../../models/Allergen";
 })
 export class IngredientEditComponent implements OnInit {
 
-  categoryId: string | null;
+  activeTab: string | null;
   ingredient: Ingredient = new Ingredient();
   originalIngredient: Ingredient = new Ingredient();  // Initialized with empty strings
   ingredientToSave: IngredientToSave = new IngredientToSave();
@@ -35,7 +35,7 @@ export class IngredientEditComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.categoryId = this.activatedRoute.snapshot.queryParamMap.get('activeTab');
+    this.activeTab = this.activatedRoute.snapshot.queryParamMap.get('activeTab');
     this.ingredientId = this.activatedRoute.snapshot.paramMap.get('id');
     if (this.ingredientId) {
       this.getAllergens();
@@ -80,11 +80,11 @@ export class IngredientEditComponent implements OnInit {
         {
           size: 'md',
           onConfirm: (() => {
-            this.router.navigate(['../dashboard/ingredienti']);
+            this.router.navigate(['../dashboard/ingredienti'], { queryParams: { activeTab: this.activeTab } });
           })
         });
     } else {
-      this.router.navigate(['../dashboard/ingredienti']);
+        this.router.navigate(['../dashboard/ingredienti'], { queryParams: { activeTab: this.activeTab } });
     }
   }
 
@@ -110,7 +110,7 @@ export class IngredientEditComponent implements OnInit {
 
   saveNewIngredient() {
     this.ingredientToSave.id = this.ingredientId!;
-    this.ingredientToSave.categoryId = this.categoryId!;
+    this.ingredientToSave.categoryId = this.activeTab!;
     this.ingredientToSave.name = this.ingredient.name;
     this.ingredientToSave.description = this.ingredient.note;
     this.ingredientToSave.alcoholic = this.ingredient.alcoholic;
@@ -123,7 +123,7 @@ export class IngredientEditComponent implements OnInit {
         },
         complete: () => {
           this.toastrService.success("Ingrediente salvato con successo");
-          this.router.navigate(['../dashboard/ingredienti']);
+          this.router.navigate(['../dashboard/ingredienti'], { queryParams: { activeTab: this.activeTab } });
         }
       });
     } else {

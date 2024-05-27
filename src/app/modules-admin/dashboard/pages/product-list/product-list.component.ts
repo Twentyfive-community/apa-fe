@@ -16,7 +16,6 @@ import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
 import {ActivatedRoute, Router} from "@angular/router";
 import {CategoryEditComponent} from "../../../../shared/category-edit/category-edit.component";
 import {
-  TwentyfiveModalGenericComponentModule,
   TwentyfiveModalGenericComponentService
 } from "twentyfive-modal-generic-component";
 
@@ -49,7 +48,7 @@ export class ProductListComponent implements OnInit{
       icon: 'bi bi-pencil-square',
       action: async (myRow: any) => {
         console.log(myRow);
-        this.router.navigate(['/dashboard/editingProdotti/', myRow.id], {relativeTo: this.activatedRouteRoute,
+        this.router.navigate(['/dashboard/editingProdotti/', myRow.id], {relativeTo: this.activatedRoute,
           queryParams: {
             categoryId: this.activeTab,
           }});
@@ -79,17 +78,17 @@ export class ProductListComponent implements OnInit{
   extras: any[] = [
     {name: 'prodottoKg', value: 'productKgDetails'}
   ]
-  activeTab: string = '';
+  activeTab: string | null;
   pageSize: number = 5
   currentPage: number = 0;
   maxSize: number = 5;
   collectionSize: number = 0;
   sortColumn: string = '';
   sortDirection: string = '';
-
+  categoryId: string | null;
 
   categoryType=['productKg','productWeighted','tray'];
-  categoryActive: string = '';
+  categoryActive: string;
   navCategories: Category[]=[];
   disabledCategories: Category[] = [];
   productListKg: ProductKg[]=[];
@@ -103,13 +102,14 @@ export class ProductListComponent implements OnInit{
   trayDetails: TrayDetails = new TrayDetails();
 
   constructor(private router: Router,
-              private activatedRouteRoute: ActivatedRoute,
+              private activatedRoute: ActivatedRoute,
               private toastrService: ToastrService,
               private modalService: TwentyfiveModalService,
               private categoryService:CategoryService,
               private productService:ProductService,
               private genericModalService:TwentyfiveModalGenericComponentService) {}
   ngOnInit(): void {
+    this.activeTab = this.activatedRoute.snapshot.queryParamMap.get('activeTab');
     this.getCategories();
   }
 
@@ -117,32 +117,40 @@ export class ProductListComponent implements OnInit{
   getCategories(){
     this.categoryService.getAll(this.categoryType).subscribe((response: any) => {
       this.navCategories = response;
-      if (this.navCategories.length > 0){
-        this.activeTab = this.navCategories[0].id;
-        this.categoryActive = this.navCategories[0].type;
-        this.getAll();
+      if (this.activeTab){
+        this.categoryService.getById(this.activeTab).subscribe((response: any) => {
+          this.categoryActive = response.type;
+          this.getAll();
+        })
+      } else {
+        if (this.navCategories.length > 0){
+          this.activeTab = this.navCategories[0].id;
+          this.categoryActive = this.navCategories[0].type;
+          this.getAll();
+        }
       }
-    })
+
+    });
     this.categoryService.getAllDisabled(this.categoryType).subscribe((response: any) => {
       this.disabledCategories = response;
-    })
+    });
   }
   getAll(page?: number){
     switch (this.categoryActive) {
       case 'productKg':
-        this.productService.getAllKg(this.activeTab,page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection).subscribe((res: any) => {
+        this.productService.getAllKg(this.activeTab!,page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection).subscribe((res: any) => {
           this.productListKg = res.content
           this.collectionSize = res.totalElements;
         })
         break;
       case 'productWeighted':
-        this.productService.getAllWeighted(this.activeTab,page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection).subscribe((res: any) => {
+        this.productService.getAllWeighted(this.activeTab!,page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection).subscribe((res: any) => {
           this.productListWeighted = res.content
           this.collectionSize = res.totalElements;
         })
         break;
       case 'tray':
-        this.productService.getAllTrays(this.activeTab,page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection).subscribe((res: any) => {
+        this.productService.getAllTrays(this.activeTab!,page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection).subscribe((res: any) => {
           this.trayList = res.content
           this.collectionSize = res.totalElements;
         })
@@ -272,7 +280,7 @@ export class ProductListComponent implements OnInit{
         showIcon: true,
         size: 'md',
         onConfirm: (() => {
-          this.categoryService.disableCategory(this.activeTab).subscribe({
+          this.categoryService.disableCategory(this.activeTab!).subscribe({
             next: (() =>{
               this.getCategories();
             })

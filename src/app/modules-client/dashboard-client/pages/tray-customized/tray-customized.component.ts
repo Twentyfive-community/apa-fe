@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
 import {TwentyfiveModalGenericComponentService} from "twentyfive-modal-generic-component";
 import {ProductService} from "../../../../services/product.service";
 import {ProductWeighted, ProductWeightedDetails, TrayDetails} from "../../../../models/Product";
@@ -16,17 +16,23 @@ import {ToastrService} from "ngx-toastr";
   templateUrl: './tray-customized.component.html',
   styleUrl: './tray-customized.component.scss'
 })
-export class TrayCustomizedComponent implements OnInit{
+export class TrayCustomizedComponent implements OnInit,AfterViewInit{
+
+  @ViewChild('modalContent', { static: false }) modalContent!: ElementRef;
 
   trayDetails: TrayDetails = new TrayDetails();
   bundleInPurchase: BundleInPurchase = new BundleInPurchase();
   productListWeighted: ProductWeighted[]=[new ProductWeighted()];
   productWeighted: ProductWeightedDetails = new ProductWeightedDetails();
   currentStep = 1;
-  selectedPrice: number = 0;
-
+  page =0;
+  size =10;
   customerIdkc: string = '';
   customer: Customer = new Customer();
+  isLoading = false;
+  hasMoreProducts = true; // Flag to check if more products are available
+
+
   ngOnInit(): void {
     this.getCustomer();
     this.productService.getByIdTray('664c677cdb11452a067bbdf5').subscribe((response:any)=> {
@@ -34,12 +40,11 @@ export class TrayCustomizedComponent implements OnInit{
       this.bundleInPurchase.id = response.id;
       this.bundleInPurchase.totalWeight = 0;
     });
-    this.productService.getAllWeightedWithoutPage('664361ed09aa3a0e1b249988').subscribe((response:any) => {
-      this.productListWeighted = response;
-      this.productListWeighted.forEach((product: any) => {
-        product.quantity = 0;
-      });
-    })
+    this.getAllCustomizedTray();
+  }
+
+  ngAfterViewInit(): void {
+    this.modalContent.nativeElement.addEventListener('scroll', this.onScroll.bind(this));
   }
 
   constructor(private modalService:TwentyfiveModalGenericComponentService,
@@ -49,6 +54,16 @@ export class TrayCustomizedComponent implements OnInit{
               private cartService: CartService,
               private toastrService: ToastrService
               ) {
+  }
+
+  onScroll(event: any): void {
+    console.log("sto scrollando fortissimo");
+    const pos = (document.documentElement.scrollTop || document.body.scrollTop) + window.innerHeight;
+    const max = document.documentElement.scrollHeight;
+    if (pos >= max && !this.isLoading && this.hasMoreProducts) {
+      this.page++;
+      this.getAllCustomizedTray();
+    }
   }
 
   nextStep() {
@@ -113,6 +128,27 @@ export class TrayCustomizedComponent implements OnInit{
     }
   }
 
+  getAllCustomizedTray() {
+    this.isLoading = true;
+    this.productService.getAllForCustomizedTray('664361ed09aa3a0e1b249988', this.page, this.size).subscribe(
+      (response: any) => {
+        const newProducts = response.content.map((product: any) => {
+          product.quantity = 0;
+          return product;
+        });
+        this.productListWeighted = [...this.productListWeighted, ...newProducts];
+        this.isLoading = false;
+        if (newProducts.length < this.size) {
+          this.hasMoreProducts = false; // No more products available
+        }
+      },
+      error => {
+        console.error(error);
+        this.isLoading = false;
+      }
+    );
+  }
+
   onInputChange(event: any) {
     this.bundleInPurchase.quantity=event.target.value;
   }
@@ -126,7 +162,8 @@ export class TrayCustomizedComponent implements OnInit{
         this.toastrService.success("Vassoio aggiunto al carrello con successo");
         this.close()
       }
-    })  }
+    })
+  }
   close(){
     this.modalService.close();
   }

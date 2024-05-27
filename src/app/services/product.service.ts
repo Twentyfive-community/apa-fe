@@ -46,9 +46,9 @@ export class ProductService {
     return this.http.get(`${this.baseWeightedUrl}/getAll`, {params: p});
   }
 
-  getAllWeightedWithoutPage(idCategory: string) {
-    let p = Utils.createHttpParams({'idCategory': idCategory});
-    return this.http.get(`${this.baseWeightedUrl}/getAllWithoutPage`, {params: p});
+  getAllForCustomizedTray(idCategory: string,page: number, size: number) {
+    let p = Utils.createHttpParams({'idCategory': idCategory,'page': page, 'size': size});
+    return this.http.get(`${this.baseWeightedUrl}/getAllForCustomizedTray`, {params: p});
   }
   getByIdWeighted(id:string){
     return this.http.get(`${this.baseWeightedUrl}/getById/${id}`);

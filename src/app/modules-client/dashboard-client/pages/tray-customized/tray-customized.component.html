@@ -1,85 +1,86 @@
-<div class = modal-content>
+<div class="modal-content">
   <div class="modal-header">
     <button type="button" class="btn-close" (click)="close()"></button>
   </div>
-</div>
 
-<div class="modal-body">
-  <div [ngSwitch]="currentStep">
+  <div #modalContent class="modal-body" (scroll)="onScroll($event)">
+    <div [ngSwitch]="currentStep">
 
-    <div *ngSwitchCase="1">
-      <h4 class="mb-3 ms-2 me-2 mt-4">Seleziona misura vassoio</h4>
-      <div class="mb-3 ms-2 me-2" *ngFor="let measure of trayDetails.measuresList">
-      <app-generic-card
-        [title]="'' +measure.label"
-        [description]="'Peso: ' +measure.weight+ 'kg'"
-        [imageUrl]="trayDetails.imageUrl"
-        [price]="'' +trayDetails.pricePerKg*measure.weight+ ' €'"
-        (click)="selectMeasure(measure)"
-      ></app-generic-card>
+      <div *ngSwitchCase="1">
+        <h4 class="mb-3 ms-2 me-2 mt-4">Seleziona misura vassoio</h4>
+        <div class="mb-3 ms-2 me-2" *ngFor="let measure of trayDetails.measuresList">
+          <app-generic-card
+            [title]="'' + measure.label"
+            [description]="'Peso: ' + measure.weight + 'kg'"
+            [imageUrl]="trayDetails.imageUrl"
+            [price]="'' + trayDetails.pricePerKg * measure.weight + ' €'"
+            (click)="selectMeasure(measure)"
+          ></app-generic-card>
+        </div>
       </div>
-    </div>
 
-    <div *ngSwitchCase="2">
-      <div class="back-white">
-        <lib-generic-button-text-with-icon
+      <div *ngSwitchCase="2">
+        <div class="back-white">
+          <lib-generic-button-text-with-icon
             buttonText="Torna Indietro"
             [iconLeft]="true"
             prefixIcon="bi bi-arrow-left"
             [buttonStyle]="ButtonTheme.OnlyText"
             (click)="previousStep()"
           ></lib-generic-button-text-with-icon>
-        <hr>
-      </div>
-
-      <h4 class="mb-3 ms-2 me-2 mt-4 fs-3">Componi vassoio</h4>
-      <div class="mb-3 ms-2 me-2">
-        <span class="fs-5 d-block mb-3">Misura: {{bundleInPurchase.measure.label}}</span>
-        <span class="fs-6 d-block mb-3">Peso: {{bundleInPurchase.measure.weight}} kg</span>
-        <span class="fs-5 d-block mb-2">{{bundleInPurchase.totalPrice}} €</span>
-        <div class="mb-2 me-2" *ngFor="let weighted of productListWeighted">
-          <app-generic-card
-            [imageLeft]="true"
-            [imageUrl]="weighted.imageUrl"
-            [title]="'' +weighted.name"
-            [currentWeight]="bundleInPurchase.totalWeight"
-            [weight]="weighted.realWeight"
-            [quantity]="weighted.quantity"
-            [totalWeight]="bundleInPurchase.measure.weight"
-            (resultChange)="updateResult($event,weighted.id,weighted.realWeight)"
-          ></app-generic-card>
+          <hr>
         </div>
 
-        <!-- Box visibile con sticky-bottom -->
-        <div class="sticky-box me-2 ms-2 ">
-          <div class="sized-box mb-5">
-            <div class="content">
-              <div class="row mt-2 me-2 ms-2 d-flex align-items-center">
+        <h4 class="mb-3 ms-2 me-2 mt-4 fs-3">Componi vassoio</h4>
+        <div class="mb-3 ms-2 me-2">
+          <span class="fs-5 d-block mb-3">Misura: {{bundleInPurchase.measure.label}}</span>
+          <span class="fs-6 d-block mb-3">Peso: {{bundleInPurchase.measure.weight}} kg</span>
+          <span class="fs-5 d-block mb-2">{{bundleInPurchase.totalPrice}} €</span>
+          <div class="mb-2 me-2" *ngFor="let weighted of productListWeighted">
+            <app-generic-card
+              [imageLeft]="true"
+              [imageUrl]="weighted.imageUrl"
+              [title]="'' + weighted.name"
+              [currentWeight]="bundleInPurchase.totalWeight"
+              [weight]="weighted.realWeight"
+              [quantity]="weighted.quantity"
+              [totalWeight]="bundleInPurchase.measure.weight"
+              (resultChange)="updateResult($event, weighted.id, weighted.realWeight)"
+            ></app-generic-card>
+          </div>
 
-                <div class="col">
-                  <h6>Peso Utilizzato:</h6>
+          <!-- Box visibile con sticky-bottom -->
+          <div class="sticky-box me-2 ms-2">
+            <div class="sized-box mb-5">
+              <div class="content">
+                <div class="row mt-2 me-2 ms-2 d-flex align-items-center">
+                  <div class="col">
+                    <h6>Peso Utilizzato:</h6>
+                  </div>
+                  <div class="col text-end mb-2">
+                    <h6><span class="gray-text">{{ bundleInPurchase.totalWeight }}</span>/{{ bundleInPurchase.measure.weight }} kg</h6>
+                  </div>
+
+                  <span class="gray-span mb-3">NB: qualora il peso del vassoio non venga riempito completamente, il nostro operatore inserirà dei mignon in modo casuale</span>
+
+                  <div class="mb-3">
+                    <lib-generic-button
+                      class=""
+                      buttonText="Aggiungi al carrello"
+                      [buttonSize]="ButtonSizeTheme.FullWidth"
+                      [customStyles]="{'color': 'white'}"
+                      [buttonStyle]="ButtonTheme.Secondary"
+                      (click)="saveTray()"
+                    ></lib-generic-button>
+                  </div>
+
                 </div>
-                <div class="col text-end mb-2">
-                  <h6><span class="gray-text">{{ bundleInPurchase.totalWeight }}</span>/{{ bundleInPurchase.measure.weight }} kg</h6>
-                </div>
-
-                <span class="gray-span mb-3">NB: qualora il peso del vassoio non venga riempito completamente, il nostro operatore inserirà dei mignon in modo casuale</span>
-
-                <div class="mb-3">
-                  <lib-generic-button
-                    class=""
-                    buttonText="Aggiungi al carrello"
-                    [buttonSize]="ButtonSizeTheme.FullWidth"
-                    [customStyles]="{'color': 'white'}"
-                    [buttonStyle]="ButtonTheme.Secondary"
-                    (click)="saveTray()"
-                  ></lib-generic-button>
-                </div>
-
               </div>
             </div>
           </div>
         </div>
       </div>
+
+    </div>
   </div>
 </div>

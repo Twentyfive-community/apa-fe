@@ -123,7 +123,7 @@ export class ProductEditComponent implements OnInit {
       {
         size: 'md',
         onConfirm: (() => {
-          this.router.navigate(['../dashboard/prodotti']);
+          this.router.navigate(['../dashboard/prodotti'], {queryParams: {activeTab: this.categoryId}});
         })
       });
   }
@@ -218,7 +218,7 @@ export class ProductEditComponent implements OnInit {
               },
               complete: () => {
                 this.toastrService.success("Prodotto salvato con successo");
-                this.router.navigate(['../dashboard/prodotti']);
+                this.router.navigate(['../dashboard/prodotti'], {queryParams: {activeTab: this.categoryId}});
               }
             })
           }
@@ -231,7 +231,7 @@ export class ProductEditComponent implements OnInit {
             },
             complete: () => {
               this.toastrService.success("Prodotto salvato con successo");
-              this.router.navigate(['../dashboard/prodotti']);
+              this.router.navigate(['../dashboard/prodotti'], {queryParams: {activeTab: this.categoryId}});
             }
           })
           break;
@@ -242,7 +242,7 @@ export class ProductEditComponent implements OnInit {
             },
             complete: () => {
               this.toastrService.success("Prodotto salvato con successo");
-              this.router.navigate(['../dashboard/prodotti']);
+              this.router.navigate(['../dashboard/prodotti'], {queryParams: {activeTab: this.categoryId}});
             }
           })
           break;

@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ButtonSizeTheme, ButtonTheme, TableHeadTheme, TableTheme} from "twentyfive-style";
 import {Ingredient} from "../../../../models/Ingredient";
 import {CustomerService} from "../../../../services/customer.service";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {TwentyfiveModalService} from "twentyfive-modal";
 import {IngredientService} from "../../../../services/ingredient.service";
 import {Category} from "../../../../models/Category";
@@ -22,6 +22,9 @@ export class IngredientListComponent implements OnInit{
   protected readonly ButtonTheme = ButtonTheme;
   protected readonly TableTheme = TableTheme;
   protected readonly TableHeadTheme = TableHeadTheme;
+
+  activeTab: string | null; // Inizializza la tab attiva come vuota
+
 
   currentPage: number=0;
   maxSize: number = 5;
@@ -54,28 +57,15 @@ export class IngredientListComponent implements OnInit{
   categories: Category[] = []
   disabledCategories: Category[] = [];
 
-
-  tableActions: any[]=[
-    {
-      icon:'bi bi-pencil-square',
-      action: async(event: any) =>{
-        this.router.navigate(['/dashboard/editingIngredienti', event.id],{ queryParams: { activeTab: this.activeTab } } )
-      },
-      actionName:'Modifica',
-      toolTipText:'Modifica',
-      placement: 'top',
-      showFunction: () => {
-      }
-    }
-  ]
-
   constructor(private ingredientService: IngredientService,
               private categoryService: CategoryService,
+              private activatedRoute: ActivatedRoute,
               private router: Router,
               private modalService: TwentyfiveModalService,
               private genericModalService: TwentyfiveModalGenericComponentService) {}
 
   ngOnInit(): void {
+    this.activeTab = this.activatedRoute.snapshot.queryParamMap.get('activeTab');
     this.getCategories()
   }
 
@@ -113,7 +103,7 @@ export class IngredientListComponent implements OnInit{
         showIcon: true,
         size: 'md',
         onConfirm: (() => {
-          this.categoryService.disableCategory(this.activeTab).subscribe({
+          this.categoryService.disableCategory(this.activeTab!).subscribe({
             next: (() =>{
               this.getCategories();
             })
@@ -152,15 +142,16 @@ export class IngredientListComponent implements OnInit{
   getCategories(){
     this.categoryService.getAll(["ingredienti"]).subscribe((response: any) => {
       this.categories = response
-      this.activeTab = this.categories[0].id;
-      this.getAll(this.activeTab)
+      if (!this.activeTab){
+        this.activeTab = this.categories[0].id;
+      }
+      this.getAll(this.activeTab!)
     })
     this.categoryService.getAllDisabled(["ingredienti"]).subscribe((response: any) => {
       this.disabledCategories = response;
     })
   }
 
-  activeTab: string = ''; // Inizializza la tab attiva come vuota
 
   setActiveTab(tabId: string) {
     this.activeTab = tabId; // Imposta l'ID della tab attiva quando viene cliccata
@@ -170,7 +161,7 @@ export class IngredientListComponent implements OnInit{
   disableStatus(id: string){
     this.ingredientService.disableIngredient(id).subscribe({
       next: (() => {
-        this.getAll(this.activeTab,this.currentPage);
+        this.getAll(this.activeTab!,this.currentPage);
       })
     });
   }
@@ -179,7 +170,7 @@ export class IngredientListComponent implements OnInit{
   activateStatus(id: string){
     this.ingredientService.activeIngredient(id).subscribe({
       next: (() => {
-        this.getAll(this.activeTab);
+        this.getAll(this.activeTab!);
       })
     });
   }
@@ -187,18 +178,18 @@ export class IngredientListComponent implements OnInit{
 
   selectSize(event: any){
     this.pageSize=event;
-    this.getAll(this.activeTab)
+    this.getAll(this.activeTab!)
   }
 
   changePage(event: number){
     this.currentPage = event -1;
-    this.getAll(this.activeTab,this.currentPage);
+    this.getAll(this.activeTab!,this.currentPage);
   }
 
   sortingColumn(event: any){
     this.sortColumn = event.sortColumn;
     this.sortDirection = event.sortDirection;
-    this.getAll(this.activeTab,this.currentPage);
+    this.getAll(this.activeTab!,this.currentPage);
   }
 
 
