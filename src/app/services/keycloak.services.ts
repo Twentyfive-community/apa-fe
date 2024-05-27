@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { KeycloakService, KeycloakOptions } from 'keycloak-angular';
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import {catchError, throwError} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,8 @@ export class KeycloakCustomService {
   private clientId:string='apa-app';
   private redirect_url:string="";
 
-  constructor(private keycloakService: KeycloakService) { }
+  constructor(private keycloakService: KeycloakService,private http: HttpClient) { }
+
 
   async initKeycloak() {
     const options: KeycloakOptions = {
@@ -78,4 +81,7 @@ export class KeycloakCustomService {
         });
     });
   }
+
+
+
 }
