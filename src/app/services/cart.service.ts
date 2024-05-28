@@ -12,11 +12,12 @@ import {BundleInPurchase} from "../models/Bundle";
 export class CartService {
 
   private baseCartUrl: string = `${environment.backendUrl}/cart`;
-  private baseWeightedUrl: string = `${environment.backendUrl}/productsWeighted`;
-  private baseTrayUrl: string = `${environment.backendUrl}/trays`;
-  private uploadProPicUrl = `${environment.ftpUrl}/uploadkkk/`;
 
   constructor(private http: HttpClient) {
+  }
+
+  get(id: string) {
+    return this.http.get(`${this.baseCartUrl}/${id}`)
   }
 
   addToCartProductInPurchase(idCustomer: string, product: ProductInPurchase){
@@ -25,6 +26,14 @@ export class CartService {
 
   addToCartBundleInPurchase(idCustomer: string, bundle: BundleInPurchase){
     return this.http.post(`${this.baseCartUrl}/add-to-cart/bundle/${idCustomer}`, bundle)
+  }
+
+  removeFromCart(idCustomer: string, positions: number[]) {
+    return this.http.post(`${this.baseCartUrl}/remove-from-cart/${idCustomer}`, positions);
+  }
+
+  obtainMinimumPickupDateTime(idCustomer: string, positions: number[]) {
+    return this.http.post<Map<string, string[]>>(`${this.baseCartUrl}/pickup-dateTimes/${idCustomer}`, positions);
   }
 
 }

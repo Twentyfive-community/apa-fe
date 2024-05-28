@@ -19,7 +19,7 @@
       <div *ngIf="quantity !== undefined" class="d-flex align-items-center">
         <p class="card-text text-truncate me-2 m-0 d-flex align-items-center" style="color: gray"> Q.tà</p>
         <button class="btn btn-primary btn-sm" (click)="decreaseQuantity()" style="height: 2rem" [class.btn-secondary]="quantity === 0" [disabled]="quantity === 0">-</button>
-        <input min="0" max="calculateMaxQuantity()" type="number" class="form-control mx-2" [(ngModel)]="quantity" disabled="true" (change)="onQuantityChange($event)" (input)="onQuantityChange($event)" style="width: 60px; text-align: center;">
+        <input min="0" type="number" class="form-control mx-2" [(ngModel)]="quantity" disabled="true" (change)="onQuantityChange($event)" (input)="onQuantityChange($event)" style="width: 60px; text-align: center;">
         <button class="btn btn-primary btn-sm" (click)="increaseQuantity()" style="height: 2rem"
                 [class.btn-secondary]="(quantity + 1) * weight! >= totalWeight! || currentWeight! + weight!>= totalWeight!"
                 [disabled]="(quantity + 1) * weight! >= totalWeight! || currentWeight! + weight!>= totalWeight!">

@@ -1,0 +1,64 @@
+<div class="card shadow mb-3">
+  <div class="card-body">
+
+    <div class="row mb-2">
+      <div class="col-12 col-sm-2">
+        <img [src]="product.imageUrl" style="max-height:152px; object-fit: cover; border-radius: 0.375rem" class="card-img" alt="Product Image">
+        <hr class="d-sm-none">
+      </div>
+      <div class="col-10 col-sm-8">
+        <h5 class="card-title">{{product.name}}</h5>
+        <p class="card-text">{{product.price}} /kg</p>
+        <div class="d-flex align-items-center">
+          <p class="card-text text-truncate me-2 m-0 d-flex align-items-center" style="color: gray"> Q.tà</p>
+          <button class="btn btn-primary btn-sm" (click)="decreaseQuantity()" style="height: 2rem">-</button>
+          <input min="0" type="number" class="form-control mx-2" [value]="product.quantity" disabled="true" style="width: 60px; text-align: center;">
+          <button class="btn btn-primary btn-sm" (click)="increaseQuantity()" style="height: 2rem">+</button>
+        </div>
+      </div>
+      <div class="col-2 d-flex justify-content-end">
+        <input type="checkbox" [(ngModel)]="this.product.toBuy" (change)="toggleSelection()"  style="width: 2rem; height: 2rem">
+      </div>
+    </div>
+
+    <div *ngIf="product.weight">
+      <p><b>Peso:</b> {{product.weight}} kg</p>
+      <p><b>Forma:</b> {{product.shape}}</p>
+    </div>
+    <div *ngIf="product.customization != null">
+      <p><b>Personalizzazioni:</b></p>
+      <ul *ngFor="let item of product.customization | keyvalue">
+        <li><b>{{item.key}}:</b><br>
+          {{item.value}}</li>
+      </ul>
+    </div>
+
+        <!-- Specific details for Vassoio -->
+    <div *ngIf="product.totalWeight">
+      <p><b>Misura:</b> {{product.measure.label}} ({{product.measure.weight}} kg)</p>
+      <p><b>Peso totale:</b> {{ product.totalWeight }} kg</p>
+      <p><b>Prodotti singoli:</b></p>
+      <ul *ngFor="let item of product.weightedProducts">
+        <li>
+          <p><b>x{{item.quantity}}</b> {{item.name}}</p>
+        </li>
+      </ul>
+    </div>
+
+    <hr/>
+
+    <p *ngIf="this.product.notes != null "><b>Note:</b> {{ product.notes }}</p>
+    <p><b>Data e ora di ritiro minime:</b> {{ product.deliveryDate | date:'dd/MM/yyyy' }}</p>
+    <p><b>Prezzo Totale Prodotto:</b> {{product.totalPrice}}</p>
+    <div>
+      <lib-generic-button-text-with-icon
+        [buttonStyle]="ButtonTheme.Primary"
+        [buttonSize]="ButtonSizeTheme.FullWidth"
+        buttonText='Modifica'
+        suffixIcon='bi bi-pencil-square'
+        routerLink="''"
+        [iconLeft]="false"
+      ></lib-generic-button-text-with-icon>
+    </div>
+  </div>
+</div>

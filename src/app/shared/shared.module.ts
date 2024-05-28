@@ -11,28 +11,32 @@ import { CategoryEditComponent } from './category-edit/category-edit.component';
 import {TwentyfiveModalGenericComponentModule} from "twentyfive-modal-generic-component";
 import {NgbDropdown, NgbDropdownMenu, NgbDropdownToggle} from "@ng-bootstrap/ng-bootstrap";
 import { GenericCardComponent } from './generic-card/generic-card.component';
+import { CartProductCardComponent } from './cart-product-card/cart-product-card.component';
 import {FormsModule} from "@angular/forms";
+import {RouterLink} from "@angular/router";
 
 @NgModule({
   declarations: [
     CategoryEditComponent,
     GenericCardComponent,
+    CartProductCardComponent,
   ],
-    imports: [
-        CommonModule,
-        TwentyfiveNavbarModule,
-        TwentyfiveSidebarModule,
-        TwentyfiveAccordionTableModule,
-        CollapseModule,
-        TwentyfiveTableModule,
-        TwentyfiveInputModule,
-        GenericButtonModule,
-        TwentyfiveModalGenericComponentModule,
-        NgbDropdown,
-        NgbDropdownMenu,
-        NgbDropdownToggle,
-        FormsModule
-    ],
+  imports: [
+    CommonModule,
+    TwentyfiveNavbarModule,
+    TwentyfiveSidebarModule,
+    TwentyfiveAccordionTableModule,
+    CollapseModule,
+    TwentyfiveTableModule,
+    TwentyfiveInputModule,
+    GenericButtonModule,
+    TwentyfiveModalGenericComponentModule,
+    NgbDropdown,
+    NgbDropdownMenu,
+    NgbDropdownToggle,
+    FormsModule,
+    RouterLink
+  ],
   exports: [
     CommonModule,
     TwentyfiveNavbarModule,
@@ -43,6 +47,7 @@ import {FormsModule} from "@angular/forms";
     TwentyfiveInputModule,
     GenericButtonModule,
     GenericCardComponent,
+    CartProductCardComponent,
   ]
 })
 export class SharedModule {

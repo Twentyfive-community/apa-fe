@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {NavbarTheme} from "twentyfive-style";
 
 @Component({
@@ -6,7 +6,7 @@ import {NavbarTheme} from "twentyfive-style";
   templateUrl: './dashboard-client.html',
   styleUrl: './dashboard-client.scss'
 })
-export class DashboardClient {
+export class DashboardClient{
 
   navbarItems: any[] = [
     {
@@ -14,18 +14,16 @@ export class DashboardClient {
       icon: "bi bi-person",
       navigationUrl: "profilo",
       disableClick: false,
-      labelColor: ""
+      labelColor: "",
     },
     {
       title: "Carrello",
       icon: "bi bi-cart",
-      navigationUrl: "",
+      navigationUrl: "carrello",
       disableClick: false,
-      labelColor: ""
-    },
+      labelColor: "",
+    }
   ]
 
-
-
-    protected readonly NavbarTheme = NavbarTheme;
+protected readonly NavbarTheme = NavbarTheme;
 }

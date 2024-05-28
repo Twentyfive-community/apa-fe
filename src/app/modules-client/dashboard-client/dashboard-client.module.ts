@@ -14,6 +14,7 @@ import {TwentyfiveDropdownModule} from "twentyfive-dropdown";
 import {FormsModule} from "@angular/forms";
 import {TwentyfiveDatepickerModule} from "twentyfive-datepicker";
 import {TwentyfiveTimepickerModule} from "twentyfive-timepicker";
+import { UserCartComponent } from './pages/user-cart/user-cart.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import {TwentyfiveTimepickerModule} from "twentyfive-timepicker";
     UserOrderComponent,
     UserOrderDetailComponent,
     ProductDetailsComponent,
-    TrayCustomizedComponent
+    TrayCustomizedComponent,
+    UserCartComponent
   ],
   imports: [
     DashboardClientRoutingModule,

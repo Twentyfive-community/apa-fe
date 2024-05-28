@@ -1,0 +1,29 @@
+<div>
+  <app-cart-product-card *ngFor="let product of cart.purchases"
+                         [product]="product"
+                         (selectionChange)="calculateTotalPrice()"
+                         (toBuyChange)="toggleItemsToBuy($event)"
+                         (removeFromCart)="removeFromCart($event)"
+  ></app-cart-product-card>
+</div>
+
+<div class="sticky-box me-2 ms-2">
+  <div class="row mt-2 ms-2 d-flex align-content-center">
+    <h6 >Data e ora ritiro:</h6>
+    <p class="ms-2">DATA E ORA DI RITIRO</p>
+  </div>
+  <div class="row ms-2">
+    <h6>Totale da pagare:</h6>
+    <p class="ms-2"> {{cart.totalPrice}}</p>
+  </div>
+
+  <div class="d-flex justify-content-end">
+    <lib-generic-button
+      class=""
+      buttonText="Ordina"
+      [buttonSize]="ButtonSizeTheme.Medium"
+      [buttonStyle]="ButtonTheme.Secondary"
+      [customStyles]="{'color':'white'}"
+    ></lib-generic-button>
+  </div>
+</div>
