@@ -8,7 +8,8 @@ import {OrderDetails} from "../../../../models/Order";
 import {CompletedorderService} from "../../../../services/completedorder.service";
 import {ProductService} from "../../../../services/product.service";
 import {BundleInPurchase, BundleInPurchaseDetails} from "../../../../models/Bundle";
-
+import {TwentyfiveModalService} from "twentyfive-modal";
+declare var bootstrap: any;
 @Component({
   selector: 'app-user-order-detail',
   templateUrl: './user-order-detail.component.html',
@@ -22,6 +23,8 @@ export class UserOrderDetailComponent implements OnInit {
 
   productImages: string[]=[];
   bundleImages: string[]=[];
+  customizationsVisible: boolean[] = [];
+
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -31,7 +34,17 @@ export class UserOrderDetailComponent implements OnInit {
     private productService:ProductService,
   ) {}
 
+  loadBootstrapJS(): void {
+    if (!document.querySelector('script[src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"]')) {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js';
+      script.async = true;
+      document.head.appendChild(script);
+    }
+  }
+
   ngOnInit(): void {
+    this.loadBootstrapJS();
     this.activeOrders = this.activatedRoute.snapshot.queryParamMap.get('activeOrders');
     this.customerId= this.activatedRoute.snapshot.queryParamMap.get('customerId')!;
     this.orderId = this.activatedRoute.snapshot.paramMap.get('id')!;
@@ -112,7 +125,11 @@ export class UserOrderDetailComponent implements OnInit {
 
 
   contactUs(): void {
-    // Implement the logic to contact, maybe open a mailto or call window
+    const contactModal = new bootstrap.Modal(document.getElementById('contactModal'), {
+      keyboard: false
+    });
+    contactModal.show();
+
   }
 
   protected readonly ButtonTheme = ButtonTheme;
@@ -128,5 +145,16 @@ export class UserOrderDetailComponent implements OnInit {
 
     let n = this.orderDetails.bundles.indexOf(bundle);
     return this.bundleImages.at(n);
+  }
+
+  toggleCustomization(product: ProductInPurchase): void {
+    let n = this.orderDetails.products.indexOf(product);
+    this.customizationsVisible[n] = !this.customizationsVisible[n];
+  }
+
+  getCustomizationVisible(product: ProductInPurchase){
+    let n = this.orderDetails.products.indexOf(product);
+    return this.customizationsVisible[n];
+
   }
 }
