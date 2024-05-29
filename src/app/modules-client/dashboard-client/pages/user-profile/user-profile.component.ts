@@ -7,7 +7,7 @@ import {SigningKeycloakService} from "twentyfive-keycloak-new";
 import {Customer, CustomerDetails} from "../../../../models/Customer";
 import {KeycloakCustomService} from "../../../../services/keycloak.services";
 import {KeycloakPasswordRecoveryService} from "../../../../services/passwordrecovery.service";
-
+declare var bootstrap: any;
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
@@ -25,6 +25,7 @@ export class UserProfileComponent implements OnInit{
   }
 
   ngOnInit(): void {
+    this.loadBootstrapJS();
     this.getCustomer();
   }
 
@@ -37,6 +38,14 @@ export class UserProfileComponent implements OnInit{
       this.customerService.getCustomerByKeycloakId(this.customerIdkc).subscribe( (res:any) =>{
         this.customer = res
       })
+    }
+  }
+  loadBootstrapJS(): void {
+    if (!document.querySelector('script[src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"]')) {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js';
+      script.async = true;
+      document.head.appendChild(script);
     }
   }
 
@@ -65,12 +74,24 @@ export class UserProfileComponent implements OnInit{
   }
 
   goToActiveOrders() {
-    this.router.navigate(['../catalogo/ordini',this.customer.id],{queryParams:{activeOrders:true}});
+    if (this.customer.activeOrdersCount=='0'){
+      const contactModal = new bootstrap.Modal(document.getElementById('contactModal'), {
+        keyboard: false
+      });
+      contactModal.show();
+    }
+    else this.router.navigate(['../catalogo/ordini',this.customer.id],{queryParams:{activeOrders:true}});
 
   }
 
   goToCompletedOrders() {
-    this.router.navigate(['../catalogo/ordini',this.customer.id],{queryParams:{activeOrders:false}});
+    if (this.customer.activeOrdersCount=='0'){
+      const contactModal = new bootstrap.Modal(document.getElementById('contactModal'), {
+        keyboard: false
+      });
+      contactModal.show();
+    }
+    else this.router.navigate(['../catalogo/ordini',this.customer.id],{queryParams:{activeOrders:false}});
 
   }
 
@@ -92,6 +113,10 @@ export class UserProfileComponent implements OnInit{
               console.log('Errore durante l\'invio dell\'email di recupero.');
             }
           });
+          const emailConfirmationModal = new bootstrap.Modal(document.getElementById('emailConfirmationModal'), {
+            keyboard: false
+          });
+          emailConfirmationModal.show();
         })
       });
 
