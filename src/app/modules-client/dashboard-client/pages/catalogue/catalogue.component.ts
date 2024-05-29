@@ -6,10 +6,12 @@ import {TwentyfiveModalGenericComponentService} from "twentyfive-modal-generic-c
 import {ProductService} from "../../../../services/product.service";
 import {ProductDetails, ProductKg, ProductWeighted, Tray, TrayDetails} from "../../../../models/Product";
 import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
-import {CategoryEditComponent} from "../../../../shared/category-edit/category-edit.component";
 import {ProductDetailsComponent} from "../product-details/product-details.component";
-import {response} from "express";
 import {TrayCustomizedComponent} from "../tray-customized/tray-customized.component";
+import {CustomerDetails} from "../../../../models/Customer";
+import {KeycloakPasswordRecoveryService} from "../../../../services/passwordrecovery.service";
+import {CustomerService} from "../../../../services/customer.service";
+import {SigningKeycloakService} from "twentyfive-keycloak-new";
 
 @Component({
   selector: 'app-catalogue',
@@ -17,6 +19,8 @@ import {TrayCustomizedComponent} from "../tray-customized/tray-customized.compon
   styleUrl: './catalogue.component.scss'
 })
 export class CatalogueComponent implements OnInit {
+
+
 
   categories: Category[] = []
   categoryType = ['productKg', 'productWeighted', 'tray'];
@@ -30,10 +34,13 @@ export class CatalogueComponent implements OnInit {
   trayDetails: TrayDetails = new TrayDetails();
 
 
+
+
   constructor(private categoryService: CategoryService,
-              private router: Router,
               private genericModalService: TwentyfiveModalGenericComponentService,
-              private productService: ProductService
+              private productService: ProductService,
+              private signingKeycloakService: SigningKeycloakService,
+              private customerService:CustomerService,
   ) {
   }
 
@@ -41,6 +48,7 @@ export class CatalogueComponent implements OnInit {
   ngOnInit() {
     this.getCategories()
   }
+
 
   getCategories() {
     this.categoryService.getAll(this.categoryType).subscribe((response: any) => {

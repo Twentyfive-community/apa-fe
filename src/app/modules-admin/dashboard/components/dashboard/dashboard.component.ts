@@ -90,6 +90,8 @@ export class DashboardComponent implements OnInit{
     });
   }
 
+
+
   checkTitle() {
     return this.title;
   }
