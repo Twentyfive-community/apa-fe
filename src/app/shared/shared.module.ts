@@ -35,7 +35,7 @@ import {RouterLink} from "@angular/router";
     NgbDropdownMenu,
     NgbDropdownToggle,
     FormsModule,
-    RouterLink
+    RouterLink,
   ],
   exports: [
     CommonModule,

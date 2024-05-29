@@ -1,9 +1,12 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {ItemInPurchase} from "../../models/Cart";
+import {Cart, ItemInPurchase} from "../../models/Cart";
 import {ProductService} from "../../services/product.service";
 import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
 import {TwentyfiveModalService} from "twentyfive-modal";
 import {CartService} from "../../services/cart.service";
+import {debounceTime, Observable, Subject, tap} from "rxjs";
+import {ToastrService} from "ngx-toastr";
+import {switchMap} from "rxjs/operators";
 
 @Component({
   selector: 'app-cart-product-card',
@@ -13,23 +16,34 @@ import {CartService} from "../../services/cart.service";
 export class CartProductCardComponent implements OnInit{
 
   @Input() product: ItemInPurchase
+  @Input() customerId: string;
+  @Input() position: number[];
   @Output() selectionChange = new EventEmitter<string>();
   @Output() removeFromCart = new EventEmitter<string>();
   @Output() toBuyChange = new EventEmitter<string>();
 
+  private quantityChange = new Subject<void>();
 
-
-  private currentQuantity: number | undefined;
-
+  minDate: any;
+  minTime: any;
 
   constructor(private cartService: CartService,
+              private toastrService: ToastrService,
               private productService: ProductService,
-              private modalService: TwentyfiveModalService,
-  ) {
+              private modalService: TwentyfiveModalService,)  {
+    this.quantityChange.pipe(
+      debounceTime(1000),
+      switchMap(() => {
+        return this.modifyCart(); // Esegue modifyCart e attende il completamento
+      })
+    ).subscribe(() => {
+      this.obtainMinimumPickupDateTime(); // Una volta completato modifyCart, esegue obtainMinimumPickupDateTime
+    });
   }
 
   ngOnInit() {
     this.getProduct();
+    this.obtainMinimumPickupDateTime()
   }
 
   getProduct() {
@@ -58,8 +72,22 @@ export class CartProductCardComponent implements OnInit{
     }
   }
 
+  obtainMinimumPickupDateTime() {
+    console.log(this.product.quantity)
+    this.cartService.obtainMinimumPickupDateTime(this.customerId, this.position).subscribe((res: any) => {
+      console.log(res)
+      const keys = Object.keys(res);
+      if (keys.length > 0) {
+        this.minDate = keys[0]; // La prima data è la minima
+        this.minTime = res[this.minDate][0]; // Il primo orario della data minima è il più piccolo
+        console.log(this.position)
+        console.log(this.minDate + ' ' + this.minTime)
+        this.product.deliveryDate = this.minDate
+      }
+    });
+  }
+
   toggleSelection() {
-    // this.product.toBuy = !this.product.toBuy;
     console.log(this.product.toBuy)
     this.toBuyChange.emit(this.product.id);
   }
@@ -69,6 +97,7 @@ export class CartProductCardComponent implements OnInit{
     console.log('increaseQuantity > quantity ' + this.product.quantity)
 
     this.calcTotalPrice()
+    this.quantityChange.next()
     console.log('increaseQuantity > totalPrice ' + this.product.totalPrice);
   }
 
@@ -77,6 +106,8 @@ export class CartProductCardComponent implements OnInit{
       this.product.quantity--;
       console.log('decreaseQuantity > quantity ' + this.product.quantity)
       this.calcTotalPrice()
+      this.quantityChange.next()
+
 
     } else if (this.product.quantity == 1) {
       this.modalService.openModal (
@@ -107,11 +138,26 @@ export class CartProductCardComponent implements OnInit{
       this.product.totalPrice = (priceAsNumber * this.product.measure.weight) * this.product.quantity;
     } else {
       //torte
-      this.product.totalPrice = (priceAsNumber) * this.product.weight * this.product.quantity;
+      this.product.totalPrice = (priceAsNumber * this.product.weight) * this.product.quantity;
     }
+    this.selectionChange.emit()
     console.log(this.product.totalPrice)
-    this.selectionChange.emit(this.product.id);
   }
+
+  private modifyCart(): Observable<any> {
+    let index = this.position[0];
+    return this.cartService.modifyCart(this.customerId, index, this.product).pipe(
+      tap({
+        next: () => {
+          this.toastrService.success('Quantità modificata con successo');
+        },
+        error: (error) => {
+          this.toastrService.error('Impossibile modificare quantità');
+        }
+      })
+    );
+  }
+
 
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
   protected readonly ButtonTheme = ButtonTheme;
