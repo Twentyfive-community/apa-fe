@@ -1,4 +1,3 @@
-
 <div class="order-details-container">
   <div class="row mb-4">
     <div class="col-12 col-lg-3">
@@ -13,53 +12,81 @@
   </div>
   <hr>
 
-  <div class="orders-container">
+  <div class="orders-container row row-cols-1 row-cols-md-2 g-4">
 
-    <div *ngFor="let product of orderDetails.products" class="product-details card mt-2">
+    <div *ngFor="let product of orderDetails.products" class="col">
+      <div class="product-details card h-90 mt-2">
 
-      <div class="column mt-2 ms-2">
-        <img [src]="getImageOfProduct(product)">
-        <h4 class="mb-2">{{ product.name }}</h4>
-        <div class="col-11 ms-2 mb-2">
-          <h6 class="mb-0">Quantità:</h6>
-          <p style="color: gray; ">{{ product.quantity  }}</p>
+        <div class="row">
+          <div class="col-12 col-sm-4">
+            <img [src]="getImageOfProduct(product)" style="min-height:100px;min-width:90px;max-height:100px; object-fit: cover; border-radius: 0.375rem" class="card-img" alt="Product Image">
+            <hr class="d-sm-none">
+          </div>
+          <div class="col-10 col-sm-8">
+            <h4 class="mb-4" style="font-size: 1.2rem;">{{ product.name }}</h4>
+            <div class="row">
+              <div class="col-6 ms-2 mb-2">
+                <h6 class="mb-0" style="font-size: 1rem;">Quantità:</h6>
+                <p style="color: gray; font-size: 0.9rem;">{{ product.quantity }}</p>
+              </div>
+              <div class="col-5 ms-2">
+                <h6 class="mb-0" style="font-size: 1rem;">Peso:</h6>
+                <p style="color: gray; font-size: 0.9rem;">{{ product.weight }} kg</p>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="col-11 ms-2">
-          <h6 class="mb-0">Peso:</h6>
-          <p style="color: gray;"> {{ product.weight }} kg</p>
-        </div>
-        <div class="col-11 ms-2 mb-2">
-          <h6 class="mb-2">Personalizzazioni:</h6>
-          <ul *ngFor="let item of product.customization | keyvalue" class="mt-0 mb-0">
-            <li><b>{{ item.key }}:</b> {{ item.value }}</li>
-          </ul>
-        </div>
-        <div class="col-11 ms-2">
-          <h6 class="mb-0">Note:</h6>
-          <p style="color: gray;">{{ product.notes }}</p>
-        </div>
-        <div class="col-11 ms-2">
-          <h6 class="mb-0">Prezzo del prodotto:</h6>
-          <p style="color: gray;">€ {{ product.totalPrice }}</p>
+
+        <div class="column mt-2 ms-2">
+          <div class="col-11 ms-2 mb-2">
+            <h6 class="mb-2">
+              <button (click)="toggleCustomization(product)" class="btn btn-link p-0 btn-small-black" style="font-size: 1rem;">
+                Personalizzazioni
+                <i [ngClass]="{'bi bi-chevron-down': !getCustomizationVisible(product), 'bi bi-chevron-up': getCustomizationVisible(product)}"></i>
+              </button>
+            </h6>
+            <ul *ngIf="getCustomizationVisible(product)" class="mt-0 mb-0" style="font-size: 0.9rem;">
+              <li *ngFor="let item of product.customization | keyvalue">
+                <b>{{ item.key }}:</b> {{ item.value }}
+              </li>
+            </ul>
+          </div>
+          <div class="col-11 ms-2">
+            <h6 class="mb-0" style="font-size: 1rem;">Note:</h6>
+            <p style="color: gray; font-size: 0.9rem;">{{ product.notes }}</p>
+          </div>
+          <div class="col-11 ms-2">
+            <h6 class="mb-0" style="font-size: 1rem;">Prezzo del prodotto:</h6>
+            <p style="color: gray; font-size: 0.9rem;">€ {{ product.totalPrice }}</p>
+          </div>
         </div>
       </div>
     </div>
 
-    <div *ngFor="let bundle of orderDetails.bundles" class="product-details card">
-      <img [src]="getImageOfBundle(bundle)">
-      <div class="column mt-2 ms-2">
-        <h4 class="mb-2">{{ bundle.name }}</h4>
-        <div class="col-11 ms-2 mb-2">
-          <h6 class="mb-0">Quantità:</h6>
-          <p style="color: gray; ">{{ bundle.quantity }}</p>
-        </div>
-        <div class="col-11 ms-2 mb-2">
-          <h6 class="mb-0">Misura:</h6>
-          <p style="color: gray; ">{{ bundle.measure.label }}</p>
+    <div *ngFor="let bundle of orderDetails.bundles" class="col">
+      <div class="product-details card h-90 mt-2">
+        <div class="row">
+          <div class="col-12 col-sm-4">
+            <img [src]="getImageOfBundle(bundle)" style="min-height:100px;min-width:90px;max-height:100px; object-fit: cover; border-radius: 0.375rem" class="card-img" alt="Product Image">
+            <hr class="d-sm-none">
+          </div>
+          <div class="col-10 col-sm-8">
+            <h4 class="mb-4" style="font-size: 1.2rem;">{{ bundle.name }}</h4>
+            <div class="row">
+              <div class="col-6  ms-2 mb-2">
+                <h6 class="mb-0" style="font-size: 1rem;">Quantità:</h6>
+                <p style="color: gray; font-size: 0.9rem;">{{ bundle.quantity }}</p>
+              </div>
+              <div class="col-5  ms-2">
+                <h6 class="mb-0" style="font-size: 1rem;">Misura:</h6>
+                <p style="color: gray; font-size: 0.9rem;">{{ bundle.measure.label }}</p>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="col-11 ms-2">
-          <h6 class="mb-0">Prezzo del prodotto:</h6>
-          <p style="color: gray;">€ {{ bundle.totalPrice }}</p>
+          <h6 class="mb-0" style="font-size: 1rem;">Prezzo del prodotto:</h6>
+          <p style="color: gray; font-size: 0.9rem;">€ {{ bundle.totalPrice }}</p>
         </div>
       </div>
     </div>
@@ -67,26 +94,46 @@
   </div>
   <div class="sized-box"></div>
 
-
-
-  <div class="sticky-bottom sticky-bottom">
-    <div class="row mt-2 ms-2 d-flex align-content-center">
-      <h6 >Data e ora ritiro:</h6>
-      <p class="ms-2">{{ orderDetails.pickupDateTime }}</p>
+  <div class="sticky-bottom">
+    <div class="row mt-2 ms-2 align-items-center">
+      <h6 class="col-5">Data e ora ritiro:</h6>
+      <h6 class="col-5">Totale:</h6>
     </div>
-    <div class="row ms-2">
-      <h6>Totale da pagare:</h6>
-      <p class="ms-2">{{ orderDetails.totalPrice}} €</p>
+    <div class="row mt-2 ms-2 align-items-center">
+      <p class="col-5">{{ orderDetails.pickupDateTime }}</p>
+      <p class="col-5">{{ orderDetails.totalPrice }} €</p>
     </div>
 
-    <div class="row float-end me-5">
-      <lib-generic-button
-        class=""
-        buttonText="Contattaci"
-        [buttonSize]="ButtonSizeTheme.Medium"
-        [buttonStyle]="ButtonTheme.Primary"
-      ></lib-generic-button>
+    <div class="row me-5 mb-2 align-items-center justify-content-end">
+      <div class="col-auto">
+        <lib-generic-button
+          (click)="contactUs()"
+          buttonText="Contattaci"
+          [buttonSize]="ButtonSizeTheme.Medium"
+          [buttonStyle]="ButtonTheme.Primary"
+        ></lib-generic-button>
+      </div>
     </div>
   </div>
 
+</div>
+
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="contactModalLabel">I nostri contatti</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Contatta la nostra pasticceria al numero:
+      </div>
+      <div class="modal-body">
+        +39 012 345 6789
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+      </div>
+    </div>
+  </div>
 </div>

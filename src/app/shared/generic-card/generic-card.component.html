@@ -1,7 +1,13 @@
 <div class="card custom-card">
   <div class="row card-body p-0">
+    <div *ngIf="imageLeft "class=" col-4 d-flex justify-content-center">
+      <img [src]="imageUrl" class="img-fluid" style="overflow:hidden; object-fit: cover; border-radius: 0.5rem">
+    </div>
     <div class="col-8">
       <h5 class="card-title">{{ title }}</h5>
+      <ng-container *ngIf="weight">
+        <p class="card-text text-truncate" style="font-size: small; color: gray">Peso: {{ weight }} Kg</p>
+      </ng-container>
       <ng-container *ngIf="ingredientList">
         <p class="card-text text-truncate" style="font-size: small; color: gray">Ingredienti: {{ ingredientList.join(', ') }}</p>
       </ng-container>
@@ -10,8 +16,18 @@
       </ng-container>
       <p class="card-text">{{ allergens }}</p>
       <h5 class="card-text">{{ price }}</h5>
+      <div *ngIf="quantity !== undefined" class="d-flex align-items-center">
+        <p class="card-text text-truncate me-2 m-0 d-flex align-items-center" style="color: gray"> Q.tà</p>
+        <button class="btn btn-primary btn-sm" (click)="decreaseQuantity()" style="height: 2rem" [class.btn-secondary]="quantity === 0" [disabled]="quantity === 0">-</button>
+        <input min="0" type="number" class="form-control mx-2" [(ngModel)]="quantity" disabled="true" (change)="onQuantityChange($event)" (input)="onQuantityChange($event)" style="width: 60px; text-align: center;">
+        <button class="btn btn-primary btn-sm" (click)="increaseQuantity()" style="height: 2rem"
+                [class.btn-secondary]="(quantity + 1) * weight! >= totalWeight! || currentWeight! + weight!>= totalWeight!"
+                [disabled]="(quantity + 1) * weight! >= totalWeight! || currentWeight! + weight!>= totalWeight!">
+          +
+        </button>
+      </div>
     </div>
-    <div class=" col-4 d-flex justify-content-center">
+    <div *ngIf="!imageLeft "class=" col-4 d-flex justify-content-center">
       <img [src]="imageUrl" class="img-fluid" style="overflow:hidden; object-fit: cover; border-radius: 0.5rem">
     </div>
   </div>

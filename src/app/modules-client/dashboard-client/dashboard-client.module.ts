@@ -6,6 +6,7 @@ import {NgbDropdown, NgbDropdownMenu, NgbDropdownToggle} from "@ng-bootstrap/ng-
 import {CatalogueComponent} from "./pages/catalogue/catalogue.component";
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 import {UserEditComponent} from "./pages/user-edit/user-edit.component";
+import { TrayCustomizedComponent } from './pages/tray-customized/tray-customized.component';
 import { UserOrderComponent } from './pages/user-order/user-order.component';
 import { UserOrderDetailComponent } from './pages/user-order-detail/user-order-detail.component';
 import {ProductDetailsComponent} from "./pages/product-details/product-details.component";
@@ -14,6 +15,7 @@ import {FormsModule} from "@angular/forms";
 import {TwentyfiveDatepickerModule} from "twentyfive-datepicker";
 import {TwentyfiveTimepickerModule} from "twentyfive-timepicker";
 import { CustomCakeComponent } from './pages/custom-cake/custom-cake.component';
+import { UserCartComponent } from './pages/user-cart/user-cart.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { CustomCakeComponent } from './pages/custom-cake/custom-cake.component';
     UserOrderComponent,
     UserOrderDetailComponent,
     ProductDetailsComponent,
-    CustomCakeComponent
+    CustomCakeComponent,
+    TrayCustomizedComponent,
+    UserCartComponent
   ],
   imports: [
     DashboardClientRoutingModule,

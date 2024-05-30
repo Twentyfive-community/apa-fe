@@ -123,7 +123,7 @@ export class ProductEditComponent implements OnInit {
       {
         size: 'md',
         onConfirm: (() => {
-          this.router.navigate(['../dashboard/prodotti']);
+          this.router.navigate(['../dashboard/prodotti'], {queryParams: {activeTab: this.categoryId}});
         })
       });
   }
@@ -218,7 +218,7 @@ export class ProductEditComponent implements OnInit {
               },
               complete: () => {
                 this.toastrService.success("Prodotto salvato con successo");
-                this.router.navigate(['../dashboard/prodotti']);
+                this.router.navigate(['../dashboard/prodotti'], {queryParams: {activeTab: this.categoryId}});
               }
             })
           }
@@ -231,7 +231,7 @@ export class ProductEditComponent implements OnInit {
             },
             complete: () => {
               this.toastrService.success("Prodotto salvato con successo");
-              this.router.navigate(['../dashboard/prodotti']);
+              this.router.navigate(['../dashboard/prodotti'], {queryParams: {activeTab: this.categoryId}});
             }
           })
           break;
@@ -242,7 +242,7 @@ export class ProductEditComponent implements OnInit {
             },
             complete: () => {
               this.toastrService.success("Prodotto salvato con successo");
-              this.router.navigate(['../dashboard/prodotti']);
+              this.router.navigate(['../dashboard/prodotti'], {queryParams: {activeTab: this.categoryId}});
             }
           })
           break;
@@ -359,10 +359,6 @@ export class ProductEditComponent implements OnInit {
     this.productToAdd.imageUrl = '';
     // Reimposta il valore dell'input del file a null per consentire la selezione dello stesso file
     this.fileInputRef.nativeElement.value = '';
-  }
-
-  handleIngredientSelect(event: any) {
-
   }
 
   protected readonly ButtonTheme = ButtonTheme;

@@ -5,7 +5,7 @@
       [buttonSize]="ButtonSizeTheme.ExtraLarge"
       buttonText='Crea ordine'
       suffixIcon='bi bi-plus-circle'
-      routerLink="/dashboard/modifica-ordine"
+      routerLink="/catalogo"
       [iconLeft]="false"
     ></lib-generic-button-text-with-icon>
   </div>
@@ -60,7 +60,7 @@
 
         <p><b>Gocce di cioccolato:</b> {{ product.chocolateChips }}</p>
         <p><b>NOTE:</b> {{ product.notes }}</p>
-        <p><b>Prezzo totale:</b> {{ product.totalPrice }} €</p>
+        <p><b>Prezzo totale prodotto:</b> {{ product.totalPrice }} €</p>
 
 
         <p class="flex-grow-1"><b>ALLEGATO:</b></p>
@@ -80,6 +80,15 @@
         <p><b>Peso:</b> {{ bundle.measure.weight }} Kg</p>
         <p><b>Quantità:</b> {{ bundle.quantity }}</p>
         <p><b>Prezzo totale:</b> {{ bundle.totalPrice }} €</p>
+        <div *ngIf="bundle.weightedProducts">
+          <p><b>Mignon:</b></p>
+          <ul *ngFor="let weightedProduct of bundle.weightedProducts">
+            <li>
+              <p><b>x{{weightedProduct.quantity}}</b> {{weightedProduct.name}}</p>
+            </li>
+          </ul>
+          <p><b>Peso Totale Mignon scelti:</b>  {{bundle.totalWeight}} kg</p>
+        </div>
       </div>
     </div>
 

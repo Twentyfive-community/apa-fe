@@ -1,0 +1,57 @@
+<div>
+  <app-cart-product-card *ngFor="let product of cart.purchases; let i = index"
+                         [product]="product"
+                         [customerId]="customer.id"
+                         [position]="[i]"
+                         (selectionChange)="calculateTotalPrice()"
+                         (toBuyChange)="toggleItemsToBuy($event)"
+                         (removeFromCart)="removeFromCart($event)"
+  ></app-cart-product-card>
+</div>
+
+<div class="sticky-box">
+  <div class="row mt-2 mb-3 mx-auto d-flex align-content-center">
+    <h6>Data e ora ritiro:</h6>
+    <div class="col-12 col-md-6">
+      <lib-twentyfive-datepicker
+        [showLabel]="false"
+        [labelStyle]="LabelTheme.LabelBold"
+        [setMinDateToToday]="true"
+        [enabledDates]="enabledDate"
+        (dateSelected)="onDateChange($event)"
+      ></lib-twentyfive-datepicker>
+    </div>
+    <div class="col-12 col-md-6 mt-2 mt-md-0">
+      <lib-twentyfive-generic-timepicker
+        [showLabel]="false"
+        [timeOptions]="selectedSlots"
+        [disabled]="!selectedDate"
+        (changeTime)="onTimeSelected($event)"
+      ></lib-twentyfive-generic-timepicker>
+    </div>
+  </div>
+
+  <div class="row mb-2 mx-auto">
+    <h6>Lascia una nota</h6>
+    <div class="px-2">
+      <textarea [(ngModel)]="orderNotes" [ngClass]="InputTheme.Primary" class="form-control" rows="3"
+                placeholder="Inserisci una nota" style="max-height: 100px; resize: vertical;"></textarea>
+    </div>
+  </div>
+
+  <div class="row mx-auto">
+    <h6>Totale da pagare:</h6>
+    <p class="ms-2">{{cart.totalPrice}} €</p>
+  </div>
+
+  <div class="d-flex justify-content-end mb-2 me-2">
+    <lib-generic-button
+      (click)="buyCart()"
+      class=""
+      buttonText="Ordina"
+      [buttonSize]="ButtonSizeTheme.Medium"
+      [buttonStyle]="ButtonTheme.Secondary"
+      [customStyles]="{'color':'white'}"
+    ></lib-generic-button>
+  </div>
+</div>

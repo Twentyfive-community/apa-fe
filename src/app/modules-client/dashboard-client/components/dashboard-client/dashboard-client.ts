@@ -1,12 +1,21 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {NavbarTheme} from "twentyfive-style";
+import {CustomerDetails} from "../../../../models/Customer";
+import {SigningKeycloakService} from "twentyfive-keycloak-new";
+import {CustomerService} from "../../../../services/customer.service";
 
 @Component({
   selector: 'app-dashboard-client',
   templateUrl: './dashboard-client.html',
   styleUrl: './dashboard-client.scss'
 })
-export class DashboardClient {
+export class DashboardClient implements OnInit{
+
+
+  customer:CustomerDetails =new CustomerDetails()
+  customerIdkc :string =''
+  imAdmin: string=''
+
 
   navbarItems: any[] = [
     {
@@ -14,18 +23,56 @@ export class DashboardClient {
       icon: "bi bi-person",
       navigationUrl: "profilo",
       disableClick: false,
-      labelColor: ""
+      labelColor: "",
     },
     {
       title: "Carrello",
       icon: "bi bi-cart",
-      navigationUrl: "",
+      navigationUrl: "carrello",
       disableClick: false,
-      labelColor: ""
+      labelColor: "",
     },
   ]
 
+  adminItems: any[] = [
+    {
+      title: "Carrello",
+      icon: "bi bi-cart",
+      navigationUrl: "carrello",
+      disableClick: false,
+      labelColor: "",
+    },
+  ]
+
+  constructor(private signingKeycloakService: SigningKeycloakService,
+              private customerService:CustomerService,) {
+  }
 
 
-    protected readonly NavbarTheme = NavbarTheme;
+  ngOnInit(): void {
+    this.getCustomer()
+  }
+
+
+  assignItems(){
+    if(this.imAdmin)return this.adminItems;
+    else return this.navbarItems;
+
+  }
+
+  private getCustomer() {
+    let keycloackService=(this.signingKeycloakService)as any;
+    this.customerIdkc=keycloackService.keycloakService._userProfile.id;
+    console.log(keycloackService.keycloakService._userProfile.id);
+    if(this.customerIdkc!=null){
+      this.customerService.getCustomerByKeycloakId(this.customerIdkc).subscribe( (res:any) =>{
+        this.customer = res
+      })
+    }
+    //this.imAdmin=keycloackService.keycloakService._userProfile.role;
+    this.imAdmin=keycloackService.loggedUserRoles().includes('admin');
+    //verifica qui se l'utente è admin
+  }
+
+protected readonly NavbarTheme = NavbarTheme;
 }

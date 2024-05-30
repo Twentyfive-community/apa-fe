@@ -6,20 +6,26 @@ import {TwentyfiveModalGenericComponentService} from "twentyfive-modal-generic-c
 import {ProductService} from "../../../../services/product.service";
 import {ProductDetails, ProductKg, ProductWeighted, Tray, TrayDetails} from "../../../../models/Product";
 import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
-import {CategoryEditComponent} from "../../../../shared/category-edit/category-edit.component";
 import {ProductDetailsComponent} from "../product-details/product-details.component";
 import {response} from "express";
 import {CustomCakeComponent} from "../custom-cake/custom-cake.component";
+import {TrayCustomizedComponent} from "../tray-customized/tray-customized.component";
+import {CustomerDetails} from "../../../../models/Customer";
+import {KeycloakPasswordRecoveryService} from "../../../../services/passwordrecovery.service";
+import {CustomerService} from "../../../../services/customer.service";
+import {SigningKeycloakService} from "twentyfive-keycloak-new";
 
 @Component({
   selector: 'app-catalogue',
   templateUrl: './catalogue.component.html',
   styleUrl: './catalogue.component.scss'
 })
-export class CatalogueComponent implements OnInit{
+export class CatalogueComponent implements OnInit {
+
+
 
   categories: Category[] = []
-  categoryType=['productKg','productWeighted','tray'];
+  categoryType = ['productKg', 'productWeighted', 'tray'];
   categoryActive: string = '';
   categoryName: string = '';
   productListKg: ProductKg[]=[];
@@ -31,11 +37,13 @@ export class CatalogueComponent implements OnInit{
 
 
 
+
   constructor(private categoryService: CategoryService,
-              private router: Router,
               private genericModalService: TwentyfiveModalGenericComponentService,
-              private productService: ProductService
-              ) {
+              private productService: ProductService,
+              private signingKeycloakService: SigningKeycloakService,
+              private customerService:CustomerService,
+  ) {
   }
 
 
@@ -43,7 +51,8 @@ export class CatalogueComponent implements OnInit{
     this.getCategories()
   }
 
-  getCategories(){
+
+  getCategories() {
     this.categoryService.getAll(this.categoryType).subscribe((response: any) => {
       this.categories = response
       this.activeTab = this.categories[0].id;
@@ -62,7 +71,7 @@ export class CatalogueComponent implements OnInit{
     this.getAll()
   }
 
-  getAll(){
+  getAll() {
     switch (this.categoryActive) {
       case 'productKg':
         this.productService.getAllKgActive(this.activeTab).subscribe((res: any) => {
@@ -80,11 +89,14 @@ export class CatalogueComponent implements OnInit{
   modalProduct(productId: string){
     let r = this.genericModalService.open(ProductDetailsComponent, "s", {});
     r.componentInstance.productId = productId;
-    r.componentInstance.categoryType= this.categoryActive;
-    r.componentInstance.categoryName= this.categoryName;
+    r.componentInstance.categoryType = this.categoryActive;
+    r.componentInstance.categoryName = this.categoryName;
     r.result.finally(() => {
       this.getAll()
     })
+  }
+  getIngredientListOfProduct(idProd: string) {
+
   }
 
   modalCustomCake(){
@@ -95,6 +107,30 @@ export class CatalogueComponent implements OnInit{
   }
 
 
+  customizedTray() {
+    let r = this.genericModalService.open(TrayCustomizedComponent, "l", {});
+  }
+
+  getProductDetails(event: any) {
+    switch (this.categoryActive) {
+      case 'productKg':
+        this.productService.getByIdKg(event.id).subscribe((response: any) => {
+          this.productDetails = response;
+        })
+        break;
+      case 'productWeighted':
+        this.productService.getByIdWeighted(event.id).subscribe((response: any) => {
+          this.productDetails = response;
+        })
+        break;
+      case 'tray':
+        this.productService.getByIdTray(event.id).subscribe((response: any) => {
+          this.trayDetails = response;
+        })
+        break;
+    }
+  }
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
   protected readonly ButtonTheme = ButtonTheme;
+
 }

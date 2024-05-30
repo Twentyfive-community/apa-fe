@@ -79,7 +79,6 @@ export class CompletedOrderComponent implements OnInit{
       value: '25'
     }
   ];
-  private subscriptionText: any;
 
   constructor(private toastrService: ToastrService,
               private modalService: TwentyfiveModalService,
@@ -101,6 +100,7 @@ export class CompletedOrderComponent implements OnInit{
     let orderId = $event.id
     this.completedOrderService.getOrderDetails(orderId).subscribe((res: any) => {
       this.orderDetails = res
+      console.log(this.orderDetails);
     })
   }
 
@@ -134,9 +134,6 @@ export class CompletedOrderComponent implements OnInit{
     this.getAll();
   }
 
-  switchClick(event: any) {
-    console.log(event)
-  }
 
   openImage(url: string) {
     window.open(url, '_blank');

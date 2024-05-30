@@ -43,7 +43,7 @@
     "twentyfive-cookie-modal": "^0.0.15",
     "twentyfive-cookie-modal-detailed": "^0.0.29",
     "twentyfive-cookie-modal-policy": "^0.0.1",
-    "twentyfive-datepicker": "^0.0.21",
+    "twentyfive-datepicker": "^0.0.22",
     "twentyfive-dropdown": "^0.0.12",
     "twentyfive-input": "^0.0.26",
     "twentyfive-modal": "^0.0.50",
@@ -54,7 +54,7 @@
     "twentyfive-style": "^0.0.107",
     "twentyfive-switch": "^0.0.9",
     "twentyfive-table": "^0.0.101",
-    "twentyfive-timepicker": "^0.0.23",
+    "twentyfive-timepicker": "^0.0.25",
     "zone.js": "~0.14.3"
   },
   "devDependencies": {

@@ -4,7 +4,7 @@
     <div class="col-10">
       <h3>Anagrafica</h3>
     </div>
-    <div class="col-1">
+    <div class="col-1 d-flex justify-content-end">
       <i class="bi bi-pencil-fill" (click)="goToEdit()"></i>
     </div>
   </div>
@@ -38,7 +38,7 @@
 <section >
   <h3 class="mb-2">I tuoi ordini</h3>
   <div class="row">
-    <div class="col-9 padded-left d-flex align-items-center">
+    <div class="col-10 d-flex align-items-center">
       <lib-generic-button-text-with-icon
         buttonText="In corso"
         (click)="goToActiveOrders()"
@@ -48,13 +48,13 @@
       ></lib-generic-button-text-with-icon>
       <span class="ms-2 small-text">( {{ customer.activeOrdersCount }} )</span>
     </div>
-    <div class="col-1">
+    <div class="col-1 d-flex align-items-center justify-content-end">
       <i class="bi bi-chevron-right small-icon"></i>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-9 padded-left d-flex align-items-center">
+    <div class="col-10 d-flex align-items-center">
       <lib-generic-button-text-with-icon
         buttonText="Completati"
         (click)="goToCompletedOrders()"
@@ -64,7 +64,7 @@
       ></lib-generic-button-text-with-icon>
       <span class="ms-2 small-text">( {{ customer.completedOrdersCount }} )</span>
     </div>
-    <div class="col-1">
+    <div class="col-1 d-flex align-items-center justify-content-end">
       <i class="bi bi-chevron-right small-icon"></i>
     </div>
   </div>
@@ -78,25 +78,58 @@
 <section>
   <h3 class="mb-2">Gestione</h3>
   <div class="row">
-    <div class="col-9 padded-left">
+    <div class="col-10">
       <lib-generic-button-text-with-icon
         buttonText="Reset password"
         [iconLeft]="true"
         prefixIcon="bi bi-arrow-counterclockwise"
         [buttonStyle]="ButtonTheme.OnlyText"
+        (click)="resetPassword()"
       ></lib-generic-button-text-with-icon>
     </div>
-    <div class="col-1">
+    <div class="col-1 d-flex align-items-center justify-content-end">
       <i class="bi bi-chevron-right small-icon"></i>
     </div>
   </div>
 </section>
 
-<div class="row float-start ms-5 mt-5" *ngIf="customerIdkc">
+<div *ngIf="customerIdkc" class="row mt-5">
   <lib-generic-button
     buttonText="LOGOUT"
     (click)="this.makeLogout()"
-    [buttonSize]="ButtonSizeTheme.Medium"
+    [buttonSize]="ButtonSizeTheme.FullWidth"
     [buttonStyle]="ButtonTheme.Primary"
+
   ></lib-generic-button>
+</div>
+
+<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="contactModalLabel">Avviso</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Nessun ordine presente
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="emailConfirmationModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="emailConfirmationModalLabel">Avviso</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body mb-0">
+        L'email è stata inviata con successo.
+      </div>
+      <div class="modal-body mt-0">
+        (se non riesci a vederla controlla anche la posta indesiderata)
+      </div>
+    </div>
+  </div>
 </div>
