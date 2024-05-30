@@ -40,6 +40,8 @@ export class CustomCakeComponent implements OnInit{
   ingredientsObject: Ingredient[];
 
   stepCompleted: boolean[] = new Array(this.steps.length).fill(false);
+  numeri: string[] = Array.from({ length: 10 }, (_, i) => i.toString());
+  lettere: string[] = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
 
 
   customer: CustomerDetails = new CustomerDetails();
@@ -51,6 +53,7 @@ export class CustomCakeComponent implements OnInit{
   selectedWeight: number;
   selectedBase: string = '';
   selectedForma: string = '';
+  selectedDettaglioForma: string = '';
   selectedBagna: string = '';
   selectedFarciture: string[] = [];
   selectedCopertura: string = '';
@@ -77,7 +80,6 @@ export class CustomCakeComponent implements OnInit{
   gocceOptions: string[] = [];
   granelleOptions: string[] = [];
 
-  customization: Map<string,string> = new Map<string,string>();
   //AGGIUNGI DECORAZIONI DOPO
 
 
@@ -269,6 +271,16 @@ export class CustomCakeComponent implements OnInit{
    }
   }
 
+
+    getDettagliForma(): string[] {
+        if (this.selectedForma === 'Numero') {
+            return this.numeri;
+        } else if (this.selectedForma === 'Lettera') {
+            return this.lettere;
+        }
+        return [];
+    }
+
   getFarcitureOptions(){
     this.ingredientService.getAllByNameCategories('Crema', 'ingredienti').subscribe((response: any) =>{
       this.ingredientsObject=response;
@@ -386,8 +398,21 @@ export class CustomCakeComponent implements OnInit{
   selectType(type: string){
     this.selectedType = type;
     //this.stepCompleted[1]=true;
+    this.resetSelection();
     this.getBaseOptions();
     this.goToNextStep(1)
+  }
+
+  resetSelection(){
+      this.selectedBase = '';
+      this.selectedWeight = 0;
+      this.selectedForma = '';
+      this.selectedBagna = '';
+      this.selectedFarciture = [];
+      this.selectedCopertura = '';
+      this.selectedFrutta = [];
+      this.selectedGocce = [];
+      this.selectedGranelle = [];
   }
 
   selectBase(base: string){
@@ -407,10 +432,18 @@ export class CustomCakeComponent implements OnInit{
 
   selectForma(forma: string){
     this.selectedForma=forma;
-    //this.stepCompleted[4]=true;
-    this.getFarcitureOptions();
-    this.goToNextStep(4)
+    if(forma!='Numero' && forma!='Lettera') {
+      //this.stepCompleted[4]=true;
+      this.getFarcitureOptions();
+      this.goToNextStep(4)
+    }
   }
+
+    selectDettaglioForma(dettaglio: string) {
+        this.selectedDettaglioForma = dettaglio;
+        this.getFarcitureOptions();
+        this.goToNextStep(4);
+    }
 
   selectFarcitura(farcitura: string) {
     if (!this.selectedFarciture.includes(farcitura) && this.selectedFarciture.length < 2) {
@@ -558,9 +591,14 @@ export class CustomCakeComponent implements OnInit{
     this.productInPurchase.weight=this.selectedWeight
     this.productInPurchase.shape=this.selectedForma
     this.productInPurchase.totalPrice=this.realPrice //la quantità è 1 di default, basta peso * priceAlKG
+
     //le customizzazioni sono base, farciture, frutte, bagna, gocce, copertura, granelle)
     this.productInPurchase.customization = {};
 
+    if(this.selectedForma == 'Lettera' || this.selectedForma == 'Numero'){
+      this.productInPurchase.customization.DettaglioForma = this.selectedDettaglioForma;
+    }
+    this.productInPurchase.customization.Type = this.selectedType;
     this.productInPurchase.customization.Base = this.selectedBase;
     this.productInPurchase.customization.Copertura = this.selectedCopertura;
     this.productInPurchase.customization.Bagna = this.selectedBagna;
@@ -588,6 +626,7 @@ export class CustomCakeComponent implements OnInit{
       this.toastrService.error("Compilare tutti i campi necessari");
     }
     else{
+        console.log(this.productInPurchase);
       this.cartService.addToCartProductInPurchase(this.customer.id, this.productInPurchase).subscribe({
         error: () => {
           this.toastrService.error("Errore nell'aggiunta del prodotto nel carrello!");
