@@ -27,7 +27,7 @@ import {
 export class ProductListComponent implements OnInit{
   headersKg: any[] = [
     {name: 'Nome', value: 'name',sortable: true},
-    {name: 'Allergeni', value: 'allergens.iconUrl'},
+    {name: 'Allergeni', value: 'allergens'},
     {name: 'Ingredienti', value: 'ingredients'},
     {name: 'Prezzo/Kg', value: 'pricePerKg',sortable: true}
   ];
@@ -215,13 +215,27 @@ export class ProductListComponent implements OnInit{
             }
           });
         } else {
-          this.productService.activateByIdKg(event.id).subscribe({
-            error: () => {
-              this.toastrService.error("Errore nell\'attivare questo prodotto!");
-              this.getAll(this.currentPage-1);
-            },
-            complete: () => {
-              this.getAll(this.currentPage-1);
+          this.productService.activateByIdKg(event.id).subscribe((response:any)=>{
+            if (!response){
+              this.modalService.openModal(
+                'Il prodotto ha uno più ingredienti disattivati. Attivarlo comunque?',
+                'Abilita prodotto',
+                'Annulla',
+                'Conferma',
+                {
+                  showIcon: true,
+                  size: 'md',
+                  onConfirm: (() => {
+                    this.productService.activateByIdWeighted(event.id,true).subscribe({
+                      complete:() =>{
+                        this.toastrService.success("Prodotto riattivato correttamente!");
+                      }
+                    });
+                  }),
+                  onClose: (() =>{
+                    this.getAll(this.currentPage-1);
+                  })
+                });
             }
           });
         }
@@ -238,15 +252,30 @@ export class ProductListComponent implements OnInit{
             }
           });
         } else {
-          this.productService.activateByIdWeighted(event.id).subscribe({
-            error: () => {
-              this.toastrService.error("Errore nell\'attivare questo prodotto!");
-              this.getAll(this.currentPage-1);
-            },
-            complete: () => {
-              this.getAll(this.currentPage-1);
+          this.productService.activateByIdWeighted(event.id).subscribe((response:any)=>{
+            if (!response){
+              this.modalService.openModal(
+                'Il prodotto ha uno più ingredienti disattivati. Attivarlo comunque?',
+                'Abilita prodotto',
+                'Annulla',
+                'Conferma',
+                {
+                  showIcon: true,
+                  size: 'md',
+                  onConfirm: (() => {
+                    this.productService.activateByIdWeighted(event.id,true).subscribe({
+                      complete:() =>{
+                        this.toastrService.success("Prodotto riattivato correttamente!");
+                      }
+                    });
+                  }),
+                  onClose: (() =>{
+                    this.getAll(this.currentPage-1);
+                  })
+                });
             }
           });
+
         }
         break;
       case 'tray':

@@ -29,7 +29,6 @@ export class TrayCustomizedComponent implements OnInit,AfterViewInit{
   size =10;
   customerIdkc: string = '';
   customer: Customer = new Customer();
-  isLoading = false;
   hasMoreProducts = true; // Flag to check if more products are available
 
 
@@ -57,12 +56,12 @@ export class TrayCustomizedComponent implements OnInit,AfterViewInit{
   }
 
   onScroll(event: any): void {
-    console.log("sto scrollando fortissimo");
-    const pos = (document.documentElement.scrollTop || document.body.scrollTop) + window.innerHeight;
-    const max = document.documentElement.scrollHeight;
-    if (pos >= max && !this.isLoading && this.hasMoreProducts) {
-      this.page++;
-      this.getAllCustomizedTray();
+    const element = event.target;
+    if (this.currentStep === 2 && element.scrollHeight - element.scrollTop === element.clientHeight) {
+      if(this.hasMoreProducts){
+        this.size+=10;
+        this.getAllCustomizedTray()
+      }
     }
   }
 
@@ -73,6 +72,7 @@ export class TrayCustomizedComponent implements OnInit,AfterViewInit{
   previousStep() {
     this.currentStep--;
     this.bundleInPurchase.totalWeight=0;
+    this.bundleInPurchase.weightedProducts=[];
   }
 
   selectMeasure(measure:Measure) {
@@ -129,22 +129,14 @@ export class TrayCustomizedComponent implements OnInit,AfterViewInit{
   }
 
   getAllCustomizedTray() {
-    this.isLoading = true;
     this.productService.getAllForCustomizedTray('664361ed09aa3a0e1b249988', this.page, this.size).subscribe(
       (response: any) => {
-        const newProducts = response.content.map((product: any) => {
+        this.productListWeighted=response.content;
+        this.productListWeighted.forEach((product: any) => {
           product.quantity = 0;
-          return product;
         });
-        this.productListWeighted = [...this.productListWeighted, ...newProducts];
-        this.isLoading = false;
-        if (newProducts.length < this.size) {
-          this.hasMoreProducts = false; // No more products available
-        }
-      },
-      error => {
-        console.error(error);
-        this.isLoading = false;
+        console.log(response.totalElements < this.size);
+        if(response.totalElements < this.size) this.hasMoreProducts = false;
       }
     );
   }
