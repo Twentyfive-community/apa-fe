@@ -60,7 +60,7 @@ export class CompletedOrderComponent implements OnInit{
       tooltipText: 'Riattiva Ordine',
       placement: 'top',
       showFunction: (myRow: any) => {
-        return myRow.status === 'ANNULLATO';
+        return myRow.status === 'ANNULLATO' && this.isCurrentDateBefore(myRow.pickupDate);
       }
     },
   ]
@@ -79,6 +79,7 @@ export class CompletedOrderComponent implements OnInit{
       value: '25'
     }
   ];
+  now: string;
 
   constructor(private toastrService: ToastrService,
               private modalService: TwentyfiveModalService,
@@ -92,6 +93,8 @@ export class CompletedOrderComponent implements OnInit{
   getAll(page?: number) {
     this.completedOrderService.getAll(page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection).subscribe((res: any) => {
       this.data = res.content
+      console.log(this.data);
+
       this.collectionSize = res.totalElements;
     })
   }
@@ -137,6 +140,12 @@ export class CompletedOrderComponent implements OnInit{
 
   openImage(url: string) {
     window.open(url, '_blank');
+  }
+
+  isCurrentDateBefore(dateString:string){
+    const currentDate = new Date();
+    const comparisonDate = new Date(dateString);
+    return currentDate < comparisonDate;
   }
 
   protected readonly ButtonTheme = ButtonTheme;
