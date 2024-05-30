@@ -2,3 +2,9 @@
   width: 500px;
   height: 200px;
 }
+
+.small-icon{
+  width: 24px;  /* Imposta la larghezza desiderata */
+  height: 24px; /* Imposta l'altezza desiderata */
+  object-fit: contain; /* Assicura che l'immagine si adatti alle dimensioni senza distorsioni */
+}

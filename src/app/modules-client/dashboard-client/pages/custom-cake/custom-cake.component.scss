@@ -13,8 +13,8 @@
 }
 
 .step-circle {
-  width: 2rem;
-  height: 2rem;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background-color: #dee2e6;
   display: flex;
@@ -34,11 +34,13 @@
 }
 
 .step.active .step-circle {
-  background-color: #0d6efd;
+  background-color: #fdb90d;
+  border-color: #fdb90d;
 }
 
 .step.active .step-circle:hover {
-  background-color: #0b5ed7;
+  background-color: #fdb90d;
+  border-color: #fdb90d;
 }
 
 .step.disabled {
@@ -53,7 +55,7 @@
 
 .step-circle.completed {
   background-color: #28a745; /* Colore verde */
-  border-color: #28a745; /* Colore del bordo verde */
+  border-color: #28a745; /* Colore verde */
   color: white; /* Colore del testo bianco */
 }
 
