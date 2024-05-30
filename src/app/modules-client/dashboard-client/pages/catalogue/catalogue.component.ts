@@ -9,6 +9,7 @@ import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
 import {CategoryEditComponent} from "../../../../shared/category-edit/category-edit.component";
 import {ProductDetailsComponent} from "../product-details/product-details.component";
 import {response} from "express";
+import {CustomCakeComponent} from "../custom-cake/custom-cake.component";
 
 @Component({
   selector: 'app-catalogue',
@@ -82,6 +83,13 @@ export class CatalogueComponent implements OnInit{
     r.componentInstance.categoryType= this.categoryActive;
     r.componentInstance.categoryName= this.categoryName;
     r.result.finally(() => {
+      this.getAll()
+    })
+  }
+
+  modalCustomCake(){
+    let r = this.genericModalService.open(CustomCakeComponent, "s", {});
+    r.result.finally( () => {
       this.getAll()
     })
   }

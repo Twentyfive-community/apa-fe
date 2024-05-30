@@ -13,6 +13,7 @@ import {TwentyfiveDropdownModule} from "twentyfive-dropdown";
 import {FormsModule} from "@angular/forms";
 import {TwentyfiveDatepickerModule} from "twentyfive-datepicker";
 import {TwentyfiveTimepickerModule} from "twentyfive-timepicker";
+import { CustomCakeComponent } from './pages/custom-cake/custom-cake.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import {TwentyfiveTimepickerModule} from "twentyfive-timepicker";
     UserEditComponent,
     UserOrderComponent,
     UserOrderDetailComponent,
-    ProductDetailsComponent
+    ProductDetailsComponent,
+    CustomCakeComponent
   ],
   imports: [
     DashboardClientRoutingModule,

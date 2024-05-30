@@ -87,7 +87,6 @@
     <lib-twentyfive-input
       labelText="Aggiungi una frase"
       placeholder="Tanti Auguri!"
-      inputType="textArea"
       [value]="productInPurchase.notes"
       (input)="onInputChange($event)"
     ></lib-twentyfive-input>
@@ -117,28 +116,6 @@
   </div>
 
   <input type="file" #fileInput style="display: none;" (change)="handleFileSelect($event)">
-  </ng-container>
-
-  <ng-container *ngIf="categoryName != 'Vassoi'">
-  <div class="row ms-1 mt-3 me-1 mb-3">
-    <lib-twentyfive-datepicker
-      [showLabel]="true"
-      [labelStyle]="LabelTheme.LabelMedium"
-      [labelText]="'Data ritiro'"
-      [datePickerStyle]="DatePickerTheme.Primary"
-      (dateSelected)="onSelectDate($event)"
-      [selectedDate]="deliveryDate"
-      [setMinDateToToday]="true"
-    ></lib-twentyfive-datepicker>
-  </div>
-
-  <div class="row ms-1 mt-3 me-1 mb-3">
-    <lib-twentyfive-generic-timepicker
-      [showLabel]="true"
-      [labelStyle]="LabelTheme.LabelMedium"
-      [labelText]="'Ora ritiro'"
-    ></lib-twentyfive-generic-timepicker>
-  </div>
   </ng-container>
 
   <hr>
