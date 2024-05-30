@@ -28,7 +28,7 @@
           <h5 class="card-title">Id ordine:</h5>
           <h6 class="card-subtitle text-muted">#{{ order.id }}</h6>
         </div>
-        <i *ngIf="activeOrders" class="bi bi-trash clickable-icon" (click)="cancelOrder(order.id); $event.stopPropagation()"></i>
+        <i *ngIf="activeOrders=='true'" class="bi bi-trash clickable-icon" (click)="cancelOrder(order.id); $event.stopPropagation()"></i>
       </div>
       <div class="card-body" (click)="goToDetail(order.id)">
         <p class="card-text"><strong>Data e ora ritiro:</strong> {{ order.formattedPickupDate }}</p>
