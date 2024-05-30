@@ -14,6 +14,7 @@ import {TwentyfiveDropdownModule} from "twentyfive-dropdown";
 import {FormsModule} from "@angular/forms";
 import {TwentyfiveDatepickerModule} from "twentyfive-datepicker";
 import {TwentyfiveTimepickerModule} from "twentyfive-timepicker";
+import { CustomCakeComponent } from './pages/custom-cake/custom-cake.component';
 import { UserCartComponent } from './pages/user-cart/user-cart.component';
 
 @NgModule({
@@ -25,6 +26,7 @@ import { UserCartComponent } from './pages/user-cart/user-cart.component';
     UserOrderComponent,
     UserOrderDetailComponent,
     ProductDetailsComponent,
+    CustomCakeComponent,
     TrayCustomizedComponent,
     UserCartComponent
   ],

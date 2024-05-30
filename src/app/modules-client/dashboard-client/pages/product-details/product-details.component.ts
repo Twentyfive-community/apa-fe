@@ -1,13 +1,9 @@
 import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
-import {Category} from "../../../../models/Category";
 import {TwentyfiveModalGenericComponentService} from "twentyfive-modal-generic-component";
-import {CategoryService} from "../../../../services/category.service";
-import {ButtonSizeTheme, ButtonTheme, DatePickerButtonTheme, DatePickerTheme, LabelTheme} from "twentyfive-style";
-import {Router} from "@angular/router";
+import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
 import {ToastrService} from "ngx-toastr";
 import {ProductService} from "../../../../services/product.service";
-import {ProductDetails, ProductInPurchase, ProductKg, TrayDetails} from "../../../../models/Product";
-import {Allergen} from "../../../../models/Allergen";
+import {ProductDetails, ProductInPurchase, TrayDetails} from "../../../../models/Product";
 import {environment} from "../../../../../environments/environment";
 import {BundleInPurchase} from "../../../../models/Bundle";
 import {Measure} from "../../../../models/Measure";
@@ -40,7 +36,6 @@ export class ProductDetailsComponent implements OnInit{
   weightOptions: number[] = [];
   measureOptions: Measure[] = [];
   file: File | null;
-  deliveryDate: Date;
 
   constructor(private modalService: TwentyfiveModalGenericComponentService,
               private keycloackService: SigningKeycloakService,
@@ -166,10 +161,6 @@ export class ProductDetailsComponent implements OnInit{
     this.productInPurchase.attachment = `${environment.ftpDownloadUrl}${this.file!.name}`
   }
 
-  onSelectDate(event: any) {
-    let data = new Date(event.getTime() - event.getTimezoneOffset() * 60000);
-      this.productInPurchase.deliveryDate = data.toISOString().split('T')[0];
-  }
 
   getRealPrice(){
     if(this.categoryName != 'Vassoi'){
@@ -239,7 +230,4 @@ export class ProductDetailsComponent implements OnInit{
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
   protected readonly ButtonTheme = ButtonTheme;
 
-  protected readonly LabelTheme = LabelTheme;
-  protected readonly DatePickerTheme = DatePickerTheme;
-  protected readonly DatePickerButtonTheme = DatePickerButtonTheme;
 }

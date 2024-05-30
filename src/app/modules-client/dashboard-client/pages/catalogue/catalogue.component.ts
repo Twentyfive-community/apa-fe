@@ -7,6 +7,8 @@ import {ProductService} from "../../../../services/product.service";
 import {ProductDetails, ProductKg, ProductWeighted, Tray, TrayDetails} from "../../../../models/Product";
 import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
 import {ProductDetailsComponent} from "../product-details/product-details.component";
+import {response} from "express";
+import {CustomCakeComponent} from "../custom-cake/custom-cake.component";
 import {TrayCustomizedComponent} from "../tray-customized/tray-customized.component";
 import {CustomerDetails} from "../../../../models/Customer";
 import {KeycloakPasswordRecoveryService} from "../../../../services/passwordrecovery.service";
@@ -84,7 +86,7 @@ export class CatalogueComponent implements OnInit {
     }
   }
 
-  modalProduct(productId: string) {
+  modalProduct(productId: string){
     let r = this.genericModalService.open(ProductDetailsComponent, "s", {});
     r.componentInstance.productId = productId;
     r.componentInstance.categoryType = this.categoryActive;
@@ -95,6 +97,13 @@ export class CatalogueComponent implements OnInit {
   }
   getIngredientListOfProduct(idProd: string) {
 
+  }
+
+  modalCustomCake(){
+    let r = this.genericModalService.open(CustomCakeComponent, "s", {});
+    r.result.finally( () => {
+      this.getAll()
+    })
   }
 
 

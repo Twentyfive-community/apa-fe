@@ -24,6 +24,7 @@
                                                [buttonStyle]="ButtonTheme.Secondary"
                                                [customStyles]="{'height': '120px','color': 'white'}"
                                                [iconLeft]="false"
+                                               (click) = "modalCustomCake()"
             ></lib-generic-button-text-with-icon>
             <lib-generic-button-text-with-icon *ngIf="category.name === 'Vassoi'"
                                                buttonText="Vassoio Personalizzato"

@@ -44,6 +44,11 @@ export class IngredientService {
     return this.http.get(`${this.baseUrl}/getAllByTypeCategories`, {params: p});
   }
 
+  getAllByNameCategories(name: string, type: string){
+    let p = Utils.createHttpParams({'name': name, 'type': type});
+    return this.http.get(`${this.baseUrl}/getAllByNameCategories`, {params: p});
+  }
+
   getByName(name: string) {
     let p= Utils.createHttpParams({'name':name});
     return this.http.get(`${this.baseUrl}/getByName`,{params: p});

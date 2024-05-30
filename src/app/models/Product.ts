@@ -87,7 +87,7 @@ export class ProductInPurchase {
   weight: number;
   quantity: number;
   shape: string;
-  customization: Map<string, string>;
+  customization: any;
   chocolateChips: boolean;
   notes: string;
   attachment: string;

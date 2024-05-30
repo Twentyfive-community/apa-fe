@@ -1,0 +1,75 @@
+.stepper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 2rem;
+}
+
+.step-circle {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background-color: #dee2e6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 1px solid #ced4da;
+  color: white; /* Cambia il colore del numero nel pallino a bianco */
+}
+
+.step-circle:hover {
+  background-color: #838a91;
+}
+
+.step-content {
+  margin-left: 1rem;
+}
+
+.step.active .step-circle {
+  background-color: #0d6efd;
+}
+
+.step.active .step-circle:hover {
+  background-color: #0b5ed7;
+}
+
+.step.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.step-circle.disabled {
+  pointer-events: none;
+  background-color: #ccc;
+}
+
+.step-circle.completed {
+  background-color: #28a745; /* Colore verde */
+  border-color: #28a745; /* Colore del bordo verde */
+  color: white; /* Colore del testo bianco */
+}
+
+.drop-zone {
+  border: 2px dashed #ccc; /* Bordo tratteggiato grigio */
+  padding: 20px; /* Spaziatura interna */
+  background-color: #f0f0f0; /* Sfondo grigio */
+  font-weight: bold; /* Testo in grassetto */
+}
+
+::ng-deep lib-twentyfive-input label {
+  font-size: 1.2rem !important; /* Imposta la dimensione del font simile a un h5 */
+  font-weight: 400; /* Assicurati che l'etichetta abbia un peso del carattere simile a un h5 */
+}
+
+
+
+
+
