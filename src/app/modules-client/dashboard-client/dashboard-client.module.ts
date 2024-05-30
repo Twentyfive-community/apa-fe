@@ -16,6 +16,7 @@ import {TwentyfiveDatepickerModule} from "twentyfive-datepicker";
 import {TwentyfiveTimepickerModule} from "twentyfive-timepicker";
 import { CustomCakeComponent } from './pages/custom-cake/custom-cake.component';
 import { UserCartComponent } from './pages/user-cart/user-cart.component';
+import {TooltipModule} from "ngx-bootstrap/tooltip";
 
 @NgModule({
   declarations: [
@@ -30,17 +31,18 @@ import { UserCartComponent } from './pages/user-cart/user-cart.component';
     TrayCustomizedComponent,
     UserCartComponent
   ],
-  imports: [
-    DashboardClientRoutingModule,
-    SharedModule,
-    NgbDropdown,
-    NgbDropdownMenu,
-    NgbDropdownToggle,
-    TwentyfiveDropdownModule,
-    FormsModule,
-    TwentyfiveDatepickerModule,
-    TwentyfiveTimepickerModule
-  ]
+    imports: [
+        DashboardClientRoutingModule,
+        SharedModule,
+        NgbDropdown,
+        NgbDropdownMenu,
+        NgbDropdownToggle,
+        TwentyfiveDropdownModule,
+        FormsModule,
+        TwentyfiveDatepickerModule,
+        TwentyfiveTimepickerModule,
+        TooltipModule
+    ]
 })
 export class DashboardClientModule {
 }
