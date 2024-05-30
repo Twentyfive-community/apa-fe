@@ -413,6 +413,8 @@ export class CustomCakeComponent implements OnInit{
       this.selectedFrutta = [];
       this.selectedGocce = [];
       this.selectedGranelle = [];
+      for(let i=1; i<this.stepCompleted.length; i++)
+          this.stepCompleted[i]=false;
   }
 
   selectBase(base: string){
