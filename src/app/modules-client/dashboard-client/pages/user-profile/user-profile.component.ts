@@ -85,7 +85,7 @@ export class UserProfileComponent implements OnInit{
   }
 
   goToCompletedOrders() {
-    if (this.customer.activeOrdersCount=='0'){
+    if (this.customer.completedOrdersCount=='0'){
       const contactModal = new bootstrap.Modal(document.getElementById('contactModal'), {
         keyboard: false
       });

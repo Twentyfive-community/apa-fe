@@ -34,7 +34,7 @@ export class IngredientListComponent implements OnInit{
 
   headers: any[] = [
     { name:'Nome',    value:'name'},
-    { name:'Allergeni',   value:'allergens.iconUrl'},
+    { name:'Allergeni',   value:'allergens'},
     { name:'Descrizione', value:'note'}
   ]
   paginationElements: any[] = [
