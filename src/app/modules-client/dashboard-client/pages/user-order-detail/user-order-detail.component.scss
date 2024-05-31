@@ -1,38 +1,66 @@
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  background-color: #97979f; /* Light grey background */
+}
+
+.order-details-container {
+  padding: 0;
+  border-radius: 8px;
+}
+
+.custom-button {
+  color: black; /* Set the text color to black */
+}
+
+.small-chevron {
+  font-size: 0.80rem; /* Make the chevron icon smaller */
+}
+
 .card {
-  background-color: white;  /* Imposta il colore di sfondo delle card a bianco */
-  border-radius: 8px;       /* Arrotonda gli angoli delle card */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);  /* Aggiunge un'ombreggiatura leggera per un effetto elevato */
-  padding: 20px;            /* Aggiunge spazio all'interno della card */
-  margin-bottom: 20px;      /* Distanza tra una card e l'altra */
-  transition: box-shadow 0.3s; /* Transizione fluida per l'ombreggiatura */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+  padding: 16px; /* Added padding inside the card */
 }
 
 .card:hover {
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Aumenta l'ombreggiatura quando il mouse passa sopra la card */
-}
-.btn-small-white {
-  font-size: 0.75em;
-  color: black !important;
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
+.card-img {
+  min-height: 100px;
+  min-width: 80px;
+  max-height: 100px;
+  object-fit: cover;
+  border-radius: 0.375rem;
+}
 
 .sticky-bottom {
-  position: fixed;
-  background-color: white; /* opzionale, a seconda del design */
-  box-shadow: 0 -2px 10px rgba(0,0,0,0.3); /* opzionale, per un effetto visivo di separazione */
-  z-index: 10; /* Assicurati che sia sopra altri contenuti */
-  left: 0;
-  right: 0;
+  position: sticky;
   bottom: 0;
-  width: 100%;
-  height: 18%;
+  background: white;
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid #ddd;
+  padding: 1rem;
+  z-index: 1000;
 }
 
-.sized-box {
-  width: 200px;  /* Larghezza del box */
-  height: 150px; /* Altezza del box */
-  display: flex; /* Utilizzo Flexbox per centrare il contenuto all'interno */
-  justify-content: center; /* Centra orizzontalmente il contenuto interno */
-  align-items: center; /* Centra verticalmente il contenuto interno */
+.text-muted {
+  color: gray;
 }
 
+button.btn-link {
+  font-size: 1rem;
+}
+
+.modal-content {
+  border-radius: 8px; /* Added border-radius for contact us modal */
+}
+
+.bg-gray {
+  background-color: #f8f9fa; /* Light grey background */
+}

@@ -36,6 +36,13 @@ export class DashboardClient implements OnInit{
 
   adminItems: any[] = [
     {
+      title: "Admin",
+      icon: "bi bi-motherboard",
+      navigationUrl: "../dashboard",
+      disableClick: false,
+      labelColor: "",
+    },
+    {
       title: "Carrello",
       icon: "bi bi-cart",
       navigationUrl: "carrello",
