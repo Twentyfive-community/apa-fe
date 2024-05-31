@@ -398,12 +398,12 @@ export class CustomCakeComponent implements OnInit{
   selectType(type: string){
     this.selectedType = type;
     //this.stepCompleted[1]=true;
-    this.resetSelection();
+    this.resetSelectionFromType();
     this.getBaseOptions();
     this.goToNextStep(1)
   }
 
-  resetSelection(){
+  resetSelectionFromType(){
       this.selectedBase = '';
       this.selectedWeight = 0;
       this.selectedForma = '';
@@ -439,6 +439,24 @@ export class CustomCakeComponent implements OnInit{
       this.getFarcitureOptions();
       this.goToNextStep(4)
     }
+    this.resetSelectionFromForma();
+  }
+
+  resetSelectionFromForma(){
+    if(this.selectedForma == 'Lettera')
+      this.selectedDettaglioForma = this.lettere[0]
+    else if(this.selectedForma == 'Numero')
+      this.selectedDettaglioForma = this.numeri[0]
+    else
+      this.selectedDettaglioForma = '';
+    this.selectedBagna = '';
+    this.selectedFarciture = [];
+    this.selectedCopertura = '';
+    this.selectedFrutta = [];
+    this.selectedGocce = [];
+    this.selectedGranelle = [];
+    for(let i=4; i<this.stepCompleted.length; i++)
+      this.stepCompleted[i]=false;
   }
 
     selectDettaglioForma(dettaglio: string) {

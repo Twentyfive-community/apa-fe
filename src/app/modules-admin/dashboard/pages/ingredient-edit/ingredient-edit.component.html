@@ -56,7 +56,6 @@
       <div *ngFor="let allergen of selectedAllergens" class="me-2 mb-2">
         <lib-twentyfive-chip
           chipText="{{allergen.name}}"
-          [showIcon]="true"
           [chipStyle]="ChipTheme.Secondary"
           [closeableChip]="true"
           (closeChip)="closeChip(allergen)"
