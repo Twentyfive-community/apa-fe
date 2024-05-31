@@ -32,6 +32,10 @@ export class OrderService {
     return this.http.post(`${this.baseUrl}/adminCancel/${id}`,null)
   }
 
+  cancelOrderUser(id: string) {
+    return this.http.post(`${this.baseUrl}/cancel/${id}`,null)
+  }
+
   getActiveOrdersByCustomer(userId: string, page: number = 0, size: number = 10): Observable<Order[]> {
     const params = new HttpParams()
       .set('page', page.toString())

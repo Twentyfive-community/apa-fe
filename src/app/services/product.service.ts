@@ -38,9 +38,11 @@ export class ProductService {
     return this.http.get(`${this.baseKgUrl}/disableById/${id}`);
   }
 
-  activateByIdKg(id:string){
-    return this.http.get(`${this.baseKgUrl}/activateById/${id}`);
+  activateByIdKg(id:string,booleanModal?:boolean){
+    let p = Utils.createHttpParams({'booleanModal':booleanModal ? booleanModal : false});
+    return this.http.get(`${this.baseKgUrl}/activateById/${id}`, {params: p});
   }
+
   getAllWeighted(idCategory: string,page: number, size: number,sortColumn: string,sortDirection:string) {
     let p = Utils.createHttpParams({'idCategory': idCategory,'page': page, 'size': size,'sortColumn': sortColumn,'sortDirection': sortDirection});
     return this.http.get(`${this.baseWeightedUrl}/getAll`, {params: p});
@@ -51,14 +53,16 @@ export class ProductService {
     return this.http.get(`${this.baseWeightedUrl}/getAllForCustomizedTray`, {params: p});
   }
   getByIdWeighted(id:string){
+
     return this.http.get(`${this.baseWeightedUrl}/getById/${id}`);
   }
   disableByIdWeighted(id:string){
     return this.http.get(`${this.baseWeightedUrl}/disableById/${id}`);
   }
 
-  activateByIdWeighted(id:string){
-    return this.http.get(`${this.baseWeightedUrl}/activateById/${id}`);
+  activateByIdWeighted(id:string,booleanModal?:boolean){
+    let p = Utils.createHttpParams({'booleanModal':booleanModal ? booleanModal : false});
+    return this.http.get(`${this.baseWeightedUrl}/activateById/${id}`, {params: p});
   }
   getAllTrays(idCategory:string,page: number, size: number,sortColumn: string,sortDirection:string){
     let p = Utils.createHttpParams({'idCategory':idCategory,'page': page, 'size': size,'sortColumn': sortColumn,'sortDirection': sortDirection});

@@ -4,6 +4,8 @@ import { Order } from "../../../../models/Order";
 import { CompletedorderService } from "../../../../services/completedorder.service";
 import {ButtonTheme} from "twentyfive-style";
 import {OrderService} from "../../../../services/order.service";
+import {TwentyfiveModalService} from "twentyfive-modal";
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-user-order',
@@ -20,19 +22,34 @@ export class UserOrderComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private completedOrderService: CompletedorderService,
     private router: Router,
-    private orderService:OrderService
+    private orderService:OrderService,
+    private modalService: TwentyfiveModalService,
   ) { }
 
   ngOnInit(): void {
+    this.loadBootstrapJS();
     this.activeOrders = this.activatedRoute.snapshot.queryParamMap.get('activeOrders');
     this.customerId = this.activatedRoute.snapshot.paramMap.get('id')!;
     this.orders=[]
     if(this.customerId) {
-      if (this.activeOrders == 'true') {
-        this.loadActiveOrders();
+      this.loadOrders();
+    }
+  }
 
-      } else
-        this.loadCompletedOrders();
+  loadOrders(){
+    if (this.activeOrders == 'true') {
+      this.loadActiveOrders();
+
+    } else
+      this.loadCompletedOrders();
+  }
+
+  loadBootstrapJS(): void {
+    if (!document.querySelector('script[src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"]')) {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js';
+      script.async = true;
+      document.head.appendChild(script);
     }
   }
 
@@ -70,4 +87,46 @@ export class UserOrderComponent implements OnInit {
     this.router.navigate(['../catalogo/dettaglio-ordine',orderId],{queryParams:{activeOrders:this.activeOrders,customerId:this.customerId}});
 
   }
+
+  cancelOrder(id: string) {
+    // Apre una finestra modale di conferma
+    this.modalService.openModal(
+      'Se continui, l\'ordine con id #' + id + ' verrà annullato. Vuoi procedere?',
+      'Annulla l\'ordine',
+      'Annulla',
+      'Conferma',
+      {
+        size: 'md',
+        onConfirm: () => {
+          console.log('Richiesta di cancellamento per l\'ordine con id ' + id);
+
+          // Richiama il servizio per cancellare l'ordine
+          this.orderService.cancelOrderUser(id).subscribe({
+            next: (orders) => {
+              // Mostra una finestra modale di conferma email
+              const orderCancelModal = new bootstrap.Modal(document.getElementById('cancelOrderModal'), {
+                keyboard: false
+              });
+              orderCancelModal .show();
+              this.loadOrders();
+
+
+
+            },
+            error: (error) => {
+              var status=error.status;
+              if(status==400) {
+                const impOrderCancelModal = new bootstrap.Modal(document.getElementById('impossibleCancelOrderModal'), {
+                  keyboard: false
+                });
+                impOrderCancelModal.show();
+                this.loadOrders();
+              }
+            }
+          });
+        }
+      }
+    );
+  }
+
 }

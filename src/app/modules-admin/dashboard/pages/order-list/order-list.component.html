@@ -52,14 +52,15 @@
         <p><b>Quantità:</b> {{ product.quantity }}</p>
         <p><b>Forma:</b> {{ product.shape }}</p>
 
-
-        <p><b>Personalizzazioni:</b></p>
-        <ul *ngFor="let item of product.customization | keyvalue">
-          <li><b>{{ item.key }}:</b> {{ item.value }}</li>
-        </ul>
+        <div *ngIf="product.customization">
+          <p><b>Personalizzazioni:</b></p>
+          <ul *ngFor="let item of product.customization | keyvalue">
+            <li><b>{{ item.key }}:</b> {{ item.value }}</li>
+          </ul>
+        </div>
 
         <p><b>Gocce di cioccolato:</b> {{ product.chocolateChips }}</p>
-        <p><b>NOTE:</b> {{ product.notes }}</p>
+        <p><b>Testo decorativo:</b> {{ product.notes }}</p>
         <p><b>Prezzo totale prodotto:</b> {{ product.totalPrice }} €</p>
 
 
@@ -94,7 +95,8 @@
 
 
     <div class=" m-2 mt-0 mb-0">
-      <h4 class="mb-4">Info Contatto:</h4>
+      <h4 class="mb-4">Info:</h4>
+      <p><b>Note:</b> {{ orderDetails.note }}</p>
       <p><b>E-mail:</b> {{ orderDetails.email }}</p>
       <p><b>Numero di Telefono:</b> {{ orderDetails.phoneNumber }}</p>
     </div>

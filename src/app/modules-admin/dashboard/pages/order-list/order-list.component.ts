@@ -31,7 +31,7 @@ export class OrderListComponent implements OnInit, AfterViewInit{
   sortDirection: string = '';
 
   subscriptionText: any;
-
+  isCheckedList: boolean[] = [];
   isAlertOn: boolean;
   audio:HTMLAudioElement;
 
@@ -151,6 +151,7 @@ export class OrderListComponent implements OnInit, AfterViewInit{
   getAll(page?: number) {
     this.orderService.getAll(page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection).subscribe((res: any) => {
       this.data = res.content;
+      this.data.forEach(() => this.isCheckedList.push(false));
       this.collectionSize = res.totalElements;
     })
   }
@@ -224,6 +225,9 @@ export class OrderListComponent implements OnInit, AfterViewInit{
           size: 'md',
           onConfirm: (() => {
             this.completeOrder(myRow)
+          }),
+          onAbort: (() => {
+            this.getAll(this.currentPage-1);
           })
         });
   }
