@@ -18,7 +18,7 @@
     <ng-container *ngIf="categoryName != 'Vassoi'">
     <h4>{{ productDetails.name }}</h4>
     </ng-container>
-    <ng-container *ngIf="categoryName === 'Vassoi'">
+    <ng-container *ngIf="categoryName == 'Vassoi'">
       <h4>{{ trayDetails.name }}</h4>
     </ng-container>
   </div>
@@ -52,7 +52,7 @@
 
   <ng-container *ngIf="categoryName != 'Vassoi'">
   <div class="row m-1">
-    <p class="mb-1" style="font-size: large">Peso</p>
+    <p class="mb-1" style="font-size: large">Peso <span *ngIf="fromEdit" style="font-size: large"> scelto: ({{productToEdit.weight}} Kg)</span></p>
     <div ngbDropdown class="dropdown">
       <button class="btn btn-outline-dark" ngbDropdownToggle id="weightDropdown">
         {{ selectedWeight }} kg
@@ -82,7 +82,7 @@
     </div>
   </ng-container>
 
-  <ng-container *ngIf="categoryName === 'Le Nostre Torte' || categoryName === 'Semifreddi'">
+  <ng-container *ngIf="categoryName === 'Le Nostre Torte' || categoryName === 'Semifreddi' || fromEdit && productToEdit.notes">
   <div class="row ms-1 mt-3 me-1 mb-3">
     <lib-twentyfive-input
       labelText="Aggiungi una frase"
@@ -93,7 +93,7 @@
   </div>
   </ng-container>
 
-  <ng-container *ngIf="categoryName === 'Le Nostre Torte'">
+  <ng-container *ngIf="categoryName === 'Le Nostre Torte' || fromEdit && productToEdit.attachment">
   <div class="row ms-2 mt-2 me-3">
     <p style="font-size:larger ">Immagine</p>
     <div class="drop-zone rounded  ms-1 mb-2 mt-1" #dropZone (drop)="handleDrop($event)" (dragover)="handleDragOver($event)" (click)="fileInput.click()">
@@ -120,6 +120,14 @@
 
   <hr>
 
+  <div *ngIf="fromEdit" class="row ms-1 mt-3 me-1 mb-3">
+    <span class="col-6 d-flex justify-content-start">
+      Quantità
+    </span>
+    <span class="col-6 d-flex justify-content-end">
+      {{productToEdit.quantity}}
+    </span>
+  </div>
   <div class="row ms-1 mt-3 me-1 mb-3">
     <span class="col-6 d-flex justify-content-start">
       Prezzo
@@ -127,9 +135,10 @@
     <span class="col-6 d-flex justify-content-end">
       {{getRealPrice()}}
     </span>
+
   </div>
 
-  <div class="row ms-1 mt-5 me-1 mb-5">
+  <div *ngIf="!fromEdit" class="row ms-1 mt-5 me-1 mb-5">
       <lib-generic-button
         [type]="'submit'"
         (click)="saveNewProductInPurchase()"
@@ -138,6 +147,18 @@
         [buttonText]="'Aggiungi al carrello'"
       ></lib-generic-button>
   </div>
+
+  <div *ngIf="fromEdit" class="row ms-1 mt-5 me-1 mb-5">
+    <lib-generic-button
+      [type]="'submit'"
+      (click)="updateProduct()"
+      [buttonSize]="ButtonSizeTheme.FullWidth"
+      [buttonStyle]="ButtonTheme.Primary"
+      [buttonText]="'Modifica prodotto'"
+    ></lib-generic-button>
+  </div>
+
+
 
 
 

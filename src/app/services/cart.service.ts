@@ -41,9 +41,15 @@ export class CartService {
     return this.http.post(`${this.baseCartUrl}/buy-from-cart/${customerId}`, buyInfos);
   }
 
-  modifyCart(customerId: string, index: number, iIP: any) {
+  modifyPipInCart(customerId: string, index: number, pIP: any) {
     let p = Utils.createHttpParams({'index':index})
-    return this.http.patch(`${this.baseCartUrl}/modify-cart/${customerId}`, iIP, {params: p})
+    return this.http.patch(`${this.baseCartUrl}/modify-pip-cart/${customerId}`, pIP, {params: p})
+  }
+
+  modifyBipInCart(customerId: string, index: number, bIP: any) {
+    //ToDo AGGIUNGERE QUESTA FUNZIONE AL CART QUANDO SI MODIFICA LA QUANTITA DI UN BUNDLE
+    let p = Utils.createHttpParams({'index':index})
+    return this.http.patch(`${this.baseCartUrl}/modify-bip-cart/${customerId}`, bIP, {params: p})
   }
 
 }

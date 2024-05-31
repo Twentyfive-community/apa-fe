@@ -26,8 +26,10 @@ export class UserCartComponent implements OnInit{
   selectedSlots: string[] = []; //lista degli orari disponibili per il giorno scelto
 
   selectedDate: NgbDate | null = null; // Variabile per la data selezionata
-  selectedTime: string = ''; // Variabile per l'orario selezionato
+  selectedTime! : any // Variabile per l'orario selezionato
   selectedPickupDateTime: string = ''; // Variabile per la data e l'orario combinati
+
+  isCartLoaded: boolean = false; //ToDO: Sostituire con uno spinner
 
   orderNotes: string = '';
 
@@ -45,7 +47,7 @@ export class UserCartComponent implements OnInit{
     let keycloackService=(this.keycloakService)as any;
     let customerIdkc=keycloackService.keycloakService._userProfile.id;
     if(customerIdkc!=null){
-      this.customerService.getCustomerByKeycloakId(customerIdkc).subscribe( (res:any) =>{
+      this.customerService.getCustomerByKeycloakId(customerIdkc).subscribe((res:any) =>{
         this.customer = res
         this.getCart()
       })
@@ -55,17 +57,32 @@ export class UserCartComponent implements OnInit{
   getCart() {
     this.cartService.get(this.customer.id).subscribe((res:any) =>{
       this.cart = res;
-      console.log(this.cart);
       this.initializeItemsToBuy();
       this.obtainCartMinPickupDateTime()
+      this.isCartLoaded = true;
 
+      console.log(this.cart)
+
+      //console.log('item to buy')
       console.log(this.itemToBuy);
     })
   }
 
   initializeItemsToBuy() {
     this.itemToBuy = this.cart.purchases.map((product, index) => {
-      return { id: product.id, index, toBuy: true }; // Inizializziamo toBuy a true
+      let type: string;
+      if (product.name === 'Torta Personalizzata') {
+        type = 'Torta Personalizzata';
+      } else if (product.name === 'Vassoio Personalizzato') {
+        type = 'Vassoio Personalizzato';
+      } else if (product.measure) {
+        type = 'tray';
+      } else if (!product.customization) {
+        type = 'productKg';
+      } else {
+        type = 'Altro';
+      }
+      return { id: product.id, index, toBuy: true, type:type };
     });
   }
 
@@ -74,23 +91,24 @@ export class UserCartComponent implements OnInit{
     const indexToBuy = this.itemToBuy
       .filter(item => item.toBuy)
       .map(item => item.index);
-    // console.log(indexToBuy)
 
     this.cartService.obtainMinimumPickupDateTime(this.customer.id, indexToBuy).subscribe((res: any) => {
       this.slot = res
+      //console.log('slot')
+      //console.log(this.slot)
       this.enabledDate = Object.keys(this.slot).map(date => {
         const [year, month, day] = date.split('-').map(num => parseInt(num, 10));
         return new NgbDate(year, month, day);
       });
-      console.log(this.enabledDate)
     });
+    //console.log('obtainMinDate')
+    //console.log(this.enabledDate)
   }
 
   onDateChange(date: any): void {
     this.selectedDate = date;
     const formattedDate = this.formatDate(this.selectedDate)
     this.selectedSlots = this.slot[formattedDate]
-    // this.timePickerDisabled = false
   }
   private formatDate(date: any): string {
     const year = date.getFullYear();
@@ -100,13 +118,12 @@ export class UserCartComponent implements OnInit{
   }
   onTimeSelected(event: any) {
     this.selectedTime = event
-    console.log("orario selezionato" + event)
   }
 
   toggleItemsToBuy(productId: string) {
     const productIndex = this.itemToBuy.findIndex(product => product.id === productId);
-    console.log(productId)
-    console.log(productIndex)
+    //console.log(productId)
+    //console.log(productIndex)
     if (productIndex !== -1) {
       // Cambiamo il valore di toBuy in base alla sua attuale condizione
       this.itemToBuy[productIndex].toBuy = !this.itemToBuy[productIndex].toBuy;
@@ -117,7 +134,7 @@ export class UserCartComponent implements OnInit{
         this.itemToBuy.push({ id: productId, index: 0, toBuy: true, name: product.name });
       }
     }
-    console.log(this.itemToBuy)
+    //console.log(this.itemToBuy)
     this.obtainCartMinPickupDateTime()
     this.calculateTotalPrice(); // Ricalcoliamo il prezzo totale
   }
@@ -136,7 +153,7 @@ export class UserCartComponent implements OnInit{
     this.cart.totalPrice = this.cart.purchases.reduce((sum, product) => {
       return product.toBuy ? sum + product.totalPrice : sum;
     }, 0);
-    console.log(this.cart.totalPrice)
+    //console.log(this.cart.totalPrice)
   }
 
   buyCart() {
@@ -146,7 +163,7 @@ export class UserCartComponent implements OnInit{
 
     if (this.selectedDate && this.selectedTime) {
       this.selectedPickupDateTime = `${this.formatDate(this.selectedDate)}T${this.selectedTime}`;
-      console.log("Data e orario selezionati: " + this.selectedPickupDateTime);
+      //console.log("Data e orario selezionati: " + this.selectedPickupDateTime);
 
       this.cartService.buyFromCart(this.customer.id, indexToBuy, this.selectedPickupDateTime, this.orderNotes).subscribe({
         next: () => {
@@ -165,8 +182,22 @@ export class UserCartComponent implements OnInit{
     } else {
       this.toastrService.error('Selezionare una data e un orario valido')
     }
+  }
 
+  isBuyButtonDisabled(): boolean {
+    // Return true if all items have toBuy set to false, otherwise false
+    return !this.itemToBuy.some(item => item.toBuy);
+  }
 
+  calculatePriceAndObtainDate() {
+    this.calculateTotalPrice();
+
+    this.selectedDate = null;
+    this.selectedTime = '';
+    this.orderNotes = '';
+
+    this.obtainCartMinPickupDateTime();
+    this.onDateChange(this.selectedDate)
   }
 
 

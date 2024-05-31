@@ -7,6 +7,14 @@ import {CartService} from "../../services/cart.service";
 import {debounceTime, Observable, Subject, tap} from "rxjs";
 import {ToastrService} from "ngx-toastr";
 import {switchMap} from "rxjs/operators";
+import {TwentyfiveModalGenericComponentService} from "twentyfive-modal-generic-component";
+import {CustomCakeComponent} from "../../modules-client/dashboard-client/pages/custom-cake/custom-cake.component";
+import {
+  TrayCustomizedComponent
+} from "../../modules-client/dashboard-client/pages/tray-customized/tray-customized.component";
+import {
+  ProductDetailsComponent
+} from "../../modules-client/dashboard-client/pages/product-details/product-details.component";
 
 @Component({
   selector: 'app-cart-product-card',
@@ -18,6 +26,7 @@ export class CartProductCardComponent implements OnInit{
   @Input() product: ItemInPurchase
   @Input() customerId: string;
   @Input() position: number[];
+  @Input() type: string;
   @Output() selectionChange = new EventEmitter<string>();
   @Output() removeFromCart = new EventEmitter<string>();
   @Output() toBuyChange = new EventEmitter<string>();
@@ -30,7 +39,8 @@ export class CartProductCardComponent implements OnInit{
   constructor(private cartService: CartService,
               private toastrService: ToastrService,
               private productService: ProductService,
-              private modalService: TwentyfiveModalService,)  {
+              private modalService: TwentyfiveModalService,
+              private genericModalService: TwentyfiveModalGenericComponentService,)  {
     this.quantityChange.pipe(
       debounceTime(1000),
       switchMap(() => {
@@ -40,71 +50,72 @@ export class CartProductCardComponent implements OnInit{
       this.obtainMinimumPickupDateTime(); // Una volta completato modifyCart, esegue obtainMinimumPickupDateTime
     });
   }
+  // ToDo: AGGIUNGERE DEBOUNCER CHE RICARICA LA PAGINA OGNI 30min/1h
 
   ngOnInit() {
     this.getProduct();
-    this.obtainMinimumPickupDateTime()
+    this.obtainMinimumPickupDateTime();
   }
 
   getProduct() {
     if(this.product.weightedProducts !== undefined) {
       this.productService.getByIdTray(this.product.id).subscribe((res:any) => {
-        console.log('vassoio')
+        // console.log('vassoio')
 
         this.product.name = res.name;
         this.product.imageUrl = res.imageUrl;
         this.product.price = `€ ${res.pricePerKg.toFixed(2)}`;
         this.product.toBuy = true
 
-        console.log(this.product)
+        // console.log(this.product)
       })
     } else {
       this.productService.getByIdKg(this.product.id).subscribe((res:any) => {
-        console.log('torta')
+        // console.log('torta')
 
         this.product.name = res.name;
         this.product.imageUrl = res.imageUrl;
         this.product.price = res.pricePerKg;
         this.product.toBuy = true
 
-        console.log(this.product)
+        // console.log(this.product)
       })
     }
   }
 
   obtainMinimumPickupDateTime() {
-    console.log(this.product.quantity)
+    // console.log(this.product.quantity)
     this.cartService.obtainMinimumPickupDateTime(this.customerId, this.position).subscribe((res: any) => {
-      console.log(res)
+      // console.log(res)
       const keys = Object.keys(res);
       if (keys.length > 0) {
         this.minDate = keys[0]; // La prima data è la minima
         this.minTime = res[this.minDate][0]; // Il primo orario della data minima è il più piccolo
-        console.log(this.position)
-        console.log(this.minDate + ' ' + this.minTime)
+        // console.log(this.position)
+        // console.log(this.minDate + ' ' + this.minTime)
         this.product.deliveryDate = this.minDate
       }
     });
   }
 
   toggleSelection() {
-    console.log(this.product.toBuy)
+    // console.log(this.product.toBuy)
     this.toBuyChange.emit(this.product.id);
   }
 
   increaseQuantity() {
     this.product.quantity++;
-    console.log('increaseQuantity > quantity ' + this.product.quantity)
+    // console.log('increaseQuantity > quantity ' + this.product.quantity)
 
     this.calcTotalPrice()
     this.quantityChange.next()
-    console.log('increaseQuantity > totalPrice ' + this.product.totalPrice);
+    // console.log('increaseQuantity > totalPrice ' + this.product.totalPrice);
   }
 
   decreaseQuantity() {
     if (this.product.quantity > 1) {
       this.product.quantity--;
-      console.log('decreaseQuantity > quantity ' + this.product.quantity)
+      // console.log('decreaseQuantity > quantity ' + this.product.quantity)
       this.calcTotalPrice()
       this.quantityChange.next()
 
@@ -140,25 +151,70 @@ export class CartProductCardComponent implements OnInit{
       //torte
       this.product.totalPrice = (priceAsNumber * this.product.weight) * this.product.quantity;
     }
-    this.selectionChange.emit()
-    console.log(this.product.totalPrice)
+    // this.selectionChange.emit()
+    // console.log(this.product.totalPrice)
   }
 
-  private modifyCart(): Observable<any> {
+  modifyCart(): Observable<any> {
     let index = this.position[0];
-    return this.cartService.modifyCart(this.customerId, index, this.product).pipe(
+    if(this.type == 'productKg') {
+      return this.cartService.modifyPipInCart(this.customerId, index, this.product).pipe(
+        tap({
+          next: () => {
+            this.toastrService.success('Quantità modificata con successo');
+          },
+          error: (error) => {
+            this.toastrService.error('Impossibile modificare quantità');
+          },
+          complete: () => {
+            this.selectionChange.emit()
+          }
+        })
+      );
+    } else {
+      return this.cartService.modifyBipInCart(this.customerId, index, this.product).pipe(
       tap({
         next: () => {
           this.toastrService.success('Quantità modificata con successo');
         },
         error: (error) => {
           this.toastrService.error('Impossibile modificare quantità');
+        },
+        complete: () => {
+          this.selectionChange.emit()
         }
       })
     );
+
+    }
   }
 
-
+  goToEdit() {
+    switch (this.type) {
+      case 'Torta Personalizzata':
+        this.toastrService.info('Torta Personalizzata')
+        let customCakeModal = this.genericModalService.open(CustomCakeComponent, "md", {});
+        customCakeModal.result.finally( () => {})
+        break;
+      case 'Vassoio Personalizzato':
+        this.toastrService.info('Vassoio Personalizzato');
+        let customTrayModal = this.genericModalService.open(TrayCustomizedComponent, "md", {});
+        customTrayModal.result.finally( () => {})
+        break;
+      case 'tray':
+      case 'productKg':
+        let productKgModal = this.genericModalService.open(ProductDetailsComponent, "md", {});
+        productKgModal.componentInstance.customer.id = this.customerId;
+        productKgModal.componentInstance.fromEdit = true;
+        productKgModal.componentInstance.productToEdit = this.product
+        productKgModal.componentInstance.index = this.position[0]
+        productKgModal.componentInstance.categoryType = this.type
+        productKgModal.result.finally(() => {
+          this.selectionChange.emit()
+        })
+        break;
+    }
+  }
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
   protected readonly ButtonTheme = ButtonTheme;
 }

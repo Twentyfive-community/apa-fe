@@ -11,6 +11,7 @@ import {SigningKeycloakService} from "twentyfive-keycloak-new";
 import {CustomerDetails} from "../../../../models/Customer";
 import {CustomerService} from "../../../../services/customer.service";
 import {CartService} from "../../../../services/cart.service";
+import {ItemInPurchase} from "../../../../models/Cart";
 
 @Component({
   selector: 'app-product-details',
@@ -20,6 +21,10 @@ import {CartService} from "../../../../services/cart.service";
 export class ProductDetailsComponent implements OnInit{
   @ViewChild('dropZone') dropZoneRef!: ElementRef;
   @ViewChild('fileInput') fileInputRef!: ElementRef;
+
+  fromEdit: boolean = false; //segnala che si tratta di una modifica
+  productToEdit: ItemInPurchase = new ItemInPurchase(); //prodotto ricevuto dalla modale di modifica
+  index: number | undefined;
 
   customer: CustomerDetails = new CustomerDetails();
   customerIdkc: string = '';
@@ -46,8 +51,13 @@ export class ProductDetailsComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.getProductDetails(this.productId)
-    this.getCustomer();
+    if (this.fromEdit) {
+      console.log(this.productToEdit);
+      this.setProductDetailsForEdit();
+    } else {
+      this.getProductDetails(this.productId);
+      this.getCustomer();
+    }
   }
 
 
@@ -68,6 +78,8 @@ export class ProductDetailsComponent implements OnInit{
       case 'tray':
         this.productService.getByIdTray(id).subscribe((response:any) =>{
           this.trayDetails=response;
+          console.log(response)
+          console.log(this.trayDetails)
           this.initializeMeasureOptions()
           this.selectedMeasure=this.trayDetails.measuresList[0].weight.toString()
           this.selectedMeasureLabel=this.trayDetails.measuresList[0].label
@@ -163,11 +175,22 @@ export class ProductDetailsComponent implements OnInit{
 
 
   getRealPrice(){
-    if(this.categoryName != 'Vassoi'){
+
+    if(this.categoryName != 'Vassoi' || this.categoryType == 'productKg'){
       const priceString = this.productDetails.pricePerKg?.replace(/[^\d.-]/g, '');
       const price = parseFloat(priceString);
-      this.productInPurchase.totalPrice=price*this.productInPurchase.weight
-      return ('€ '+(price*this.productInPurchase.weight).toFixed(2))
+      if (this.fromEdit) {
+        this.productInPurchase.totalPrice=(price*this.productInPurchase.weight)*this.productToEdit.quantity
+        return ('€ '+ ((price * this.productInPurchase.weight)*this.productToEdit.quantity).toFixed(2));
+      } else {
+        if (this.fromEdit) {
+          this.productInPurchase.totalPrice=(price*this.productInPurchase.weight)*this.productToEdit.quantity
+          return ('€ '+((price*this.productInPurchase.weight)*this.productToEdit.quantity).toFixed(2))
+
+        }
+        this.productInPurchase.totalPrice=price*this.productInPurchase.weight
+        return ('€ '+(price*this.productInPurchase.weight).toFixed(2))
+      }
     }
     else{
       const measure = parseFloat(this.selectedMeasure)
@@ -175,6 +198,20 @@ export class ProductDetailsComponent implements OnInit{
       return ('€ '+(this.bundleInPurchase.totalPrice).toFixed(2))
     }
   }
+
+  // getTotalPrice(){
+  //   if(this.categoryName != 'Vassoi' || this.categoryType == 'productKg'){
+  //     const priceString = this.productDetails.pricePerKg?.replace(/[^\d.-]/g, '');
+  //     const price = parseFloat(priceString);
+  //     this.productInPurchase.totalPrice=price*this.productInPurchase.weight
+  //     return (price * this.productInPurchase.weight).toFixed(2);
+  //   }
+  //   else{
+  //     const measure = parseFloat(this.selectedMeasure)
+  //     this.bundleInPurchase.totalPrice=this.trayDetails.pricePerKg*measure
+  //     return (this.bundleInPurchase.totalPrice).toFixed(2);
+  //   }
+  // }
 
   getCustomer(){
     let keycloakService=(this.keycloackService)as any;
@@ -227,7 +264,63 @@ export class ProductDetailsComponent implements OnInit{
   }
 
 
+
+  setProductDetailsForEdit() {
+    if (this.categoryType === 'productKg') {
+      this.getProductDetails(this.productToEdit.id)
+      this.productDetails.name  = this.productToEdit.name;
+      this.productDetails.imageUrl = this.productToEdit.imageUrl;
+      this.productDetails.pricePerKg = this.productToEdit.price;
+      this.productInPurchase.notes = this.productToEdit.notes;
+      this.productInPurchase.attachment = this.productToEdit.attachment
+      this.initializeWeightOptions();
+      this.selectedWeight = this.productToEdit.weight;
+
+
+    } else if (this.categoryType === 'tray') {
+      this.categoryName = 'Vassoi'
+      this.getProductDetails(this.productToEdit.id)
+      this.trayDetails.name =  this.productToEdit.name;
+      console.log(this.trayDetails.name)
+
+      this.trayDetails.pricePerKg = parseFloat(this.productToEdit.price.replace(/[^\d.-]/g, ''));
+      this.trayDetails.measuresList= [this.productToEdit.measure]; // Puoi aggiungere le misure se disponibili
+      this.trayDetails.imageUrl ; this.productToEdit.imageUrl
+
+      this.selectedMeasure = this.productToEdit.measure.weight.toString();
+      this.selectedMeasureLabel = this.productToEdit.measure.label;
+      this.bundleInPurchase = this.productToEdit;
+      this.initializeMeasureOptions();
+    }
+  }
+
+
+
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
   protected readonly ButtonTheme = ButtonTheme;
 
+  updateProduct() {
+    switch (this.categoryType) {
+      case 'productKg':
+        this.productToEdit.weight = this.selectedWeight;
+        this.productToEdit.notes = this.productInPurchase.notes
+        this.productToEdit.attachment = this.productInPurchase.attachment
+        this.productToEdit.totalPrice = Number(this.getRealPrice())
+        this.cartService.modifyPipInCart(this.customer.id, this.index!, this.productToEdit).subscribe({
+          next: () => {
+            this.toastrService.success("Prodotto modificato con successo!");
+          },
+          error: () => {
+            this.toastrService.error("Impossibile modificare prodotto!")
+          },
+          complete: () => {
+            this.close()
+          }
+        })
+        break
+      case 'tray':
+        console.log('salvo tray')
+        break;
+    }
+  }
 }
