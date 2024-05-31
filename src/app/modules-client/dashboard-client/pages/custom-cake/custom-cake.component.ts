@@ -420,16 +420,43 @@ export class CustomCakeComponent implements OnInit{
   selectBase(base: string){
     this.selectedBase = base;
     //this.stepCompleted[2]=true;
+    this.resetSelectionFromBase()
     this.getWeightOptions();
     this.goToNextStep(2)
+  }
+
+  resetSelectionFromBase(){
+    this.selectedWeight = 0;
+    this.selectedForma = '';
+    this.selectedBagna = '';
+    this.selectedFarciture = [];
+    this.selectedCopertura = '';
+    this.selectedFrutta = [];
+    this.selectedGocce = [];
+    this.selectedGranelle = [];
+    for(let i=2; i<this.stepCompleted.length; i++)
+      this.stepCompleted[i]=false;
   }
 
   selectWeight(weight: number){
     this.selectedWeight = weight;
     this.getPrice();
+    this.resetSelectionFromWeight()
     //this.stepCompleted[3]=true;
     this.getFormeOptions();
     this.goToNextStep(3)
+  }
+
+  resetSelectionFromWeight(){
+    this.selectedForma = '';
+    this.selectedBagna = '';
+    this.selectedFarciture = [];
+    this.selectedCopertura = '';
+    this.selectedFrutta = [];
+    this.selectedGocce = [];
+    this.selectedGranelle = [];
+    for(let i=3; i<this.stepCompleted.length; i++)
+      this.stepCompleted[i]=false;
   }
 
   selectForma(forma: string){

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ButtonSizeTheme, ButtonTheme, InputTheme, LabelTheme} from "twentyfive-style";
 import {SigningKeycloakService} from "twentyfive-keycloak-new";
 import {Customer} from "../../../../models/Customer";
@@ -7,6 +7,7 @@ import {CartService} from "../../../../services/cart.service";
 import {Cart} from "../../../../models/Cart";
 import {NgbDate} from "@ng-bootstrap/ng-bootstrap";
 import {ToastrService} from "ngx-toastr";
+import {Subscription, interval, takeWhile} from "rxjs";
 import {Router} from "@angular/router";
 
 @Component({
@@ -14,7 +15,7 @@ import {Router} from "@angular/router";
   templateUrl: './user-cart.component.html',
   styleUrl: './user-cart.component.scss'
 })
-export class UserCartComponent implements OnInit{
+export class UserCartComponent implements OnInit, OnDestroy{
 
   customer: Customer =new Customer()
   cart: Cart = new Cart();
@@ -35,6 +36,8 @@ export class UserCartComponent implements OnInit{
   orderNotes: string = '';
   private imAdmin: false;
 
+  private cartReloadSubscription!: Subscription; //Variabile per avviare il reload di this.getCart
+
   constructor(private keycloakService: SigningKeycloakService,
               private customerService:CustomerService,
               private toastrService: ToastrService,
@@ -44,6 +47,19 @@ export class UserCartComponent implements OnInit{
 
   ngOnInit(): void {
     this.getCustomer();
+
+    this.cartReloadSubscription = interval(30 * 60 * 1000) // 30 minuti in millisecondi
+      .pipe(takeWhile(() => this.isCartLoaded))
+      .subscribe(() => {
+        this.getCart();
+      });
+  }
+
+  ngOnDestroy(): void {
+    // Annullare la sottoscrizione quando il componente viene distrutto
+    if (this.cartReloadSubscription) {
+      this.cartReloadSubscription.unsubscribe();
+    }
   }
 
   private getCustomer() {
@@ -65,10 +81,10 @@ export class UserCartComponent implements OnInit{
       this.obtainCartMinPickupDateTime()
       this.isCartLoaded = true;
 
-      console.log(this.cart)
+      // console.log(this.cart)
 
       //console.log('item to buy')
-      console.log(this.itemToBuy);
+      //console.log(this.itemToBuy);
     })
   }
 
