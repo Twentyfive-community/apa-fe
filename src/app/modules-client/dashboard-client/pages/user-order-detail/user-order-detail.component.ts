@@ -155,6 +155,5 @@ export class UserOrderDetailComponent implements OnInit {
   getCustomizationVisible(product: ProductInPurchase){
     let n = this.orderDetails.products.indexOf(product);
     return this.customizationsVisible[n];
-
   }
 }
