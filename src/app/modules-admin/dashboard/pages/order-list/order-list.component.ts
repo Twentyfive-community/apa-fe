@@ -226,7 +226,7 @@ export class OrderListComponent implements OnInit, AfterViewInit{
           onConfirm: (() => {
             this.completeOrder(myRow)
           }),
-          onAbort: (() => {
+          onClose: (() => {
             this.getAll(this.currentPage-1);
           })
         });
