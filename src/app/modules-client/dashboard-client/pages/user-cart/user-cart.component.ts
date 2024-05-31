@@ -7,6 +7,7 @@ import {CartService} from "../../../../services/cart.service";
 import {Cart} from "../../../../models/Cart";
 import {NgbDate} from "@ng-bootstrap/ng-bootstrap";
 import {ToastrService} from "ngx-toastr";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-user-cart',
@@ -32,11 +33,13 @@ export class UserCartComponent implements OnInit{
   isCartLoaded: boolean = false; //ToDO: Sostituire con uno spinner
 
   orderNotes: string = '';
+  private imAdmin: false;
 
   constructor(private keycloakService: SigningKeycloakService,
               private customerService:CustomerService,
               private toastrService: ToastrService,
-              private cartService:CartService) {
+              private cartService:CartService,
+              private router: Router) {
   }
 
   ngOnInit(): void {
@@ -52,6 +55,7 @@ export class UserCartComponent implements OnInit{
         this.getCart()
       })
     }
+    this.imAdmin=keycloackService.loggedUserRoles().includes('admin');
   }
 
   getCart() {
@@ -157,6 +161,9 @@ export class UserCartComponent implements OnInit{
   }
 
   buyCart() {
+    if(this.imAdmin){
+      this.router.navigate(['../dashboard']);
+    }
     const indexToBuy = this.itemToBuy
       .filter(item => item.toBuy)
       .map(item => item.index);
