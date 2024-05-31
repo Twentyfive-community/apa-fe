@@ -1,40 +1,39 @@
-import {AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild} from '@angular/core';
-import {TwentyfiveModalGenericComponentService} from "twentyfive-modal-generic-component";
-import {ProductService} from "../../../../services/product.service";
-import {ProductWeighted, ProductWeightedDetails, TrayDetails} from "../../../../models/Product";
-import {BundleInPurchase, PieceInPurchase} from "../../../../models/Bundle";
-import {Measure} from "../../../../models/Measure";
-import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
-import {SigningKeycloakService} from "twentyfive-keycloak-new";
-import {CustomerService} from "../../../../services/customer.service";
-import {Customer} from "../../../../models/Customer";
-import {CartService} from "../../../../services/cart.service";
-import {ToastrService} from "ngx-toastr";
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { TwentyfiveModalGenericComponentService } from 'twentyfive-modal-generic-component';
+import { ProductService } from '../../../../services/product.service';
+import { ProductWeighted, ProductWeightedDetails, TrayDetails } from '../../../../models/Product';
+import { BundleInPurchase, PieceInPurchase } from '../../../../models/Bundle';
+import { Measure } from '../../../../models/Measure';
+import { ButtonSizeTheme, ButtonTheme } from 'twentyfive-style';
+import { SigningKeycloakService } from 'twentyfive-keycloak-new';
+import { CustomerService } from '../../../../services/customer.service';
+import { Customer } from '../../../../models/Customer';
+import { CartService } from '../../../../services/cart.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-tray-customized',
   templateUrl: './tray-customized.component.html',
-  styleUrl: './tray-customized.component.scss'
+  styleUrls: ['./tray-customized.component.scss']
 })
-export class TrayCustomizedComponent implements OnInit,AfterViewInit{
+export class TrayCustomizedComponent implements OnInit, AfterViewInit {
 
   @ViewChild('modalContent', { static: false }) modalContent!: ElementRef;
 
   trayDetails: TrayDetails = new TrayDetails();
   bundleInPurchase: BundleInPurchase = new BundleInPurchase();
-  productListWeighted: ProductWeighted[]=[new ProductWeighted()];
+  productListWeighted: ProductWeighted[] = [new ProductWeighted()];
   productWeighted: ProductWeightedDetails = new ProductWeightedDetails();
   currentStep = 1;
-  page =0;
-  size =10;
+  page = 0;
+  size = 10;
   customerIdkc: string = '';
   customer: Customer = new Customer();
   hasMoreProducts = true; // Flag to check if more products are available
 
-
   ngOnInit(): void {
     this.getCustomer();
-    this.productService.getByIdTray('664c677cdb11452a067bbdf5').subscribe((response:any)=> {
+    this.productService.getByIdTray('664c677cdb11452a067bbdf5').subscribe((response: any) => {
       this.trayDetails = response;
       this.bundleInPurchase.id = response.id;
       this.bundleInPurchase.totalWeight = 0;
@@ -43,24 +42,24 @@ export class TrayCustomizedComponent implements OnInit,AfterViewInit{
   }
 
   ngAfterViewInit(): void {
-    this.modalContent.nativeElement.addEventListener('scroll', this.onScroll.bind(this));
+    // Rimuovi l'evento di scroll qui poiché gestito direttamente nell'HTML
   }
 
-  constructor(private modalService:TwentyfiveModalGenericComponentService,
-              private productService:ProductService,
-              private keycloakService: SigningKeycloakService,
-              private customerService: CustomerService,
-              private cartService: CartService,
-              private toastrService: ToastrService
-              ) {
-  }
+  constructor(
+    private modalService: TwentyfiveModalGenericComponentService,
+    private productService: ProductService,
+    private keycloakService: SigningKeycloakService,
+    private customerService: CustomerService,
+    private cartService: CartService,
+    private toastrService: ToastrService
+  ) { }
 
   onScroll(event: any): void {
     const element = event.target;
     if (this.currentStep === 2 && element.scrollHeight - element.scrollTop === element.clientHeight) {
-      if(this.hasMoreProducts){
-        this.size+=10;
-        this.getAllCustomizedTray()
+      if (this.hasMoreProducts) {
+        this.size += 10;
+        this.getAllCustomizedTray();
       }
     }
   }
@@ -71,13 +70,13 @@ export class TrayCustomizedComponent implements OnInit,AfterViewInit{
 
   previousStep() {
     this.currentStep--;
-    this.bundleInPurchase.totalWeight=0;
-    this.bundleInPurchase.weightedProducts=[];
+    this.bundleInPurchase.totalWeight = 0;
+    this.bundleInPurchase.weightedProducts = [];
   }
 
-  selectMeasure(measure:Measure) {
-    this.bundleInPurchase.measure=measure;
-    this.bundleInPurchase.totalPrice=this.trayDetails.pricePerKg*measure.weight;
+  selectMeasure(measure: Measure) {
+    this.bundleInPurchase.measure = measure;
+    this.bundleInPurchase.totalPrice = this.trayDetails.pricePerKg * measure.weight;
     this.nextStep();
   }
 
@@ -117,46 +116,46 @@ export class TrayCustomizedComponent implements OnInit,AfterViewInit{
     this.bundleInPurchase.totalWeight = parseFloat(newTotalWeight.toFixed(2));
   }
 
-  getCustomer(){
-    let keycloakService=(this.keycloakService)as any;
-    this.customerIdkc=keycloakService.keycloakService._userProfile.id;
-    if(this.customerIdkc!=null){
-      this.customerService.getCustomerByKeycloakId(this.customerIdkc).subscribe((res: any) =>{
-        this.customer=res;
-
-      })
+  getCustomer() {
+    let keycloakService = (this.keycloakService) as any;
+    this.customerIdkc = keycloakService.keycloakService._userProfile.id;
+    if (this.customerIdkc != null) {
+      this.customerService.getCustomerByKeycloakId(this.customerIdkc).subscribe((res: any) => {
+        this.customer = res;
+      });
     }
   }
 
   getAllCustomizedTray() {
     this.productService.getAllForCustomizedTray('664361ed09aa3a0e1b249988', this.page, this.size).subscribe(
       (response: any) => {
-        this.productListWeighted=response.content;
+        this.productListWeighted = response.content;
         this.productListWeighted.forEach((product: any) => {
           product.quantity = 0;
         });
         console.log(response.totalElements < this.size);
-        if(response.totalElements < this.size) this.hasMoreProducts = false;
+        if (response.totalElements < this.size) this.hasMoreProducts = false;
       }
     );
   }
 
   onInputChange(event: any) {
-    this.bundleInPurchase.quantity=event.target.value;
+    this.bundleInPurchase.quantity = event.target.value;
   }
 
-  saveTray(){
+  saveTray() {
     this.cartService.addToCartBundleInPurchase(this.customer.id, this.bundleInPurchase).subscribe({
       error: () => {
         this.toastrService.error("Errore nell'aggiunta del vassoio nel carrello!");
       },
       complete: () => {
         this.toastrService.success("Vassoio aggiunto al carrello con successo");
-        this.close()
+        this.close();
       }
-    })
+    });
   }
-  close(){
+
+  close() {
     this.modalService.close();
   }
 

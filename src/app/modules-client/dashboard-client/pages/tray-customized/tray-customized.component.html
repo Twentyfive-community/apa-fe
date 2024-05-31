@@ -3,7 +3,7 @@
     <button type="button" class="btn-close" (click)="close()"></button>
   </div>
 
-  <div #modalContent class="modal-body">
+  <div #modalContent class="modal-body" style="height: 650px; overflow-y: auto;">
     <div [ngSwitch]="currentStep">
       <div *ngSwitchCase="1">
         <h4 class="mb-3 ms-2 me-2 mt-4">Seleziona misura vassoio</h4>
@@ -18,7 +18,7 @@
         </div>
       </div>
 
-      <div *ngSwitchCase="2" >
+      <div *ngSwitchCase="2">
         <div class="back-white">
           <lib-generic-button-text-with-icon
             buttonText="Torna Indietro"
@@ -30,18 +30,16 @@
           <hr>
         </div>
 
-
-        <div class="mb-3 ms-2 me-2" (scroll)="onScroll($event)" style="height: 650px; overflow-y: auto;">
-
+        <div class="mb-3 ms-2 me-2" style="height: 650px; overflow-y: auto;" (scroll)="onScroll($event)">
           <div class="row">
-            <h4 class="col-7 mb-3 ms-2 me-2 mt-0 fs-3" >Componi vassoio</h4>
+            <h4 class="col-7 mb-3 ms-2 me-2 mt-0 fs-3">Componi vassoio</h4>
             <img class="col-4" [src]="trayDetails.imageUrl">
           </div>
 
           <span class="fs-5 d-block mb-3">Misura: {{bundleInPurchase.measure.label}}</span>
           <span class="fs-6 d-block mb-3">Peso: {{bundleInPurchase.measure.weight}} kg</span>
           <span class="fs-5 d-block mb-2">{{bundleInPurchase.totalPrice}} €</span>
-          <div class="mb-2 me-2" *ngFor="let weighted of productListWeighted" >
+          <div class="mb-2 me-2" *ngFor="let weighted of productListWeighted">
             <app-generic-card
               [imageLeft]="true"
               [imageUrl]="weighted.imageUrl"
@@ -78,14 +76,12 @@
                       (click)="saveTray()"
                     ></lib-generic-button>
                   </div>
-
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
