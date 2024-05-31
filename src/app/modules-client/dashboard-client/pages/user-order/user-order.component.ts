@@ -107,11 +107,7 @@ export class UserOrderComponent implements OnInit {
               const orderCancelModal = new bootstrap.Modal(document.getElementById('cancelOrderModal'), {
                 keyboard: false
               });
-              orderCancelModal .show();
-              this.loadOrders();
-
-
-
+              orderCancelModal.show();
             },
             error: (error) => {
               var status=error.status;
@@ -124,6 +120,8 @@ export class UserOrderComponent implements OnInit {
               }
             }
           });
+
+          this.loadOrders();
         }
       }
     );
