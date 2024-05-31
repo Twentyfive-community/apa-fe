@@ -23,7 +23,7 @@
 
     <div *ngIf="product.weight">
       <p><b>Peso:</b> {{product.weight}} kg</p>
-      <p><b>Forma:</b> {{product.shape}}</p>
+      <p *ngIf="product.shape"><b>Forma:</b> {{product.shape}}</p>
     </div>
     <div *ngIf="product.customization != null">
       <p><b>Personalizzazioni:</b></p>
@@ -52,8 +52,9 @@
     <hr/>
 
     <p><b>Data e ora di ritiro minime:</b> {{ product.deliveryDate | date:'dd/MM/yyyy' }} {{minTime}}</p>
+    <p *ngIf="type=='tray'"><b>Peso Scelto: </b>{{product.measure.label}} ({{product.measure.weight}} kg)</p>
     <p><b>Prezzo Totale Prodotto:</b> {{product.totalPrice}} €</p>
-    <div>
+    <div *ngIf="type == 'tray' || type == 'productKg'">
       <lib-generic-button-text-with-icon
         [buttonStyle]="ButtonTheme.Primary"
         [buttonSize]="ButtonSizeTheme.FullWidth"

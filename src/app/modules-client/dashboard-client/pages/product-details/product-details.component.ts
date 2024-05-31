@@ -52,7 +52,7 @@ export class ProductDetailsComponent implements OnInit{
 
   ngOnInit(): void {
     if (this.fromEdit) {
-      console.log(this.productToEdit);
+      // console.log(this.productToEdit);
       this.setProductDetailsForEdit();
     } else {
       this.getProductDetails(this.productId);
@@ -78,8 +78,6 @@ export class ProductDetailsComponent implements OnInit{
       case 'tray':
         this.productService.getByIdTray(id).subscribe((response:any) =>{
           this.trayDetails=response;
-          console.log(response)
-          console.log(this.trayDetails)
           this.initializeMeasureOptions()
           this.selectedMeasure=this.trayDetails.measuresList[0].weight.toString()
           this.selectedMeasureLabel=this.trayDetails.measuresList[0].label
@@ -175,27 +173,26 @@ export class ProductDetailsComponent implements OnInit{
 
 
   getRealPrice(){
-
-    if(this.categoryName != 'Vassoi' || this.categoryType == 'productKg'){
+    if(this.categoryName != 'Vassoi' || this.categoryType == 'productKg') {
       const priceString = this.productDetails.pricePerKg?.replace(/[^\d.-]/g, '');
       const price = parseFloat(priceString);
       if (this.fromEdit) {
         this.productInPurchase.totalPrice=(price*this.productInPurchase.weight)*this.productToEdit.quantity
-        return ('€ '+ ((price * this.productInPurchase.weight)*this.productToEdit.quantity).toFixed(2));
+        return (((price*this.productInPurchase.weight)*this.productToEdit.quantity).toFixed(2));
       } else {
-        if (this.fromEdit) {
-          this.productInPurchase.totalPrice=(price*this.productInPurchase.weight)*this.productToEdit.quantity
-          return ('€ '+((price*this.productInPurchase.weight)*this.productToEdit.quantity).toFixed(2))
-
-        }
         this.productInPurchase.totalPrice=price*this.productInPurchase.weight
         return ('€ '+(price*this.productInPurchase.weight).toFixed(2))
       }
-    }
-    else{
-      const measure = parseFloat(this.selectedMeasure)
-      this.bundleInPurchase.totalPrice=this.trayDetails.pricePerKg*measure
-      return ('€ '+(this.bundleInPurchase.totalPrice).toFixed(2))
+    } else {
+      if (this.fromEdit) {
+        const measure = parseFloat(this.selectedMeasure)
+        this.bundleInPurchase.totalPrice=(measure*this.trayDetails.pricePerKg)*this.productToEdit.quantity
+        return (((measure*this.trayDetails.pricePerKg)*this.productToEdit.quantity).toFixed(2))
+      } else {
+        const measure = parseFloat(this.selectedMeasure)
+        this.bundleInPurchase.totalPrice=this.trayDetails.pricePerKg*measure
+        return ('€ '+(this.bundleInPurchase.totalPrice).toFixed(2))
+      }
     }
   }
 
@@ -275,16 +272,11 @@ export class ProductDetailsComponent implements OnInit{
       this.productInPurchase.attachment = this.productToEdit.attachment
       this.initializeWeightOptions();
       this.selectedWeight = this.productToEdit.weight;
-
-
     } else if (this.categoryType === 'tray') {
       this.categoryName = 'Vassoi'
       this.getProductDetails(this.productToEdit.id)
       this.trayDetails.name =  this.productToEdit.name;
-      console.log(this.trayDetails.name)
 
-      this.trayDetails.pricePerKg = parseFloat(this.productToEdit.price.replace(/[^\d.-]/g, ''));
-      this.trayDetails.measuresList= [this.productToEdit.measure]; // Puoi aggiungere le misure se disponibili
       this.trayDetails.imageUrl ; this.productToEdit.imageUrl
 
       this.selectedMeasure = this.productToEdit.measure.weight.toString();
@@ -293,6 +285,7 @@ export class ProductDetailsComponent implements OnInit{
       this.initializeMeasureOptions();
     }
   }
+
 
 
 
@@ -305,6 +298,7 @@ export class ProductDetailsComponent implements OnInit{
         this.productToEdit.weight = this.selectedWeight;
         this.productToEdit.notes = this.productInPurchase.notes
         this.productToEdit.attachment = this.productInPurchase.attachment
+        // console.log(this.productToEdit.totalPrice)
         this.productToEdit.totalPrice = Number(this.getRealPrice())
         this.cartService.modifyPipInCart(this.customer.id, this.index!, this.productToEdit).subscribe({
           next: () => {
@@ -319,7 +313,21 @@ export class ProductDetailsComponent implements OnInit{
         })
         break
       case 'tray':
-        console.log('salvo tray')
+        var measureForBundle = new Measure();
+        measureForBundle.label=this.selectedMeasureLabel
+        measureForBundle.weight=Number(parseFloat(this.selectedMeasure).toFixed(2))
+        this.productToEdit.measure=measureForBundle
+        this.cartService.modifyBipInCart(this.customer.id, this.index!, this.productToEdit).subscribe({
+          next: () => {
+            this.toastrService.success("Prodotto modificato con successo!");
+          },
+          error: () => {
+            this.toastrService.error("Impossibile modificare prodotto!")
+          },
+          complete: () => {
+            this.close()
+          }
+        })
         break;
     }
   }
