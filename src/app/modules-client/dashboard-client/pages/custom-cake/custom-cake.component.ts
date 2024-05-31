@@ -439,7 +439,9 @@ export class CustomCakeComponent implements OnInit{
       this.getFarcitureOptions();
       this.goToNextStep(4)
     }
-    this.resetSelectionFromForma();
+    else{
+      this.resetSelectionFromForma();
+    }
   }
 
   resetSelectionFromForma(){
