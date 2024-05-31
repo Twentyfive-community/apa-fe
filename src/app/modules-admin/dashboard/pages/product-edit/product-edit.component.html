@@ -13,7 +13,7 @@
 <hr>
 
 <div class="row mb-4 mt-4">
-  <h3 *ngIf="!productId">Crea </h3>
+  <h3 *ngIf="!productId">Crea {{category.name}}</h3>
   <h3 *ngIf="productId">Modifica {{category.name}}</h3>
 </div>
 
@@ -186,7 +186,12 @@
   </div>
   <div *ngIf="file || productToAdd.imageUrl" class="row">
     <div class="col-10">
-      <span>Immagine</span>
+      <div *ngIf="productToAdd.imageUrl" class="image-container">
+        <img [src]="productToAdd.imageUrl" class="image-preview">
+      </div>
+      <div *ngIf="file" class="image-container">
+        {{file.name}}
+      </div>
     </div>
     <div class="col-2">
       <button class="btn btn-link text-dark" (click)="removeFile($event)">
@@ -195,6 +200,7 @@
     </div>
   </div>
 </div>
+
 <input type="file" #fileInput style="display: none;" (change)="handleFileSelect($event)" accept=".png, .jpg, .jpeg">
 
 

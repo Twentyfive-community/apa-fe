@@ -53,6 +53,7 @@
               [dataDetails]="dataDetailsKg"
               [singleOpen]="true"
               [showSwitch]="true"
+              [columnTemplateRefs]="columnTemplateRefs"
               [detailsTemplateRef]="templateRefProduct"
               [page]="currentPage"
               [pageSize]="pageSize"
@@ -79,6 +80,7 @@
               [dataDetails]="dataDetailsWeighted"
               [singleOpen]="true"
               [showSwitch]="true"
+              [columnTemplateRefs]="columnTemplateRefs"
               [detailsTemplateRef]="templateRefProduct"
               [page]="currentPage"
               [pageSize]="pageSize"
@@ -165,6 +167,15 @@
       <span>{{ trayDetails.description }}</span>
     </div>
   </ng-template>
+
+  <ng-template #templateColumnRef let-product>
+    <ng-container *ngFor="let allergen of product.allergens; let i = index">
+      <span *ngIf="i !== 0">&nbsp;</span>
+      <img [src]="allergen.iconUrl" style="max-width: 30px; height: auto; position: relative;" [title]="allergen.name">
+    </ng-container>
+  </ng-template>
+
+
 </div>
 
 

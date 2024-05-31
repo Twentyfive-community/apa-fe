@@ -16,4 +16,13 @@
   height:200px;
   width:400px;
 }
+.image-container {
+  max-width: 150px;
+  max-height: 150px;
+  overflow: hidden;
+}
 
+.image-preview {
+  width: 100%;
+  height: auto;
+}

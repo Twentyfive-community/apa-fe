@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {CategoryService} from "../../../../services/category.service";
 import {Category} from "../../../../models/Category";
 import {ProductService} from "../../../../services/product.service";
@@ -24,7 +24,7 @@ import {
   templateUrl: './product-list.component.html',
   styleUrl: './product-list.component.scss'
 })
-export class ProductListComponent implements OnInit{
+export class ProductListComponent implements OnInit, AfterViewInit{
   headersKg: any[] = [
     {name: 'Nome', value: 'name',sortable: true},
     {name: 'Allergeni', value: 'allergens'},
@@ -33,7 +33,7 @@ export class ProductListComponent implements OnInit{
   ];
   headersWeighted: any[] = [
     {name: 'Nome', value: 'name',sortable: true},
-    {name: 'Allergeni', value: 'allergens.iconUrl'},
+    {name: 'Allergeni', value: 'allergens'},
     {name: 'Ingredienti', value: 'ingredients'},
     {name: 'Peso', value: 'weight',sortable: true}
   ];
@@ -78,6 +78,10 @@ export class ProductListComponent implements OnInit{
   extras: any[] = [
     {name: 'prodottoKg', value: 'productKgDetails'}
   ]
+
+  @ViewChild('templateColumnRef', {static: true}) templateColumnRef!: TemplateRef<any>;
+
+  columnTemplateRefs: { [key: string]: TemplateRef<any> } = {};
   activeTab: string | null;
   pageSize: number = 5
   currentPage: number = 0;
@@ -112,8 +116,10 @@ export class ProductListComponent implements OnInit{
     this.activeTab = this.activatedRoute.snapshot.queryParamMap.get('activeTab');
     this.getCategories();
   }
+  ngAfterViewInit() {
+    this.columnTemplateRefs['allergens'] = this.templateColumnRef;
 
-
+  }
   getCategories(){
     this.categoryService.getAll(this.categoryType).subscribe((response: any) => {
       this.navCategories = response;
