@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ButtonSizeTheme, ButtonTheme, TableHeadTheme, TableTheme} from 'twentyfive-style';
 import {OrderService} from "../../../../services/order.service";
 import {Order, OrderDetails} from "../../../../models/Order";
@@ -13,7 +13,7 @@ import {SettingService} from "../../../../services/setting.service";
   templateUrl: './order-list.component.html',
   styleUrl: './order-list.component.scss'
 })
-export class OrderListComponent implements OnInit, AfterViewInit{
+export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
 
   @ViewChild('templateRef', { static: true }) templateRef!: TemplateRef<any>;
   @ViewChild('templateColumnRef', {static: true}) templateColumnRef!: TemplateRef<any>;
@@ -30,10 +30,13 @@ export class OrderListComponent implements OnInit, AfterViewInit{
   sortColumn: string = '';
   sortDirection: string = '';
 
-  subscriptionText: any;
+  newSubscriptionText: any;
+  cancelSubscriptionText: any;
   isCheckedList: boolean[] = [];
   isAlertOn: boolean;
-  audio:HTMLAudioElement;
+  newOrderAudio:HTMLAudioElement;
+  cancelOrderAudio:HTMLAudioElement;
+
 
   headers: any[] = [
     {name: 'ID', value: 'id', sortable: false},
@@ -124,8 +127,10 @@ export class OrderListComponent implements OnInit, AfterViewInit{
                private toastr: ToastrService,
                private settingService: SettingService
              ) {
-    this.audio = new Audio();
-    this.audio.src = 'assets/sounds/order-arrived.mp3';
+    this.newOrderAudio = new Audio();
+    this.newOrderAudio.src = 'assets/sounds/order-arrived.mp3';
+    this.cancelOrderAudio = new Audio();
+    this.cancelOrderAudio.src = 'assets/sounds/order-canceled.mp3';
   }
 
 
@@ -133,11 +138,18 @@ export class OrderListComponent implements OnInit, AfterViewInit{
     this.settingService.isAlertOn().subscribe((response: any) => {
       this.isAlertOn=response;
     });
-    this.subscriptionText = this.rxStompService.watch('/apa_order').subscribe((message: any) => {
+    this.newSubscriptionText = this.rxStompService.watch('/new_apa_order').subscribe((message: any) => {
       if(this.isAlertOn){
-        this.playNotificationSound();
+        this.playNotificationSound('new');
       }
       this.toastr.success(message.body);
+      this.getAll();
+    });
+    this.cancelSubscriptionText = this.rxStompService.watch('/cancel_apa_order').subscribe((message: any) => {
+      if(this.isAlertOn){
+        this.playNotificationSound('cancel');
+      }
+      this.toastr.error(message.body);
       this.getAll();
     });
     this.getAll();
@@ -231,8 +243,15 @@ export class OrderListComponent implements OnInit, AfterViewInit{
           })
         });
   }
-  private playNotificationSound() {
-    this.audio.play();
+  private playNotificationSound(type:string) {
+    switch(type){
+      case 'new':
+        this.newOrderAudio.play();
+        break;
+      case 'cancel':
+        this.cancelOrderAudio.play();
+        break;
+    }
   }
 
   downloadPdf(id: string) {
@@ -247,6 +266,16 @@ export class OrderListComponent implements OnInit, AfterViewInit{
       document.body.removeChild(a);
     });
   }
+
+  ngOnDestroy(): void {
+    if (this.newSubscriptionText) {
+      this.newSubscriptionText.unsubscribe();
+    }
+    if (this.cancelSubscriptionText) {
+      this.cancelSubscriptionText.unsubscribe();
+    }
+  }
+
   protected readonly ButtonTheme = ButtonTheme;
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
 }
