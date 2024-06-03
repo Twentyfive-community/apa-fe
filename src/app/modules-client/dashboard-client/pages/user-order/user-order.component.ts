@@ -100,31 +100,41 @@ export class UserOrderComponent implements OnInit {
         onConfirm: () => {
           console.log('Richiesta di cancellamento per l\'ordine con id ' + id);
 
-          // Richiama il servizio per cancellare l'ordine
-          this.orderService.cancelOrderUser(id).subscribe({
-            next: (orders) => {
-              // Mostra una finestra modale di conferma email
-              const orderCancelModal = new bootstrap.Modal(document.getElementById('cancelOrderModal'), {
-                keyboard: false
-              });
-              orderCancelModal.show();
-            },
-            error: (error) => {
-              var status=error.status;
-              if(status==400) {
-                const impOrderCancelModal = new bootstrap.Modal(document.getElementById('impossibleCancelOrderModal'), {
-                  keyboard: false
-                });
-                impOrderCancelModal.show();
-                this.loadOrders();
-              }
-            }
-          });
+          this.handleCancel(id);
 
-          this.loadOrders();
         }
       }
     );
+  }
+
+  handleCancel(id:string){
+    this.orderService.cancelOrderUser(id).subscribe({
+      next: (response) => {
+        console.log(response);
+        // Mostra una finestra modale di conferma email
+        const orderCancelModal = new bootstrap.Modal(document.getElementById('cancelOrderModal'), {
+          keyboard: false
+        });
+        console.log(this.orders);
+        orderCancelModal.show();
+        this.orders=[]
+        if(this.customerId) {
+          this.loadOrders();
+        }
+        console.log(this.orders);
+      },
+      error: (error) => {
+        var status=error.status;
+        if(status==400) {
+          const impOrderCancelModal = new bootstrap.Modal(document.getElementById('impossibleCancelOrderModal'), {
+            keyboard: false
+          });
+          impOrderCancelModal.show();
+
+        }
+      }
+    });
+
   }
 
 }
