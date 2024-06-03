@@ -185,7 +185,7 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
         this.toastrService.error(errorMessage);
       },
       complete: () => {
-        this.getAll();
+        this.getAll(this.currentPage-1);
       }
     });
   }
@@ -200,7 +200,7 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
         this.toastrService.error(errorMessage);
       },
       complete: () => {
-        this.getAll();
+        this.getAll(this.currentPage-1);
       }
     });
   }
