@@ -36,14 +36,13 @@ export class OrderService {
     return this.http.post(`${this.baseUrl}/cancel/${id}`,null)
   }
 
-  getActiveOrdersByCustomer(userId: string, page: number = 0, size: number = 10): Observable<Order[]> {
+  getActiveOrdersByCustomer(userId: string, page: number = 0, size: number = 10): Observable<any> {
     const params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
 
     return this.http.get<any>(`${this.baseUrl}/by-customer/${userId}`, { params })
       .pipe(
-        map(response => response.content as Order[]), // Estrai solo la parte di 'content' contenente gli ordini
         catchError(error => {
           console.error('Error fetching orders', error);
           return throwError(() => new Error('Error fetching orders'));

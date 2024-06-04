@@ -18,6 +18,11 @@ export class UserOrderComponent implements OnInit {
 
   orders: Order[] = [];
 
+
+  currentPage: number = 1;
+  itemsPerPage: number = 15;
+  totalPages: number = 1;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private completedOrderService: CompletedorderService,
@@ -36,12 +41,12 @@ export class UserOrderComponent implements OnInit {
     }
   }
 
-  loadOrders(){
+  loadOrders() {
     if (this.activeOrders == 'true') {
-      this.loadActiveOrders();
-
-    } else
-      this.loadCompletedOrders();
+      this.loadActiveOrders(this.currentPage - 1, this.itemsPerPage);
+    } else {
+      this.loadCompletedOrders(this.currentPage - 1, this.itemsPerPage);
+    }
   }
 
   loadBootstrapJS(): void {
@@ -53,11 +58,12 @@ export class UserOrderComponent implements OnInit {
     }
   }
 
-  private loadCompletedOrders(): void {
-    this.completedOrderService.getCompletedOrdersByCustomer(this.customerId).subscribe({
-      next: (orders) => {
-        console.log(orders);  // Aggiungi questo per controllare il dato ricevuto
-        this.orders = orders;
+  private loadCompletedOrders(page: number, size: number): void {
+    this.completedOrderService.getCompletedOrdersByCustomer(this.customerId, page, size).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.orders = response.content;
+        this.setupPagination(response.totalPages);
       },
       error: (error) => {
         console.error('Failed to load orders:', error);
@@ -65,16 +71,35 @@ export class UserOrderComponent implements OnInit {
     });
   }
 
-  private loadActiveOrders(): void {
-    this.orderService.getActiveOrdersByCustomer(this.customerId).subscribe({
-      next: (orders) => {
-        console.log(orders);  // Aggiungi questo per controllare il dato ricevuto
-        this.orders = orders;
+  private loadActiveOrders(page: number, size: number): void {
+    this.orderService.getActiveOrdersByCustomer(this.customerId, page, size).subscribe({
+      next: (response) => {
+        console.log(response);
+        this.orders = response.content;
+        this.setupPagination(response.totalPages);
       },
       error: (error) => {
         console.error('Failed to load orders:', error);
       }
     });
+  }
+
+  setupPagination(totalPages: number) {
+    this.totalPages = totalPages;
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.loadOrders();
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.loadOrders();
+    }
   }
 
   close(): void {
@@ -116,12 +141,18 @@ export class UserOrderComponent implements OnInit {
           keyboard: false
         });
         console.log(this.orders);
-        orderCancelModal.show();
         this.orders=[]
         if(this.customerId) {
           this.loadOrders();
         }
         console.log(this.orders);
+        if(this.orders.length==0){
+          this.close();
+        }
+        else{
+          orderCancelModal.show();
+
+        }
       },
       error: (error) => {
         var status=error.status;
