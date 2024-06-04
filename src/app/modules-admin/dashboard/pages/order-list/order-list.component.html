@@ -95,7 +95,16 @@
   </ng-template>
 
   <ng-template #templateColumnRef let-product>
-    <input type="checkbox" (click)="checkComplete(product.id)">
+    <div ngbDropdown class="dropdown">
+      <button class="btn btn-outline-dark" ngbDropdownToggle id="baseDropdown" (click)="stopPropagation($event)">
+        {{product.status}}
+      </button>
+      <ul ngbDropdownMenu aria-labelledby="baseDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
+        <li *ngFor="let status of statuses" class="dropdown-item" (click)="changeStatus(product.id,status)">
+          {{ status }}
+        </li>
+      </ul>
+    </div>
   </ng-template>
 </div>
 

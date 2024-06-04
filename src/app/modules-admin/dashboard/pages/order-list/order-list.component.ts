@@ -32,7 +32,6 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
 
   newSubscriptionText: any;
   cancelSubscriptionText: any;
-  isCheckedList: boolean[] = [];
   isAlertOn: boolean;
   newOrderAudio:HTMLAudioElement;
   cancelOrderAudio:HTMLAudioElement;
@@ -45,10 +44,9 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
     {name: 'Data Ritiro', value: 'formattedPickupDate', sortable: true},
     {name: 'Prezzo', value: 'price', sortable: true},
     {name: 'Status', value: 'status', sortable: true},
-    {name: 'Completo', value: 'complete'}
   ];
   data: Order[] = []
-
+  statuses: string[] = [];
   extras: any[] = [
     {name: 'ordine', value: 'orderDetails'},
   ]
@@ -92,29 +90,6 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
       showFunction: () => {
         return true;
       }
-    },
-    {
-      icon: 'bi bi-x',
-      action: async (myRow: any) => {
-        this.modalService.openModal(
-          'Sei sicuro di voler annullare questo ordine?',
-          'Annulla Ordine',
-          'Annulla',
-          'Conferma',
-          {
-            showIcon: true,
-            size: 'md',
-            onConfirm: (() => {
-              this.cancelOrder(myRow.id)
-            })
-          });
-      },
-      actionName: 'Annulla',
-      tooltipText: 'Annulla Ordine',
-      placement: 'top',
-      showFunction: () => {
-        return true;
-      }
     }
   ]
 
@@ -135,6 +110,9 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
 
 
   ngOnInit(): void {
+    this.orderService.getAllStatuses().subscribe((response:any) =>{
+      this.statuses=response;
+    });
     this.settingService.isAlertOn().subscribe((response: any) => {
       this.isAlertOn=response;
     });
@@ -156,14 +134,13 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
   }
 
   ngAfterViewInit() {
-    this.columnTemplateRefs['complete'] = this.templateColumnRef;
+    this.columnTemplateRefs['status'] = this.templateColumnRef;
 
   }
 
   getAll(page?: number) {
     this.orderService.getAll(page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection).subscribe((res: any) => {
       this.data = res.content;
-      this.data.forEach(() => this.isCheckedList.push(false));
       this.collectionSize = res.totalElements;
     })
   }
@@ -173,36 +150,6 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
     this.orderService.getOrderDetails(orderId).subscribe((res: any) => {
       this.orderDetails = res
     })
-  }
-
-  completeOrder(id: string) {
-    this.orderService.completeOrder(id).subscribe({
-      next: () => {
-        this.toastrService.success('Ordine completato');
-      },
-      error: (err) => {
-        const errorMessage = err.message;
-        this.toastrService.error(errorMessage);
-      },
-      complete: () => {
-        this.getAll(this.currentPage-1);
-      }
-    });
-  }
-
-  cancelOrder(id: string) {
-    this.orderService.cancelOrder(id).subscribe({
-      next: () => {
-        this.toastrService.success('Ordine annullato con successo');
-      },
-      error: (err) => {
-        const errorMessage = err.message;
-        this.toastrService.error(errorMessage);
-      },
-      complete: () => {
-        this.getAll(this.currentPage-1);
-      }
-    });
   }
 
   sortingColumn(event: any) {
@@ -226,23 +173,6 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
     window.open(url, '_blank');
   }
 
-  checkComplete(myRow:any){
-      this.modalService.openModal(
-        'Vuoi segnare questo ordine come completato?',
-        'Completa Ordine',
-        'Annulla',
-        'Conferma',
-        {
-          showIcon: true,
-          size: 'md',
-          onConfirm: (() => {
-            this.completeOrder(myRow)
-          }),
-          onClose: (() => {
-            this.getAll(this.currentPage-1);
-          })
-        });
-  }
   private playNotificationSound(type:string) {
     switch(type){
       case 'new':
@@ -278,4 +208,74 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
 
   protected readonly ButtonTheme = ButtonTheme;
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
+
+  stopPropagation(event: Event) {
+    event.stopPropagation();
+  }
+
+  changeStatus(id:string,status:string) {
+    event!.stopPropagation();
+    switch(status){
+      case 'COMPLETO':
+        this.modalService.openModal(
+          'Vuoi segnare questo ordine come completato?',
+          'Completa Ordine',
+          'Annulla',
+          'Conferma',
+          {
+            showIcon: true,
+            size: 'md',
+            onConfirm: (() => {
+              this.orderService.changeOrderStatus(id,status).subscribe({
+                next: () => {
+                  this.toastrService.success('Ordine completato!');
+                },
+                error: () => {
+                  this.toastrService.error('Error fetching order');
+                },
+                complete: () => {
+                  this.getAll(this.currentPage-1);
+                }
+              });
+            })
+          });
+        break;
+      case 'ANNULLATO':
+        this.modalService.openModal(
+          'Sei sicuro di voler annullare questo ordine?',
+          'Annulla Ordine',
+          'Annulla',
+          'Conferma',
+          {
+            showIcon: true,
+            size: 'md',
+            onConfirm: (() => {
+              this.orderService.changeOrderStatus(id,status).subscribe({
+                next: () => {
+                  this.toastrService.success('Ordine annullato con successo');
+                },
+                error: () => {
+                  this.toastrService.error('Error fetching order');
+                },
+                complete: () => {
+                  this.getAll(this.currentPage-1);
+                }
+              });
+            })
+          });
+        break;
+      default:
+        this.orderService.changeOrderStatus(id,status).subscribe({
+          next: () => {
+            this.toastrService.success(`Ordine aggiornato con successo!`);
+          },
+          error: () => {
+            this.toastrService.error('Error fetching order');
+          },
+          complete: () => {
+            this.getAll(this.currentPage-1);
+          }
+        });
+    }
+  }
 }

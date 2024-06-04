@@ -23,13 +23,12 @@ export class OrderService {
   getOrderDetails(id: string) {
     return this.http.get(`${this.baseUrl}/details/${id}`)
   }
-
-  completeOrder(id: string) {
-    return this.http.post(`${this.baseUrl}/complete/${id}`, null)
+  getAllStatuses() {
+    return this.http.get(`${this.baseUrl}/getAllStatuses`);
   }
-
-  cancelOrder(id: string) {
-    return this.http.post(`${this.baseUrl}/adminCancel/${id}`,null)
+  changeOrderStatus(id:string,status:string) {
+    let p = Utils.createHttpParams({'status':status})
+    return this.http.get(`${this.baseUrl}/changeOrderStatus/${id}`, {params: p});
   }
 
   cancelOrderUser(id: string) {
