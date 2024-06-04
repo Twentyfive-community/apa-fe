@@ -93,8 +93,6 @@ export class CompletedOrderComponent implements OnInit{
   getAll(page?: number) {
     this.completedOrderService.getAll(page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection).subscribe((res: any) => {
       this.data = res.content
-      console.log(this.data);
-
       this.collectionSize = res.totalElements;
     })
   }

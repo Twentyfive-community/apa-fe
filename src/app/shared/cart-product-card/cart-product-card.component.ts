@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Cart, ItemInPurchase} from "../../models/Cart";
+import {ItemInPurchase} from "../../models/Cart";
 import {ProductService} from "../../services/product.service";
 import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
 import {TwentyfiveModalService} from "twentyfive-modal";
@@ -36,6 +36,8 @@ export class CartProductCardComponent implements OnInit{
   minDate: any;
   minTime: any;
 
+  showCustomizations: boolean = false;
+
   constructor(private cartService: CartService,
               private toastrService: ToastrService,
               private productService: ProductService,
@@ -50,7 +52,6 @@ export class CartProductCardComponent implements OnInit{
       this.obtainMinimumPickupDateTime(); // Una volta completato modifyCart, esegue obtainMinimumPickupDateTime
     });
   }
-  // ToDo: AGGIUNGERE DEBOUNCER CHE RICARICA LA PAGINA OGNI 30min/1h
 
   ngOnInit() {
     this.getProduct();
@@ -98,6 +99,10 @@ export class CartProductCardComponent implements OnInit{
     });
   }
 
+  toggleCustomizations() {
+    this.showCustomizations = !this.showCustomizations;
+  }
+
   toggleSelection() {
     // console.log(this.product.toBuy)
     this.toBuyChange.emit(this.product.id);
@@ -121,7 +126,12 @@ export class CartProductCardComponent implements OnInit{
 
 
     } else if (this.product.quantity == 1) {
-      this.modalService.openModal (
+      this.handleProductRemove()
+    }
+  }
+
+  handleProductRemove() {
+    this.modalService.openModal (
       'Vuoi togliere questo prodotto dal carrello?',
       'Elimina prodotto',
       'Annulla',
@@ -132,9 +142,7 @@ export class CartProductCardComponent implements OnInit{
         onConfirm: (() => {
           this.removeFromCart.emit(this.product.id)
         })
-      }
-    );
-    }
+      });
   }
 
   calcTotalPrice() {

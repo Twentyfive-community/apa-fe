@@ -9,6 +9,7 @@ import {NgbDate} from "@ng-bootstrap/ng-bootstrap";
 import {ToastrService} from "ngx-toastr";
 import {Subscription, interval, takeWhile} from "rxjs";
 import {Router} from "@angular/router";
+import {TwentyfiveModalService} from "twentyfive-modal";
 
 @Component({
   selector: 'app-user-cart',
@@ -39,6 +40,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
   private cartReloadSubscription!: Subscription; //Variabile per avviare il reload di this.getCart
 
   constructor(private keycloakService: SigningKeycloakService,
+              private modalService: TwentyfiveModalService,
               private customerService:CustomerService,
               private toastrService: ToastrService,
               private cartService:CartService,
@@ -159,13 +161,36 @@ export class UserCartComponent implements OnInit, OnDestroy{
     this.calculateTotalPrice(); // Ricalcoliamo il prezzo totale
   }
 
-  removeFromCart(productId: string) {
-    const productIndex = this.cart.purchases.findIndex(product => product.id === productId);
-    if (productIndex !== -1) {
-      this.cartService.removeFromCart(this.customer.id, [productIndex]).subscribe(
-        updatedCart => {
-          this.getCart()
-        })
+  removeFromCart(productId?: string) {
+    if (productId) {
+      const productIndex = this.cart.purchases.findIndex(product => product.id === productId);
+      if (productIndex !== -1) {
+        this.cartService.removeFromCart(this.customer.id, [productIndex]).subscribe(
+          updatedCart => {
+            this.getCart()
+          })
+      }
+    } else {
+      this.modalService.openModal (
+        'Vuoi svuotare il carrello?',
+        'Svuota carrello',
+        'Annulla',
+        'Conferma',
+        {
+          showIcon: true,
+          size: 'md',
+          onConfirm: (() => {
+            const allProductIndexes = this.cart.purchases.map((product, index) => index);
+            if (allProductIndexes.length > 0) {
+              this.cartService.removeFromCart(this.customer.id, allProductIndexes).subscribe(
+                updatedCart => {
+                  this.getCart();
+                })
+            }
+          })
+        }
+      );
+
     }
   }
 

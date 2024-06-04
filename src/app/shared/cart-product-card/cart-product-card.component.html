@@ -1,12 +1,12 @@
-<div class="card shadow mb-3">
-  <div class="card-body">
+<div class="card shadow mb-3" style="min-height: 670px;">
+  <div class="card-body d-flex flex-column">
 
     <div class="row mb-2">
-      <div class="col-12 col-sm-3">
+      <div class="col-12">
         <img [src]="product.imageUrl" style="min-width:125px; min-height: 152px; max-height:152px; object-fit: cover; border-radius: 0.375rem" class="card-img" alt="Product Image">
-        <hr class="d-sm-none">
+        <hr>
       </div>
-      <div class="col-10 col-sm-7">
+      <div class="col-10">
         <h5 class="card-title">{{product.name}}</h5>
         <p class="card-text">{{product.price}} /kg</p>
         <div class="d-flex align-items-center">
@@ -16,9 +16,13 @@
           <button class="btn btn-primary btn-sm" (click)="increaseQuantity()" style="height: 2rem">+</button>
         </div>
       </div>
-      <div class="col-2 d-flex justify-content-end">
-        <input type="checkbox" [(ngModel)]="this.product.toBuy" (change)="toggleSelection()"  style="width: 2rem; height: 2rem">
+
+      <div class="col-2 d-flex flex-column align-items-end">
+        <input class="mb-2" type="checkbox" [(ngModel)]="this.product.toBuy" (change)="toggleSelection()" tooltip="Deseleziona"
+               style="width: 2rem; height: 2rem; cursor: pointer">
+        <i class="bi bi-trash clickable-icon" (click)="handleProductRemove(); $event.stopPropagation()" tooltip="Rimuovi" style="color: red; cursor: pointer"></i>
       </div>
+
     </div>
 
     <div *ngIf="product.weight">
@@ -26,12 +30,23 @@
       <p *ngIf="product.shape"><b>Forma:</b> {{product.shape}}</p>
     </div>
     <div *ngIf="product.customization != null">
-      <p><b>Personalizzazioni:</b></p>
-      <ul *ngFor="let item of product.customization | keyvalue">
-        <li><b>{{item.key}}:</b><br>
-          {{item.value}}</li>
-      </ul>
+      <div>
+        <p>
+          <b>Personalizzazioni</b>
+          <button class="btn btn-link" (click)="toggleCustomizations()">
+            <i [ngClass]="{'bi bi-chevron-down': !showCustomizations, 'bi bi-chevron-up': showCustomizations}" style="font-size: 1rem; color: black"></i>
+          </button>
+        </p>
+        <ul *ngIf="showCustomizations">
+          <li *ngFor="let item of product.customization | keyvalue">
+            <b>{{item.key}}:</b><br>
+            {{item.value}}
+          </li>
+        </ul>
+      </div>
     </div>
+
+
     <div *ngIf="this.product.notes != null ">
       <p><b>Testo Decorativo:</b> {{ product.notes }}</p>
     </div>
@@ -41,28 +56,36 @@
     <div *ngIf="product.totalWeight">
       <p><b>Misura:</b> {{product.measure.label}} ({{product.measure.weight}} kg)</p>
       <p><b>Peso totale:</b> {{ product.totalWeight }} kg</p>
-      <p><b>Prodotti singoli:</b></p>
-      <ul *ngFor="let item of product.weightedProducts">
-        <li>
+      <p>
+        <b>Pezzi singoli</b>
+        <button class="btn btn-link" (click)="toggleCustomizations()">
+          <i [ngClass]="{'bi bi-chevron-down': !showCustomizations, 'bi bi-chevron-up': showCustomizations}" style="font-size: 1rem; color: black"></i>
+        </button>
+      </p>
+      <ul *ngIf="showCustomizations">
+        <li *ngFor="let item of product.weightedProducts">
           <p><b>x{{item.quantity}}</b> {{item.name}}</p>
         </li>
       </ul>
     </div>
 
-    <hr/>
 
-    <p><b>Data e ora di ritiro minime:</b> {{ product.deliveryDate | date:'dd/MM/yyyy' }} {{minTime}}</p>
-    <p *ngIf="type=='tray'"><b>Peso Scelto: </b>{{product.measure.label}} ({{product.measure.weight}} kg)</p>
-    <p><b>Prezzo Totale Prodotto:</b> {{product.totalPrice}} €</p>
-    <div *ngIf="type == 'tray' || type == 'productKg'">
-      <lib-generic-button-text-with-icon
-        [buttonStyle]="ButtonTheme.Primary"
-        [buttonSize]="ButtonSizeTheme.FullWidth"
-        buttonText='Modifica'
-        suffixIcon='bi bi-pencil-square'
-        (click)="goToEdit()"
-        [iconLeft]="false"
-      ></lib-generic-button-text-with-icon>
+    <div class="mt-auto">
+      <hr/>
+
+      <p><b>Data e ora di ritiro minime:</b> {{ product.deliveryDate | date:'dd/MM/yyyy' }} {{minTime}}</p>
+      <p *ngIf="type=='tray'"><b>Peso Scelto: </b>{{product.measure.label}} ({{product.measure.weight}} kg)</p>
+      <p><b>Prezzo Totale Prodotto:</b> {{product.totalPrice}} €</p>
+      <div class="mt-auto" *ngIf="type == 'tray' || type == 'productKg'">
+        <lib-generic-button-text-with-icon
+          [buttonStyle]="ButtonTheme.Primary"
+          [buttonSize]="ButtonSizeTheme.FullWidth"
+          buttonText='Modifica'
+          suffixIcon='bi bi-pencil-square'
+          (click)="goToEdit()"
+          [iconLeft]="false"
+        ></lib-generic-button-text-with-icon>
+      </div>
     </div>
   </div>
 </div>
