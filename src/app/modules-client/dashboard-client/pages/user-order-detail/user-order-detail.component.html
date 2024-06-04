@@ -36,26 +36,30 @@
         </div>
 
         <div class="column mt-2">
-          <div class="col-12 mb-2">
-            <h6>
-              <button (click)="toggleCustomization(product)" class="btn btn-link p-0 custom-button">
-                Personalizzazioni
-                <i [ngClass]="{'bi bi-chevron-down small-chevron': !getCustomizationVisible(product), 'bi bi-chevron-up small-chevron': getCustomizationVisible(product)}"></i>
+          <div class="row mb-2" *ngIf="getCustomization(product).length > 0; let customizationItem">
+            <h6 class="col-12 d-flex align-items-center">
+              <button (click)="toggleCustomization(product)" class="btn btn-link p-0 custom-button mb-3 col-auto">
+
+                <span style="margin-left: 10px;">Personalizzazioni  </span>
+                <i [ngClass]="{'bi bi-chevron-down small-chevron': !getCustomizationVisible(product), 'bi bi-chevron-up small-chevron': getCustomizationVisible(product)}" style="font-size: 1rem; width: 1rem; height: 1rem;"></i>
               </button>
             </h6>
-            <ul *ngIf="getCustomizationVisible(product)" class="list-unstyled text-muted">
-              <li *ngFor="let item of product.customization | keyvalue">
-                <b>{{ item.key }}:</b> {{ item.value }}
+
+            <ul *ngIf="getCustomizationVisible(product)" class="col-12 list-unstyled ms-3 text-muted">
+              <li *ngFor="let customization of getCustomization(product)">
+                <b>{{ customization[0] }}:</b> {{ customization[1] }}
               </li>
             </ul>
           </div>
-          <div class="col-12 mb-2">
+
+
+          <div class="col-12 mb-2 ms-2">
             <h6>Note:</h6>
-            <p class="text-muted">{{ product.notes }}</p>
+            <p class="text-muted ms-3">{{ product.notes }}</p>
           </div>
-          <div class="col-12 mb-2">
+          <div class="col-12 mb-2 ms-2">
             <h6>Prezzo del prodotto:</h6>
-            <p class="text-muted">€ {{ product.totalPrice }}</p>
+            <p class="text-muted ms-3">€ {{ product.totalPrice }}</p>
           </div>
         </div>
       </div>
@@ -70,13 +74,13 @@
           <div class="col-10 col-sm-8">
             <h4 class="mb-4">{{ bundle.name }}</h4>
             <div class="row">
-              <div class="col-6">
+              <div class="col-6 ms-2">
                 <h6>Quantità:</h6>
-                <p class="text-muted">{{ bundle.quantity }}</p>
+                <p class="text-muted ms-3">{{ bundle.quantity }}</p>
               </div>
-              <div class="col-6">
+              <div class="col-6 ms-2">
                 <h6>Misura:</h6>
-                <p class="text-muted">{{ bundle.measure.label }} kg</p>
+                <p class="text-muted ms-3">{{ bundle.measure.label }} kg</p>
               </div>
             </div>
           </div>

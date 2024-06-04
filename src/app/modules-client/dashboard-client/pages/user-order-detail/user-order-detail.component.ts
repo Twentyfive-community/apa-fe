@@ -9,6 +9,7 @@ import {CompletedorderService} from "../../../../services/completedorder.service
 import {ProductService} from "../../../../services/product.service";
 import {BundleInPurchase, BundleInPurchaseDetails} from "../../../../models/Bundle";
 import {TwentyfiveModalService} from "twentyfive-modal";
+
 declare var bootstrap: any;
 @Component({
   selector: 'app-user-order-detail',
@@ -65,6 +66,17 @@ export class UserOrderDetailComponent implements OnInit {
     }
 
   }
+
+  getCustomization(pip: ProductInPurchase): [string, string][] {
+    const customizationArray: [string, string][] = [];
+    for (const key in pip.customization) {
+      if (pip.customization.hasOwnProperty(key)) {
+        customizationArray.push([key, pip.customization[key]]);
+      }
+    }
+    return customizationArray;
+  }
+
 
 
   loadProductsFromCompletedOrder(): void {

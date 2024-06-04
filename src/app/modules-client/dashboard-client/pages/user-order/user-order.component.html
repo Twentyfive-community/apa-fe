@@ -33,6 +33,16 @@
       <div class="card-body" (click)="goToDetail(order.id)">
         <p class="card-text"><strong>Data e ora ritiro:</strong> {{ order.formattedPickupDate }}</p>
         <p class="card-text"><strong>Prezzo:</strong> {{ order.price }}</p>
+        <p class="card-text">
+          <strong>Stato: </strong>
+          <span [style.fontWeight]="'bold'" [style.color]="
+            order.status === 'Annullato' ? 'red' :
+            order.status === 'Ricevuto' ? 'green' :  '#FFD700'">
+            {{ order.status }}
+          </span>
+        </p>
+
+
       </div>
     </div>
   </div>
