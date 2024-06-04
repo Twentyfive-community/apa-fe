@@ -1,53 +1,67 @@
 <div *ngIf="isCartLoaded && cart.purchases.length > 0">
-  <div>
-    <app-cart-product-card *ngFor="let product of cart.purchases; let i = index"
-                           [product]="product"
-                           [customerId]="customer.id"
-                           [position]="[i]"
-                           [type]="itemToBuy[i].type"
-                           (selectionChange)="calculatePriceAndObtainDate()"
-                           (toBuyChange)="toggleItemsToBuy($event)"
-                           (removeFromCart)="removeFromCart($event)"
-    ></app-cart-product-card>
+  <div class="row d-flex flex-wrap">
+    <div class="col-12 col-md-4" *ngFor="let product of cart.purchases; let i = index">
+      <app-cart-product-card
+        [product]="product"
+        [customerId]="customer.id"
+        [position]="[i]"
+        [type]="itemToBuy[i].type"
+        (selectionChange)="calculatePriceAndObtainDate()"
+        (toBuyChange)="toggleItemsToBuy($event)"
+        (removeFromCart)="removeFromCart($event)"
+      ></app-cart-product-card>
+    </div>
+  </div>
 
-    <div class="sticky-box">
-      <div class="row mt-2 mb-3 mx-auto d-flex align-content-center">
-        <h6>Data e ora ritiro:</h6>
-        <div class="col-12 col-md-6">
-          <lib-twentyfive-datepicker
-            [disabledInput]="isBuyButtonDisabled()"
-            [showLabel]="false"
-            [labelStyle]="LabelTheme.LabelBold"
-            [setMinDateToToday]="true"
-            [enabledDates]="enabledDate"
-            (dateSelected)="onDateChange($event)"
-          ></lib-twentyfive-datepicker>
-        </div>
-        <div class="col-12 col-md-6 mt-2 mt-md-0">
-          <lib-twentyfive-generic-timepicker
-            [time]="selectedTime"
-            [showLabel]="false"
-            [timeOptions]="selectedSlots"
-            [disabled]="!selectedDate"
-            (changeTime)="onTimeSelected($event)"
-          ></lib-twentyfive-generic-timepicker>
-        </div>
+  <div class="sticky-box">
+    <div class="row mt-2 mb-3 mx-auto d-flex align-content-center">
+      <h6>Data e ora ritiro:</h6>
+      <div class="col-12 col-md-6">
+        <lib-twentyfive-datepicker
+          [disabledInput]="isBuyButtonDisabled()"
+          [showLabel]="false"
+          [labelStyle]="LabelTheme.LabelBold"
+          [setMinDateToToday]="true"
+          [enabledDates]="enabledDate"
+          (dateSelected)="onDateChange($event)"
+        ></lib-twentyfive-datepicker>
       </div>
-
-      <div class="row mb-2 mx-auto">
-        <h6>Lascia una nota</h6>
-        <div class="px-2">
-      <textarea [disabled]="isBuyButtonDisabled()" [(ngModel)]="orderNotes" [ngClass]="InputTheme.Primary" class="form-control"
-                rows="3" placeholder="Inserisci una nota" style="max-height: 100px; resize: vertical;"></textarea>
-        </div>
+      <div class="col-12 col-md-6 mt-2 mt-md-0">
+        <lib-twentyfive-generic-timepicker
+          [time]="selectedTime"
+          [showLabel]="false"
+          [timeOptions]="selectedSlots"
+          [disabled]="!selectedDate"
+          (changeTime)="onTimeSelected($event)"
+        ></lib-twentyfive-generic-timepicker>
       </div>
+    </div>
 
-      <div class="row mx-auto">
-        <h6>Totale da pagare:</h6>
-        <p class="ms-2">{{cart.totalPrice}} €</p>
+    <div class="row mb-2 mx-auto">
+      <h6>Lascia una nota</h6>
+      <div class="px-2">
+        <textarea [disabled]="isBuyButtonDisabled()" [(ngModel)]="orderNotes" [ngClass]="InputTheme.Primary" class="form-control"
+                  rows="3" placeholder="Inserisci una nota" style="max-height: 100px; resize: vertical;"></textarea>
       </div>
+    </div>
 
-      <div class="d-flex justify-content-end mb-2 me-2">
+    <div class="row mx-auto">
+      <h6>Totale da pagare:</h6>
+      <p class="ms-2">{{cart.totalPrice}} €</p>
+    </div>
+
+    <div class="row justify-content-end mb-2 me-2">
+      <div class="col-12 col-md-6 col-lg-2 d-flex justify-content-center mb-2 mb-md-0">
+        <lib-generic-button
+          (click)="!isBuyButtonDisabled() ? removeFromCart() : null"
+          [disabled]="isBuyButtonDisabled()"
+          buttonText="Svuota carrello"
+          [buttonSize]="ButtonSizeTheme.Medium"
+          [buttonStyle]="ButtonTheme.Primary"
+          [customStyles]="{'color':'white'}"
+        ></lib-generic-button>
+      </div>
+      <div class="col-12 col-md-3 d-flex justify-content-end">
         <lib-generic-button
           (click)="!isBuyButtonDisabled() ? buyCart() : null"
           [disabled]="isBuyButtonDisabled()"
@@ -62,19 +76,21 @@
   </div>
 </div>
 
-<div *ngIf="isCartLoaded && cart.purchases.length == 0" class="mb-5">
-  <div class="card">
-    <div class="card-body text-center">
-      <h5 class="card-title">Carrello Vuoto</h5>
-      <p class="card-text">Non hai ancora aggiunto nessun elemento al carrello.</p>
-      <div class="d-flex justify-content-center">
-        <lib-generic-button
-          routerLink=".."
-          buttonText="Ordina qualcosa"
-          [customStyles]="{'color':'blue'}"
-          [buttonStyle]="ButtonTheme.OnlyText"
-        ></lib-generic-button>
+
+  <!-- Sezione carrello vuoto-->
+  <div *ngIf="isCartLoaded && cart.purchases.length == 0" class="mb-5">
+    <div class="card">
+      <div class="card-body text-center">
+        <h5 class="card-title">Carrello Vuoto</h5>
+        <p class="card-text">Non hai ancora aggiunto nessun elemento al carrello.</p>
+        <div class="d-flex justify-content-center">
+          <lib-generic-button
+            routerLink=".."
+            buttonText="Ordina qualcosa"
+            [customStyles]="{'color':'blue'}"
+            [buttonStyle]="ButtonTheme.OnlyText"
+          ></lib-generic-button>
+        </div>
       </div>
     </div>
   </div>
-</div>

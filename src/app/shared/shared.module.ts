@@ -14,6 +14,7 @@ import { GenericCardComponent } from './generic-card/generic-card.component';
 import { CartProductCardComponent } from './cart-product-card/cart-product-card.component';
 import {FormsModule} from "@angular/forms";
 import {RouterLink} from "@angular/router";
+import {TooltipModule} from "ngx-bootstrap/tooltip";
 
 @NgModule({
   declarations: [
@@ -21,22 +22,23 @@ import {RouterLink} from "@angular/router";
     GenericCardComponent,
     CartProductCardComponent,
   ],
-  imports: [
-    CommonModule,
-    TwentyfiveNavbarModule,
-    TwentyfiveSidebarModule,
-    TwentyfiveAccordionTableModule,
-    CollapseModule,
-    TwentyfiveTableModule,
-    TwentyfiveInputModule,
-    GenericButtonModule,
-    TwentyfiveModalGenericComponentModule,
-    NgbDropdown,
-    NgbDropdownMenu,
-    NgbDropdownToggle,
-    FormsModule,
-    RouterLink,
-  ],
+    imports: [
+        CommonModule,
+        TwentyfiveNavbarModule,
+        TwentyfiveSidebarModule,
+        TwentyfiveAccordionTableModule,
+        CollapseModule,
+        TwentyfiveTableModule,
+        TwentyfiveInputModule,
+        GenericButtonModule,
+        TwentyfiveModalGenericComponentModule,
+        NgbDropdown,
+        NgbDropdownMenu,
+        NgbDropdownToggle,
+        FormsModule,
+        RouterLink,
+        TooltipModule,
+    ],
   exports: [
     CommonModule,
     TwentyfiveNavbarModule,
