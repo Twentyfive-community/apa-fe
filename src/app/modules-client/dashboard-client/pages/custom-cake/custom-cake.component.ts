@@ -63,6 +63,7 @@ export class CustomCakeComponent implements OnInit{
 
   note: string='';
   file: File | null;
+  abbreviatedFileName: string = '';
   price: string='';
   realPrice: number = 0;
 
@@ -300,6 +301,9 @@ export class CustomCakeComponent implements OnInit{
     if(this.selectedBase == 'Millefoglie' || this.selectedBase == 'Red Velvet'){
       this.bagnaOptions=['NO BAGNE'];
       this.selectedBagna = this.bagnaOptions[0];
+      this.getFruttaOptions();
+      this.getGocceOptions();
+      this.goToNextStep(6)
     }
     else{
       this.ingredientService.getAllByNameCategories('Bagne', 'ingredienti').subscribe((response: any) =>{
@@ -335,10 +339,16 @@ export class CustomCakeComponent implements OnInit{
 
     if(this.selectedType=='Torta a forma' || this.selectedType=='Drip Cake'){
       this.granelleOptions = ['NO GRANELLE'];
+      this.selectedGranelle.push('NO GRANELLE');
+      this.getCopertureOptions()
+      this.goToNextStep(8)
     }
     else if(this.selectedType=='Torta classica'){
       if(this.selectedBase=='Mimosa' || this.selectedBase=='Saint Honorè' || this.selectedBase=='Red Velvet'){
         this.granelleOptions = ['NO GRANELLE'];
+        this.selectedGranelle.push('NO GRANELLE');
+        this.getCopertureOptions()
+        this.goToNextStep(8)
       }
       else{
         this.ingredientService.getAllByNameCategories('Granelle', 'ingredienti').subscribe((response: any) =>{
@@ -367,6 +377,8 @@ export class CustomCakeComponent implements OnInit{
       case 'Torta classica':
         if(this.selectedBase=='Millefoglie'){
           this.coperturaOptions=['NO COPERTURE'];
+          this.selectedCopertura='NO COPERTURE';
+          this.goToNextStep(9)
         }
         else if(this.selectedBase=='Diplomatica'){
           this.coperturaOptions=['Zucchero a velo'];
@@ -502,6 +514,9 @@ export class CustomCakeComponent implements OnInit{
       this.stepCompleted[5]=true;
       this.getBagneOptions()
     }
+    if (this.selectedFarciture.length >= 2) {
+      this.goToNextStep(5); // Passa direttamente allo step successivo
+    }
   }
 
   removeFarcitura(farcitura: string) {
@@ -528,6 +543,9 @@ export class CustomCakeComponent implements OnInit{
       this.stepCompleted[7]=true;
       this.getGranelleOptions()
     }
+    if ((this.selectedFrutta.length + this.selectedGocce.length) >= 3) {
+      this.goToNextStep(7); // Passa direttamente allo step successivo
+    }
   }
 
   removeFrutta(frutta: string) {
@@ -545,6 +563,9 @@ export class CustomCakeComponent implements OnInit{
       this.stepCompleted[7]=true;
       this.getGranelleOptions()
     }
+    if ((this.selectedFrutta.length + this.selectedGocce.length) >= 3) {
+      this.goToNextStep(7); // Passa direttamente allo step successivo
+    }
   }
 
   removeGoccia(goccia: string) {
@@ -561,6 +582,9 @@ export class CustomCakeComponent implements OnInit{
     if(this.selectedGranelle.length>0){
       this.stepCompleted[8]=true;
       this.getCopertureOptions()
+    }
+    if (this.selectedGranelle.length >= 2) {
+      this.goToNextStep(8); // Passa direttamente allo step successivo
     }
   }
 
@@ -583,6 +607,7 @@ export class CustomCakeComponent implements OnInit{
     this.productInPurchase.notes = event.target.value;
   }
 
+
   handleDragOver(event: DragEvent) {
     event.preventDefault(); // Impedisce il comportamento predefinito del browser
   }
@@ -604,8 +629,19 @@ export class CustomCakeComponent implements OnInit{
   }
 
   handleFiles(files: FileList) {
-    this.file = files[0];
+    const file = files[0];
+    this.abbreviatedFileName = this.getAbbreviatedFileName(file.name);
+    this.file = file;
   }
+
+  getAbbreviatedFileName(fileName: string): string {
+    const maxFileNameLength = 15; // Lunghezza massima del nome del file
+    if (fileName.length > maxFileNameLength) {
+      return fileName.substring(0, maxFileNameLength) + '...';
+    }
+    return fileName;
+  }
+
 
   removeFile(event: Event) {
     event.stopPropagation();

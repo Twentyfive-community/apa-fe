@@ -77,5 +77,14 @@
   overflow-y: auto; /* Aggiungi overflow per lo scrolling */
 }
 
+/* Stile per gli step */
+.step, .step-text, .step-icon {
+  cursor: pointer;
+}
+
+/* Stile per le dropdown */
+.dropdown-option {
+  cursor: pointer;
+}
 
 

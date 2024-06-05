@@ -17,9 +17,9 @@
           {{ i + 1 }}
         </div>
         <div class="step-content">
-          <h5 *ngIf="step != 'Decorazioni'">{{ step }}*</h5>
-          <h5 *ngIf="step === 'Decorazioni'">{{ step }}</h5>
-          <small  class="text-muted">Seleziona {{ step.toLowerCase() }} della torta</small>
+          <h5 (click)="goToStep(i)" *ngIf="step != 'Decorazioni'">{{ step }}*</h5>
+          <h5 (click)="goToStep(i)" *ngIf="step === 'Decorazioni'">{{ step }}</h5>
+          <small  class="text-muted " (click)="goToStep(i)">Seleziona {{ step.toLowerCase() }} della torta</small>
           <ng-container *ngIf="i === currentStep">
 
             <ng-container *ngIf="step === 'Tipologia'">
@@ -128,7 +128,7 @@
             <ng-container *ngIf="step === 'Bagna'">
               <!-- Utilizza la tua dropdown personalizzata qui -->
               <div ngbDropdown class="dropdown">
-                <button class="btn btn-outline-dark" ngbDropdownToggle id="bagnaDropdown">
+                <button class="btn btn-outline-dark" ngbDropdownToggle id="bagnaDropdown" [disabled]="bagnaOptions[0]==='NO BAGNE'">
                   {{ selectedBagna }}
                 </button>
                 <ul ngbDropdownMenu aria-labelledby="bagnaDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
@@ -137,6 +137,7 @@
                   </li>
                 </ul>
               </div>
+              <small *ngIf="bagnaOptions[0] === 'NO BAGNE'" class="text-muted">Non è possibile selezionare bagne per questa tipologia di torta</small>
             </ng-container>
 
             <ng-container *ngIf="step === 'Frutta e Gocce'">
@@ -192,7 +193,7 @@
 
             <ng-container *ngIf="step === 'Granelle'">
               <div ngbDropdown class="dropdown">
-                <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedGranelle.length === 2" id="granellaDropdown">
+                <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedGranelle.length === 2 || granelleOptions[0] === 'NO GRANELLE'" id="granellaDropdown">
                   Seleziona granelle
                 </button>
                 <ul ngbDropdownMenu aria-labelledby="granellaDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
@@ -201,8 +202,8 @@
                   </li>
                 </ul>
               </div>
-              <div class="mt-2">
-                <ng-container *ngFor="let granella of selectedGranelle">
+              <div *ngIf="granelleOptions[0] != 'NO GRANELLE'" class="mt-2">
+                <ng-container  *ngFor="let granella of selectedGranelle">
       <span class="badge bg-secondary me-2 mb-2">
         {{ granella }}
         <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Close" (click)="removeGranella(granella)"></button>
@@ -210,13 +211,14 @@
                 </ng-container>
               </div>
               <small *ngIf="selectedGranelle.length === 2" class="text-muted">Hai selezionato il massimo di 2 granelle</small>
+              <small *ngIf="granelleOptions[0] === 'NO GRANELLE'" class="text-muted">Non è possibile selezionare granelle per questa tipologia di torta</small>
             </ng-container>
 
 
             <ng-container *ngIf="step === 'Copertura'">
               <!-- Utilizza la tua dropdown personalizzata qui -->
               <div ngbDropdown class="dropdown">
-                <button class="btn btn-outline-dark" ngbDropdownToggle id="coperturaDropdown">
+                <button class="btn btn-outline-dark" ngbDropdownToggle id="coperturaDropdown" [disabled]="coperturaOptions[0] === 'NO COPERTURE'">
                   {{ selectedCopertura }}
                 </button>
                 <ul ngbDropdownMenu aria-labelledby="coperturaDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
@@ -225,6 +227,7 @@
                   </li>
                 </ul>
               </div>
+              <small *ngIf="coperturaOptions[0] === 'NO COPERTURE'" class="text-muted">Non è possibile selezionare coperture per questa tipologia di torta</small>
             </ng-container>
 
             <ng-container *ngIf="step === 'Decorazioni'">
@@ -244,7 +247,7 @@
                   </div>
                   <div *ngIf="file" class="row">
                     <div class="col-10">
-                      <span>{{ file.name }}</span>
+                      <span>{{ abbreviatedFileName }}</span>
                     </div>
                     <div class="col-2">
                       <button class="btn btn-link text-dark" (click)="removeFile($event)">
