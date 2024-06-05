@@ -651,8 +651,8 @@ export class CustomCakeComponent implements OnInit{
   }
 
   uploadImage(){
-    this.productService.uploadPic(this.file!).subscribe();
-    this.productInPurchase.attachment = `${environment.ftpDownloadUrl}${this.file!.name}`
+    this.productService.uploadPic(this.file!,this.productInPurchase.name).subscribe();
+    this.productInPurchase.attachment = `${environment.ftpDownloadUrl}${this.productInPurchase.name}`+'/'+`${this.file!.name}`
   }
   getCustomer(){
     let keycloakService=(this.keycloackService)as any;

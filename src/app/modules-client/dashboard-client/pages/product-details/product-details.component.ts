@@ -167,8 +167,8 @@ export class ProductDetailsComponent implements OnInit{
   }
 
   uploadImage(){
-    this.productService.uploadPic(this.file!).subscribe();
-    this.productInPurchase.attachment = `${environment.ftpDownloadUrl}${this.productInPurchase.name}+'/'+${this.file!.name}`
+    this.productService.uploadPic(this.file!,this.productInPurchase.name).subscribe();
+    this.productInPurchase.attachment = `${environment.ftpDownloadUrl}${this.productInPurchase.name}`+'/'+`${this.file!.name}`
   }
 
 

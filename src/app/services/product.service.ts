@@ -97,8 +97,8 @@ export class ProductService {
     return this.http.get<string>(`${this.baseTrayUrl}/imageById/${id}`, { responseType: 'text' as 'json' });
   }
 
-  uploadPic(file: File) {
-    let path = 'apa/products'
+  uploadPic(file: File,name: string) {
+    let path = `apa/products/${name}/`
     let formData = new FormData();
     formData.append('file', file)
     let h = new HttpHeaders();

@@ -198,8 +198,8 @@ export class ProductEditComponent implements OnInit {
   }
 
   uploadImage() {
-    this.productService.uploadPic(this.file!).subscribe();
-    this.productToAdd.imageUrl = `${environment.ftpDownloadUrl}${this.file!.name}`;
+    this.productService.uploadPic(this.file!,this.productToAdd.name).subscribe();
+    this.productToAdd.imageUrl = `${environment.ftpDownloadUrl}${this.productToAdd.name}`+'/'+`${this.file!.name}`;
   }
 
 
