@@ -18,6 +18,8 @@ import {TwentyfiveModalService} from "twentyfive-modal";
 })
 export class UserCartComponent implements OnInit, OnDestroy{
 
+  private imAdmin: false;
+
   customer: Customer =new Customer()
   cart: Cart = new Cart();
   itemToBuy: any[] = []; //lista che tiene traccia degli oggetti da comprare
@@ -34,8 +36,9 @@ export class UserCartComponent implements OnInit, OnDestroy{
 
   isCartLoaded: boolean = false; //ToDO: Sostituire con uno spinner
 
+  isCollapsed: boolean = true;
+
   orderNotes: string = '';
-  private imAdmin: false;
 
   private cartReloadSubscription!: Subscription; //Variabile per avviare il reload di this.getCart
 
@@ -62,6 +65,10 @@ export class UserCartComponent implements OnInit, OnDestroy{
     if (this.cartReloadSubscription) {
       this.cartReloadSubscription.unsubscribe();
     }
+  }
+
+  toggleStickyBox() {
+    this.isCollapsed = !this.isCollapsed;
   }
 
   private getCustomer() {
@@ -116,15 +123,12 @@ export class UserCartComponent implements OnInit, OnDestroy{
 
     this.cartService.obtainMinimumPickupDateTime(this.customer.id, indexToBuy).subscribe((res: any) => {
       this.slot = res
-      //console.log('slot')
-      //console.log(this.slot)
+
       this.enabledDate = Object.keys(this.slot).map(date => {
         const [year, month, day] = date.split('-').map(num => parseInt(num, 10));
         return new NgbDate(year, month, day);
       });
     });
-    //console.log('obtainMinDate')
-    //console.log(this.enabledDate)
   }
 
   onDateChange(date: any): void {
@@ -144,8 +148,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
 
   toggleItemsToBuy(productId: string) {
     const productIndex = this.itemToBuy.findIndex(product => product.id === productId);
-    //console.log(productId)
-    //console.log(productIndex)
+
     if (productIndex !== -1) {
       // Cambiamo il valore di toBuy in base alla sua attuale condizione
       this.itemToBuy[productIndex].toBuy = !this.itemToBuy[productIndex].toBuy;
@@ -158,7 +161,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
     }
     //console.log(this.itemToBuy)
     this.obtainCartMinPickupDateTime()
-    this.calculateTotalPrice(); // Ricalcoliamo il prezzo totale
+    this.calculateTotalPrice();
   }
 
   removeFromCart(productId?: string) {

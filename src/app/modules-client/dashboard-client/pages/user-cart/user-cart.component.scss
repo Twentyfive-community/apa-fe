@@ -5,6 +5,18 @@
   background-color: white;
   border: 1px solid #ddd;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-  z-index: 1000; /* Assicurati che sia sopra gli altri elementi */
-  min-height: 200px; /* Imposta un'altezza minima per assicurarti che il contenuto sia visibile */
+  z-index: 1000;
+  overflow: hidden;
+}
+
+.sticky-box.collapsed .sticky-box-body {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sticky-box-body {
+  max-height: 500px;
+  opacity: 1;
+  transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
 }
