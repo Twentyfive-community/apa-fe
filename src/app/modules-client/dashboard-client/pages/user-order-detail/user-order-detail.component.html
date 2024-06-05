@@ -1,4 +1,4 @@
-<div class="container-fluid order-details-container ">
+<div class="container-fluid order-details-container">
   <div class="row mb-4">
     <div class="col-12 col-lg-3">
       <lib-generic-button-text-with-icon
@@ -12,90 +12,91 @@
   </div>
   <hr>
 
-  <div class="orders-container row row-cols-1 row-cols-md-2 g-4">
-
-    <div *ngFor="let product of orderDetails.products" class="col">
-      <div class="product-details card h-100 mt-2 p-3">
-        <div class="row mb-2">
-          <div class="col-12 col-sm-4">
-            <img [src]="getImageOfProduct(product)" class="card-img" alt="Product Image">
-          </div>
-          <div class="col-10 col-sm-8">
-            <h4 class="mb-4">{{ product.name }}</h4>
-            <div class="row">
-              <div class="col-6">
-                <h6>Quantità:</h6>
-                <p class="text-muted">{{ product.quantity }}</p>
-              </div>
-              <div class="col-6">
-                <h6>Peso:</h6>
-                <p class="text-muted">{{ product.weight }} kg</p>
+  <div class="orders-container row row-cols-1 row-cols-md-2 row-cols-lg-3 align-content-center justify-content-center g-4">
+    <!-- Product Card -->
+    <div *ngFor="let product of orderDetails.products" class="col px-lg-5">
+      <div class="product-details card h-100 mt-2">
+        <div class="card-body d-flex flex-column">
+          <div class="row mb-2 flex-grow-1">
+            <div class="col-12 col-sm-4">
+              <img [src]="getImageOfProduct(product)" class="card-img img-fluid" alt="Product Image">
+            </div>
+            <div class="col-12 col-sm-8">
+              <h4 class="mb-4">{{ product.name }}</h4>
+              <div class="row">
+                <div class="col-6">
+                  <h6>Quantità:</h6>
+                  <p class="text-muted">{{ product.quantity }}</p>
+                </div>
+                <div class="col-6">
+                  <h6>Peso:</h6>
+                  <p class="text-muted">{{ product.weight }} kg</p>
+                </div>
               </div>
             </div>
           </div>
+          <div class="mt-2">
+            <div class="mb-2" *ngIf="getCustomization(product).length > 0">
+              <h6>
+                <button (click)="toggleCustomization(product)" class="btn btn-link p-0 custom-button mb-3">
+                  Personalizzazioni
+                  <i [ngClass]="{'bi bi-chevron-down small-chevron': !getCustomizationVisible(product), 'bi bi-chevron-up small-chevron': getCustomizationVisible(product)}" style="font-size: 1rem; width: 1rem; height: 1rem;"></i>
+                </button>
+              </h6>
+              <ul *ngIf="getCustomizationVisible(product)" class="list-unstyled ms-3 text-muted">
+                <li *ngFor="let customization of getCustomization(product)">
+                  <b>{{ customization[0] }}:</b> {{ customization[1] }}
+                </li>
+              </ul>
+            </div>
+
+            <div class="mb-2 ms-2">
+              <h6>Note:</h6>
+              <p class="text-muted ms-3">{{ product.notes }}</p>
+            </div>
+            <div class="mb-2 ms-2">
+              <h6>Prezzo del prodotto:</h6>
+              <p class="text-muted ms-3">€ {{ product.totalPrice }}</p>
+            </div>
+          </div>
         </div>
+      </div>
+    </div>
 
-        <div class="column mt-2">
-          <div class="row mb-2" *ngIf="getCustomization(product).length > 0; let customizationItem">
-            <h6 class="col-12 d-flex align-items-center">
-              <button (click)="toggleCustomization(product)" class="btn btn-link p-0 custom-button mb-3 col-auto">
-
-                <span style="margin-left: 10px;">Personalizzazioni  </span>
-                <i [ngClass]="{'bi bi-chevron-down small-chevron': !getCustomizationVisible(product), 'bi bi-chevron-up small-chevron': getCustomizationVisible(product)}" style="font-size: 1rem; width: 1rem; height: 1rem;"></i>
-              </button>
-            </h6>
-
-            <ul *ngIf="getCustomizationVisible(product)" class="col-12 list-unstyled ms-3 text-muted">
-              <li *ngFor="let customization of getCustomization(product)">
-                <b>{{ customization[0] }}:</b> {{ customization[1] }}
-              </li>
-            </ul>
+    <!-- Bundle Card -->
+    <div *ngFor="let bundle of orderDetails.bundles" class="col px-lg-5">
+      <div class="product-details card h-100 mt-2 p-3">
+        <div class="card-body d-flex flex-column">
+          <div class="row mb-2 flex-grow-1">
+            <div class="col-12 col-sm-4">
+              <img [src]="getImageOfBundle(bundle)" class="card-img img-fluid" alt="Bundle Image">
+            </div>
+            <div class="col-12 col-sm-8">
+              <h4 class="mb-4">{{ bundle.name }}</h4>
+              <div class="row">
+                <div class="col-6">
+                  <h6>Quantità:</h6>
+                  <p class="text-muted">{{ bundle.quantity }}</p>
+                </div>
+                <div class="col-6">
+                  <h6>Misura:</h6>
+                  <p class="text-muted">{{ bundle.measure.label }} kg</p>
+                </div>
+              </div>
+            </div>
           </div>
-
-
-          <div class="col-12 mb-2 ms-2">
-            <h6>Note:</h6>
-            <p class="text-muted ms-3">{{ product.notes }}</p>
-          </div>
-          <div class="col-12 mb-2 ms-2">
+          <div class="mb-2">
             <h6>Prezzo del prodotto:</h6>
-            <p class="text-muted ms-3">€ {{ product.totalPrice }}</p>
+            <p class="text-muted">€ {{ bundle.totalPrice }}</p>
           </div>
         </div>
       </div>
     </div>
-
-    <div *ngFor="let bundle of orderDetails.bundles" class="col">
-      <div class="product-details card h-100 mt-2 p-3">
-        <div class="row mb-2">
-          <div class="col-12 col-sm-4">
-            <img [src]="getImageOfBundle(bundle)" class="card-img" alt="Product Image">
-          </div>
-          <div class="col-10 col-sm-8">
-            <h4 class="mb-4">{{ bundle.name }}</h4>
-            <div class="row">
-              <div class="col-6 ms-2">
-                <h6>Quantità:</h6>
-                <p class="text-muted ms-3">{{ bundle.quantity }}</p>
-              </div>
-              <div class="col-6 ms-2">
-                <h6>Misura:</h6>
-                <p class="text-muted ms-3">{{ bundle.measure.label }} kg</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-12 mb-2">
-          <h6>Prezzo del prodotto:</h6>
-          <p class="text-muted">€ {{ bundle.totalPrice }}</p>
-        </div>
-      </div>
-    </div>
-
   </div>
 
-  <div class="sticky-bottom mt-4 pt-4 border-top">
-    <div class="row align-items-center">
+  <!-- Order Summary -->
+  <div class="order-summary sticky-bottom mt-4 pt-4 border-top">
+    <div class="row align-items-center mb-3">
       <div class="col-6">
         <h6>Data e ora ritiro:</h6>
         <p>{{ orderDetails.pickupDateTime }}</p>
@@ -103,6 +104,16 @@
       <div class="col-6 text-end">
         <h6>Totale:</h6>
         <p>{{ orderDetails.totalPrice }} €</p>
+      </div>
+    </div>
+    <div class="row align-items-center mb-3">
+      <div class="col-6">
+        <h6>Note:</h6>
+        <p>{{ orderDetails.note }}</p>
+      </div>
+      <div class="col-6 text-end">
+        <h6>Status:</h6>
+        <p>a</p>
       </div>
     </div>
     <div class="row justify-content-end">
@@ -116,9 +127,9 @@
       </div>
     </div>
   </div>
-
 </div>
 
+<!-- Contact Us Modal -->
 <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content" style="border-radius: 8px;">
