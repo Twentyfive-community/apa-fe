@@ -21,5 +21,6 @@ export class OrderDetails {
   phoneNumber: string;
   pickupDateTime: string;
   totalPrice: number;
+  formattedPickupDate: string;
 
 }
