@@ -22,5 +22,5 @@ export class OrderDetails {
   pickupDateTime: string;
   totalPrice: number;
   formattedPickupDate: string;
-
+  status: string;
 }
