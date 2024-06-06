@@ -16,12 +16,12 @@
   </div>
 
   <!-- Inizio Stickybox -->
-  <div class="sticky-box p-3" [ngClass]="{'collapsed': isCollapsed}">
+  <div class="sticky-box p-3" style="cursor: pointer" [ngClass]="{'collapsed': isCollapsed}">
     <!-- titolo -->
-    <div class="sticky-box-title col-12">
+    <div class="sticky-box-title col-12" (click)="toggleStickyBox()">
       <p>
         <b>Finalizza Ordine</b>
-        <button class="btn btn-link" (click)="toggleStickyBox()">
+        <button class="btn btn-link">
           <i [ngClass]="{'bi bi-chevron-down': isCollapsed, 'bi bi-chevron-up': !isCollapsed}" style="font-size: 1rem; color: black"></i>
         </button>
       </p>

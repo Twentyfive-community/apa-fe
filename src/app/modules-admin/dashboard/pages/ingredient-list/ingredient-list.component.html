@@ -1,6 +1,6 @@
 <ul class="nav nav-tabs" id="myTab" role="tablist">
   <li *ngFor="let category of categories" class="nav-item" role="presentation" ngbDropdown>
-    <div (click)="setActiveTab(category.id)" class="nav-link" id="{{category.id}}-tab" data-bs-toggle="tab" [attr.data-bs-target]="'#'+category.id" role="tab" [class.active]="activeTab === category.id" [attr.aria-controls]="category.id" aria-selected="true">
+    <div (click)="setActiveTab(category.id)" class="nav-link" style="cursor: pointer" id="{{category.id}}-tab" data-bs-toggle="tab" [attr.data-bs-target]="'#'+category.id" role="tab" [class.active]="activeTab === category.id" [attr.aria-controls]="category.id" aria-selected="true">
       {{category.name}}
       <span ngbDropdownToggle class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"></span>
     </div>
@@ -10,7 +10,7 @@
     </ul>
   </li>
   <li *ngFor="let category of disabledCategories" class="nav-item" role="presentation" ngbDropdown>
-    <div class="nav-link disattivo">
+    <div class="nav-link disattivo" style="cursor: default">
       {{category.name}}
       <span ngbDropdownToggle class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"></span>
     </div>
