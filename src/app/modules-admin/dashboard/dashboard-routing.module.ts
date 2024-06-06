@@ -11,6 +11,9 @@ import {IngredientListComponent} from "./pages/ingredient-list/ingredient-list.c
 import {IngredientEditComponent} from "./pages/ingredient-edit/ingredient-edit.component";
 import {ProductListComponent} from "./pages/product-list/product-list.component";
 import {ProductEditComponent} from "./pages/product-edit/product-edit.component";
+import {IngredientGuard} from "./guards/ingredient.guard";
+import {ProductGuard} from "./guards/product.guard";
+import {CustomerGuard} from "./guards/customer.guard";
 
 const routes: Routes = [
   {path: '', redirectTo: 'ordini', pathMatch: 'full'},
@@ -26,16 +29,16 @@ const routes: Routes = [
 
     {path: 'clienti', component: CustomerListComponent, data: {title: 'Clienti'}},
     {path: 'dettagliClienti/:id', component: CustomerDetailsComponent, data: {title: 'Dettagli Cliente'}},
-    {path: 'editingClienti', component: CustomerEditComponent, data: {title: 'Crea Cliente'}},
-    {path: 'editingClienti/:id', component: CustomerEditComponent, data: {title: 'Modifica Cliente'}},
+    {path: 'editingClienti', component: CustomerEditComponent, data: {title: 'Crea Cliente'}, canDeactivate: [CustomerGuard]},
+    {path: 'editingClienti/:id', component: CustomerEditComponent, data: {title: 'Modifica Cliente'}, canDeactivate: [CustomerGuard]},
 
     {path: 'prodotti', component: ProductListComponent, data: {title: 'Prodotti'}},
-    {path: 'editingProdotti', component: ProductEditComponent, data: {title: 'Crea Prodotto'}},
-    {path: 'editingProdotti/:id', component: ProductEditComponent, data: {title: 'Modifica Prodotto'}},
+    {path: 'editingProdotti', component: ProductEditComponent, data: {title: 'Crea Prodotto'}, canDeactivate: [ProductGuard]},
+    {path: 'editingProdotti/:id', component: ProductEditComponent, data: {title: 'Modifica Prodotto'}, canDeactivate: [ProductGuard]},
 
     {path: 'ingredienti', component: IngredientListComponent, data: {title: 'Ingredienti'}},
-    {path: 'editingIngredienti', component: IngredientEditComponent, data: {title: 'Crea Ingrediente'}},
-    {path: 'editingIngredienti/:id', component: IngredientEditComponent, data: {title: 'Modifica Ingrediente'}},
+    {path: 'editingIngredienti', component: IngredientEditComponent, data: {title: 'Crea Ingrediente'}, canDeactivate: [IngredientGuard]},
+    {path: 'editingIngredienti/:id', component: IngredientEditComponent, data: {title: 'Modifica Ingrediente'}, canDeactivate: [IngredientGuard]},
   ]
 }];
 

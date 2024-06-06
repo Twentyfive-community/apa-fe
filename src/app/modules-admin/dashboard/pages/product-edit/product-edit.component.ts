@@ -114,18 +114,7 @@ export class ProductEditComponent implements OnInit {
   }
 
   close() {
-
-    this.modalService.openModal(
-      'Procedendo in questo modo si perderanno i dati inseriti. Continuare?',
-      '',
-      'Annulla',
-      'Conferma',
-      {
-        size: 'md',
-        onConfirm: (() => {
           this.router.navigate(['../dashboard/prodotti'], {queryParams: {activeTab: this.categoryId}});
-        })
-      });
   }
 
   closeIconClicked(index: number) {

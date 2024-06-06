@@ -13,6 +13,7 @@ import {ToastrService} from "ngx-toastr";
 })
 export class CustomerEditComponent implements OnInit{
 
+  originalCustomer: Customer = new Customer()
   customer: Customer = new Customer()
   customerId: string | null;
   ngOnInit(): void {
@@ -26,6 +27,8 @@ export class CustomerEditComponent implements OnInit{
               private toastrService: ToastrService,
               private activatedRouteRoute: ActivatedRoute) {
   }
+
+
 
   onInputChange(event: any, type: string) {
     switch (type) {
@@ -44,19 +47,15 @@ export class CustomerEditComponent implements OnInit{
     }
   }
 
-  close() {
+  hasChanges(): boolean{
+    return this.customer.firstName !== this.originalCustomer.firstName ||
+      this.customer.lastName !== this.originalCustomer.lastName ||
+      this.customer.email !== this.originalCustomer.email ||
+      this.customer.phoneNumber !== this.originalCustomer.phoneNumber;
+  }
 
-    this.modalService.openModal(
-      'Procedendo in questo modo si perderanno i dati inseriti. Continuare?',
-      '',
-      'Annulla',
-      'Conferma',
-      {
-        size: 'md',
-        onConfirm: (() => {
-          this.router.navigate(['../dashboard/clienti']);
-          })
-      });
+  close() {
+    this.router.navigate(['../dashboard/clienti']);
   }
 
   saveNewCustomer(){
@@ -75,6 +74,7 @@ export class CustomerEditComponent implements OnInit{
     if(this.customerId!=null){
       this.customerService.getCustomerDetails(this.customerId).subscribe( (res:any) =>{
         this.customer = res
+        this.originalCustomer = { ...res };
         console.log(res);
         console.log(this.customer);
       })

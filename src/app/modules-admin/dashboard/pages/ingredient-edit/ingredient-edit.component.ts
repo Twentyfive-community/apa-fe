@@ -71,21 +71,7 @@ export class IngredientEditComponent implements OnInit {
   }
 
   close() {
-    if (this.hasChanges()) {
-      this.modalService.openModal(
-        'Procedendo in questo modo si perderanno i dati inseriti. Continuare?',
-        '',
-        'Annulla',
-        'Conferma',
-        {
-          size: 'md',
-          onConfirm: (() => {
-            this.router.navigate(['../dashboard/ingredienti'], { queryParams: { activeTab: this.activeTab } });
-          })
-        });
-    } else {
-        this.router.navigate(['../dashboard/ingredienti'], { queryParams: { activeTab: this.activeTab } });
-    }
+    this.router.navigate(['../dashboard/ingredienti'], { queryParams: { activeTab: this.activeTab } });
   }
 
   getAllergens() {
