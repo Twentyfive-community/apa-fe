@@ -18,13 +18,15 @@
   <!-- Inizio Stickybox -->
   <div class="sticky-box p-3" style="cursor: pointer" [ngClass]="{'collapsed': isCollapsed}">
     <!-- titolo -->
-    <div class="sticky-box-title col-12" (click)="toggleStickyBox()">
-      <p>
+    <div class="sticky-box-title" (click)="toggleStickyBox()">
+      <span>
         <b>Finalizza Ordine</b>
+        <i class="mx-3" [ngClass]="isDisabled('buy_button') ? 'bi bi-exclamation-triangle-fill' : 'bi bi-check-circle-fill'"
+           [style.color]="isDisabled('buy_button') ? 'red' : 'green'"></i>
         <button class="btn btn-link">
           <i [ngClass]="{'bi bi-chevron-down': isCollapsed, 'bi bi-chevron-up': !isCollapsed}" style="font-size: 1rem; color: black"></i>
         </button>
-      </p>
+      </span>
     </div>
 
     <div class="sticky-box-body">
@@ -34,7 +36,7 @@
         <!-- datepicker -->
         <div class="col-12 col-md-6">
           <lib-twentyfive-datepicker
-            [disabledInput]="isBuyButtonDisabled()"
+            [disabledInput]="isDisabled('datepicker')"
             [showLabel]="false"
             [labelStyle]="LabelTheme.LabelBold"
             [setMinDateToToday]="true"
@@ -58,7 +60,7 @@
       <div class="row mb-2">
         <h6>Lascia una nota</h6>
         <div>
-        <textarea [disabled]="isBuyButtonDisabled()" [(ngModel)]="orderNotes" [ngClass]="InputTheme.Primary" class="form-control"
+        <textarea [disabled]="isDisabled('textarea')" [(ngModel)]="orderNotes" [ngClass]="InputTheme.Primary" class="form-control"
                   rows="3" placeholder="Inserisci una nota" style="max-height: 100px; resize: vertical;"></textarea>
         </div>
       </div>
@@ -69,13 +71,23 @@
         <p>{{cart.totalPrice}} €</p>
       </div>
 
+    </div>
+
+    <!--sticky box footer -->
+    <div class="sticky-box-footer">
+
+      <!-- Totale da visualizzare quando isCollapsed -->
+      <div class="row" *ngIf="isCollapsed">
+        <span> <p><b>Totale da pagare:</b> {{cart.totalPrice}} €</p></span>
+      </div>
+
+      <!-- bottoni -->
       <div class="row">
         <!-- Bottoni per schermi grandi -->
         <div class="col-12 d-flex flex-md-row justify-content-end d-none d-md-flex">
           <div class="mb-2 mb-md-0 me-md-2">
             <lib-generic-button
-              (click)="!isBuyButtonDisabled() ? removeFromCart() : null"
-              [disabled]="isBuyButtonDisabled()"
+              (click)="removeFromCart()"
               buttonText="Svuota carrello"
               [buttonSize]="ButtonSizeTheme.Medium"
               [buttonStyle]="ButtonTheme.Primary"
@@ -84,8 +96,8 @@
           </div>
           <div>
             <lib-generic-button
-              (click)="!isBuyButtonDisabled() ? buyCart() : null"
-              [disabled]="isBuyButtonDisabled()"
+              (click)="!isDisabled('buy_button') ? buyCart() : isCollapsed = false"
+              [disabled]="isDisabled('buy_button')"
               buttonText="Ordina"
               [buttonSize]="ButtonSizeTheme.Medium"
               [buttonStyle]="ButtonTheme.Secondary"
@@ -98,8 +110,7 @@
         <div class="col-12 d-flex flex-column justify-content-end d-md-none">
           <div class="mb-2">
             <lib-generic-button
-              (click)="!isBuyButtonDisabled() ? removeFromCart() : null"
-              [disabled]="isBuyButtonDisabled()"
+              (click)="removeFromCart()"
               buttonText="Svuota carrello"
               [buttonSize]="ButtonSizeTheme.FullWidth"
               [buttonStyle]="ButtonTheme.Primary"
@@ -108,8 +119,8 @@
           </div>
           <div>
             <lib-generic-button
-              (click)="!isBuyButtonDisabled() ? buyCart() : null"
-              [disabled]="isBuyButtonDisabled()"
+              (click)="!isDisabled('buy_button') ? buyCart() : null"
+              [disabled]="isDisabled('buy_button')"
               buttonText="Ordina"
               [buttonSize]="ButtonSizeTheme.FullWidth"
               [buttonStyle]="ButtonTheme.Secondary"
@@ -120,10 +131,6 @@
       </div>
     </div>
 
-    <!-- Totale da visualizzare quando isCollapsed -->
-    <div class="row" *ngIf="isCollapsed">
-      <span> <p><b>Totale da pagare:</b> {{cart.totalPrice}} €</p></span>
-    </div>
 
 
   </div>

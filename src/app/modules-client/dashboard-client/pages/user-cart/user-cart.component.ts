@@ -235,9 +235,17 @@ export class UserCartComponent implements OnInit, OnDestroy{
     }
   }
 
-  isBuyButtonDisabled(): boolean {
-    // Return true if all items have toBuy set to false, otherwise false
-    return !this.itemToBuy.some(item => item.toBuy);
+  isDisabled(from: string): boolean {
+    switch (from) {
+      case 'buy_button':
+        return !this.itemToBuy.some(item => item.toBuy) || !this.selectedDate || !this.selectedTime;
+      case 'datepicker':
+        return !this.itemToBuy.some(item => item.toBuy);
+      case 'textarea':
+        return !this.itemToBuy.some(item => item.toBuy);
+      default:
+        return true;
+    }
   }
 
   calculatePriceAndObtainDate() {
