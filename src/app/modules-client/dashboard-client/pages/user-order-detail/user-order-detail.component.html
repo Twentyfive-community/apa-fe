@@ -35,6 +35,7 @@
               </div>
             </div>
           </div>
+          <hr>
           <div >
             <div class="mt-2 mb-1" *ngIf="getCustomization(product).length > 0">
               <h6>
@@ -47,9 +48,10 @@
                 <li *ngFor="let customization of getCustomization(product)">
                   <b>{{ customization[0] }}:</b> {{ customization[1] }}
                 </li>
+                <hr>
               </ul>
+
             </div>
-            <hr>
             <div *ngIf="product.notes" class="col-6">
               <h6>Note:</h6>
               <p>{{ product.notes }}</p>
