@@ -9,6 +9,7 @@ import {CompletedorderService} from "../../../../services/completedorder.service
 import {ProductService} from "../../../../services/product.service";
 import {BundleInPurchase, BundleInPurchaseDetails} from "../../../../models/Bundle";
 import {TwentyfiveModalService} from "twentyfive-modal";
+import {RxStompServiceService} from "../../../../services/rxstomp/rx-stomp-service.service";
 
 declare var bootstrap: any;
 @Component({
@@ -21,7 +22,8 @@ export class UserOrderDetailComponent implements OnInit {
   orderDetails: OrderDetails=new OrderDetails();
   customerId: string = '';
   activeOrders: string | null = '';
-
+  completed = false;
+  customerSubscriptionText: any;
   productImages: string[]=[];
   bundleImages: string[]=[];
   customizationsVisible: boolean[] = [];
@@ -33,6 +35,7 @@ export class UserOrderDetailComponent implements OnInit {
     private orderService: OrderService,
     private completedOrderService: CompletedorderService,
     private productService:ProductService,
+    private rxStompService: RxStompServiceService
   ) {}
 
   loadBootstrapJS(): void {
@@ -53,17 +56,18 @@ export class UserOrderDetailComponent implements OnInit {
     this.productImages=[];
     this.bundleImages=[];
     if (this.customerId && this.orderId) {
-
-      if(this.activeOrders=='true')
-        this.loadProductsFromActiveOrder();
-      else
-        this.loadProductsFromCompletedOrder();
-
-      console.log('product.nameè')
-      for(var product of this.orderDetails.products){
-        console.log(product.name)
-      }
+      this.customerSubscriptionText = this.rxStompService.watch(`/${this.customerId}`).subscribe((message:any) =>{
+        if(message.body == 'COMPLETO' || message.body == 'ANNULLATO'){
+          this.completed=true;
+        }
+          this.loadOrders(this.completed);
+      });
+    this.loadOrders();
+    console.log('product.nameè')
+    for(var product of this.orderDetails.products){
+      console.log(product.name)
     }
+  }
 
   }
 
@@ -167,5 +171,11 @@ export class UserOrderDetailComponent implements OnInit {
   getCustomizationVisible(product: ProductInPurchase){
     let n = this.orderDetails.products.indexOf(product);
     return this.customizationsVisible[n];
+  }
+  loadOrders(completed?:boolean){
+    if(this.activeOrders=='true' || completed? completed : false)
+      this.loadProductsFromActiveOrder();
+    else
+      this.loadProductsFromCompletedOrder();
   }
 }

@@ -113,6 +113,19 @@
 
       <div class="col-6 text-start">
         <h6>Status:</h6>
+        <span
+          [style.fontWeight]="'bold'"
+          [style.color]="
+            orderDetails.status === 'Annullato' ? '#FF6F61' :
+            orderDetails.status === 'Ricevuto' ? '#FFD700' :
+            orderDetails.status === 'In preparazione' ? '#77DD77' :
+            orderDetails.status === 'Pronto' ? '#FFB347' :
+            orderDetails.status === 'Completo' ? '#89CFF0' :
+            'black'">
+        {{ orderDetails.status }}
+    </span>
+
+
       </div>
       <div  class="col-6 text-end">
         <h6>Note:</h6>

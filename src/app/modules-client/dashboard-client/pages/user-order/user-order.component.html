@@ -35,11 +35,17 @@
         <p class="card-text"><strong>Prezzo:</strong> {{ order.price }}</p>
         <p class="card-text">
           <strong>Stato: </strong>
-          <span [style.fontWeight]="'bold'" [style.color]="
-            order.status === 'Annullato' ? 'red' :
-            order.status === 'Ricevuto' ? 'green' :  '#FFD700'">
-            {{ order.status }}
-          </span>
+          <span
+            [style.fontWeight]="'bold'"
+            [style.color]="
+            order.status === 'Annullato' ? '#FF6F61' :
+            order.status === 'Ricevuto' ? '#FFD700' :
+            order.status === 'In preparazione' ? '#77DD77' :
+            order.status === 'Pronto' ? '#FFB347' :
+            order.status === 'Completo' ? '#89CFF0' :
+            'black'">
+        {{ order.status }}
+    </span>
         </p>
 
 

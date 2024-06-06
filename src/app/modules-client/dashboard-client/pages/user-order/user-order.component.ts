@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import { ActivatedRoute, Router } from "@angular/router";
 import { Order } from "../../../../models/Order";
 import { CompletedorderService } from "../../../../services/completedorder.service";
 import {ButtonTheme} from "twentyfive-style";
 import {OrderService} from "../../../../services/order.service";
 import {TwentyfiveModalService} from "twentyfive-modal";
+import {RxStompServiceService} from "../../../../services/rxstomp/rx-stomp-service.service";
 declare var bootstrap: any;
 
 @Component({
@@ -12,9 +13,12 @@ declare var bootstrap: any;
   templateUrl: './user-order.component.html',
   styleUrls: ['./user-order.component.scss']
 })
-export class UserOrderComponent implements OnInit {
+export class UserOrderComponent implements OnInit, OnDestroy {
   activeOrders: string | null = '';
   customerId: string = '';
+  customerSubscriptionText: any;
+
+
 
   orders: Order[] = [];
 
@@ -29,6 +33,7 @@ export class UserOrderComponent implements OnInit {
     private router: Router,
     private orderService:OrderService,
     private modalService: TwentyfiveModalService,
+    private rxStompService: RxStompServiceService
   ) { }
 
   ngOnInit(): void {
@@ -36,6 +41,9 @@ export class UserOrderComponent implements OnInit {
     this.activeOrders = this.activatedRoute.snapshot.queryParamMap.get('activeOrders');
     this.customerId = this.activatedRoute.snapshot.paramMap.get('id')!;
     this.orders=[]
+    this.customerSubscriptionText = this.rxStompService.watch(`/${this.customerId}`).subscribe((message:any) =>{
+      this.loadOrders();
+    });
     if(this.customerId) {
       this.loadOrders();
     }
@@ -74,7 +82,6 @@ export class UserOrderComponent implements OnInit {
   private loadActiveOrders(page: number, size: number): void {
     this.orderService.getActiveOrdersByCustomer(this.customerId, page, size).subscribe({
       next: (response) => {
-        console.log(response);
         this.orders = response.content;
         this.setupPagination(response.totalPages);
       },
@@ -166,6 +173,12 @@ export class UserOrderComponent implements OnInit {
       }
     });
 
+  }
+
+  isActiveOrderStomp(message:string){
+    return message == 'RICEVUTO' || message || 'IN_PREPARAZIONE' && message || 'PRONTO';
+  }
+  ngOnDestroy(): void {
   }
 
 }
