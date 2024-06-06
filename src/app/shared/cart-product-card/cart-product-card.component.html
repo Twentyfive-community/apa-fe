@@ -1,4 +1,4 @@
-<div class="card shadow mb-3" style="min-height: 670px;">
+<div class="card shadow mb-3" style="min-height: 500px;">
   <div class="card-body d-flex flex-column">
 
     <div class="row mb-2">
@@ -71,13 +71,13 @@
     </div>
 
 
-    <div class="mt-auto">
+    <div >
       <hr/>
 
       <p><b>Data e ora di ritiro minime:</b> {{ product.deliveryDate | date:'dd/MM/yyyy' }} {{minTime}}</p>
       <p *ngIf="type=='tray'"><b>Peso Scelto: </b>{{product.measure.label}} ({{product.measure.weight}} kg)</p>
       <p><b>Prezzo Totale Prodotto:</b> {{product.totalPrice}} €</p>
-      <div class="mt-auto" *ngIf="type == 'tray' || type == 'productKg'">
+      <div  *ngIf="type == 'tray' || type == 'productKg'">
         <lib-generic-button-text-with-icon
           [buttonStyle]="ButtonTheme.Primary"
           [buttonSize]="ButtonSizeTheme.FullWidth"
