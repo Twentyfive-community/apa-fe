@@ -213,8 +213,10 @@ export class ProductEditComponent implements OnInit {
           if (this.isValid()) {
             this.productToAdd.ingredientIds = await this.insertIngredientFoundByName();
             this.productService.saveWeighted(this.productToAdd).subscribe({
-              error: () => {
-                this.toastrService.error("Errore nel salvataggio del prodotto!");
+              error: (errorResponse) => {
+                if (errorResponse.error.status === 'NOT_ACCEPTABLE') { // Controlla lo status code per l'errore specifico
+                  this.toastrService.error("Esiste già un prodotto con questo nome!");
+                }
               },
               complete: () => {
                 this.toastrService.success("Prodotto salvato con successo");
@@ -226,8 +228,10 @@ export class ProductEditComponent implements OnInit {
         case 'productKg':
           this.productToAdd.ingredientIds = await this.insertIngredientFoundByName();
           this.productService.saveKg(this.productToAdd).subscribe({
-            error: () => {
-              this.toastrService.error("Errore nel salvataggio del prodotto!");
+            error: (errorResponse) => {
+              if (errorResponse.error.status === 'NOT_ACCEPTABLE') { // Controlla lo status code per l'errore specifico
+                this.toastrService.error("Esiste già un prodotto con questo nome!");
+              }
             },
             complete: () => {
               this.toastrService.success("Prodotto salvato con successo");
@@ -237,8 +241,10 @@ export class ProductEditComponent implements OnInit {
           break;
         case 'tray':
           this.productService.saveTray(this.productToAdd).subscribe({
-            error: () => {
-              this.toastrService.error("Errore nel salvataggio del prodotto!");
+            error: (errorResponse) => {
+              if (errorResponse.error.status === 'NOT_ACCEPTABLE') { // Controlla lo status code per l'errore specifico
+                this.toastrService.error("Esiste già un prodotto con questo nome!");
+              }
             },
             complete: () => {
               this.toastrService.success("Prodotto salvato con successo");
