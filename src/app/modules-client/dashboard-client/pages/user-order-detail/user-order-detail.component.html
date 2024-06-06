@@ -12,16 +12,16 @@
   </div>
   <hr>
 
-  <div class="orders-container row row-cols-1 row-cols-md-2 row-cols-lg-3 align-content-center justify-content-center g-4">
+  <div class="orders-container row row-cols-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-3 align-content-center justify-content-center g-4">
     <!-- Product Card -->
-    <div *ngFor="let product of orderDetails.products" class="col px-lg-5">
-      <div class="product-details card h-100 mt-2">
-        <div class="card-body d-flex flex-column">
-          <div class="row mb-2 flex-grow-1">
+    <div *ngFor="let product of orderDetails.products" class="col px-lg-4 px-md-2">
+      <div class="product-details card h-80 mt-2">
+        <div class="card-body">
+          <div class="row">
             <div class="col-12 col-sm-4">
               <img [src]="getImageOfProduct(product)" class="card-img img-fluid" alt="Product Image">
             </div>
-            <div class="col-12 col-sm-8">
+            <div class="col-12 col-sm-8 mt-2">
               <h4 class="mb-4">{{ product.name }}</h4>
               <div class="row">
                 <div class="col-6">
@@ -35,10 +35,10 @@
               </div>
             </div>
           </div>
-          <div class="mt-2">
-            <div class="mb-2" *ngIf="getCustomization(product).length > 0">
+          <div >
+            <div class="mt-2 mb-1" *ngIf="getCustomization(product).length > 0">
               <h6>
-                <button (click)="toggleCustomization(product)" class="btn btn-link p-0 custom-button mb-3">
+                <button (click)="toggleCustomization(product)" class="btn btn-link p-0 custom-button ms-2">
                   Personalizzazioni
                   <i [ngClass]="{'bi bi-chevron-down small-chevron': !getCustomizationVisible(product), 'bi bi-chevron-up small-chevron': getCustomizationVisible(product)}" style="font-size: 1rem; width: 1rem; height: 1rem;"></i>
                 </button>
@@ -49,12 +49,12 @@
                 </li>
               </ul>
             </div>
-
-            <div class="mb-2 ms-2">
+            <hr>
+            <div *ngIf="product.notes" class="col-6">
               <h6>Note:</h6>
-              <p class="text-muted ms-3">{{ product.notes }}</p>
+              <p>{{ product.notes }}</p>
             </div>
-            <div class="mb-2 ms-2">
+            <div class="ms-2">
               <h6>Prezzo del prodotto:</h6>
               <p class="text-muted ms-3">€ {{ product.totalPrice }}</p>
             </div>
@@ -67,7 +67,7 @@
     <div *ngFor="let bundle of orderDetails.bundles" class="col px-lg-5">
       <div class="product-details card h-100 mt-2 p-3">
         <div class="card-body d-flex flex-column">
-          <div class="row mb-2 flex-grow-1">
+          <div class="row flex-grow-1">
             <div class="col-12 col-sm-4">
               <img [src]="getImageOfBundle(bundle)" class="card-img img-fluid" alt="Bundle Image">
             </div>
@@ -85,7 +85,8 @@
               </div>
             </div>
           </div>
-          <div class="mb-2">
+          <hr>
+          <div class="">
             <h6>Prezzo del prodotto:</h6>
             <p class="text-muted">€ {{ bundle.totalPrice }}</p>
           </div>
@@ -95,7 +96,7 @@
   </div>
 
   <!-- Order Summary -->
-  <div class="order-summary sticky-bottom mt-4 pt-4 border-top">
+  <div class="order-summary sticky-bottom mt-5 pt-4 border-top">
     <div class="row align-items-center mb-3">
       <div class="col-6">
         <h6>Data e ora ritiro:</h6>
@@ -107,13 +108,13 @@
       </div>
     </div>
     <div class="row align-items-center mb-3">
-      <div class="col-6">
+
+      <div class="col-6 text-start">
+        <h6>Status:</h6>
+      </div>
+      <div  class="col-6 text-end">
         <h6>Note:</h6>
         <p>{{ orderDetails.note }}</p>
-      </div>
-      <div class="col-6 text-end">
-        <h6>Status:</h6>
-        <p>a</p>
       </div>
     </div>
     <div class="row justify-content-end">
