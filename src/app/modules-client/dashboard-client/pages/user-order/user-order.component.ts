@@ -175,10 +175,10 @@ export class UserOrderComponent implements OnInit, OnDestroy {
 
   }
 
-  isActiveOrderStomp(message:string){
-    return message == 'RICEVUTO' || message || 'IN_PREPARAZIONE' && message || 'PRONTO';
-  }
   ngOnDestroy(): void {
+    if (this.customerSubscriptionText) {
+      this.customerSubscriptionText.unsubscribe();
+    }
   }
 
 }

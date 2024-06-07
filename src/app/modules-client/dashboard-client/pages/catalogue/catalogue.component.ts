@@ -7,13 +7,8 @@ import {ProductService} from "../../../../services/product.service";
 import {ProductDetails, ProductKg, ProductWeighted, Tray, TrayDetails} from "../../../../models/Product";
 import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
 import {ProductDetailsComponent} from "../product-details/product-details.component";
-import {response} from "express";
 import {CustomCakeComponent} from "../custom-cake/custom-cake.component";
 import {TrayCustomizedComponent} from "../tray-customized/tray-customized.component";
-import {CustomerDetails} from "../../../../models/Customer";
-import {KeycloakPasswordRecoveryService} from "../../../../services/passwordrecovery.service";
-import {CustomerService} from "../../../../services/customer.service";
-import {SigningKeycloakService} from "twentyfive-keycloak-new";
 
 @Component({
   selector: 'app-catalogue',
@@ -29,8 +24,11 @@ export class CatalogueComponent implements OnInit {
   categoryActive: string = '';
   categoryName: string = '';
   productListKg: ProductKg[]=[];
-  productListWeighted: ProductWeighted[]=[];
   trayList: Tray[]=[];
+  currentPage: number = 1;
+  itemsPerPage: number = 2;
+  totalPages: number = 1;
+
 
   productDetails: ProductDetails = new ProductDetails();
   trayDetails: TrayDetails = new TrayDetails();
@@ -41,8 +39,6 @@ export class CatalogueComponent implements OnInit {
   constructor(private categoryService: CategoryService,
               private genericModalService: TwentyfiveModalGenericComponentService,
               private productService: ProductService,
-              private signingKeycloakService: SigningKeycloakService,
-              private customerService:CustomerService,
   ) {
   }
 
@@ -68,19 +64,22 @@ export class CatalogueComponent implements OnInit {
     this.activeTab = category.id; // Imposta l'ID della tab attiva quando viene cliccata
     this.categoryActive = category.type;
     this.categoryName = category.name;
+    this.currentPage=1;
     this.getAll()
   }
 
-  getAll() {
+  getAll(page?:number) {
     switch (this.categoryActive) {
       case 'productKg':
-        this.productService.getAllKgActive(this.activeTab).subscribe((res: any) => {
-          this.productListKg = res
+        this.productService.getAllKgActive(this.activeTab, page? this.currentPage-1 : 0, this.itemsPerPage).subscribe((res: any) => {
+          this.productListKg = res.content
+          this.setupPagination(res.totalPages);
         })
         break;
       case 'tray':
-        this.productService.getAllTraysActive(this.activeTab).subscribe((res: any) => {
-          this.trayList = res
+        this.productService.getAllTraysActive(this.activeTab,page? this.currentPage-1 : 0, this.itemsPerPage).subscribe((res: any) => {
+          this.trayList = res.content;
+          this.setupPagination(res.totalPages);
         })
         break;
     }
@@ -130,6 +129,25 @@ export class CatalogueComponent implements OnInit {
         break;
     }
   }
+
+  setupPagination(totalPages: number) {
+    this.totalPages = totalPages;
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.getAll(this.currentPage-1);
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.getAll(this.currentPage-1);
+    }
+  }
+
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
   protected readonly ButtonTheme = ButtonTheme;
 

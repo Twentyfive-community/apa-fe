@@ -29,3 +29,34 @@
   overflow-y: hidden;
   -webkit-overflow-scrolling: touch; /* Abilita lo scorrimento fluido su dispositivi mobili */
 }
+.pagination-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 20px 0;
+}
+
+.pagination-button {
+  background-color: #000;
+  border: 1px solid #000;
+  color: #fff;
+  cursor: pointer;
+  padding: 8px 16px;
+  margin: 0 5px;
+  font-size: 1rem;
+  border-radius: 8px; /* Bordi stondati */
+}
+
+.pagination-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination-text {
+  margin: 0 10px;
+  font-size: 1rem;
+}
+
+.pagination-icon {
+  font-size: 1rem; /* Aumenta la dimensione delle icone */
+}

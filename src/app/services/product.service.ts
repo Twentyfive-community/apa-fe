@@ -25,8 +25,8 @@ export class ProductService {
     return this.http.get(`${this.baseKgUrl}/getAll`, {params: p});
   }
 
-  getAllKgActive(idCategory: string){
-    let p = Utils.createHttpParams({'idCategory': idCategory});
+  getAllKgActive(idCategory: string, page:number, size:number){
+    let p = Utils.createHttpParams({'idCategory': idCategory,'page': page, 'size': size});
     return this.http.get(`${this.baseKgUrl}/getAllActive`, {params: p});
   }
 
@@ -69,8 +69,8 @@ export class ProductService {
     return this.http.get(`${this.baseTrayUrl}/getAll`, {params: p});
   }
 
-  getAllTraysActive(idCategory: string){
-    let p = Utils.createHttpParams({'idCategory':idCategory});
+  getAllTraysActive(idCategory: string,page: number, size: number){
+    let p = Utils.createHttpParams({'idCategory':idCategory,'page': page, 'size': size});
     return this.http.get(`${this.baseTrayUrl}/getAllActive`, {params: p});
   }
   getByIdTray(id:string){
