@@ -173,7 +173,7 @@ export class UserOrderDetailComponent implements OnInit {
     return this.customizationsVisible[n];
   }
   loadOrders(completed?:boolean){
-    if(this.activeOrders=='true' || !completed)
+    if(this.activeOrders=='true' && !completed)
       this.loadProductsFromActiveOrder();
     else
       this.loadProductsFromCompletedOrder();
