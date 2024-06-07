@@ -55,8 +55,9 @@
     <div class="d-flex ">
       <div *ngFor="let allergen of selectedAllergens" class="me-2 mb-2">
         <lib-twentyfive-chip
-          chipText="{{allergen.name}}"
+          [chipText]="allergen.name"
           [chipStyle]="ChipTheme.Secondary"
+          [chipImg]="allergen.iconUrl"
           [closeableChip]="true"
           (closeChip)="closeChip(allergen)"
         ></lib-twentyfive-chip>
