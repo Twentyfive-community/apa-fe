@@ -47,6 +47,7 @@ export class UserOrderComponent implements OnInit, OnDestroy {
     if(this.customerId) {
       this.loadOrders();
     }
+
   }
 
   loadOrders() {
@@ -74,6 +75,7 @@ export class UserOrderComponent implements OnInit, OnDestroy {
         this.setupPagination(response.totalPages);
       },
       error: (error) => {
+        this.close();
         console.error('Failed to load orders:', error);
       }
     });
@@ -82,10 +84,20 @@ export class UserOrderComponent implements OnInit, OnDestroy {
   private loadActiveOrders(page: number, size: number): void {
     this.orderService.getActiveOrdersByCustomer(this.customerId, page, size).subscribe({
       next: (response) => {
-        this.orders = response.content;
-        this.setupPagination(response.totalPages);
+        console.log('active');
+        try{
+          this.orders = response.content;
+          this.setupPagination(response.totalPages);
+
+        }catch(e){
+          this.close();
+        }
+
+
       },
       error: (error) => {
+        console.log('no');
+        this.close();
         console.error('Failed to load orders:', error);
       }
     });

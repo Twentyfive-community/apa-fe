@@ -133,6 +133,14 @@
       </div>
     </div>
     <div class="row justify-content-end">
+      <div *ngIf="activeOrders=='true'" class="col-auto">
+        <lib-generic-button
+          (click)="cancelOrder(orderId)"
+          buttonText="Annulla Ordine"
+          [buttonSize]="ButtonSizeTheme.Medium"
+          [buttonStyle]="ButtonTheme.Primary"
+        ></lib-generic-button>
+      </div>
       <div class="col-auto">
         <lib-generic-button
           (click)="contactUs()"
@@ -161,6 +169,34 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cancelOrderModalLabel">Avviso</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body mb-0">
+        L'ordine è stato annullato con successo.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="impossibleCancelOrderModal" tabindex="-1" aria-labelledby="impossibleCancelOrderModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="impossibleCancelOrderModalLabel">Avviso</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body mb-0">
+        Non è piu possibile cancellare l'ordine.
       </div>
     </div>
   </div>

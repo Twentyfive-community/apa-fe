@@ -35,7 +35,8 @@ export class UserOrderDetailComponent implements OnInit {
     private orderService: OrderService,
     private completedOrderService: CompletedorderService,
     private productService:ProductService,
-    private rxStompService: RxStompServiceService
+    private rxStompService: RxStompServiceService,
+    private modalService: TwentyfiveModalService,
   ) {}
 
   loadBootstrapJS(): void {
@@ -177,5 +178,50 @@ export class UserOrderDetailComponent implements OnInit {
       this.loadProductsFromActiveOrder();
     else
       this.loadProductsFromCompletedOrder();
+  }
+
+
+  cancelOrder(id: string) {
+    // Apre una finestra modale di conferma
+    this.modalService.openModal(
+      'Se continui, l\'ordine con id #' + id + ' verrà annullato. Vuoi procedere?',
+      'Annulla l\'ordine',
+      'Annulla',
+      'Conferma',
+      {
+        size: 'md',
+        onConfirm: () => {
+          console.log('Richiesta di cancellamento per l\'ordine con id ' + id);
+
+          this.handleCancel(id);
+
+        }
+      }
+    );
+  }
+
+  handleCancel(id:string){
+    this.orderService.cancelOrderUser(id).subscribe({
+      next: (response) => {
+        console.log(response);
+        // Mostra una finestra modale di conferma email
+        //const orderCancelModal = new bootstrap.Modal(document.getElementById('cancelOrderModal'), {
+          //keyboard: false
+        //});
+        //orderCancelModal.show();
+        this.close();
+      },
+      error: (error) => {
+        var status=error.status;
+        if(status==400) {
+          const impOrderCancelModal = new bootstrap.Modal(document.getElementById('impossibleCancelOrderModal'), {
+            keyboard: false
+          });
+          impOrderCancelModal.show();
+
+        }
+      }
+    });
+
   }
 }
