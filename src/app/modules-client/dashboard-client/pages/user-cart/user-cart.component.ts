@@ -224,6 +224,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
           this.toastrService.error('Impossibile effettuare l\'ordine')
         },
         complete: () => {
+          this.isCollapsed = true
           this.selectedDate = null;
           this.selectedTime = '';
           this.orderNotes = '';
