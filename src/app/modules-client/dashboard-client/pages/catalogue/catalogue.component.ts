@@ -26,7 +26,7 @@ export class CatalogueComponent implements OnInit {
   productListKg: ProductKg[]=[];
   trayList: Tray[]=[];
   currentPage: number = 1;
-  itemsPerPage: number = 2;
+  itemsPerPage: number = 9;
   totalPages: number = 1;
 
 
