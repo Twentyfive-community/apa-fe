@@ -13,6 +13,5 @@ export class HomeComponent {
 
   goTo() {
     this.router.navigate(['../dashboard']);
-
   }
 }

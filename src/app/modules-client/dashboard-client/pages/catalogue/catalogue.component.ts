@@ -9,6 +9,9 @@ import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
 import {ProductDetailsComponent} from "../product-details/product-details.component";
 import {CustomCakeComponent} from "../custom-cake/custom-cake.component";
 import {TrayCustomizedComponent} from "../tray-customized/tray-customized.component";
+import {CustomerDetails} from "../../../../models/Customer";
+import {SigningKeycloakService} from "twentyfive-keycloak-new";
+import {CustomerService} from "../../../../services/customer.service";
 
 @Component({
   selector: 'app-catalogue',
@@ -18,6 +21,8 @@ import {TrayCustomizedComponent} from "../tray-customized/tray-customized.compon
 export class CatalogueComponent implements OnInit {
 
 
+  customer: CustomerDetails = new CustomerDetails();
+  customerIdkc: string = '';
 
   categories: Category[] = []
   categoryType = ['productKg', 'productWeighted', 'tray'];
@@ -39,12 +44,17 @@ export class CatalogueComponent implements OnInit {
   constructor(private categoryService: CategoryService,
               private genericModalService: TwentyfiveModalGenericComponentService,
               private productService: ProductService,
+              private router: Router,
+              private keycloackService: SigningKeycloakService,
+              private customerService: CustomerService,
   ) {
   }
 
 
   ngOnInit() {
     this.getCategories()
+    this.getCustomer();
+    console.log("SAAAAS" + this.customerIdkc)
   }
 
 
@@ -94,8 +104,16 @@ export class CatalogueComponent implements OnInit {
       this.getAll()
     })
   }
-  getIngredientListOfProduct(idProd: string) {
 
+  getCustomer(){
+    let keycloakService=(this.keycloackService)as any;
+    this.customerIdkc=keycloakService.keycloakService._userProfile.id;
+    if(this.customerIdkc!=null){
+      this.customerService.getCustomerByKeycloakId(this.customerIdkc).subscribe((res: any) =>{
+        this.customer=res;
+
+      })
+    }
   }
 
   modalCustomCake(){
@@ -146,6 +164,10 @@ export class CatalogueComponent implements OnInit {
       this.currentPage++;
       this.getAll(this.currentPage-1);
     }
+  }
+
+  goToLogin(){
+      this.router.navigate(['../dashboard'])
   }
 
   protected readonly ButtonSizeTheme = ButtonSizeTheme;

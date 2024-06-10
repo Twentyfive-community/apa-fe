@@ -13,58 +13,84 @@ export class DashboardClient implements OnInit{
 
 
   customer:CustomerDetails =new CustomerDetails()
-  customerIdkc :string =''
+  customerIdkc : string = ''
   imAdmin: string=''
+  navbarItems: any[] = [];
+  adminItems: any[] = [];
 
 
-  navbarItems: any[] = [
-    {
-      title: "Profilo",
-      icon: "bi bi-person",
-      navigationUrl: "profilo",
-      disableClick: false,
-      labelColor: "",
-    },
-    {
-      title: "Carrello",
-      icon: "bi bi-cart",
-      navigationUrl: "carrello",
-      disableClick: false,
-      labelColor: "",
-    },
-  ]
 
-  adminItems: any[] = [
-    {
-      title: "Admin",
-      icon: "bi bi-motherboard",
-      navigationUrl: "../dashboard",
-      disableClick: false,
-      labelColor: "",
-    },
-    {
-      title: "Carrello",
-      icon: "bi bi-cart",
-      navigationUrl: "carrello",
-      disableClick: false,
-      labelColor: "",
-    },
-  ]
+
+  private updateNavbarItems() {
+    if (this.customerIdkc !== '') {
+      this.navbarItems = [
+        {
+          title: "Profilo",
+          icon: "bi bi-person",
+          navigationUrl: "profilo",
+          disableClick: false,
+          labelColor: "",
+        },
+        {
+          title: "Carrello",
+          icon: "bi bi-cart",
+          navigationUrl: "carrello",
+          disableClick: false,
+          labelColor: "",
+        },
+      ];
+    }
+    else{
+      this.navbarItems = [
+        {
+          title: "Profilo",
+          icon: "bi bi-person",
+          navigationUrl: "../dashboard",
+          disableClick: false,
+          labelColor: "",
+        },
+        {
+          title: "Carrello",
+          icon: "bi bi-cart",
+          navigationUrl: "../dashboard",
+          disableClick: false,
+          labelColor: "",
+        },
+      ];
+    }
+
+    this.adminItems = [
+      {
+        title: "Admin",
+        icon: "bi bi-motherboard",
+        navigationUrl: "../dashboard",
+        disableClick: false,
+        labelColor: "",
+      },
+      {
+        title: "Carrello",
+        icon: "bi bi-cart",
+        navigationUrl: "carrello",
+        disableClick: false,
+        labelColor: "",
+      },
+    ];
+  }
 
   constructor(private signingKeycloakService: SigningKeycloakService,
               private customerService:CustomerService,) {
   }
 
 
-  ngOnInit(): void {
+  ngOnInit(): void{
     this.getCustomer()
+    this.updateNavbarItems()
   }
 
 
   assignItems(){
     if(this.imAdmin)return this.adminItems;
     else return this.navbarItems;
-
   }
 
   private getCustomer() {

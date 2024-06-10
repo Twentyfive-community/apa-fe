@@ -17,7 +17,7 @@
         <!-- Bottone "Torta Personalizzata" o "Vassoio Personalizzato" -->
         <div class="row mt-3 mb-3">
           <div class="col-12 ">
-            <lib-generic-button-text-with-icon *ngIf="category.name === 'Le Nostre Torte'"
+            <lib-generic-button-text-with-icon *ngIf="category.name === 'Le Nostre Torte' && customerIdkc != ''"
                                                buttonText="Torta Personalizzata"
                                                suffixIcon="bi bi-plus-circle"
                                                [buttonSize]="ButtonSizeTheme.FullWidth"
@@ -26,7 +26,16 @@
                                                [iconLeft]="false"
                                                (click) = "modalCustomCake()"
             ></lib-generic-button-text-with-icon>
-            <lib-generic-button-text-with-icon *ngIf="category.name === 'Vassoi'"
+            <lib-generic-button-text-with-icon *ngIf="category.name === 'Le Nostre Torte' && customerIdkc === ''"
+                                               buttonText="Torta Personalizzata"
+                                               suffixIcon="bi bi-plus-circle"
+                                               [buttonSize]="ButtonSizeTheme.FullWidth"
+                                               [buttonStyle]="ButtonTheme.Secondary"
+                                               [customStyles]="{'height': '120px','color': 'white'}"
+                                               [iconLeft]="false"
+                                               (click) = "goToLogin()"
+            ></lib-generic-button-text-with-icon>
+            <lib-generic-button-text-with-icon *ngIf="category.name === 'Vassoi' && customerIdkc != '' "
                                                buttonText="Vassoio Personalizzato"
                                                suffixIcon="bi bi-plus-circle"
                                                [buttonSize]="ButtonSizeTheme.FullWidth"
@@ -35,6 +44,15 @@
                                                [iconLeft]="false"
                                                (click)="customizedTray()"
             ></lib-generic-button-text-with-icon>
+            <lib-generic-button-text-with-icon *ngIf="category.name === 'Vassoi' && customerIdkc === '' "
+                                               buttonText="Vassoio Personalizzato"
+                                               suffixIcon="bi bi-plus-circle"
+                                               [buttonSize]="ButtonSizeTheme.FullWidth"
+                                               [buttonStyle]="ButtonTheme.Secondary"
+                                               [customStyles]="{'height': '120px','color': 'white'}"
+                                               [iconLeft]="false"
+                                               (click)="goToLogin()"
+            ></lib-generic-button-text-with-icon>
           </div>
         </div>
         <!-- Contenuto dinamico della scheda -->
@@ -42,7 +60,7 @@
             <ng-container  [ngSwitch]="category.type">
               <ng-container *ngSwitchCase="'productKg'">
                 <ng-container  *ngFor="let product of productListKg">
-                  <div class="col-sm-12 col-md-6 col-lg-4 mb-4"  >
+                  <div *ngIf="customerIdkc!=''" class="col-sm-12 col-md-6 col-lg-4 mb-4"  >
                     <app-generic-card class="w-100"
                       [title]="product.name"
                       [ingredientList]="product.ingredients"
@@ -51,17 +69,37 @@
                     (click)="modalProduct(product.id)">
                     </app-generic-card>
                   </div>
+
+                  <div *ngIf="customerIdkc===''" class="col-sm-12 col-md-6 col-lg-4 mb-4"  >
+                    <app-generic-card class="w-100"
+                                      [title]="product.name"
+                                      [ingredientList]="product.ingredients"
+                                      [price]="product.pricePerKg+'/kg'"
+                                      [imageUrl]="product.imageUrl"
+                                      (click)="goToLogin()">
+                    </app-generic-card>
+                  </div>
+
                 </ng-container>
               </ng-container>
               <ng-container *ngSwitchCase="'tray'">
                 <ng-container *ngFor="let tray of trayList">
-                  <div class="col-sm-12 col-md-6 col-lg-4 mb-4"  >
+                  <div *ngIf="customerIdkc!=''" class="col-sm-12 col-md-6 col-lg-4 mb-4"  >
                     <app-generic-card class="w-100"
                       [title]="tray.name"
                       [description]="tray.description"
                       [price]="'€'+tray.pricePerKg+'/kg'"
                       [imageUrl]="tray.imageUrl"
                       (click)="modalProduct(tray.id)">
+                    </app-generic-card>
+                  </div>
+                  <div *ngIf="customerIdkc===''" class="col-sm-12 col-md-6 col-lg-4 mb-4"  >
+                    <app-generic-card class="w-100"
+                                      [title]="tray.name"
+                                      [description]="tray.description"
+                                      [price]="'€'+tray.pricePerKg+'/kg'"
+                                      [imageUrl]="tray.imageUrl"
+                                      (click)="goToLogin()">
                     </app-generic-card>
                   </div>
                 </ng-container>

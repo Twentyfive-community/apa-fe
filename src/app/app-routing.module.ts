@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import {HomeComponent} from "./components/home/home.component";
+import { CatalogueComponent } from './modules-client/dashboard-client/pages/catalogue/catalogue.component';
 import {roleAuthGuard} from "./guard/role-auth.guard";
 import {CustomAuthGuard} from "twentyfive-keycloak-new";
 import {TwentyfiveNotFoundComponent} from "twentyfive-not-found";
@@ -17,7 +18,7 @@ const routes: Routes = [
     loadChildren: () => import('./modules-client/dashboard-client/dashboard-client.module').then(m => m.DashboardClientModule),
     canActivate: [CustomAuthGuard]
   },
-  {path: 'home', component: HomeComponent},
+  {path: 'home', loadChildren: () => import('./modules-client/dashboard-client/dashboard-client.module').then(m => m.DashboardClientModule)},
   {path: '', redirectTo: 'home', pathMatch: 'full'},
   {path: '**', component: TwentyfiveNotFoundComponent}
 
