@@ -15,6 +15,9 @@ import { Allergen } from "../../../../models/Allergen";
 })
 export class IngredientEditComponent implements OnInit {
 
+  navigationType: 'back' | 'save' | null = null;
+
+
   activeTab: string | null;
   ingredient: Ingredient = new Ingredient();
   originalIngredient: Ingredient = new Ingredient();  // Initialized with empty strings
@@ -71,6 +74,7 @@ export class IngredientEditComponent implements OnInit {
   }
 
   close() {
+    this.navigationType="back"
     this.router.navigate(['../dashboard/ingredienti'], { queryParams: { activeTab: this.activeTab } });
   }
 
@@ -102,6 +106,7 @@ export class IngredientEditComponent implements OnInit {
     this.ingredientToSave.alcoholic = this.ingredient.alcoholic;
     this.ingredientToSave.active = this.ingredient.active;
     this.ingredientToSave.allergenNames = this.selectedAllergensNames;
+    this.navigationType="save"
     if(this.isValid()) {
       this.ingredientService.saveIngredient(this.ingredientToSave).subscribe({
         error: () => {

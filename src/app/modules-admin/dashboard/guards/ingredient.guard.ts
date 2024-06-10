@@ -13,7 +13,7 @@ export class IngredientGuard implements CanDeactivate<IngredientEditComponent> {
   constructor(private modalService: TwentyfiveModalService) {}
 
   canDeactivate(component: IngredientEditComponent): Observable<boolean> | boolean {
-    if (component.hasChanges()) {
+    if (component.hasChanges() && component.navigationType === "back") {
       return new Observable<boolean>((observer) => {
         this.modalService.openModal(
           'Procedendo in questo modo si perderanno i dati inseriti. Continuare?',

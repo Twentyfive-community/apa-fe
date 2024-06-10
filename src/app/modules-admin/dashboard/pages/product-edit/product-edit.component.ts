@@ -20,6 +20,7 @@ export class ProductEditComponent implements OnInit {
   @ViewChild('dropZone') dropZoneRef!: ElementRef;
   @ViewChild('fileInput') fileInputRef!: ElementRef;
 
+  navigationType: 'back' | 'save' | null = null;
 
   categoryId: string | null;
   productId: string | null;
@@ -114,6 +115,7 @@ export class ProductEditComponent implements OnInit {
   }
 
   close() {
+          this.navigationType="back";
           this.router.navigate(['../dashboard/prodotti'], {queryParams: {activeTab: this.categoryId}});
   }
 
@@ -193,6 +195,7 @@ export class ProductEditComponent implements OnInit {
 
 
   async saveNewProduct() {
+    this.navigationType="save"
     if (this.isValid()) {
       if (this.file) {
         await this.uploadImage();

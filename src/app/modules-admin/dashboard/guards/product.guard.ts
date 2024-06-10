@@ -13,7 +13,7 @@ export class ProductGuard implements CanDeactivate<ProductEditComponent> {
   constructor(private modalService: TwentyfiveModalService) {}
 
   canDeactivate(component: ProductEditComponent): Observable<boolean> | boolean {
-   //if (component.hasChanges()) {
+   if (component.navigationType === "back") {
       return new Observable<boolean>((observer) => {
         this.modalService.openModal(
           'Procedendo in questo modo si perderanno i dati inseriti. Continuare?',
@@ -29,7 +29,7 @@ export class ProductGuard implements CanDeactivate<ProductEditComponent> {
           }
         );
       });
-    //}
+    }
     return true;
   }
 }

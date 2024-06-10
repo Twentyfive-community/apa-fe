@@ -13,6 +13,9 @@ import {ToastrService} from "ngx-toastr";
 })
 export class CustomerEditComponent implements OnInit{
 
+  navigationType: 'back' | 'save' | null = null;
+
+
   originalCustomer: Customer = new Customer()
   customer: Customer = new Customer()
   customerId: string | null;
@@ -55,10 +58,12 @@ export class CustomerEditComponent implements OnInit{
   }
 
   close() {
+    this.navigationType="back"
     this.router.navigate(['../dashboard/clienti']);
   }
 
   saveNewCustomer(){
+    this.navigationType="save"
     this.customerService.saveCustomer(this.customer).subscribe({
       error:() =>{
         this.toastrService.error("Errore nel salvare il customer");

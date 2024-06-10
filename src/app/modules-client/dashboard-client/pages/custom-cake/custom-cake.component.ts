@@ -35,7 +35,7 @@ export class CustomCakeComponent implements OnInit{
  productInPurchase: ProductInPurchase = new ProductInPurchase();
 
   steps = ['Tipologia','Base', 'Peso', 'Forma', 'Farcitura', 'Bagna', 'Frutta e Gocce',
-     'Granelle', 'Copertura', 'Decorazioni'];
+     'Copertura', 'Granelle', 'Decorazioni'];
 
   ingredientsObject: Ingredient[];
 
@@ -335,32 +335,6 @@ export class CustomCakeComponent implements OnInit{
     })
   }
 
-  getGranelleOptions(){
-
-    if(this.selectedType=='Torta a forma' || this.selectedType=='Drip Cake'){
-      this.granelleOptions = ['NO GRANELLE'];
-      this.selectedGranelle.push('NO GRANELLE');
-      this.getCopertureOptions()
-      this.goToNextStep(8)
-    }
-    else if(this.selectedType=='Torta classica'){
-      if(this.selectedBase=='Mimosa' || this.selectedBase=='Saint Honorè' || this.selectedBase=='Red Velvet'){
-        this.granelleOptions = ['NO GRANELLE'];
-        this.selectedGranelle.push('NO GRANELLE');
-        this.getCopertureOptions()
-        this.goToNextStep(8)
-      }
-      else{
-        this.ingredientService.getAllByNameCategories('Granelle', 'ingredienti').subscribe((response: any) =>{
-          this.ingredientsObject=response;
-          for(let ingrediente of this.ingredientsObject){
-            this.granelleOptions.push(ingrediente.name);
-          }
-        })
-      }
-    }
-  }
-
   getCopertureOptions() {
     switch(this.selectedType){
       case 'Drip Cake':
@@ -378,7 +352,8 @@ export class CustomCakeComponent implements OnInit{
         if(this.selectedBase=='Millefoglie'){
           this.coperturaOptions=['NO COPERTURE'];
           this.selectedCopertura='NO COPERTURE';
-          this.goToNextStep(9)
+          this.getGranelleOptions();
+          this.goToNextStep(8)
         }
         else if(this.selectedBase=='Diplomatica'){
           this.coperturaOptions=['Zucchero a velo'];
@@ -401,6 +376,30 @@ export class CustomCakeComponent implements OnInit{
         break;
     }
     this.selectedCopertura=this.coperturaOptions[0];
+  }
+
+  getGranelleOptions(){
+
+    if(this.selectedType=='Torta a forma' || this.selectedType=='Drip Cake'){
+      this.granelleOptions = ['NO GRANELLE'];
+      this.selectedGranelle.push('NO GRANELLE');
+      this.goToNextStep(9)
+    }
+    else if(this.selectedType=='Torta classica'){
+      if(this.selectedBase=='Mimosa' || this.selectedBase=='Saint Honorè' || this.selectedBase=='Red Velvet'){
+        this.granelleOptions = ['NO GRANELLE'];
+        this.selectedGranelle.push('NO GRANELLE');
+        this.goToNextStep(9)
+      }
+      else{
+        this.ingredientService.getAllByNameCategories('Granelle', 'ingredienti').subscribe((response: any) =>{
+          this.ingredientsObject=response;
+          for(let ingrediente of this.ingredientsObject){
+            this.granelleOptions.push(ingrediente.name);
+          }
+        })
+      }
+    }
   }
 
   getPrice(){
@@ -538,10 +537,8 @@ export class CustomCakeComponent implements OnInit{
   selectFrutta(frutta: string) {
     if (!this.selectedFrutta.includes(frutta) && (this.selectedFrutta.length + this.selectedGocce.length )< 3) {
       this.selectedFrutta.push(frutta);
-    }
-    if(this.selectedFrutta.length>0 || this.selectedGocce.length>0){
       this.stepCompleted[7]=true;
-      this.getGranelleOptions()
+      this.getCopertureOptions();
     }
     if ((this.selectedFrutta.length + this.selectedGocce.length) >= 3) {
       this.goToNextStep(7); // Passa direttamente allo step successivo
@@ -558,10 +555,8 @@ export class CustomCakeComponent implements OnInit{
   selectGoccia(goccia: string){
     if (!this.selectedGocce.includes(goccia) && (this.selectedFrutta.length + this.selectedGocce.length)< 3) {
       this.selectedGocce.push(goccia);
-    }
-    if(this.selectedFrutta.length>0 || this.selectedGocce.length>0){
       this.stepCompleted[7]=true;
-      this.getGranelleOptions()
+      this.getCopertureOptions();
     }
     if ((this.selectedFrutta.length + this.selectedGocce.length) >= 3) {
       this.goToNextStep(7); // Passa direttamente allo step successivo
@@ -575,16 +570,22 @@ export class CustomCakeComponent implements OnInit{
     }
   }
 
+  selectCopertura(copertura: string){
+    this.selectedCopertura=copertura;
+    this.stepCompleted[8]=true;
+    this.getGranelleOptions();
+    this.goToNextStep(8);
+  }
+
   selectGranella(granella: string) {
     if (!this.selectedGranelle.includes(granella) && this.selectedGranelle.length < 2) {
       this.selectedGranelle.push(granella);
     }
     if(this.selectedGranelle.length>0){
-      this.stepCompleted[8]=true;
-      this.getCopertureOptions()
+      this.stepCompleted[9]=true;
     }
     if (this.selectedGranelle.length >= 2) {
-      this.goToNextStep(8); // Passa direttamente allo step successivo
+      this.goToNextStep(9); // Passa direttamente allo step successivo
     }
   }
 
@@ -593,12 +594,6 @@ export class CustomCakeComponent implements OnInit{
     if (index > -1) {
       this.selectedGranelle.splice(index, 1);
     }
-  }
-
-  selectCopertura(copertura: string){
-    this.selectedCopertura=copertura;
-    this.stepCompleted[9]=true;
-    this.goToNextStep(9)
   }
 
 

@@ -26,7 +26,7 @@ export class ItemInPurchase {
 
   weight: number; //Solo torte, Il peso del prodotto
   shape: string; //Solo torte, forma del prodotto
-  customization: Map<string, string>; //Solo torte, mappa delle personalizzazioni, la chiave è il tipo di personalizzazione
+  customization: any;//Solo torte, mappa delle personalizzazioni, la chiave è il tipo di personalizzazione
   chocolateChips: boolean; // Un booleano per indicare se ci sono gocce di cioccolato o meno; NON NECESSARIO
   attachment: string; // Solo torte, allegato dell'immagine sulla torta
   deliveryDate: string; // generico La data di consegna del prodotto, rappresentata come stringa (ISO 8601)
