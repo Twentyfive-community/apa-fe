@@ -171,7 +171,7 @@
   <ng-template #templateColumnRef let-product>
     <ng-container *ngFor="let allergen of product.allergens; let i = index">
       <span *ngIf="i !== 0">&nbsp;</span>
-      <img [src]="allergen.iconUrl" style="max-width: 30px; height: auto; position: relative;" [title]="allergen.name">
+      <img [src]="allergen.iconUrl" style="max-width: 30px; height: auto; position: relative;" [tooltip]="allergen.name">
     </ng-container>
   </ng-template>
 

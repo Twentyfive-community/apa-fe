@@ -66,7 +66,15 @@
         (pageChange)="changePage($event)"
         (sortableChange)="sortingColumn($event)"
         (modelChange)="selectSize($event)"
+        [columnTemplateRefs]="columnTemplateRefs"
       ></lib-twentyfive-table>
     </div>
   </div>
 </div>
+
+<ng-template #allergenColumnRef let-ingredients>
+  <ng-container *ngFor="let allergen of ingredients.allergens; let i = index">
+    <span *ngIf="i !== 0">&nbsp;</span>
+    <img [src]="allergen.iconUrl" style="max-width: 30px; height: auto; position: relative;" [tooltip]="allergen.name">
+  </ng-container>
+</ng-template>

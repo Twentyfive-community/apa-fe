@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ButtonSizeTheme, ButtonTheme, TableHeadTheme, TableTheme} from "twentyfive-style";
 import {Ingredient} from "../../../../models/Ingredient";
 import {CustomerService} from "../../../../services/customer.service";
@@ -16,7 +16,7 @@ import {CategoryEditComponent} from "../../../../shared/category-edit/category-e
   templateUrl: './ingredient-list.component.html',
   styleUrl: './ingredient-list.component.scss'
 })
-export class IngredientListComponent implements OnInit{
+export class IngredientListComponent implements OnInit, AfterViewInit{
 
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
   protected readonly ButtonTheme = ButtonTheme;
@@ -25,6 +25,9 @@ export class IngredientListComponent implements OnInit{
 
   activeTab: string | null; // Inizializza la tab attiva come vuota
 
+  @ViewChild('allergenColumnRef', {static: true}) allergenColumnRef!: TemplateRef<any>;
+
+  columnTemplateRefs: { [key: string]: TemplateRef<any> } = {};
 
   currentPage: number=0;
   maxSize: number = 5;
@@ -33,8 +36,8 @@ export class IngredientListComponent implements OnInit{
   sortDirection: string='';
 
   headers: any[] = [
-    { name:'Nome',    value:'name'},
-    { name:'Allergeni',   value:'allergens'},
+    { name:'Nome', value:'name'},
+    { name:'Allergeni', value:'allergens'},
     { name:'Descrizione', value:'note'}
   ]
   paginationElements: any[] = [
@@ -67,6 +70,10 @@ export class IngredientListComponent implements OnInit{
   ngOnInit(): void {
     this.activeTab = this.activatedRoute.snapshot.queryParamMap.get('activeTab');
     this.getCategories()
+  }
+
+  ngAfterViewInit() {
+    this.columnTemplateRefs['allergens'] = this.allergenColumnRef;
   }
 
   goToNew(){

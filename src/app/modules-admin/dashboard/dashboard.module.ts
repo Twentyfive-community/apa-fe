@@ -20,6 +20,7 @@ import { ProductListComponent } from './pages/product-list/product-list.componen
 import {NgbDropdownModule} from "@ng-bootstrap/ng-bootstrap";
 import { ProductEditComponent } from './pages/product-edit/product-edit.component';
 import {TwentyfiveAutocompleteSyncAsyncModule} from "twentyfive-autocomplete-sync-async";
+import {TooltipModule} from "ngx-bootstrap/tooltip";
 
 @NgModule({
   declarations: [
@@ -47,6 +48,7 @@ import {TwentyfiveAutocompleteSyncAsyncModule} from "twentyfive-autocomplete-syn
         TwentyfiveChipModule,
         TwentyfiveCheckboxModule,
         TwentyfiveAutocompleteSyncAsyncModule,
+        TooltipModule,
     ],
 })
 export class DashboardModule {
