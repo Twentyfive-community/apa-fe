@@ -30,6 +30,7 @@ export class ProductToEdit {
   imageUrl: string;
   active: boolean;
   weight: number;
+  stats: ProductStat
   pricePerKg: number;
   weightRange:WeightRange = new WeightRange();
   customized: boolean;
@@ -49,6 +50,7 @@ export class TrayDetails {
   id: string;
   name: string;
   customized:boolean;
+  stats:ProductStat;
   personalized: string;
   measures: string;
   measuresList: Measure[] =[]
@@ -61,6 +63,7 @@ export class ProductWeightedDetails{
   name:string;
   allergens:Allergen[];
   ingredients:string[];
+  stats:ProductStat;
   weight:string;
   imageUrl:string[];
   active:boolean;
@@ -73,6 +76,7 @@ export class ProductDetails {
   allergens:Allergen[];
   ingredients:string[];
   pricePerKg:string;
+  stats:ProductStat;
   weight:string;
   imageUrl:string;
   active:boolean;
@@ -98,4 +102,10 @@ export class ProductInPurchase {
 export class WeightRange {
   minWeight:number;
   maxWeight:number;
+}
+
+export class ProductStat {
+  id: string;
+  type: string;
+  buyingCount: number;
 }
