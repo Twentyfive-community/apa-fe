@@ -17,6 +17,7 @@ import {TwentyfiveTimepickerModule} from "twentyfive-timepicker";
 import { CustomCakeComponent } from './pages/custom-cake/custom-cake.component';
 import { UserCartComponent } from './pages/user-cart/user-cart.component';
 import {TooltipModule} from "ngx-bootstrap/tooltip";
+import {TwentyfiveAutocompleteSyncAsyncModule} from "twentyfive-autocomplete-sync-async";
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import {TooltipModule} from "ngx-bootstrap/tooltip";
         FormsModule,
         TwentyfiveDatepickerModule,
         TwentyfiveTimepickerModule,
-        TooltipModule
+        TooltipModule,
+        TwentyfiveAutocompleteSyncAsyncModule
     ]
 })
 export class DashboardClientModule {

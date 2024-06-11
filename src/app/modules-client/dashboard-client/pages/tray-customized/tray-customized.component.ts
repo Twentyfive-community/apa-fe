@@ -4,7 +4,7 @@ import { ProductService } from '../../../../services/product.service';
 import { ProductWeighted, ProductWeightedDetails, TrayDetails } from '../../../../models/Product';
 import { BundleInPurchase, PieceInPurchase } from '../../../../models/Bundle';
 import { Measure } from '../../../../models/Measure';
-import { ButtonSizeTheme, ButtonTheme } from 'twentyfive-style';
+import {ButtonSizeTheme, ButtonTheme, InputTheme, LabelTheme} from 'twentyfive-style';
 import { SigningKeycloakService } from 'twentyfive-keycloak-new';
 import { CustomerService } from '../../../../services/customer.service';
 import { Customer } from '../../../../models/Customer';
@@ -16,7 +16,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './tray-customized.component.html',
   styleUrls: ['./tray-customized.component.scss']
 })
-export class TrayCustomizedComponent implements OnInit, AfterViewInit {
+export class TrayCustomizedComponent implements OnInit {
 
   @ViewChild('modalContent', { static: false }) modalContent!: ElementRef;
 
@@ -25,12 +25,9 @@ export class TrayCustomizedComponent implements OnInit, AfterViewInit {
   productListWeighted: ProductWeighted[] = [new ProductWeighted()];
   productWeighted: ProductWeightedDetails = new ProductWeightedDetails();
   currentStep = 1;
-  page = 0;
-  size = 10;
   customerIdkc: string = '';
   customer: Customer = new Customer();
-  hasMoreProducts = true; // Flag to check if more products are available
-
+  value: string = '';
   ngOnInit(): void {
     this.getCustomer();
     this.productService.getByIdTray('664c677cdb11452a067bbdf5').subscribe((response: any) => {
@@ -41,28 +38,14 @@ export class TrayCustomizedComponent implements OnInit, AfterViewInit {
     this.getAllCustomizedTray();
   }
 
-  ngAfterViewInit(): void {
-    // Rimuovi l'evento di scroll qui poiché gestito direttamente nell'HTML
-  }
-
   constructor(
     private modalService: TwentyfiveModalGenericComponentService,
-    private productService: ProductService,
+    public productService: ProductService,
     private keycloakService: SigningKeycloakService,
     private customerService: CustomerService,
     private cartService: CartService,
     private toastrService: ToastrService
   ) { }
-
-  onScroll(event: any): void {
-    const element = event.target;
-    if (this.currentStep === 2 && element.scrollHeight - element.scrollTop === element.clientHeight) {
-      if (this.hasMoreProducts) {
-        this.size += 10;
-        this.getAllCustomizedTray();
-      }
-    }
-  }
 
   nextStep() {
     this.currentStep++;
@@ -127,14 +110,13 @@ export class TrayCustomizedComponent implements OnInit, AfterViewInit {
   }
 
   getAllCustomizedTray() {
-    this.productService.getAllForCustomizedTray('664361ed09aa3a0e1b249988', this.page, this.size).subscribe(
+    this.productService.search(this.value).subscribe(
       (response: any) => {
-        this.productListWeighted = response.content;
+        console.log('ehi, mi sto aggiornando!')
+        this.productListWeighted = response;
         this.productListWeighted.forEach((product: any) => {
           product.quantity = 0;
         });
-        console.log(response.totalElements < this.size);
-        if (response.totalElements < this.size) this.hasMoreProducts = false;
       }
     );
   }
@@ -155,10 +137,25 @@ export class TrayCustomizedComponent implements OnInit, AfterViewInit {
     });
   }
 
+  onSearch(searchTerm: string) {
+    this.productService.search(searchTerm).subscribe(
+      (response: any) => {
+        console.log('ehi, mi sto aggiornando!')
+        this.productListWeighted = response;
+        this.productListWeighted.forEach((product: any) => {
+          product.quantity = 0;
+        });
+      }
+    );
+  }
+
+
   close() {
     this.modalService.close();
   }
 
   protected readonly ButtonTheme = ButtonTheme;
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
+  protected readonly InputTheme = InputTheme;
+  protected readonly LabelTheme = LabelTheme;
 }
