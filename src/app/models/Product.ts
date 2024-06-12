@@ -19,8 +19,21 @@ export class ProductWeighted {
   weight: string;
   imageUrl: string;
   active: boolean;
-  quantity:number;
+  quantity: number;
+
+  constructor(data: any) {
+    this.id = data.id;
+    this.name = data.name;
+    this.allergens = data.allergens;
+    this.ingredients = data.ingredients;
+    this.realWeight = data.realWeight;
+    this.weight = data.weight;
+    this.imageUrl = data.imageUrl;
+    this.active = data.active;
+    this.quantity = 0;
+  }
 }
+
 export class ProductToEdit {
   id: string;
   name: string;

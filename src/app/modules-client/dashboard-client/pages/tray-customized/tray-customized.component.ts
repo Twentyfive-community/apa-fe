@@ -4,12 +4,13 @@ import { ProductService } from '../../../../services/product.service';
 import { ProductWeighted, ProductWeightedDetails, TrayDetails } from '../../../../models/Product';
 import { BundleInPurchase, PieceInPurchase } from '../../../../models/Bundle';
 import { Measure } from '../../../../models/Measure';
-import {ButtonSizeTheme, ButtonTheme, InputTheme, LabelTheme} from 'twentyfive-style';
+import { ButtonSizeTheme, ButtonTheme, InputTheme, LabelTheme } from 'twentyfive-style';
 import { SigningKeycloakService } from 'twentyfive-keycloak-new';
 import { CustomerService } from '../../../../services/customer.service';
 import { Customer } from '../../../../models/Customer';
 import { CartService } from '../../../../services/cart.service';
 import { ToastrService } from 'ngx-toastr';
+import { switchMap, debounceTime, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-tray-customized',
@@ -22,21 +23,14 @@ export class TrayCustomizedComponent implements OnInit {
 
   trayDetails: TrayDetails = new TrayDetails();
   bundleInPurchase: BundleInPurchase = new BundleInPurchase();
-  productListWeighted: ProductWeighted[] = [new ProductWeighted()];
+  productListWeighted: ProductWeighted[] = [];
   productWeighted: ProductWeightedDetails = new ProductWeightedDetails();
   currentStep = 1;
   customerIdkc: string = '';
   customer: Customer = new Customer();
   value: string = '';
-  ngOnInit(): void {
-    this.getCustomer();
-    this.productService.getByIdTray('664c677cdb11452a067bbdf5').subscribe((response: any) => {
-      this.trayDetails = response;
-      this.bundleInPurchase.id = response.id;
-      this.bundleInPurchase.totalWeight = 0;
-    });
-    this.getAllCustomizedTray();
-  }
+  private searchTerms = new Subject<string>();
+  private productQuantities: { [id: string]: number } = {}; // Mappa per memorizzare le quantità
 
   constructor(
     private modalService: TwentyfiveModalGenericComponentService,
@@ -45,7 +39,31 @@ export class TrayCustomizedComponent implements OnInit {
     private customerService: CustomerService,
     private cartService: CartService,
     private toastrService: ToastrService
-  ) { }
+  ) {}
+
+  ngOnInit(): void {
+    this.getCustomer();
+    this.productService.getByIdTray('664c677cdb11452a067bbdf5').subscribe((response: any) => {
+      this.trayDetails = response;
+      this.bundleInPurchase.id = response.id;
+      this.bundleInPurchase.totalWeight = 0;
+    });
+    this.getAllCustomizedTray();
+
+    this.searchTerms.pipe(
+      debounceTime(300), // Attendi 300ms dopo ogni tasto premuto
+      switchMap((term: string) => this.productService.search(term))
+    ).subscribe(
+      (response: any) => {
+        this.updateProductList(response);
+      }
+    );
+  }
+
+  updateProductList(newProductList: any) {
+    // Mappa i nuovi prodotti mantenendo la quantità esistente se presente
+    this.productListWeighted = newProductList.map((data: any) => this.mapToProductWeighted(data));
+  }
 
   nextStep() {
     this.currentStep++;
@@ -68,15 +86,12 @@ export class TrayCustomizedComponent implements OnInit {
     const existingPiece = this.bundleInPurchase.weightedProducts[existingPieceIndex];
 
     if (quantity === 0 && existingPieceIndex === -1) {
-      return; // Esci se la quantità è 0 e il pezzo non esiste già
+      return;
     }
 
     const oldPieceWeight = existingPiece ? existingPiece.quantity * realWeight : 0;
-
-    // Calcola il nuovo peso totale
     let newTotalWeight = this.bundleInPurchase.totalWeight - oldPieceWeight + (quantity * realWeight);
 
-    // Controlla se il nuovo peso totale supera il peso massimo
     if (newTotalWeight > this.bundleInPurchase.measure.weight) {
       alert("Il peso totale non può eccedere il peso massimo consentito!");
       return;
@@ -84,19 +99,16 @@ export class TrayCustomizedComponent implements OnInit {
 
     if (existingPieceIndex !== -1) {
       if (quantity <= 0) {
-        // Rimuovi il pezzo dalla lista
         this.bundleInPurchase.weightedProducts.splice(existingPieceIndex, 1);
       } else {
-        // Aggiorna la quantità di quel pezzo in lista
         existingPiece.quantity = quantity;
       }
     } else {
-      // Aggiungi il pezzo alla lista se non esiste
       this.bundleInPurchase.weightedProducts.push(new PieceInPurchase(id, quantity));
     }
 
-    // Aggiorna il peso totale
     this.bundleInPurchase.totalWeight = parseFloat(newTotalWeight.toFixed(2));
+    this.productQuantities[id] = quantity; // Aggiorna la quantità nel dizionario
   }
 
   getCustomer() {
@@ -112,11 +124,7 @@ export class TrayCustomizedComponent implements OnInit {
   getAllCustomizedTray() {
     this.productService.search(this.value).subscribe(
       (response: any) => {
-        console.log('ehi, mi sto aggiornando!')
-        this.productListWeighted = response;
-        this.productListWeighted.forEach((product: any) => {
-          product.quantity = 0;
-        });
+        this.updateProductList(response);
       }
     );
   }
@@ -137,25 +145,22 @@ export class TrayCustomizedComponent implements OnInit {
     });
   }
 
-  onSearch(searchTerm: string) {
-    this.productService.search(searchTerm).subscribe(
-      (response: any) => {
-        console.log('ehi, mi sto aggiornando!')
-        this.productListWeighted = response;
-        this.productListWeighted.forEach((product: any) => {
-          product.quantity = 0;
-        });
-      }
-    );
+  onSearch(event: any): void {
+    this.searchTerms.next(event.target.value);
   }
-
 
   close() {
     this.modalService.close();
   }
 
+  private mapToProductWeighted(data: any): ProductWeighted {
+    const product = new ProductWeighted(data);
+    if (this.productQuantities[product.id] !== undefined) {
+      product.quantity = this.productQuantities[product.id];
+    }
+    return product;
+  }
+
   protected readonly ButtonTheme = ButtonTheme;
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
-  protected readonly InputTheme = InputTheme;
-  protected readonly LabelTheme = LabelTheme;
 }

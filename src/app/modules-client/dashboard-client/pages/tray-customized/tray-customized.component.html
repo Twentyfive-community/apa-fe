@@ -30,27 +30,29 @@
           <hr>
         </div>
 
-        <div class="mb-3 ms-2 me-2" style="height: 650px; overflow-y: auto;">
-          <div class="row">
-            <h4 class="col-7 mb-3 ms-2 me-2 mt-0 fs-3">Componi vassoio</h4>
-            <img class="col-4" [src]="trayDetails.imageUrl">
+<!--        <div class="row">-->
+<!--          <div class="col-9">-->
+<!--            <h4 class="mb-3 ms-2 me-2 mt-0">Componi vassoio</h4>-->
+<!--            <span class="fs-5 d-block mb-3">Misura: {{bundleInPurchase.measure.label}}</span>-->
+<!--            <span class="fs-5 d-block mb-2">{{bundleInPurchase.totalPrice}} €</span>-->
+<!--          </div>-->
+<!--          <div class="col-3">-->
+<!--            <img [src]="trayDetails.imageUrl" class="img-fluid">-->
+<!--          </div>-->
+<!--        </div>-->
+
+        <div class="mb-3 ms-2 me-2" style="height: 650px; overflow-y: auto; overflow-x: hidden">
+
+          <h4 class="mb-2 large-text">Componi vassoio</h4>
+
+
+          <div class="col-8 row mb-4">
+            <lib-twentyfive-input
+              placeholder="Cerca Mignon"
+              (input)="onSearch($event)"
+            ></lib-twentyfive-input>
           </div>
 
-          <span class="fs-5 d-block mb-3">Misura: {{bundleInPurchase.measure.label}}</span>
-          <span class="fs-6 d-block mb-3">Peso: {{bundleInPurchase.measure.weight}} kg</span>
-          <span class="fs-5 d-block mb-2">{{bundleInPurchase.totalPrice}} €</span>
-          <div class="col-6 row mb-2">
-            <lib-twentyfive-autocomplete
-              [placeholder]="'Cerca Mignon'"
-              [labelStyle]="LabelTheme.LabelMedium"
-              [inputStyle]="InputTheme.Primary"
-              [showLabel]="true"
-              [isAsync]="true"
-              [textToShowField]="'value'"
-              [service]="productService"
-              (changeValue)="onSearch($event)"
-            ></lib-twentyfive-autocomplete>
-          </div>
           <div class="mb-2 me-2" style="cursor: pointer" *ngFor="let weighted of productListWeighted">
             <app-generic-card
               [imageLeft]="true"

@@ -125,7 +125,7 @@ export class CatalogueComponent implements OnInit {
 
 
   customizedTray() {
-    let r = this.genericModalService.open(TrayCustomizedComponent, "l", {});
+    let r = this.genericModalService.open(TrayCustomizedComponent, "lg", {});
   }
 
   getProductDetails(event: any) {
