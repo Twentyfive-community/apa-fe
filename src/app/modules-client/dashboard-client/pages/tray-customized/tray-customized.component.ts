@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { TwentyfiveModalGenericComponentService } from 'twentyfive-modal-generic-component';
 import { ProductService } from '../../../../services/product.service';
 import { ProductWeighted, ProductWeightedDetails, TrayDetails } from '../../../../models/Product';
@@ -29,6 +29,7 @@ export class TrayCustomizedComponent implements OnInit {
   customerIdkc: string = '';
   customer: Customer = new Customer();
   value: string = '';
+  loading:boolean = true;
   private searchTerms = new Subject<string>();
   private productQuantities: { [id: string]: number } = {}; // Mappa per memorizzare le quantità
 
@@ -43,21 +44,21 @@ export class TrayCustomizedComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCustomer();
-    this.productService.getByIdTray('664c677cdb11452a067bbdf5').subscribe((response: any) => {
-      this.trayDetails = response;
-      this.bundleInPurchase.id = response.id;
-      this.bundleInPurchase.totalWeight = 0;
-    });
-    this.getAllCustomizedTray();
-
-    this.searchTerms.pipe(
-      debounceTime(300), // Attendi 300ms dopo ogni tasto premuto
-      switchMap((term: string) => this.productService.search(term))
-    ).subscribe(
-      (response: any) => {
-        this.updateProductList(response);
+    this.productService.getByIdTray('664c677cdb11452a067bbdf5').subscribe({
+      next:(response:any)=>{
+        this.trayDetails = response;
+        this.bundleInPurchase.id = response.id;
+        this.bundleInPurchase.totalWeight = 0;
+      },
+      error:(error:any) =>{
+        console.error(error);
+        this.loading = false;
+      },
+      complete:() =>{
+        this.loading = false;
       }
-    );
+    });
+    this.searching();
   }
 
   updateProductList(newProductList: any) {
@@ -67,6 +68,7 @@ export class TrayCustomizedComponent implements OnInit {
 
   nextStep() {
     this.currentStep++;
+    this.getAllCustomizedTray();
   }
 
   previousStep() {
@@ -122,9 +124,18 @@ export class TrayCustomizedComponent implements OnInit {
   }
 
   getAllCustomizedTray() {
-    this.productService.search(this.value).subscribe(
-      (response: any) => {
+    this.loading = true;
+    this.productService.search(this.value).subscribe({
+      next:(response:any) => {
         this.updateProductList(response);
+      },
+      error:(error:any) => {
+        console.error(error);
+        this.loading = false;
+      },
+      complete:() => {
+        this.loading = false;
+      }
       }
     );
   }
@@ -134,13 +145,16 @@ export class TrayCustomizedComponent implements OnInit {
   }
 
   saveTray() {
+    this.loading = true;
     this.cartService.addToCartBundleInPurchase(this.customer.id, this.bundleInPurchase).subscribe({
       error: () => {
+        this.loading = false;
         this.toastrService.error("Errore nell'aggiunta del vassoio nel carrello!");
       },
       complete: () => {
         this.toastrService.success("Vassoio aggiunto al carrello con successo");
         this.close();
+        this.loading = false;
       }
     });
   }
@@ -149,6 +163,24 @@ export class TrayCustomizedComponent implements OnInit {
     this.searchTerms.next(event.target.value);
   }
 
+  searching(){
+    this.loading = true;
+    this.searchTerms.pipe(
+      debounceTime(300), // Attendi 300ms dopo ogni tasto premuto
+      switchMap((term: string) => this.productService.search(term))).subscribe({
+        next:(response:any) => {
+          this.updateProductList(response);
+        },
+        error:(error:any) => {
+          console.error(error);
+          this.loading = false;
+        },
+        complete:() => {
+          this.loading = false;
+        }
+      }
+    );
+  }
   close() {
     this.modalService.close();
   }

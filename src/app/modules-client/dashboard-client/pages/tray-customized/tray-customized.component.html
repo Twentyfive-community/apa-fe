@@ -4,21 +4,33 @@
   </div>
 
   <div #modalContent class="modal-body" style="height: 650px; overflow-y: auto;">
+
+    <div *ngIf="loading">
+      <apa-spinner></apa-spinner>
+    </div>
+
     <div [ngSwitch]="currentStep">
+
       <div *ngSwitchCase="1">
-        <h4 class="mb-3 ms-2 me-2 mt-4">Seleziona misura vassoio</h4>
-        <div class="mb-3 ms-2 me-2" style="cursor: pointer" *ngFor="let measure of trayDetails.measuresList">
-          <app-generic-card
-            [title]="'' + measure.label"
-            [description]="'Peso: ' + measure.weight + 'kg'"
-            [imageUrl]="trayDetails.imageUrl"
-            [price]="'' + trayDetails.pricePerKg * measure.weight + ' €'"
-            (click)="selectMeasure(measure)"
-          ></app-generic-card>
+
+        <div *ngIf="!loading">
+
+          <h4 class="mb-3 ms-2 me-2 mt-4">Seleziona misura vassoio</h4>
+          <div class="mb-3 ms-2 me-2" style="cursor: pointer" *ngFor="let measure of trayDetails.measuresList">
+            <app-generic-card
+              [title]="'' + measure.label"
+              [description]="'Peso: ' + measure.weight + 'kg'"
+              [imageUrl]="trayDetails.imageUrl"
+              [price]="'' + trayDetails.pricePerKg * measure.weight + ' €'"
+              (click)="selectMeasure(measure)"
+            ></app-generic-card>
+          </div>
+
         </div>
       </div>
 
       <div *ngSwitchCase="2">
+
         <div class="back-white">
           <lib-generic-button-text-with-icon
             buttonText="Torna Indietro"
@@ -30,18 +42,7 @@
           <hr>
         </div>
 
-<!--        <div class="row">-->
-<!--          <div class="col-9">-->
-<!--            <h4 class="mb-3 ms-2 me-2 mt-0">Componi vassoio</h4>-->
-<!--            <span class="fs-5 d-block mb-3">Misura: {{bundleInPurchase.measure.label}}</span>-->
-<!--            <span class="fs-5 d-block mb-2">{{bundleInPurchase.totalPrice}} €</span>-->
-<!--          </div>-->
-<!--          <div class="col-3">-->
-<!--            <img [src]="trayDetails.imageUrl" class="img-fluid">-->
-<!--          </div>-->
-<!--        </div>-->
-
-        <div class="mb-3 ms-2 me-2" style="height: 650px; overflow-y: auto; overflow-x: hidden">
+        <div *ngIf="!loading" class="mb-3 ms-2 me-2" style="height: 650px; overflow-y: auto; overflow-x: hidden">
 
           <h4 class="mb-2 large-text">Componi vassoio</h4>
 
@@ -95,6 +96,7 @@
             </div>
           </div>
         </div>
+
       </div>
     </div>
   </div>

@@ -38,6 +38,7 @@ export class CatalogueComponent implements OnInit {
   productDetails: ProductDetails = new ProductDetails();
   trayDetails: TrayDetails = new TrayDetails();
 
+  loading: boolean = true;
 
 
 
@@ -54,7 +55,6 @@ export class CatalogueComponent implements OnInit {
   ngOnInit() {
     this.getCategories()
     this.getCustomer();
-    console.log("SAAAAS" + this.customerIdkc)
   }
 
 
@@ -71,6 +71,7 @@ export class CatalogueComponent implements OnInit {
   activeTab: string = ''; // Inizializza la tab attiva come vuota
 
   setActiveTab(category: Category) {
+    this.loading = true;
     this.activeTab = category.id; // Imposta l'ID della tab attiva quando viene cliccata
     this.categoryActive = category.type;
     this.categoryName = category.name;
@@ -81,15 +82,33 @@ export class CatalogueComponent implements OnInit {
   getAll(page?:number) {
     switch (this.categoryActive) {
       case 'productKg':
-        this.productService.getAllKgActive(this.activeTab, page? this.currentPage-1 : 0, this.itemsPerPage).subscribe((res: any) => {
-          this.productListKg = res.content
-          this.setupPagination(res.totalPages);
-        })
+        this.productService.getAllKgActive(this.activeTab, page ? this.currentPage - 1 : 0, this.itemsPerPage)
+          .subscribe({
+            next: (res: any) => {
+              this.productListKg = res.content;
+              this.setupPagination(res.totalPages);
+            },
+            error: (error: any) => {
+              this.loading = false;
+              console.error('Si è verificato un errore durante il recupero dei dati:', error);
+            },
+            complete: () => {
+              this.loading = false;
+            }
+          });
         break;
       case 'tray':
-        this.productService.getAllTraysActive(this.activeTab,page? this.currentPage-1 : 0, this.itemsPerPage).subscribe((res: any) => {
-          this.trayList = res.content;
-          this.setupPagination(res.totalPages);
+        this.productService.getAllTraysActive(this.activeTab,page? this.currentPage-1 : 0, this.itemsPerPage).subscribe( {
+          next: (res:any) =>{
+            this.trayList = res.content;
+            this.setupPagination(res.totalPages);
+          },
+          error: (error: any) => {
+            this.loading = false;
+          },
+          complete: () => {
+            this.loading = false;
+          }
         })
         break;
     }

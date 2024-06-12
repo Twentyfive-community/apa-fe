@@ -5,289 +5,292 @@
   </div>
 
   <div class="modal-body">
-    <div class="stepper">
-      <div *ngFor="let step of steps; let i = index"
-           class="step"
-           [class.active]="i === currentStep"
-           [class.disabled]="!stepCompleted[i]">
-        <div class="step-circle"
-             (click)="goToStep(i)"
-             [ngClass]="stepCompleted[i]? 'completed': 'disabled' "
-        >
-          {{ i + 1 }}
-        </div>
-        <div class="step-content">
-          <h5 (click)="goToStep(i)" *ngIf="step != 'Decorazioni'">{{ step }}*</h5>
-          <h5 (click)="goToStep(i)" *ngIf="step === 'Decorazioni'">{{ step }}</h5>
-          <small  class="text-muted " (click)="goToStep(i)">Seleziona {{ step.toLowerCase() }} della torta</small>
-          <ng-container *ngIf="i === currentStep">
+    <div *ngIf="loading">
+      <apa-spinner></apa-spinner>
+    </div>
+    <div *ngIf="!loading">
+      <div class="stepper">
+        <div *ngFor="let step of steps; let i = index"
+             class="step"
+             [class.active]="i === currentStep"
+             [class.disabled]="!stepCompleted[i]">
+          <div class="step-circle"
+               (click)="goToStep(i)"
+               [ngClass]="stepCompleted[i]? 'completed': 'disabled' ">
+            {{ i + 1 }}
+          </div>
+          <div class="step-content">
+            <h5 (click)="goToStep(i)" *ngIf="step != 'Decorazioni'">{{ step }}*</h5>
+            <h5 (click)="goToStep(i)" *ngIf="step === 'Decorazioni'">{{ step }}</h5>
+            <small  class="text-muted " (click)="goToStep(i)">Seleziona {{ step.toLowerCase() }} della torta</small>
+            <ng-container *ngIf="i === currentStep">
 
-            <ng-container *ngIf="step === 'Tipologia'">
-              <div ngbDropdown class="dropdown">
-                <button class="btn btn-outline-dark" ngbDropdownToggle id="typeDropdown">
-                  {{ selectedType }}
-                </button>
-                <ul ngbDropdownMenu aria-labelledby="typeDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
-                  <li *ngFor="let type of selectionOptions" class="dropdown-item" (click)="selectType(type)">
-                    {{ type }}
-                  </li>
-                </ul>
-              </div>
-            </ng-container>
+              <ng-container *ngIf="step === 'Tipologia'">
+                <div ngbDropdown class="dropdown">
+                  <button class="btn btn-outline-dark" ngbDropdownToggle id="typeDropdown">
+                    {{ selectedType }}
+                  </button>
+                  <ul ngbDropdownMenu aria-labelledby="typeDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
+                    <li *ngFor="let type of selectionOptions" class="dropdown-item" (click)="selectType(type)">
+                      {{ type }}
+                    </li>
+                  </ul>
+                </div>
+              </ng-container>
 
-            <ng-container *ngIf="step === 'Base'">
-              <!-- Utilizza la tua dropdown personalizzata qui -->
-              <div ngbDropdown class="dropdown">
-                <button class="btn btn-outline-dark" ngbDropdownToggle id="baseDropdown">
-                 {{selectedBase}}
-                </button>
-                <ul ngbDropdownMenu aria-labelledby="baseDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
-                  <li *ngFor="let base of baseOptions" class="dropdown-item" (click)="selectBase(base)">
-                    {{ base }}
-                  </li>
-                </ul>
-              </div>
-            </ng-container>
+              <ng-container *ngIf="step === 'Base'">
+                <!-- Utilizza la tua dropdown personalizzata qui -->
+                <div ngbDropdown class="dropdown">
+                  <button class="btn btn-outline-dark" ngbDropdownToggle id="baseDropdown">
+                   {{selectedBase}}
+                  </button>
+                  <ul ngbDropdownMenu aria-labelledby="baseDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
+                    <li *ngFor="let base of baseOptions" class="dropdown-item" (click)="selectBase(base)">
+                      {{ base }}
+                    </li>
+                  </ul>
+                </div>
+              </ng-container>
 
-            <ng-container *ngIf="step === 'Peso'">
-              <!-- Utilizza la tua dropdown personalizzata qui -->
-              <div ngbDropdown class="dropdown">
-                <button class="btn btn-outline-dark" ngbDropdownToggle id="weightDropdown">
-                  {{ selectedWeight }} kg
-                </button>
-                <ul ngbDropdownMenu aria-labelledby="weightDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
-                  <li *ngFor="let weight of weightOptions" class="dropdown-item" (click)="selectWeight(weight)">
-                    {{ weight }} kg
-                  </li>
-                </ul>
-              </div>
-            </ng-container>
+              <ng-container *ngIf="step === 'Peso'">
+                <!-- Utilizza la tua dropdown personalizzata qui -->
+                <div ngbDropdown class="dropdown">
+                  <button class="btn btn-outline-dark" ngbDropdownToggle id="weightDropdown">
+                    {{ selectedWeight }} kg
+                  </button>
+                  <ul ngbDropdownMenu aria-labelledby="weightDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
+                    <li *ngFor="let weight of weightOptions" class="dropdown-item" (click)="selectWeight(weight)">
+                      {{ weight }} kg
+                    </li>
+                  </ul>
+                </div>
+              </ng-container>
 
-              <ng-container *ngIf="step === 'Forma'">
-                  <!-- Utilizza la tua dropdown personalizzata qui -->
-                  <div class="d-flex align-items-start">
-                      <div ngbDropdown class="dropdown me-3">
-                          <button class="btn btn-outline-dark" ngbDropdownToggle id="formaDropdown">
-                              {{ selectedForma || 'Seleziona Forma' }}
-                          </button>
-                          <ul ngbDropdownMenu aria-labelledby="formaDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
-                              <li *ngFor="let forma of formaOptions" class="dropdown-item" (click)="selectForma(forma)">
-                                  {{ forma }}
-                              </li>
-                          </ul>
-                      </div>
+                <ng-container *ngIf="step === 'Forma'">
+                    <!-- Utilizza la tua dropdown personalizzata qui -->
+                    <div class="d-flex align-items-start">
+                        <div ngbDropdown class="dropdown me-3">
+                            <button class="btn btn-outline-dark" ngbDropdownToggle id="formaDropdown">
+                                {{ selectedForma || 'Seleziona Forma' }}
+                            </button>
+                            <ul ngbDropdownMenu aria-labelledby="formaDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
+                                <li *ngFor="let forma of formaOptions" class="dropdown-item" (click)="selectForma(forma)">
+                                    {{ forma }}
+                                </li>
+                            </ul>
+                        </div>
 
-                      <div ngbDropdown class="dropdown" *ngIf="selectedForma == 'Numero'">
-                          <button class="btn btn-outline-dark" ngbDropdownToggle id="dettaglioFormaNDropdown">
-                              {{ selectedDettaglioForma || 'Seleziona' }}
-                          </button>
-                          <ul ngbDropdownMenu aria-labelledby="dettaglioFormaNDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
-                              <li *ngFor="let dettaglio of getDettagliForma()" class="dropdown-item" (click)="selectDettaglioForma(dettaglio)">
-                                  {{ dettaglio }}
-                              </li>
-                          </ul>
-                      </div>
+                        <div ngbDropdown class="dropdown" *ngIf="selectedForma == 'Numero'">
+                            <button class="btn btn-outline-dark" ngbDropdownToggle id="dettaglioFormaNDropdown">
+                                {{ selectedDettaglioForma || 'Seleziona' }}
+                            </button>
+                            <ul ngbDropdownMenu aria-labelledby="dettaglioFormaNDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
+                                <li *ngFor="let dettaglio of getDettagliForma()" class="dropdown-item" (click)="selectDettaglioForma(dettaglio)">
+                                    {{ dettaglio }}
+                                </li>
+                            </ul>
+                        </div>
 
-                      <div ngbDropdown class="dropdown" *ngIf="selectedForma == 'Lettera'">
-                          <button class="btn btn-outline-dark" ngbDropdownToggle id="dettaglioFormaLDropdown">
-                              {{ selectedDettaglioForma || 'Seleziona' }}
-                          </button>
-                          <ul ngbDropdownMenu aria-labelledby="dettaglioFormaLDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
-                              <li *ngFor="let dettaglio of getDettagliForma()" class="dropdown-item" (click)="selectDettaglioForma(dettaglio)">
-                                  {{ dettaglio }}
-                              </li>
-                          </ul>
-                      </div>
+                        <div ngbDropdown class="dropdown" *ngIf="selectedForma == 'Lettera'">
+                            <button class="btn btn-outline-dark" ngbDropdownToggle id="dettaglioFormaLDropdown">
+                                {{ selectedDettaglioForma || 'Seleziona' }}
+                            </button>
+                            <ul ngbDropdownMenu aria-labelledby="dettaglioFormaLDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
+                                <li *ngFor="let dettaglio of getDettagliForma()" class="dropdown-item" (click)="selectDettaglioForma(dettaglio)">
+                                    {{ dettaglio }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </ng-container>
+
+
+                <ng-container *ngIf="step === 'Farcitura'">
+                <!-- Dropdown personalizzata per Farcitura -->
+                <div ngbDropdown class="dropdown">
+                  <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedFarciture.length === 2" id="farcituraDropdown">
+                    Seleziona farciture
+                  </button>
+                  <ul ngbDropdownMenu aria-labelledby="farcituraDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
+                    <li *ngFor="let farcitura of farcitureOptions" class="dropdown-item" (click)="selectFarcitura(farcitura)" [class.disabled]="selectedFarciture.length === 2">
+                      {{ farcitura }}
+                    </li>
+                  </ul>
+                </div>
+                <div class="mt-2">
+                  <ng-container *ngFor="let farcitura of selectedFarciture">
+        <span class="badge bg-secondary me-2 mb-2">
+          {{ farcitura }}
+          <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Close" (click)="removeFarcitura(farcitura)"></button>
+        </span>
+                  </ng-container>
+                </div>
+                <small *ngIf="selectedFarciture.length === 2" class="text-muted">Hai selezionato il massimo di 2 farciture</small>
+              </ng-container>
+
+              <ng-container *ngIf="step === 'Bagna'">
+                <!-- Utilizza la tua dropdown personalizzata qui -->
+                <div ngbDropdown class="dropdown">
+                  <button class="btn btn-outline-dark" ngbDropdownToggle id="bagnaDropdown" [disabled]="bagnaOptions[0]==='NO BAGNE'">
+                    {{ selectedBagna }}
+                  </button>
+                  <ul ngbDropdownMenu aria-labelledby="bagnaDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
+                    <li *ngFor="let bagna of bagnaOptions" class="dropdown-item" (click)="selectBagna(bagna)">
+                      {{ bagna }}
+                    </li>
+                  </ul>
+                </div>
+                <small *ngIf="bagnaOptions[0] === 'NO BAGNE'" class="text-muted">Non è possibile selezionare bagne per questa tipologia di torta</small>
+              </ng-container>
+
+              <ng-container *ngIf="step === 'Frutta e Gocce'">
+                <div class="row">
+                  <div class="col">
+                    <!-- Dropdown per la selezione di frutta -->
+                    <div ngbDropdown class="dropdown">
+                      <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedFrutta.length === 3 || selectedGocce.length === 3" id="fruttaDropdown">
+                        Seleziona frutta
+                      </button>
+                      <ul ngbDropdownMenu aria-labelledby="fruttaDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
+                        <li *ngFor="let frutta of fruttaOptions" class="dropdown-item" (click)="selectFrutta(frutta)" [class.disabled]="selectedFrutta.length === 3 || selectedGocce.length === 3">
+                          {{ frutta }}
+                        </li>
+                      </ul>
+                    </div>
                   </div>
+                  <div class="col">
+                    <!-- Dropdown per la selezione di gocce -->
+                    <div ngbDropdown class="dropdown">
+                      <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedFrutta.length === 3 || selectedGocce.length === 3" id="gocceDropdown">
+                        Seleziona gocce
+                      </button>
+                      <ul ngbDropdownMenu aria-labelledby="gocceDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
+                        <li *ngFor="let goccia of gocceOptions" class="dropdown-item" (click)="selectGoccia(goccia)" [class.disabled]="selectedFrutta.length === 3 || selectedGocce.length === 3">
+                          {{ goccia }}
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <!-- Visualizzazione delle scelte di frutta -->
+                <div class="mt-2">
+                  <ng-container *ngFor="let frutta of selectedFrutta">
+        <span class="badge bg-secondary me-2 mb-2">
+          {{ frutta }}
+          <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Close" (click)="removeFrutta(frutta)"></button>
+        </span>
+                  </ng-container>
+                </div>
+                <!-- Visualizzazione delle scelte di gocce -->
+                <div class="mt-2">
+                  <ng-container *ngFor="let goccia of selectedGocce">
+        <span class="badge bg-secondary me-2 mb-2">
+          {{ goccia }}
+          <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Close" (click)="removeGoccia(goccia)"></button>
+        </span>
+                  </ng-container>
+                </div>
+                <!-- Messaggio di avviso sul numero massimo di selezioni -->
+                <small *ngIf="selectedFrutta.length + selectedGocce.length === 3" class="text-muted">Hai selezionato il massimo di 3 opzioni tra frutta e gocce</small>
               </ng-container>
 
 
-              <ng-container *ngIf="step === 'Farcitura'">
-              <!-- Dropdown personalizzata per Farcitura -->
-              <div ngbDropdown class="dropdown">
-                <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedFarciture.length === 2" id="farcituraDropdown">
-                  Seleziona farciture
-                </button>
-                <ul ngbDropdownMenu aria-labelledby="farcituraDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
-                  <li *ngFor="let farcitura of farcitureOptions" class="dropdown-item" (click)="selectFarcitura(farcitura)" [class.disabled]="selectedFarciture.length === 2">
-                    {{ farcitura }}
-                  </li>
-                </ul>
-              </div>
-              <div class="mt-2">
-                <ng-container *ngFor="let farcitura of selectedFarciture">
-      <span class="badge bg-secondary me-2 mb-2">
-        {{ farcitura }}
-        <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Close" (click)="removeFarcitura(farcitura)"></button>
-      </span>
-                </ng-container>
-              </div>
-              <small *ngIf="selectedFarciture.length === 2" class="text-muted">Hai selezionato il massimo di 2 farciture</small>
-            </ng-container>
+              <ng-container *ngIf="step === 'Copertura'">
+                <!-- Utilizza la tua dropdown personalizzata qui -->
+                <div ngbDropdown class="dropdown">
+                  <button class="btn btn-outline-dark" ngbDropdownToggle id="coperturaDropdown" [disabled]="coperturaOptions[0] === 'NO COPERTURE'">
+                    {{ selectedCopertura }}
+                  </button>
+                  <ul ngbDropdownMenu aria-labelledby="coperturaDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
+                    <li *ngFor="let copertura of coperturaOptions" class="dropdown-item" (click)="selectCopertura(copertura)">
+                      {{ copertura }}
+                    </li>
+                  </ul>
+                </div>
+                <small *ngIf="coperturaOptions[0] === 'NO COPERTURE'" class="text-muted">Non è possibile selezionare coperture per questa tipologia di torta</small>
+              </ng-container>
 
-            <ng-container *ngIf="step === 'Bagna'">
-              <!-- Utilizza la tua dropdown personalizzata qui -->
-              <div ngbDropdown class="dropdown">
-                <button class="btn btn-outline-dark" ngbDropdownToggle id="bagnaDropdown" [disabled]="bagnaOptions[0]==='NO BAGNE'">
-                  {{ selectedBagna }}
-                </button>
-                <ul ngbDropdownMenu aria-labelledby="bagnaDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
-                  <li *ngFor="let bagna of bagnaOptions" class="dropdown-item" (click)="selectBagna(bagna)">
-                    {{ bagna }}
-                  </li>
-                </ul>
-              </div>
-              <small *ngIf="bagnaOptions[0] === 'NO BAGNE'" class="text-muted">Non è possibile selezionare bagne per questa tipologia di torta</small>
-            </ng-container>
 
-            <ng-container *ngIf="step === 'Frutta e Gocce'">
-              <div class="row">
-                <div class="col">
-                  <!-- Dropdown per la selezione di frutta -->
-                  <div ngbDropdown class="dropdown">
-                    <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedFrutta.length === 3 || selectedGocce.length === 3" id="fruttaDropdown">
-                      Seleziona frutta
-                    </button>
-                    <ul ngbDropdownMenu aria-labelledby="fruttaDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
-                      <li *ngFor="let frutta of fruttaOptions" class="dropdown-item" (click)="selectFrutta(frutta)" [class.disabled]="selectedFrutta.length === 3 || selectedGocce.length === 3">
-                        {{ frutta }}
-                      </li>
-                    </ul>
+              <ng-container *ngIf="step === 'Granelle'">
+                <div ngbDropdown class="dropdown">
+                  <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedGranelle.length === 2 || granelleOptions[0] === 'NO GRANELLE'" id="granellaDropdown">
+                    Seleziona granelle
+                  </button>
+                  <ul ngbDropdownMenu aria-labelledby="granellaDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
+                    <li *ngFor="let granella of granelleOptions" class="dropdown-item" (click)="selectGranella(granella)" [class.disabled]="selectedGranelle.length === 2">
+                      {{ granella }}
+                    </li>
+                  </ul>
+                </div>
+                <div *ngIf="granelleOptions[0] != 'NO GRANELLE'" class="mt-2">
+                  <ng-container  *ngFor="let granella of selectedGranelle">
+        <span class="badge bg-secondary me-2 mb-2">
+          {{ granella }}
+          <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Close" (click)="removeGranella(granella)"></button>
+        </span>
+                  </ng-container>
+                </div>
+                <small *ngIf="selectedGranelle.length === 2" class="text-muted">Hai selezionato il massimo di 2 granelle</small>
+                <small *ngIf="granelleOptions[0] === 'NO GRANELLE'" class="text-muted">Non è possibile selezionare granelle per questa tipologia di torta</small>
+              </ng-container>
+
+
+              <ng-container *ngIf="step === 'Decorazioni'">
+                <div class="row mt-2 mb-3 me-1">
+                  <div class="col">
+                    <label for="fraseInput" class="form-label">Aggiungi una frase</label>
+                    <input type="text" class="form-control" id="fraseInput" placeholder="Tanti auguri!" (input)="onInputChange($event)">
                   </div>
                 </div>
-                <div class="col">
-                  <!-- Dropdown per la selezione di gocce -->
-                  <div ngbDropdown class="dropdown">
-                    <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedFrutta.length === 3 || selectedGocce.length === 3" id="gocceDropdown">
-                      Seleziona gocce
-                    </button>
-                    <ul ngbDropdownMenu aria-labelledby="gocceDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
-                      <li *ngFor="let goccia of gocceOptions" class="dropdown-item" (click)="selectGoccia(goccia)" [class.disabled]="selectedFrutta.length === 3 || selectedGocce.length === 3">
-                        {{ goccia }}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <!-- Visualizzazione delle scelte di frutta -->
-              <div class="mt-2">
-                <ng-container *ngFor="let frutta of selectedFrutta">
-      <span class="badge bg-secondary me-2 mb-2">
-        {{ frutta }}
-        <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Close" (click)="removeFrutta(frutta)"></button>
-      </span>
-                </ng-container>
-              </div>
-              <!-- Visualizzazione delle scelte di gocce -->
-              <div class="mt-2">
-                <ng-container *ngFor="let goccia of selectedGocce">
-      <span class="badge bg-secondary me-2 mb-2">
-        {{ goccia }}
-        <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Close" (click)="removeGoccia(goccia)"></button>
-      </span>
-                </ng-container>
-              </div>
-              <!-- Messaggio di avviso sul numero massimo di selezioni -->
-              <small *ngIf="selectedFrutta.length + selectedGocce.length === 3" class="text-muted">Hai selezionato il massimo di 3 opzioni tra frutta e gocce</small>
-            </ng-container>
-
-
-            <ng-container *ngIf="step === 'Copertura'">
-              <!-- Utilizza la tua dropdown personalizzata qui -->
-              <div ngbDropdown class="dropdown">
-                <button class="btn btn-outline-dark" ngbDropdownToggle id="coperturaDropdown" [disabled]="coperturaOptions[0] === 'NO COPERTURE'">
-                  {{ selectedCopertura }}
-                </button>
-                <ul ngbDropdownMenu aria-labelledby="coperturaDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
-                  <li *ngFor="let copertura of coperturaOptions" class="dropdown-item" (click)="selectCopertura(copertura)">
-                    {{ copertura }}
-                  </li>
-                </ul>
-              </div>
-              <small *ngIf="coperturaOptions[0] === 'NO COPERTURE'" class="text-muted">Non è possibile selezionare coperture per questa tipologia di torta</small>
-            </ng-container>
-
-
-            <ng-container *ngIf="step === 'Granelle'">
-              <div ngbDropdown class="dropdown">
-                <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedGranelle.length === 2 || granelleOptions[0] === 'NO GRANELLE'" id="granellaDropdown">
-                  Seleziona granelle
-                </button>
-                <ul ngbDropdownMenu aria-labelledby="granellaDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
-                  <li *ngFor="let granella of granelleOptions" class="dropdown-item" (click)="selectGranella(granella)" [class.disabled]="selectedGranelle.length === 2">
-                    {{ granella }}
-                  </li>
-                </ul>
-              </div>
-              <div *ngIf="granelleOptions[0] != 'NO GRANELLE'" class="mt-2">
-                <ng-container  *ngFor="let granella of selectedGranelle">
-      <span class="badge bg-secondary me-2 mb-2">
-        {{ granella }}
-        <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Close" (click)="removeGranella(granella)"></button>
-      </span>
-                </ng-container>
-              </div>
-              <small *ngIf="selectedGranelle.length === 2" class="text-muted">Hai selezionato il massimo di 2 granelle</small>
-              <small *ngIf="granelleOptions[0] === 'NO GRANELLE'" class="text-muted">Non è possibile selezionare granelle per questa tipologia di torta</small>
-            </ng-container>
-
-
-            <ng-container *ngIf="step === 'Decorazioni'">
-              <div class="row mt-2 mb-3 me-1">
-                <div class="col">
-                  <label for="fraseInput" class="form-label">Aggiungi una frase</label>
-                  <input type="text" class="form-control" id="fraseInput" placeholder="Tanti auguri!" (input)="onInputChange($event)">
-                </div>
-              </div>
-              <div class="row mt-1 me-2">
-                <p style="font-size:medium ">Immagine</p>
-                <div class="drop-zone rounded ms-3 mb-1 mt-1 me-3" #dropZone (drop)="handleDrop($event)" (dragover)="handleDragOver($event)" (click)="fileInput.click()">
-                  <div class="row">
-                    <div class="mb-4 text-purple">
-                      Trascina qui il file da caricare o clicca per selezionare un file
+                <div class="row mt-1 me-2">
+                  <p style="font-size:medium ">Immagine</p>
+                  <div class="drop-zone rounded ms-3 mb-1 mt-1 me-3" #dropZone (drop)="handleDrop($event)" (dragover)="handleDragOver($event)" (click)="fileInput.click()">
+                    <div class="row">
+                      <div class="mb-4 text-purple">
+                        Trascina qui il file da caricare o clicca per selezionare un file
+                      </div>
                     </div>
-                  </div>
-                  <div *ngIf="file" class="row">
-                    <div class="col-10">
-                      <span>{{ abbreviatedFileName }}</span>
-                    </div>
-                    <div class="col-2">
-                      <button class="btn btn-link text-dark" (click)="removeFile($event)">
-                        <i class="bi bi-trash"></i>
-                      </button>
+                    <div *ngIf="file" class="row">
+                      <div class="col-10">
+                        <span>{{ abbreviatedFileName }}</span>
+                      </div>
+                      <div class="col-2">
+                        <button class="btn btn-link text-dark" (click)="removeFile($event)">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <input type="file" #fileInput style="display: none;" (change)="handleFileSelect($event)" accept=".png, .jpg, .jpeg">
+                <input type="file" #fileInput style="display: none;" (change)="handleFileSelect($event)" accept=".png, .jpg, .jpeg">
+              </ng-container>
             </ng-container>
-          </ng-container>
+          </div>
         </div>
       </div>
+
+      <hr>
+
+      <div class="row ms-1 mt-3 me-1 mb-3">
+      <span class="col-6 d-flex justify-content-start">
+        Prezzo ({{this.price}}€/kg)
+      </span>
+        <span class="col-6 d-flex justify-content-end">
+          {{this.realPrice}} €
+      </span>
+      </div>
+
+      <div class="row ms-1 mt-5 me-1 mb-5">
+        <lib-generic-button
+          [type]="'submit'"
+          [buttonSize]="ButtonSizeTheme.FullWidth"
+          [buttonStyle]="ButtonTheme.Primary"
+          [buttonText]="'Aggiungi al carrello'"
+          (click) = "saveNewProductInPurchase()"
+        ></lib-generic-button>
+      </div>
     </div>
-
-    <hr>
-
-    <div class="row ms-1 mt-3 me-1 mb-3">
-    <span class="col-6 d-flex justify-content-start">
-      Prezzo ({{this.price}}€/kg)
-    </span>
-      <span class="col-6 d-flex justify-content-end">
-        {{this.realPrice}} €
-    </span>
-    </div>
-
-    <div class="row ms-1 mt-5 me-1 mb-5">
-      <lib-generic-button
-        [type]="'submit'"
-        [buttonSize]="ButtonSizeTheme.FullWidth"
-        [buttonStyle]="ButtonTheme.Primary"
-        [buttonText]="'Aggiungi al carrello'"
-        (click) = "saveNewProductInPurchase()"
-      ></lib-generic-button>
-    </div>
-
   </div>
 
 </div>

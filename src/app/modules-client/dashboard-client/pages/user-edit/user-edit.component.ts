@@ -18,7 +18,7 @@ export class UserEditComponent implements OnInit{
   newCustomer : Customer = new Customer()
   originalCustomer: Customer = new Customer()
   customerIdkc: string = ''
-
+  loading:boolean = true;
   constructor(private customerService: CustomerService,
               private router: Router,
               private modalService: TwentyfiveModalService,
@@ -53,22 +53,35 @@ export class UserEditComponent implements OnInit{
   }
 
   saveNewCustomer(){
+    this.loading = true;
     this.customerService.saveCustomerClient(this.newCustomer.id,this.newCustomer.firstName,this.newCustomer.lastName,this.newCustomer.phoneNumber).subscribe({
-      error:() =>{
+      error:(error) =>{
+        console.error(error);
         this.toastrService.error("Errore nel salvare il customer");
+        this.loading = false;
       },
       complete:() =>{
         this.toastrService.success("modifiche salvate con successo");
         this.router.navigate(['../catalogo/profilo']);
+        this.loading = false;
       }
     });
   }
 
   getCustomer(){
     if(this.customerIdkc!=null){
-      this.customerService.getCustomerByKeycloakId(this.customerIdkc).subscribe( (res:any) =>{
-        this.originalCustomer = res
-        this.newCustomer= {...res}
+      this.customerService.getCustomerByKeycloakId(this.customerIdkc).subscribe( {
+        next:(res:any) => {
+          this.originalCustomer = res
+          this.newCustomer= {...res}
+        },
+        error:(error) => {
+          console.error(error);
+          this.loading = false;
+        },
+        complete:() => {
+          this.loading = false;
+        }
       })
     }
   }

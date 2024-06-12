@@ -15,30 +15,34 @@ import { CartProductCardComponent } from './cart-product-card/cart-product-card.
 import {FormsModule} from "@angular/forms";
 import {RouterLink} from "@angular/router";
 import {TooltipModule} from "ngx-bootstrap/tooltip";
+import { ApaSpinnerComponent } from './apa-spinner/apa-spinner.component';
+import {TwentyfiveSpinnerModule} from "twentyfive-spinner";
 
 @NgModule({
   declarations: [
     CategoryEditComponent,
     GenericCardComponent,
     CartProductCardComponent,
+    ApaSpinnerComponent,
   ],
-    imports: [
-        CommonModule,
-        TwentyfiveNavbarModule,
-        TwentyfiveSidebarModule,
-        TwentyfiveAccordionTableModule,
-        CollapseModule,
-        TwentyfiveTableModule,
-        TwentyfiveInputModule,
-        GenericButtonModule,
-        TwentyfiveModalGenericComponentModule,
-        NgbDropdown,
-        NgbDropdownMenu,
-        NgbDropdownToggle,
-        FormsModule,
-        RouterLink,
-        TooltipModule,
-    ],
+  imports: [
+    CommonModule,
+    TwentyfiveNavbarModule,
+    TwentyfiveSidebarModule,
+    TwentyfiveAccordionTableModule,
+    CollapseModule,
+    TwentyfiveTableModule,
+    TwentyfiveInputModule,
+    GenericButtonModule,
+    TwentyfiveModalGenericComponentModule,
+    NgbDropdown,
+    NgbDropdownMenu,
+    NgbDropdownToggle,
+    FormsModule,
+    RouterLink,
+    TooltipModule,
+    TwentyfiveSpinnerModule,
+  ],
   exports: [
     CommonModule,
     TwentyfiveNavbarModule,
@@ -50,6 +54,7 @@ import {TooltipModule} from "ngx-bootstrap/tooltip";
     GenericButtonModule,
     GenericCardComponent,
     CartProductCardComponent,
+    ApaSpinnerComponent,
   ]
 })
 export class SharedModule {

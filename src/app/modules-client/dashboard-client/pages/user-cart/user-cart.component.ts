@@ -34,7 +34,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
   selectedTime! : any // Variabile per l'orario selezionato
   selectedPickupDateTime: string = ''; // Variabile per la data e l'orario combinati
 
-  isCartLoaded: boolean = false; //ToDO: Sostituire con uno spinner
+  loading: boolean = true;
 
   isCollapsed: boolean = true;
 
@@ -54,7 +54,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
     this.getCustomer();
 
     this.cartReloadSubscription = interval(30 * 60 * 1000) // 30 minuti in millisecondi
-      .pipe(takeWhile(() => this.isCartLoaded))
+      .pipe(takeWhile(() => this.loading))
       .subscribe(() => {
         this.getCart();
       });
@@ -84,16 +84,19 @@ export class UserCartComponent implements OnInit, OnDestroy{
   }
 
   getCart() {
-    this.cartService.get(this.customer.id).subscribe((res:any) =>{
-      this.cart = res;
-      this.initializeItemsToBuy();
-      this.obtainCartMinPickupDateTime()
-      this.isCartLoaded = true;
-
-      // console.log(this.cart)
-
-      //console.log('item to buy')
-      //console.log(this.itemToBuy);
+    this.cartService.get(this.customer.id).subscribe({
+      next:(res:any) => {
+        this.cart = res;
+        this.initializeItemsToBuy();
+        this.obtainCartMinPickupDateTime();
+      },
+      error:(error:any) => {
+        console.error(error);
+        this.loading = false;
+      },
+      complete:() => {
+        this.loading = false;
+      }
     })
   }
 
@@ -205,6 +208,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
   }
 
   buyCart() {
+    this.loading = true;
     if(this.imAdmin){
       this.router.navigate(['../dashboard']);
     }
@@ -221,7 +225,9 @@ export class UserCartComponent implements OnInit, OnDestroy{
           this.toastrService.success('Ordine effettuato con successo')
         },
         error: (error) => {
+          console.error(error);
           this.toastrService.error('Impossibile effettuare l\'ordine')
+          this.loading = false;
         },
         complete: () => {
           this.isCollapsed = true

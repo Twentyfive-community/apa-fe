@@ -41,6 +41,7 @@ export class ProductDetailsComponent implements OnInit{
   weightOptions: number[] = [];
   measureOptions: Measure[] = [];
   file: File | null;
+  loading: boolean = true;
 
   constructor(private modalService: TwentyfiveModalGenericComponentService,
               private keycloackService: SigningKeycloakService,
@@ -52,7 +53,6 @@ export class ProductDetailsComponent implements OnInit{
 
   ngOnInit(): void {
     if (this.fromEdit) {
-      // console.log(this.productToEdit);
       this.setProductDetailsForEdit();
     } else {
       this.getProductDetails(this.productId);
@@ -68,19 +68,37 @@ export class ProductDetailsComponent implements OnInit{
   getProductDetails(id: string) {
     switch (this.categoryType) {
       case 'productKg':
-        this.productService.getByIdKg(id).subscribe((response:any) =>{
-          this.productDetails=response;
-          this.initializeWeightOptions()
-          this.selectedWeight=this.productDetails.weightRange?.minWeight
-          this.productInPurchase.weight=this.productDetails.weightRange?.minWeight
+        this.productService.getByIdKg(id).subscribe({
+          next:(response:any) =>{
+            this.productDetails=response;
+            this.initializeWeightOptions()
+            this.selectedWeight=this.productDetails.weightRange?.minWeight
+            this.productInPurchase.weight=this.productDetails.weightRange?.minWeight
+          },
+          error:(error:any) =>{
+            console.error(error);
+            this.loading = false;
+          },
+          complete:()=>{
+            this.loading = false;
+          }
         })
         break;
       case 'tray':
-        this.productService.getByIdTray(id).subscribe((response:any) =>{
-          this.trayDetails=response;
-          this.initializeMeasureOptions()
-          this.selectedMeasure=this.trayDetails.measuresList[0].weight.toString()
-          this.selectedMeasureLabel=this.trayDetails.measuresList[0].label
+        this.productService.getByIdTray(id).subscribe({
+          next:(response:any) =>{
+            this.trayDetails=response;
+            this.initializeMeasureOptions()
+            this.selectedMeasure=this.trayDetails.measuresList[0].weight.toString()
+            this.selectedMeasureLabel=this.trayDetails.measuresList[0].label
+          },
+          error:(error:any) =>{
+            console.error(error);
+            this.loading = false;
+          },
+          complete:()=>{
+            this.loading = false;
+          }
         })
         break;
     }
@@ -196,20 +214,6 @@ export class ProductDetailsComponent implements OnInit{
     }
   }
 
-  // getTotalPrice(){
-  //   if(this.categoryName != 'Vassoi' || this.categoryType == 'productKg'){
-  //     const priceString = this.productDetails.pricePerKg?.replace(/[^\d.-]/g, '');
-  //     const price = parseFloat(priceString);
-  //     this.productInPurchase.totalPrice=price*this.productInPurchase.weight
-  //     return (price * this.productInPurchase.weight).toFixed(2);
-  //   }
-  //   else{
-  //     const measure = parseFloat(this.selectedMeasure)
-  //     this.bundleInPurchase.totalPrice=this.trayDetails.pricePerKg*measure
-  //     return (this.bundleInPurchase.totalPrice).toFixed(2);
-  //   }
-  // }
-
   getCustomer(){
     let keycloakService=(this.keycloackService)as any;
     this.customerIdkc=keycloakService.keycloakService._userProfile.id;
@@ -222,6 +226,7 @@ export class ProductDetailsComponent implements OnInit{
   }
 
   saveNewProductInPurchase() {
+    this.loading = true;
       if (this.file) {
         this.uploadImage();
       }
@@ -231,13 +236,16 @@ export class ProductDetailsComponent implements OnInit{
          this.productInPurchase.name = this.productDetails.name
          this.productInPurchase.quantity = 1
          this.cartService.addToCartProductInPurchase(this.customer.id, this.productInPurchase).subscribe({
-            error: () => {
-              this.toastrService.error("Errore nell'aggiunta del prodotto nel carrello!");
-            },
-            complete: () => {
-              this.toastrService.success("Prodotto aggiunto al carrello con successo");
-              this.close();
-            }
+           error: (error:any) => {
+             console.error(error);
+             this.toastrService.error("Errore nell'aggiunta del prodotto nel carrello!");
+             this.loading = false;
+          },
+           complete: () => {
+            this.toastrService.success("Prodotto aggiunto al carrello con successo");
+             this.loading = false;
+             this.close();
+          }
           })
           break;
         case 'tray':
@@ -248,11 +256,14 @@ export class ProductDetailsComponent implements OnInit{
           measureForBundle.weight=Number(parseFloat(this.selectedMeasure).toFixed(2))
           this.bundleInPurchase.measure=measureForBundle
           this.cartService.addToCartBundleInPurchase(this.customer.id, this.bundleInPurchase).subscribe({
-            error: () => {
+            error: (error:any) => {
+              console.error(error);
               this.toastrService.error("Errore nell'aggiunta del vassoio nel carrello!");
+              this.loading = false;
             },
             complete: () => {
               this.toastrService.success("Vassoio aggiunto al carrello con successo");
+              this.loading = false;
               this.close()
             }
           })
@@ -293,21 +304,24 @@ export class ProductDetailsComponent implements OnInit{
   protected readonly ButtonTheme = ButtonTheme;
 
   updateProduct() {
+    this.loading = true;
     switch (this.categoryType) {
       case 'productKg':
         this.productToEdit.weight = this.selectedWeight;
         this.productToEdit.notes = this.productInPurchase.notes
         this.productToEdit.attachment = this.productInPurchase.attachment
-        // console.log(this.productToEdit.totalPrice)
         this.productToEdit.totalPrice = Number(this.getRealPrice())
         this.cartService.modifyPipInCart(this.customer.id, this.index!, this.productToEdit).subscribe({
           next: () => {
             this.toastrService.success("Prodotto modificato con successo!");
           },
-          error: () => {
+          error: (error:any) => {
+            console.error(error)
+            this.loading = false;
             this.toastrService.error("Impossibile modificare prodotto!")
           },
           complete: () => {
+            this.loading = false;
             this.close()
           }
         })
@@ -321,10 +335,13 @@ export class ProductDetailsComponent implements OnInit{
           next: () => {
             this.toastrService.success("Prodotto modificato con successo!");
           },
-          error: () => {
+          error: (error:any) => {
+            console.error(error)
+            this.loading = false;
             this.toastrService.error("Impossibile modificare prodotto!")
           },
           complete: () => {
+            this.loading = false;
             this.close()
           }
         })

@@ -68,7 +68,7 @@ export class CustomCakeComponent implements OnInit{
   realPrice: number = 0;
 
   cakeId: string = "664f6efbc19b9d5754fa6ff3";
-
+  loading:boolean = true;
 
   selectionOptions: string[] = ['Torta classica', 'Torta a forma', 'Drip Cake'];
   weightOptions: number[] = [];
@@ -88,9 +88,18 @@ export class CustomCakeComponent implements OnInit{
 
   ngOnInit() {
     this.stepCompleted[0]=true;
-    this.productService.getByIdKg(this.cakeId).subscribe((res: any) =>{
-      this.productDetails = res
-      this.price = this.productDetails.pricePerKg?.replace(/[^\d.-]/g, '');
+    this.productService.getByIdKg(this.cakeId).subscribe( {
+      next:(res:any)=>{
+        this.productDetails = res
+        this.price = this.productDetails.pricePerKg?.replace(/[^\d.-]/g, '');
+      },
+      error:(error:any) =>{
+        console.error(error)
+        this.loading = false;
+      },
+      complete:()=>{
+        this.loading = false;
+      }
     })
     this.getCustomer();
   }
@@ -661,6 +670,7 @@ export class CustomCakeComponent implements OnInit{
   }
 
   saveNewProductInPurchase() {
+    this.loading = true;
     if (this.file) {
       this.uploadImage();
     }
@@ -708,12 +718,15 @@ export class CustomCakeComponent implements OnInit{
     else{
         console.log(this.productInPurchase);
       this.cartService.addToCartProductInPurchase(this.customer.id, this.productInPurchase).subscribe({
-        error: () => {
+        error: (error:any) => {
+          console.error(error);
+          this.loading = false;
           this.toastrService.error("Errore nell'aggiunta del prodotto nel carrello!");
         },
         complete: () => {
           this.toastrService.success("Prodotto aggiunto al carrello con successo");
           this.close();
+          this.loading = false;
         }
       })
     }
