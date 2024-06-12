@@ -80,6 +80,7 @@ export class CatalogueComponent implements OnInit {
   }
 
   getAll(page?:number) {
+    this.loading = true;
     switch (this.categoryActive) {
       case 'productKg':
         this.productService.getAllKgActive(this.activeTab, page ? this.currentPage - 1 : 0, this.itemsPerPage)

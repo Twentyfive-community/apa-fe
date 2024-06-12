@@ -6,6 +6,7 @@ import {ButtonTheme} from "twentyfive-style";
 import {OrderService} from "../../../../services/order.service";
 import {TwentyfiveModalService} from "twentyfive-modal";
 import {RxStompServiceService} from "../../../../services/rxstomp/rx-stomp-service.service";
+import {ToastrService} from "ngx-toastr";
 declare var bootstrap: any;
 
 @Component({
@@ -26,6 +27,7 @@ export class UserOrderComponent implements OnInit, OnDestroy {
   currentPage: number = 1;
   itemsPerPage: number = 15;
   totalPages: number = 1;
+  loading: boolean = true;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -33,7 +35,8 @@ export class UserOrderComponent implements OnInit, OnDestroy {
     private router: Router,
     private orderService:OrderService,
     private modalService: TwentyfiveModalService,
-    private rxStompService: RxStompServiceService
+    private rxStompService: RxStompServiceService,
+    private toastrService: ToastrService,
   ) { }
 
   ngOnInit(): void {
@@ -51,6 +54,7 @@ export class UserOrderComponent implements OnInit, OnDestroy {
   }
 
   loadOrders() {
+    this.loading = true;
     if (this.activeOrders == 'true') {
       this.loadActiveOrders(this.currentPage - 1, this.itemsPerPage);
     } else {
@@ -73,10 +77,14 @@ export class UserOrderComponent implements OnInit, OnDestroy {
         console.log(response);
         this.orders = response.content;
         this.setupPagination(response.totalPages);
+        this.loading = false;
       },
       error: (error) => {
         this.close();
         console.error('Failed to load orders:', error);
+      },
+      complete:() =>{
+        this.loading = false;
       }
     });
   }
@@ -93,12 +101,14 @@ export class UserOrderComponent implements OnInit, OnDestroy {
           this.close();
         }
 
-
       },
       error: (error) => {
-        console.log('no');
         this.close();
         console.error('Failed to load orders:', error);
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
       }
     });
   }
@@ -122,6 +132,10 @@ export class UserOrderComponent implements OnInit, OnDestroy {
   }
 
   close(): void {
+    this.loadOrders();
+  }
+
+  goBack(): void{
     this.router.navigate(['../catalogo/profilo']);
   }
 
@@ -154,17 +168,14 @@ export class UserOrderComponent implements OnInit, OnDestroy {
   handleCancel(id:string){
     this.orderService.cancelOrderUser(id).subscribe({
       next: (response) => {
-        console.log(response);
         // Mostra una finestra modale di conferma email
         const orderCancelModal = new bootstrap.Modal(document.getElementById('cancelOrderModal'), {
           keyboard: false
         });
-        console.log(this.orders);
         this.orders=[]
         if(this.customerId) {
           this.loadOrders();
         }
-        console.log(this.orders);
         if(this.orders.length==0){
           this.close();
         }
@@ -180,8 +191,11 @@ export class UserOrderComponent implements OnInit, OnDestroy {
             keyboard: false
           });
           impOrderCancelModal.show();
-
         }
+      },
+      complete:() => {
+        this.toastrService.success("L'ordine è stato annullato con successo!");
+        this.loadOrders();
       }
     });
 

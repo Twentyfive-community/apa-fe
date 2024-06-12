@@ -16,6 +16,7 @@ declare var bootstrap: any;
 export class UserProfileComponent implements OnInit{
   customer:CustomerDetails =new CustomerDetails()
   customerIdkc :string =''
+  loading: boolean = true;
 
   constructor(private signingKeycloakService: SigningKeycloakService,
               private router: Router,
@@ -35,8 +36,18 @@ export class UserProfileComponent implements OnInit{
     let keycloackService=(this.signingKeycloakService)as any;
     this.customerIdkc=keycloackService.keycloakService._userProfile.id;
     if(this.customerIdkc!=null){
-      this.customerService.getCustomerByKeycloakId(this.customerIdkc).subscribe( (res:any) =>{
-        this.customer = res
+      this.loading = true;
+      this.customerService.getCustomerByKeycloakId(this.customerIdkc).subscribe(  {
+        next:(res:any)=>{
+          this.customer = res
+        },
+        error:(error) =>{
+          console.error(error);
+          this.loading = false;
+        },
+        complete:()=>{
+          this.loading = false;
+        }
       })
     }
   }

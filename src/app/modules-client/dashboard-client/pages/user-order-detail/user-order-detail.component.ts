@@ -10,6 +10,7 @@ import {ProductService} from "../../../../services/product.service";
 import {BundleInPurchase, BundleInPurchaseDetails} from "../../../../models/Bundle";
 import {TwentyfiveModalService} from "twentyfive-modal";
 import {RxStompServiceService} from "../../../../services/rxstomp/rx-stomp-service.service";
+import {ToastrService} from "ngx-toastr";
 
 declare var bootstrap: any;
 @Component({
@@ -27,6 +28,7 @@ export class UserOrderDetailComponent implements OnInit {
   productImages: string[]=[];
   bundleImages: string[]=[];
   customizationsVisible: boolean[] = [];
+  loading:boolean = true;
 
 
   constructor(
@@ -37,6 +39,7 @@ export class UserOrderDetailComponent implements OnInit {
     private productService:ProductService,
     private rxStompService: RxStompServiceService,
     private modalService: TwentyfiveModalService,
+    private toastrService: ToastrService
   ) {}
 
   loadBootstrapJS(): void {
@@ -64,10 +67,6 @@ export class UserOrderDetailComponent implements OnInit {
           this.loadOrders(this.completed);
       });
     this.loadOrders();
-    console.log('product.nameè')
-    for(var product of this.orderDetails.products){
-      console.log(product.name)
-    }
   }
 
   }
@@ -85,13 +84,21 @@ export class UserOrderDetailComponent implements OnInit {
 
 
   loadProductsFromCompletedOrder(): void {
+    console.log("sto caricando!")
     this.completedOrderService.getOrderDetails(this.orderId).subscribe({
       next: (orderDetails: any) => {
         this.orderDetails = orderDetails;
         this.loadImages();
 
       },
-      error: (err) => console.error('Error loading completed order details:', err)
+      error: (err) => {
+        this.loading = false;
+        console.error('Error loading completed order details:', err)
+      },
+      complete: () => {
+        console.log("setto a false il loading!",this.loading);
+        this.loading = false;
+      }
     });
   }
 
@@ -101,7 +108,13 @@ export class UserOrderDetailComponent implements OnInit {
         this.orderDetails = orderDetails;
         this.loadImages();
       },
-      error: (err) => console.error('Error loading active order details:', err)
+      error: (err) => {
+        console.error('Error loading active order details:', err)
+        this.loading = false;
+      },
+      complete:() => {
+        this.loading = false;
+      }
     });
   }
 
@@ -174,10 +187,12 @@ export class UserOrderDetailComponent implements OnInit {
     return this.customizationsVisible[n];
   }
   loadOrders(completed?:boolean){
+    this.loading = true;
     if(this.activeOrders=='true' && !completed)
       this.loadProductsFromActiveOrder();
-    else
+    else{
       this.loadProductsFromCompletedOrder();
+    }
   }
 
 
@@ -191,8 +206,6 @@ export class UserOrderDetailComponent implements OnInit {
       {
         size: 'md',
         onConfirm: () => {
-          console.log('Richiesta di cancellamento per l\'ordine con id ' + id);
-
           this.handleCancel(id);
 
         }
@@ -203,12 +216,6 @@ export class UserOrderDetailComponent implements OnInit {
   handleCancel(id:string){
     this.orderService.cancelOrderUser(id).subscribe({
       next: (response) => {
-        console.log(response);
-        // Mostra una finestra modale di conferma email
-        //const orderCancelModal = new bootstrap.Modal(document.getElementById('cancelOrderModal'), {
-          //keyboard: false
-        //});
-        //orderCancelModal.show();
         this.close();
       },
       error: (error) => {
@@ -218,8 +225,10 @@ export class UserOrderDetailComponent implements OnInit {
             keyboard: false
           });
           impOrderCancelModal.show();
-
         }
+      },
+      complete: () => {
+        this.toastrService.success("Ordine annullato con successo!");
       }
     });
 
