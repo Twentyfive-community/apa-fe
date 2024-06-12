@@ -17,6 +17,7 @@ import {RouterLink} from "@angular/router";
 import {TooltipModule} from "ngx-bootstrap/tooltip";
 import { ApaSpinnerComponent } from './apa-spinner/apa-spinner.component';
 import {TwentyfiveSpinnerModule} from "twentyfive-spinner";
+import { NoItemCardComponent } from './no-item-card/no-item-card.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import {TwentyfiveSpinnerModule} from "twentyfive-spinner";
     GenericCardComponent,
     CartProductCardComponent,
     ApaSpinnerComponent,
+    NoItemCardComponent,
   ],
   imports: [
     CommonModule,
@@ -55,6 +57,7 @@ import {TwentyfiveSpinnerModule} from "twentyfive-spinner";
     GenericCardComponent,
     CartProductCardComponent,
     ApaSpinnerComponent,
+    NoItemCardComponent,
   ]
 })
 export class SharedModule {

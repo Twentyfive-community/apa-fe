@@ -1,0 +1,9 @@
+<div class="card">
+  <div class="card-body text-center">
+    <div class="d-flex justify-content-center">
+      <i class="mr-2" [ngClass]="customIcon" style="color:#CDBB6D"></i>
+    </div>
+    <p *ngIf="!customText" class="card-text"><b>Scusa! Nessun elemento disponibile al momento!</b></p>
+    <p *ngIf="customText" class="card-text"><b>{{customText}}</b></p>
+  </div>
+</div>

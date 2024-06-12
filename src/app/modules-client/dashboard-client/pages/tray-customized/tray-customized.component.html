@@ -15,6 +15,7 @@
 
         <div *ngIf="!loading">
 
+
           <h4 class="mb-3 ms-2 me-2 mt-4">Seleziona misura vassoio</h4>
           <div class="mb-3 ms-2 me-2" style="cursor: pointer" *ngFor="let measure of trayDetails.measuresList">
             <app-generic-card
@@ -52,6 +53,12 @@
               placeholder="Cerca Mignon"
               (input)="onSearch($event)"
             ></lib-twentyfive-input>
+          </div>
+
+          <div class="mt-5" *ngIf="productListWeighted.length === 0">
+            <app-no-item-card
+              [customText]="'Nessun mignon disponibile'"
+            ></app-no-item-card>
           </div>
 
           <div class="mb-2 me-2" style="cursor: pointer" *ngFor="let weighted of productListWeighted">
