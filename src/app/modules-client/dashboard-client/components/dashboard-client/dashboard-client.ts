@@ -83,8 +83,7 @@ export class DashboardClient implements OnInit{
 
 
   ngOnInit(): void{
-    this.getCustomer()
-    this.updateNavbarItems()
+    this.loadUserProfile();
   }
 
 
@@ -93,19 +92,27 @@ export class DashboardClient implements OnInit{
     else return this.navbarItems;
   }
 
-  private getCustomer() {
-    let keycloackService=(this.signingKeycloakService)as any;
-    this.customerIdkc=keycloackService.keycloakService._userProfile.id;
-    console.log(keycloackService.keycloakService._userProfile.id);
-    if(this.customerIdkc!=null){
-      this.customerService.getCustomerByKeycloakId(this.customerIdkc).subscribe( (res:any) =>{
-        this.customer = res
-      })
-    }
-    //this.imAdmin=keycloackService.keycloakService._userProfile.role;
-    this.imAdmin=keycloackService.loggedUserRoles().includes('admin');
-    //verifica qui se l'utente è admin
+  private loadUserProfile() {
+    let keycloakService = this.signingKeycloakService as any;
+    keycloakService.keycloakService.loadUserProfile().then((profile: any) => {
+      this.customerIdkc = profile.id;
+      console.log(this.customerIdkc);
+
+      if (this.customerIdkc != null) {
+        this.customerService.getCustomerByKeycloakId(this.customerIdkc).subscribe((res: any) => {
+          this.customer = res;
+          this.updateNavbarItems(); // Aggiorna navbarItems dopo aver ottenuto il cliente
+        });
+      }
+
+      this.imAdmin = keycloakService.loggedUserRoles().includes('admin');
+      this.updateNavbarItems(); // Aggiorna navbarItems anche se l'utente è admin
+    }).catch((err: any) => {
+      console.error('Failed to load user profile', err);
+      this.updateNavbarItems(); // Aggiorna navbarItems comunque per gestire il caso di errore
+    });
   }
 
-protected readonly NavbarTheme = NavbarTheme;
+
+  protected readonly NavbarTheme = NavbarTheme;
 }
