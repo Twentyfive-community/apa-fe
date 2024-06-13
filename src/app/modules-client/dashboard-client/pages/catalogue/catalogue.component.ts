@@ -76,6 +76,8 @@ export class CatalogueComponent implements OnInit {
     this.categoryActive = category.type;
     this.categoryName = category.name;
     this.currentPage=1;
+    this.productListKg = [];
+    this.trayList = [];
     this.getAll()
   }
 
@@ -127,12 +129,13 @@ export class CatalogueComponent implements OnInit {
 
   getCustomer(){
     let keycloakService=(this.keycloackService)as any;
-    this.customerIdkc=keycloakService.keycloakService._userProfile.id;
-    if(this.customerIdkc!=null){
-      this.customerService.getCustomerByKeycloakId(this.customerIdkc).subscribe((res: any) =>{
-        this.customer=res;
-
-      })
+    if(keycloakService.keycloakService._instance.authenticated) {
+      this.customerIdkc = keycloakService.keycloakService._userProfile.id;
+      if (this.customerIdkc != null) {
+        this.customerService.getCustomerByKeycloakId(this.customerIdkc).subscribe((res: any) => {
+          this.customer = res;
+        })
+      }
     }
   }
 
