@@ -106,10 +106,6 @@ export class ProductService {
     return this.http.post(`${this.uploadProPicUrl}${path}`, formData, {headers: h, responseType: 'text'});
   }
 
-
-  getImageUrlByIdKg(id: string): Observable<string> {
-    return this.http.get<string>(`${this.baseKgUrl}/imageById/${id}`, { responseType: 'text' as 'json' });
-  }
   getImageUrlByIdWeighted(id: string): Observable<string> {
     return this.http.get<string>(`${this.baseWeightedUrl}/imageById/${id}`, { responseType: 'text' as 'json' });
   }
