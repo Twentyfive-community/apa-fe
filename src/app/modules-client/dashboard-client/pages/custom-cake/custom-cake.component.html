@@ -227,7 +227,7 @@
               <ng-container *ngIf="step === 'Granelle'">
                 <div ngbDropdown class="dropdown">
                   <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedGranelle.length === 2 || granelleOptions[0] === 'NO GRANELLE'" id="granellaDropdown">
-                    Seleziona granelle
+                    Seleziona granella
                   </button>
                   <ul ngbDropdownMenu aria-labelledby="granellaDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
                     <li *ngFor="let granella of granelleOptions" class="dropdown-item" (click)="selectGranella(granella)" [class.disabled]="selectedGranelle.length === 2 || granelleOptions[0] === 'NO GRANELLE'">
