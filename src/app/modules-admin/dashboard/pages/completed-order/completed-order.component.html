@@ -1,3 +1,5 @@
+
+
 <div class="mt-4 row">
   <div class="col-12 m-0">
     <twentyfive-accordion-table
@@ -44,7 +46,6 @@
         <li><b>{{ item.key }}:</b> {{ item.value }}</li>
       </ul>
 
-      <p><b>Gocce di cioccolato:</b> {{ product.chocolateChips }}</p>
       <p><b>NOTE:</b> {{ product.notes }}</p>
       <p><b>Prezzo totale prodotto:</b> {{ product.totalPrice }} €</p>
 
@@ -80,7 +81,9 @@
   <hr/>
 
   <div class=" m-2 mt-0 mb-0">
-    <h4 class="mb-4">Info Contatto:</h4>
+    <h4 class="mb-4">Info:</h4>
+    <p><b>Note sul cliente:</b> {{ orderDetails.customerNote }}</p>
+    <p><b>Note sull'ordine:</b> {{ orderDetails.orderNote }}</p>
     <p><b>E-mail:</b> {{ orderDetails.email }}</p>
     <p><b>Numero di Telefono:</b> {{ orderDetails.phoneNumber }}</p>
   </div>

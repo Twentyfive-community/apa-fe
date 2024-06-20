@@ -27,7 +27,7 @@ export class CustomerDetailsComponent implements OnInit{
   orderDetails: OrderDetails=new OrderDetails()
 
   maxSize: number = 5;
-  pageSize: number = 5;
+  pageSize: number = 25;
   currentPage: number=0;
   collectionSize: number = 5;
 
@@ -38,23 +38,22 @@ export class CustomerDetailsComponent implements OnInit{
 
   headersOrders: any[] = [
     { name:'ID', value:'id'},
-    { name:'Data Ritiro', value:'pickupDate'},
-    { name:'Ora Ritiro', value:'pickupTime'},
+    {name: 'Data Ritiro', value: 'formattedPickupDate'},
     { name:'Prezzo', value:'price'}
   ]
 
   paginationElements: any[] = [
     {
-      actionName: '5',
-      value: '5'
-    },
-    {
-      actionName: '10',
-      value: '10'
-    },
-    {
       actionName: '25',
       value: '25'
+    },
+    {
+      actionName: '50',
+      value: '50'
+    },
+    {
+      actionName: '100',
+      value: '100'
     }
   ];
 

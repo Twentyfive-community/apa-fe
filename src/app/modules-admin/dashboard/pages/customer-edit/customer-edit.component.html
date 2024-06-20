@@ -51,6 +51,14 @@
       (input)="onInputChange($event, 'phoneNumber')"
     ></lib-twentyfive-input>
   </div>
+  <div class="row mt-4">
+    <lib-twentyfive-input
+      labelText="Note"
+      placeholder="Note"
+      [value]="customer.note"
+      (input)="onInputChange($event, 'note')"
+    ></lib-twentyfive-input>
+  </div>
 </div>
 
 <div class="row mt-5">

@@ -105,7 +105,6 @@ export class ProductInPurchase {
   quantity: number;
   shape: string;
   customization: any;
-  chocolateChips: boolean;
   notes: string;
   attachment: string;
   deliveryDate: string;

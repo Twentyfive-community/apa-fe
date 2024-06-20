@@ -16,7 +16,8 @@ export class OrderDetails {
   id: string;
   products: ProductInPurchase[]=[];
   bundles: BundleInPurchaseDetails[]=[];
-  note: string;
+  customerNote: string;
+  orderNote: string;
   email: string;
   phoneNumber: string;
   pickupDateTime: string;

@@ -18,7 +18,7 @@ export class CustomerListComponent implements OnInit{
 
   currentPage: number = 0;
   maxSize: number = 5;
-  pageSize: number = 5;
+  pageSize: number = 25;
   sortColumn: string='';
   sortDirection: string='';
 
@@ -27,21 +27,22 @@ export class CustomerListComponent implements OnInit{
     { name:'Cognome', value:'lastName'},
     { name:'Nome',    value:'firstName'},
     { name:'Email',   value:'email'},
-    { name:'Numero di telefono', value:'phoneNumber'}
+    { name:'Numero di telefono', value:'phoneNumber'},
+    { name:'Note', value:'note'}
   ]
 
   paginationElements: any[] = [
     {
-      actionName: '5',
-      value: '5'
-    },
-    {
-      actionName: '10',
-      value: '10'
-    },
-    {
       actionName: '25',
       value: '25'
+    },
+    {
+      actionName: '50',
+      value: '50'
+    },
+    {
+      actionName: '100',
+      value: '100'
     }
   ];
 

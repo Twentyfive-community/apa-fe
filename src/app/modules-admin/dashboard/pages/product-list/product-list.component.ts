@@ -63,16 +63,16 @@ export class ProductListComponent implements OnInit, AfterViewInit{
   ];
   paginationElements: any[] = [
     {
-      actionName: '5',
-      value: '5'
-    },
-    {
-      actionName: '10',
-      value: '10'
-    },
-    {
       actionName: '25',
       value: '25'
+    },
+    {
+      actionName: '50',
+      value: '50'
+    },
+    {
+      actionName: '100',
+      value: '100'
     }
   ];
   extras: any[] = [
@@ -83,7 +83,7 @@ export class ProductListComponent implements OnInit, AfterViewInit{
 
   columnTemplateRefs: { [key: string]: TemplateRef<any> } = {};
   activeTab: string | null;
-  pageSize: number = 5
+  pageSize: number = 25
   currentPage: number = 0;
   maxSize: number = 5;
   collectionSize: number = 0;
