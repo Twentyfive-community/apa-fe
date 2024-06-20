@@ -1,0 +1,42 @@
+<div class="modal-content">
+
+  <div class="modal-header">
+    <h5 class="modal-title">Rifai ordine n° {{orderId}}</h5>
+    <button type="button" class="btn-close" (click)="close()"></button>
+  </div>
+
+  <div class="col-6 mb-4">
+    <div class="row mt-4 ms-1">
+      <lib-twentyfive-datepicker
+        labelText="Data"
+        [labelStyle]="LabelTheme.LabelBold"
+        [setMinDateToToday]="true"
+        (dateSelected)="onDateChange($event)"
+      ></lib-twentyfive-datepicker>
+    </div>
+    <div class="row mt-4 ms-1">
+      <lib-twentyfive-generic-timepicker
+        labelText="Ora"
+        [time]="redoOrder.pickupTime"
+        [timeOptions]="timeslots"
+        [disabled]="!redoOrder.pickupDate"
+        (changeTime)="onTimeSelected($event)"
+      ></lib-twentyfive-generic-timepicker>
+    </div>
+    <div class="row mt-4 ms-1">
+      <lib-twentyfive-input
+        labelText="Note sull'ordine"
+        placeholder="Note sull'ordine"
+        (input)="onInputChange($event)"
+      ></lib-twentyfive-input>
+    </div>
+  </div>
+  <div class="d-flex justify-content-end mb-3 me-2" >
+      <lib-generic-button
+        buttonText="Rifai ordine"
+        [buttonSize]="ButtonSizeTheme.Medium"
+        [buttonStyle]="ButtonTheme.Primary"
+        (click)="save()"
+      ></lib-generic-button>
+  </div>
+</div>

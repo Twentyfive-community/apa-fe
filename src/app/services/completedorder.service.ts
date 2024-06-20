@@ -3,7 +3,7 @@ import {environment} from "../../environments/environment";
 import {Utils} from "../shared/utils/utils";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {catchError, map, Observable, throwError} from "rxjs";
-import {Order} from "../models/Order";
+import {Order, OrderRedoReq} from "../models/Order";
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +41,8 @@ export class CompletedorderService {
         })
       );
   }
-
+  redoOrder(order:OrderRedoReq){
+    return this.http.post(`${this.baseUrl}/redo-order`, order);
+  }
 
 }

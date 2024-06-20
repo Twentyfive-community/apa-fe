@@ -4,6 +4,9 @@ import {ButtonTheme} from "twentyfive-style";
 import {Order, OrderDetails} from "../../../../models/Order";
 import {ToastrService} from "ngx-toastr";
 import {TwentyfiveModalService} from "twentyfive-modal";
+import {CategoryEditComponent} from "../../../../shared/category-edit/category-edit.component";
+import {TwentyfiveModalGenericComponentService} from "twentyfive-modal-generic-component";
+import {OrderRedoComponent} from "../order-redo/order-redo.component";
 
 @Component({
   selector: 'app-completed-order',
@@ -40,6 +43,18 @@ export class CompletedOrderComponent implements OnInit{
 
   tableActions: any[] = [
     {
+      icon: 'bi bi-arrow-repeat',
+      action: async (myRow: any) => {
+        this.orderRedo(myRow);
+      },
+      actionName: 'Rifai',
+      tooltipText: 'Rifai Ordine',
+      placement: 'top',
+      showFunction: (myRow: any) => {
+        return true;
+      }
+    },
+    {
       icon: 'bi bi-arrow-counterclockwise',
       action: async (myRow: any) => {
         this.modalService.openModal(
@@ -59,9 +74,9 @@ export class CompletedOrderComponent implements OnInit{
       tooltipText: 'Riattiva Ordine',
       placement: 'top',
       showFunction: (myRow: any) => {
-        return myRow.status === 'ANNULLATO' && this.isCurrentDateBefore(myRow.pickupDate);
+        return myRow.status == 'Annullato' && this.isCurrentDateBefore(myRow.pickupDateTime);
       }
-    },
+    }
   ]
 
   paginationElements: any[] = [
@@ -81,6 +96,7 @@ export class CompletedOrderComponent implements OnInit{
 
   constructor(private toastrService: ToastrService,
               private modalService: TwentyfiveModalService,
+              private genericModalService: TwentyfiveModalGenericComponentService,
               private completedOrderService: CompletedorderService) {
   }
 
@@ -153,6 +169,16 @@ export class CompletedOrderComponent implements OnInit{
     const comparisonDate = new Date(dateString);
     return currentDate < comparisonDate;
   }
+
+  orderRedo(order: any){
+    let r = this.genericModalService.open(OrderRedoComponent, "md", {});
+    console.log(order.id);
+    r.componentInstance.orderId = order.id;
+    r.result.finally(() => {
+      this.getAll();
+    })
+  }
+
 
   protected readonly ButtonTheme = ButtonTheme;
 }
