@@ -17,7 +17,7 @@ export class GenericCardComponent implements OnInit {
   @Input() currentWeight?: number;
   @Input() totalWeight?: number;
   @Output() resultChange = new EventEmitter<number>();
-  @Input() allergens: Allergen[];
+  @Input() allergens: string[];
   @Input() description?: string;
   @Input() price: string;
 

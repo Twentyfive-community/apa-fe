@@ -9,6 +9,9 @@
         <ng-container *ngIf="weight">
           <p class="card-text text-truncate" style="font-size: small; color: gray">Peso: {{ weight }} Kg</p>
         </ng-container>
+        <ng-container *ngIf="allergens">
+          <p class="card-text text-truncate" style="font-size: small; color: gray">Allergeni: {{ allergens }}</p>
+        </ng-container>
         <ng-container *ngIf="ingredientList">
           <p class="card-text text-truncate" style="font-size: small; color: gray">Ingredienti: {{ ingredientList.join(', ') }}</p>
         </ng-container>
@@ -17,7 +20,6 @@
         </ng-container>
       </div>
       <div>
-        <p class="card-text">{{ allergens }}</p>
         <h5 class="card-text">{{ price }}</h5>
         <div *ngIf="quantity !== undefined" class="d-flex align-items-center quantity-section">
           <p class="card-text text-truncate me-2 m-0 d-flex align-items-center" style="color: gray"> Q.tà</p>

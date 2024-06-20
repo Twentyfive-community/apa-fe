@@ -12,6 +12,7 @@ import { CartService } from '../../../../services/cart.service';
 import { ToastrService } from 'ngx-toastr';
 import { switchMap, debounceTime, Subject } from 'rxjs';
 import {LoadingService} from "../../../../services/loading.service";
+import {Allergen} from "../../../../models/Allergen";
 
 @Component({
   selector: 'app-tray-customized',
@@ -23,6 +24,7 @@ export class TrayCustomizedComponent implements OnInit {
   @ViewChild('modalContent', { static: false }) modalContent!: ElementRef;
 
   trayDetails: TrayDetails = new TrayDetails();
+  allergenNames: string[] = [];
   bundleInPurchase: BundleInPurchase = new BundleInPurchase();
   productListWeighted: ProductWeighted[] = [];
   productWeighted: ProductWeightedDetails = new ProductWeightedDetails();
@@ -162,6 +164,9 @@ export class TrayCustomizedComponent implements OnInit {
           console.error(error);
         }
       });
+  }
+  allergens(allergens: Allergen[]): string[] {
+    return allergens.map(allergen => allergen.name);
   }
   close() {
     this.modalService.close();
