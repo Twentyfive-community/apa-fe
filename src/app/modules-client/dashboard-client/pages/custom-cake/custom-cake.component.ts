@@ -37,6 +37,8 @@ export class CustomCakeComponent implements OnInit{
   steps = ['Tipologia','Base', 'Peso', 'Forma', 'Farcitura', 'Bagna', 'Frutta e Gocce',
      'Copertura', 'Granelle', 'Decorazioni'];
 
+  stepsToCheck = ['Decorazioni', 'Frutta e Gocce'];
+
   ingredientsObject: Ingredient[];
 
   stepCompleted: boolean[] = new Array(this.steps.length).fill(false);
@@ -116,6 +118,10 @@ export class CustomCakeComponent implements OnInit{
   }
   close() {
     this.modalService.close();
+  }
+
+  isSpecialStep(step: string): boolean {
+    return this.stepsToCheck.includes(step);
   }
 
   getBaseOptions(){
@@ -297,12 +303,6 @@ export class CustomCakeComponent implements OnInit{
       for(let ingrediente of this.ingredientsObject){
         this.farcitureOptions.push(ingrediente.name);
       }
-      var ingredientToRemove = this.farcitureOptions.indexOf("Marmellata di Albicocca");
-      this.farcitureOptions.splice(ingredientToRemove);
-      ingredientToRemove = this.farcitureOptions.indexOf("Marmellata di Amarene");
-      this.farcitureOptions.splice(ingredientToRemove);
-      ingredientToRemove = this.farcitureOptions.indexOf("Marmellata ai Frutti di Bosco");
-      this.farcitureOptions.splice(ingredientToRemove);
     })
   }
 
@@ -332,6 +332,8 @@ export class CustomCakeComponent implements OnInit{
       for(let ingrediente of this.ingredientsObject){
         this.fruttaOptions.push(ingrediente.name);
       }
+      this.stepCompleted[7]=true;
+      this.getCopertureOptions();
     })
   }
 
@@ -341,6 +343,8 @@ export class CustomCakeComponent implements OnInit{
       for(let ingrediente of this.ingredientsObject){
         this.gocceOptions.push(ingrediente.name);
       }
+      this.stepCompleted[7]=true;
+      this.getCopertureOptions();
     })
   }
 
@@ -546,8 +550,6 @@ export class CustomCakeComponent implements OnInit{
   selectFrutta(frutta: string) {
     if (!this.selectedFrutta.includes(frutta) && (this.selectedFrutta.length + this.selectedGocce.length )< 3) {
       this.selectedFrutta.push(frutta);
-      this.stepCompleted[7]=true;
-      this.getCopertureOptions();
     }
     if ((this.selectedFrutta.length + this.selectedGocce.length) >= 3) {
       this.goToNextStep(7); // Passa direttamente allo step successivo
@@ -564,8 +566,6 @@ export class CustomCakeComponent implements OnInit{
   selectGoccia(goccia: string){
     if (!this.selectedGocce.includes(goccia) && (this.selectedFrutta.length + this.selectedGocce.length)< 3) {
       this.selectedGocce.push(goccia);
-      this.stepCompleted[7]=true;
-      this.getCopertureOptions();
     }
     if ((this.selectedFrutta.length + this.selectedGocce.length) >= 3) {
       this.goToNextStep(7); // Passa direttamente allo step successivo
@@ -685,10 +685,13 @@ export class CustomCakeComponent implements OnInit{
     //le customizzazioni sono base, farciture, frutte, bagna, gocce, copertura, granelle)
     this.productInPurchase.customization = {};
 
-    if(this.selectedForma == 'Lettera' || this.selectedForma == 'Numero'){
-      this.productInPurchase.customization.DettaglioForma = this.selectedDettaglioForma;
+    if(this.selectedForma == 'Lettera'){
+      this.productInPurchase.customization.Lettera = this.selectedDettaglioForma;
     }
-    this.productInPurchase.customization.Type = this.selectedType;
+    if(this.selectedForma == 'Numero'){
+      this.productInPurchase.customization.Numero = this.selectedDettaglioForma;
+    }
+    this.productInPurchase.customization.Tipo = this.selectedType;
     this.productInPurchase.customization.Base = this.selectedBase;
     this.productInPurchase.customization.Copertura = this.selectedCopertura;
     this.productInPurchase.customization.Bagna = this.selectedBagna;
