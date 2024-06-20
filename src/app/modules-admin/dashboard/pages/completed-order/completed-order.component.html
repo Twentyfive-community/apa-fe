@@ -34,57 +34,56 @@
 
 <ng-template #templateRef>
   <div>
-    <div class=" m-2 mt-0 mb-0" *ngFor="let product of orderDetails.products">
+    <div class="m-2 mt-0 mb-0" *ngFor="let product of orderDetails.products">
       <h3 class="mb-4">{{ product.name.toUpperCase() }}</h3>
-      <p><b>Peso:</b> {{ product.weight }} Kg</p>
-      <p><b>Quantità:</b> {{ product.quantity }}</p>
-      <p><b>Forma:</b> {{ product.shape }}</p>
+      <p *ngIf="product.weight"><b>Peso:</b> {{ product.weight }} Kg</p>
+      <p *ngIf="product.quantity"><b>Quantità:</b> {{ product.quantity }}</p>
+      <p *ngIf="product.shape"><b>Forma:</b> {{ product.shape }}</p>
 
+      <div *ngIf="product.customization">
+        <p><b>Personalizzazioni:</b></p>
+        <ul *ngFor="let item of product.customization | keyvalue">
+          <li><b>{{ item.key }}:</b> {{ item.value }}</li>
+        </ul>
+      </div>
 
-      <p><b>Personalizzazioni:</b></p>
-      <ul *ngFor="let item of product.customization | keyvalue">
-        <li><b>{{ item.key }}:</b> {{ item.value }}</li>
-      </ul>
-
-      <p><b>NOTE:</b> {{ product.notes }}</p>
-      <p><b>Prezzo totale prodotto:</b> {{ product.totalPrice }} €</p>
-
+      <p><b>Testo decorativo:</b> {{ product.notes ? product.notes : 'Nessuna nota' }}</p>
+      <p *ngIf="product.totalPrice"><b>Prezzo totale prodotto:</b> {{ product.totalPrice }} €</p>
 
       <p class="flex-grow-1"><b>ALLEGATO:</b></p>
-      <div *ngIf="product.attachment"class="d-flex align-items-center">
+      <div *ngIf="product.attachment" class="d-flex align-items-center">
         <img (click)="openImage(product.attachment)" [src]="product.attachment" style="max-width: 120px; height: auto; cursor: pointer; position: relative;">
       </div>
-      <div *ngIf="!product.attachment"class="d-flex align-items-center">
+      <div *ngIf="!product.attachment" class="d-flex align-items-center">
         <span>Allegato non disponibile</span>
       </div>
+      <hr/>
     </div>
   </div>
 
   <div>
-    <div class=" m-2 mt-0 mb-0" *ngFor="let bundle of orderDetails.bundles">
+    <div class="m-2 mt-0 mb-0" *ngFor="let bundle of orderDetails.bundles">
       <h4 class="mb-4">{{ bundle.name.toUpperCase() }}</h4>
-      <p><b>Peso:</b> {{ bundle.measure.weight }} Kg</p>
-      <p><b>Quantità:</b> {{ bundle.quantity }}</p>
-      <p><b>Prezzo totale:</b> {{ bundle.totalPrice }} €</p>
-      <div *ngIf="bundle.weightedProducts">
+      <p *ngIf="bundle.measure.weight"><b>Peso:</b> {{ bundle.measure.weight }} Kg</p>
+      <p *ngIf="bundle.quantity"><b>Quantità:</b> {{ bundle.quantity }}</p>
+      <p *ngIf="bundle.totalPrice"><b>Prezzo totale:</b> {{ bundle.totalPrice }} €</p>
+      <div *ngIf="bundle.weightedProducts && bundle.weightedProducts.length">
         <p><b>Mignon:</b></p>
-        <ul *ngFor="let weightedProduct of bundle.weightedProducts">
-          <li>
-            <p><b>x{{weightedProduct.quantity}}</b> {{weightedProduct.name}}</p>
+        <ul>
+          <li *ngFor="let weightedProduct of bundle.weightedProducts">
+            <p><b>x{{ weightedProduct.quantity }}</b> {{ weightedProduct.name }}</p>
           </li>
         </ul>
-        <p><b>Peso Totale Mignon scelti:</b>  {{bundle.totalWeight}} kg</p>
+        <p *ngIf="bundle.totalWeight"><b>Peso Totale Mignon scelti:</b> {{ bundle.totalWeight }} kg</p>
       </div>
     </div>
   </div>
 
-  <hr/>
-
-  <div class=" m-2 mt-0 mb-0">
+  <div class="m-2 mt-0 mb-0">
     <h4 class="mb-4">Info:</h4>
-    <p><b>Note sul cliente:</b> {{ orderDetails.customerNote }}</p>
-    <p><b>Note sull'ordine:</b> {{ orderDetails.orderNote }}</p>
-    <p><b>E-mail:</b> {{ orderDetails.email }}</p>
-    <p><b>Numero di Telefono:</b> {{ orderDetails.phoneNumber }}</p>
+    <p><b>Note sul cliente:</b> {{ orderDetails.customerNote ? orderDetails.customerNote : 'Nessuna nota' }}</p>
+    <p><b>Note sull'ordine:</b> {{ orderDetails.orderNote ? orderDetails.orderNote : 'Nessuna nota' }}</p>
+    <p *ngIf="orderDetails.email"><b>E-mail:</b> {{ orderDetails.email }}</p>
+    <p *ngIf="orderDetails.phoneNumber"><b>Numero di Telefono:</b> {{ orderDetails.phoneNumber }}</p>
   </div>
 </ng-template>
