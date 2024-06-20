@@ -39,7 +39,7 @@
           <hr>
         </div>
 
-        <div *ngIf="!loading" class="mb-3 ms-2 me-2" style="height: 650px; overflow-y: auto; overflow-x: hidden">
+        <div *ngIf="!(loadingService.loading$ | async)" class="mb-3 ms-2 me-2" style="height: 650px; overflow-y: auto; overflow-x: hidden">
 
           <h4 class="mb-2 large-text">Componi vassoio</h4>
 
