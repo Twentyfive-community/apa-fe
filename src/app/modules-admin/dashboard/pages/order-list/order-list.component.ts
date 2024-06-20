@@ -23,12 +23,13 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
 
   columnTemplateRefs: {[key: string]: TemplateRef<any>} = {};
   currentPage: number = 0;
-  pageSize: number = 5
+  pageSize: number = 25
   maxSize: number = 5;
   collectionSize: number = 0;
 
   sortColumn: string = '';
   sortDirection: string = '';
+  loading = true;
 
   newSubscriptionText: any;
   cancelSubscriptionText: any;
@@ -53,16 +54,16 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
 
   paginationElements: any[] = [
     {
-      actionName: '5',
-      value: '5'
-    },
-    {
-      actionName: '10',
-      value: '10'
-    },
-    {
       actionName: '25',
       value: '25'
+    },
+    {
+      actionName: '50',
+      value: '50'
+    },
+    {
+      actionName: '100',
+      value: '100'
     }
   ];
 
@@ -139,9 +140,19 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
   }
 
   getAll(page?: number) {
-    this.orderService.getAll(page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection).subscribe((res: any) => {
-      this.data = res.content;
-      this.collectionSize = res.totalElements;
+    this.orderService.getAll(page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection).subscribe({
+      next:(res:any) =>{
+        this.data = res.content
+        this.collectionSize = res.totalElements;
+      },
+        error:(err) => {
+        console.error(err);
+        this.toastrService.error("Errore nel recuperare gli ordini attivi!");
+        this.loading = false;
+      },
+        complete:() => {
+        this.loading = false;
+      }
     })
   }
 
@@ -155,16 +166,18 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
   sortingColumn(event: any) {
     this.sortColumn = event.sortColumn;
     this.sortDirection = event.sortDirection;
-
+    this.loading = true;
     this.getAll(this.currentPage-1)
   }
 
   changePage(event: number) {
+    this.loading = true;
     this.currentPage = event;
     this.getAll(this.currentPage-1);
   }
 
   selectSize(event: any) {
+    this.loading = true;
     this.pageSize = event;
     this.getAll(this.currentPage-1);
   }

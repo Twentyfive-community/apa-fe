@@ -47,6 +47,9 @@ export class CustomerEditComponent implements OnInit{
       case 'phoneNumber':
         this.customer.phoneNumber = event.target.value;
         break;
+      case 'note':
+        this.customer.note = event.target.value;
+        break;
     }
   }
 
@@ -64,15 +67,18 @@ export class CustomerEditComponent implements OnInit{
 
   saveNewCustomer(){
     this.navigationType="save"
-    this.customerService.saveCustomer(this.customer).subscribe({
-      error:() =>{
-        this.toastrService.error("Errore nel salvare il customer");
-      },
-      complete:() =>{
-        this.toastrService.success("Customer salvato con successo");
-        this.router.navigate(['../dashboard/clienti']);
-      }
-    });
+    if (this.isValid()){
+      this.customerService.saveCustomer(this.customer).subscribe({
+        error:(error) =>{
+          console.error(error);
+          this.toastrService.error("dominio email inesistente!");
+        },
+        complete:() =>{
+          this.toastrService.success("Customer salvato con successo");
+          this.router.navigate(['../dashboard/clienti']);
+        }
+      });
+    }
   }
 
   getCustomer(){
@@ -86,6 +92,35 @@ export class CustomerEditComponent implements OnInit{
     }
   }
 
+
+  private isValid() {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const phoneNumberRegex = /^\+?[1-9]\d{1,14}$/;
+
+    if (!this.customer.firstName) {
+      this.toastrService.error("Inserire un nome per il cliente!");
+      return false;
+    }
+    if (!this.customer.lastName) {
+      this.toastrService.error("Inserire un cognome per il cliente!");
+      return false;
+    }
+    if (!this.customer.email) {
+      this.toastrService.error("Inserire un email per il cliente!");
+      return false;
+    } else if (!emailRegex.test(this.customer.email)) {
+      this.toastrService.error("Inserire un email valida per il cliente!");
+      return false;
+    }
+    if (!this.customer.phoneNumber) {
+      this.toastrService.error("Inserire un numero di telefono per il cliente!");
+      return false;
+    } else if (!phoneNumberRegex.test(this.customer.phoneNumber)) {
+      this.toastrService.error("Inserire un numero di telefono valido per il cliente!");
+      return false;
+    }
+    return true;
+  }
 
   protected readonly ButtonTheme = ButtonTheme;
   protected readonly ButtonSizeTheme = ButtonSizeTheme;

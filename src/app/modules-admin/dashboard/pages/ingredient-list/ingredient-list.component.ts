@@ -31,9 +31,10 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
 
   currentPage: number=0;
   maxSize: number = 5;
-  pageSize: number = 5;
+  pageSize: number = 25;
   sortColumn: string='';
   sortDirection: string='';
+  loading:boolean = true;
 
   headers: any[] = [
     { name:'Nome', value:'name'},
@@ -42,16 +43,16 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
   ]
   paginationElements: any[] = [
     {
-      actionName: '5',
-      value: '5'
-    },
-    {
-      actionName: '10',
-      value: '10'
-    },
-    {
       actionName: '25',
       value: '25'
+    },
+    {
+      actionName: '50',
+      value: '50'
+    },
+    {
+      actionName: '100',
+      value: '100'
     }
   ];
 
@@ -139,9 +140,19 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
   }
 
   getAll(id: string , page?: number){
-    this.ingredientService.getAll(id,page? page : 0, this.pageSize, this.sortColumn, this.sortDirection).subscribe((response: any) => {
-      this.ingredients = response.content;
-      this.maxSize = response.totalElements;
+    this.loading = true;
+    this.ingredientService.getAll(id,page? page : 0, this.pageSize, this.sortColumn, this.sortDirection).subscribe({
+      next:(response:any) => {
+        this.ingredients = response.content;
+        this.maxSize = response.totalElements;
+      },
+      error:(err) => {
+        console.error(err);
+        this.loading = false;
+      },
+      complete:() => {
+        this.loading = false;
+      }
     })
 
   }
@@ -194,6 +205,7 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
   }
 
   sortingColumn(event: any){
+    console.log(event);
     this.sortColumn = event.sortColumn;
     this.sortDirection = event.sortDirection;
     this.getAll(this.activeTab!,this.currentPage);

@@ -4,8 +4,6 @@ import {ButtonTheme} from "twentyfive-style";
 import {Order, OrderDetails} from "../../../../models/Order";
 import {ToastrService} from "ngx-toastr";
 import {TwentyfiveModalService} from "twentyfive-modal";
-import {RxStompServiceService} from "../../../../services/rxstomp/rx-stomp-service.service";
-import {Subscription} from "rxjs";
 
 @Component({
   selector: 'app-completed-order',
@@ -17,10 +15,11 @@ export class CompletedOrderComponent implements OnInit{
   dataDetails: any[] = [new OrderDetails()]
   orderDetails: OrderDetails = new OrderDetails();
 
-  pageSize: number = 5
+  pageSize: number = 25
   currentPage: number = 0;
   maxSize: number = 5;
   collectionSize: number = 0;
+  loading: boolean = true;
 
   sortColumn: string = '';
   sortDirection: string = '';
@@ -67,19 +66,18 @@ export class CompletedOrderComponent implements OnInit{
 
   paginationElements: any[] = [
     {
-      actionName: '5',
-      value: '5'
-    },
-    {
-      actionName: '10',
-      value: '10'
-    },
-    {
       actionName: '25',
       value: '25'
+    },
+    {
+      actionName: '50',
+      value: '50'
+    },
+    {
+      actionName: '100',
+      value: '100'
     }
   ];
-  now: string;
 
   constructor(private toastrService: ToastrService,
               private modalService: TwentyfiveModalService,
@@ -91,9 +89,20 @@ export class CompletedOrderComponent implements OnInit{
   }
 
   getAll(page?: number) {
-    this.completedOrderService.getAll(page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection).subscribe((res: any) => {
-      this.data = res.content
-      this.collectionSize = res.totalElements;
+    this.loading = true;
+    this.completedOrderService.getAll(page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection).subscribe( {
+      next:(res:any) =>{
+        this.data = res.content
+        this.collectionSize = res.totalElements;
+      },
+      error:(err) => {
+        console.error(err);
+        this.toastrService.error("Errore nel recuperare gli ordini completati!");
+        this.loading = false;
+      },
+      complete:() => {
+        this.loading = false;
+      }
     })
   }
 
@@ -101,7 +110,6 @@ export class CompletedOrderComponent implements OnInit{
     let orderId = $event.id
     this.completedOrderService.getOrderDetails(orderId).subscribe((res: any) => {
       this.orderDetails = res
-      console.log(this.orderDetails);
     })
   }
 
