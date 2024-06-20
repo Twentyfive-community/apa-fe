@@ -13,6 +13,12 @@ import {ToastrService} from "ngx-toastr";
 })
 export class CategoryEditComponent implements OnInit{
 
+  // Mappa di traduzione per visualizzare le categorie in italiano
+  categoryTypeTranslationMap: { [key: string]: string } = {
+    productKg: 'Prodotto al kg',
+    productWeighted: 'Prodotto al pezzo',
+    tray: 'Vassoio'
+  };
   categoryId: string | '';
   categoryType: string[] | null;
   category: Category = new Category();
@@ -32,7 +38,6 @@ export class CategoryEditComponent implements OnInit{
   findCategoryById(){
     this.categoryService.getCategory(this.categoryId).subscribe((response:any)=>{
       this.category=response;
-      console.log(this.category)
     })
   }
 
@@ -58,7 +63,6 @@ export class CategoryEditComponent implements OnInit{
         this.close()
       },
       complete:() =>{
-        console.log(this.category);
         this.toastrService.success("Categoria salvata con successo");
         this.close()
       }

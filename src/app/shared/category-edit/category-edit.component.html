@@ -23,7 +23,7 @@
         <ul ngbDropdownMenu aria-labelledby="dropdownMenuButton" class="dropdown-menu">
           <li *ngFor="let category of categoryType">
             <a class="dropdown-item" (click)="setActiveCategory(category)">
-              {{ category }}
+              {{ categoryTypeTranslationMap[category] }}
             </a>
           </li>
         </ul>
@@ -35,7 +35,7 @@
         labelText="Tipo"
         placeholder="Tipo"
         [disabled]="true"
-        [value]="category.type"
+        [value]="categoryTypeTranslationMap[category.type]"
         [readOnly]="true"
       ></lib-twentyfive-input>
     </div>
