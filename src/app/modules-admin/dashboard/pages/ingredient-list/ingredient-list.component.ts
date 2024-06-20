@@ -60,13 +60,15 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
 
   categories: Category[] = []
   disabledCategories: Category[] = [];
+  changeTab = false;
 
   constructor(private ingredientService: IngredientService,
               private categoryService: CategoryService,
               private activatedRoute: ActivatedRoute,
               private router: Router,
               private modalService: TwentyfiveModalService,
-              private genericModalService: TwentyfiveModalGenericComponentService) {}
+              private genericModalService: TwentyfiveModalGenericComponentService) {
+  }
 
   ngOnInit(): void {
     this.activeTab = this.activatedRoute.snapshot.queryParamMap.get('activeTab');
@@ -77,15 +79,15 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
     this.columnTemplateRefs['allergens'] = this.allergenColumnRef;
   }
 
-  goToNew(){
-    this.router.navigate(['/dashboard/editingIngredienti'], { queryParams: { activeTab: this.activeTab } });
+  goToNew() {
+    this.router.navigate(['/dashboard/editingIngredienti'], {queryParams: {activeTab: this.activeTab}});
   }
 
-  goToEdit(event:any) {
-    this.router.navigate(['/dashboard/editingIngredienti', event.id],{ queryParams: { activeTab: this.activeTab } } );
+  goToEdit(event: any) {
+    this.router.navigate(['/dashboard/editingIngredienti', event.id], {queryParams: {activeTab: this.activeTab}});
   }
 
-  editCategoryToModify(){
+  editCategoryToModify() {
     let r = this.genericModalService.open(CategoryEditComponent, "lg", {});
     r.componentInstance.categoryId = this.activeTab;
     r.result.finally(() => {
@@ -93,7 +95,7 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
     })
   }
 
-  editCategory(){
+  editCategory() {
     let r = this.genericModalService.open(CategoryEditComponent, "lg", {});
     r.componentInstance.categoryId = '';
     r.result.finally(() => {
@@ -101,10 +103,10 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
     })
   }
 
-  disableCategory(){
+  disableCategory() {
     this.modalService.openModal(
       'Sei sicuro di voler disabilitare questa categoria?',
-      'Disabilita categoria',
+      'Disabilita',
       'Annulla',
       'Conferma',
       {
@@ -112,7 +114,7 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
         size: 'md',
         onConfirm: (() => {
           this.categoryService.disableCategory(this.activeTab!).subscribe({
-            next: (() =>{
+            next: (() => {
               this.getCategories();
             })
           });
@@ -120,10 +122,10 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
       });
   }
 
-  enableCategory(id:string){
+  enableCategory(id: string) {
     this.modalService.openModal(
       'Sei sicuro di voler abilitare questa categoria?',
-      'Abilita categoria',
+      'Abilita',
       'Annulla',
       'Conferma',
       {
@@ -131,7 +133,7 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
         size: 'md',
         onConfirm: (() => {
           this.categoryService.enableCategory(id).subscribe({
-            next: (() =>{
+            next: (() => {
               this.getCategories();
             })
           });
@@ -139,28 +141,26 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
       });
   }
 
-  getAll(id: string , page?: number){
-    this.loading = true;
-    this.ingredientService.getAll(id,page? page : 0, this.pageSize, this.sortColumn, this.sortDirection).subscribe({
-      next:(response:any) => {
-        this.ingredients = response.content;
-        this.maxSize = response.totalElements;
-      },
-      error:(err) => {
-        console.error(err);
-        this.loading = false;
-      },
-      complete:() => {
-        this.loading = false;
-      }
+  getAll(id: string, page?: number) {
+    const currentPage = page ? page : 0;
+    this.ingredientService.getAll(id, page ? page : 0, this.pageSize, this.sortColumn, this.sortDirection).subscribe((response: any) => {
+      console.log({
+        id: id,
+        page: currentPage,
+        pageSize: this.pageSize,
+        sortColumn: this.sortColumn,
+        sortDirection: this.sortDirection
+      });
+      this.ingredients = response.content;
+      this.maxSize = response.totalElements;
     })
 
   }
 
-  getCategories(){
+  getCategories() {
     this.categoryService.getAll(["ingredienti"]).subscribe((response: any) => {
       this.categories = response
-      if (!this.activeTab){
+      if (!this.activeTab) {
         this.activeTab = this.categories[0].id;
       }
       this.getAll(this.activeTab!)
@@ -172,20 +172,24 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
 
 
   setActiveTab(tabId: string) {
-    this.activeTab = tabId; // Imposta l'ID della tab attiva quando viene cliccata
-    this.getAll(tabId)
+    if(this.activeTab != tabId) {
+      this.activeTab = tabId;
+      this.changeTab = true;
+      this.currentPage = 0;
+      this.getAll(tabId);
+    }
   }
 
-  disableStatus(id: string){
+  disableStatus(id: string) {
     this.ingredientService.disableIngredient(id).subscribe({
       next: (() => {
-        this.getAll(this.activeTab!,this.currentPage);
+        this.getAll(this.activeTab!, this.currentPage);
       })
     });
   }
 
 
-  activateStatus(id: string){
+  activateStatus(id: string) {
     this.ingredientService.activeIngredient(id).subscribe({
       next: (() => {
         this.getAll(this.activeTab!);
@@ -194,29 +198,32 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
   }
 
 
-  selectSize(event: any){
-    this.pageSize=event;
+  selectSize(event: any) {
+    this.pageSize = event;
     this.getAll(this.activeTab!)
   }
 
-  changePage(event: number){
-    this.currentPage = event -1;
-    this.getAll(this.activeTab!,this.currentPage);
+  changePage(event: number) {
+    this.currentPage = event - 1;
+    if (this.changeTab) {
+      this.changeTab = false;
+    }
+    this.getAll(this.activeTab!, this.currentPage);
+
+    //cambio tab, setto currentPage a 0 allora una navigazione la devo bloccare 1
   }
 
-  sortingColumn(event: any){
-    console.log(event);
+  sortingColumn(event: any) {
     this.sortColumn = event.sortColumn;
     this.sortDirection = event.sortDirection;
-    this.getAll(this.activeTab!,this.currentPage);
+    this.getAll(this.activeTab!, this.currentPage);
   }
 
 
   activeOrDisable(event: any) {
-    if(event.active){
+    if (event.active) {
       this.disableStatus(event.id)
-    }
-    else{
+    } else {
       this.activateStatus(event.id)
     }
   }

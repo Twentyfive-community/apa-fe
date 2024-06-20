@@ -12,6 +12,7 @@ import {TrayCustomizedComponent} from "../tray-customized/tray-customized.compon
 import {CustomerDetails} from "../../../../models/Customer";
 import {SigningKeycloakService} from "twentyfive-keycloak-new";
 import {CustomerService} from "../../../../services/customer.service";
+import {LoadingService} from "../../../../services/loading.service";
 
 @Component({
   selector: 'app-catalogue',
@@ -38,14 +39,12 @@ export class CatalogueComponent implements OnInit {
   productDetails: ProductDetails = new ProductDetails();
   trayDetails: TrayDetails = new TrayDetails();
 
-  loading: boolean = true;
-
-
 
   constructor(private categoryService: CategoryService,
               private genericModalService: TwentyfiveModalGenericComponentService,
               private productService: ProductService,
               private router: Router,
+              public loadingService: LoadingService,
               private keycloackService: SigningKeycloakService,
               private customerService: CustomerService,
   ) {
@@ -71,7 +70,6 @@ export class CatalogueComponent implements OnInit {
   activeTab: string = ''; // Inizializza la tab attiva come vuota
 
   setActiveTab(category: Category) {
-    this.loading = true;
     this.activeTab = category.id; // Imposta l'ID della tab attiva quando viene cliccata
     this.categoryActive = category.type;
     this.categoryName = category.name;
@@ -82,7 +80,6 @@ export class CatalogueComponent implements OnInit {
   }
 
   getAll(page?:number) {
-    this.loading = true;
     switch (this.categoryActive) {
       case 'productKg':
         this.productService.getAllKgActive(this.activeTab, page ? this.currentPage - 1 : 0, this.itemsPerPage)
@@ -92,11 +89,7 @@ export class CatalogueComponent implements OnInit {
               this.setupPagination(res.totalPages);
             },
             error: (error: any) => {
-              this.loading = false;
               console.error('Si è verificato un errore durante il recupero dei dati:', error);
-            },
-            complete: () => {
-              this.loading = false;
             }
           });
         break;
@@ -105,12 +98,6 @@ export class CatalogueComponent implements OnInit {
           next: (res:any) =>{
             this.trayList = res.content;
             this.setupPagination(res.totalPages);
-          },
-          error: (error: any) => {
-            this.loading = false;
-          },
-          complete: () => {
-            this.loading = false;
           }
         })
         break;

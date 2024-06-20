@@ -12,6 +12,7 @@ import {CustomerDetails} from "../../../../models/Customer";
 import {CustomerService} from "../../../../services/customer.service";
 import {CartService} from "../../../../services/cart.service";
 import {ItemInPurchase} from "../../../../models/Cart";
+import {LoadingService} from "../../../../services/loading.service";
 
 @Component({
   selector: 'app-product-details',
@@ -41,9 +42,9 @@ export class ProductDetailsComponent implements OnInit{
   weightOptions: number[] = [];
   measureOptions: Measure[] = [];
   file: File | null;
-  loading: boolean = true;
 
   constructor(private modalService: TwentyfiveModalGenericComponentService,
+              public loadingService: LoadingService,
               private keycloackService: SigningKeycloakService,
               private productService: ProductService,
               private customerService: CustomerService,
@@ -77,10 +78,6 @@ export class ProductDetailsComponent implements OnInit{
           },
           error:(error:any) =>{
             console.error(error);
-            this.loading = false;
-          },
-          complete:()=>{
-            this.loading = false;
           }
         })
         break;
@@ -94,10 +91,6 @@ export class ProductDetailsComponent implements OnInit{
           },
           error:(error:any) =>{
             console.error(error);
-            this.loading = false;
-          },
-          complete:()=>{
-            this.loading = false;
           }
         })
         break;
@@ -226,7 +219,6 @@ export class ProductDetailsComponent implements OnInit{
   }
 
   saveNewProductInPurchase() {
-    this.loading = true;
       if (this.file) {
         this.uploadImage();
       }
@@ -239,11 +231,9 @@ export class ProductDetailsComponent implements OnInit{
            error: (error:any) => {
              console.error(error);
              this.toastrService.error("Errore nell'aggiunta del prodotto nel carrello!");
-             this.loading = false;
           },
            complete: () => {
             this.toastrService.success("Prodotto aggiunto al carrello con successo");
-             this.loading = false;
              this.close();
           }
           })
@@ -259,11 +249,9 @@ export class ProductDetailsComponent implements OnInit{
             error: (error:any) => {
               console.error(error);
               this.toastrService.error("Errore nell'aggiunta del vassoio nel carrello!");
-              this.loading = false;
             },
             complete: () => {
               this.toastrService.success("Vassoio aggiunto al carrello con successo");
-              this.loading = false;
               this.close()
             }
           })
@@ -304,7 +292,6 @@ export class ProductDetailsComponent implements OnInit{
   protected readonly ButtonTheme = ButtonTheme;
 
   updateProduct() {
-    this.loading = true;
     switch (this.categoryType) {
       case 'productKg':
         this.productToEdit.weight = this.selectedWeight;
@@ -317,11 +304,9 @@ export class ProductDetailsComponent implements OnInit{
           },
           error: (error:any) => {
             console.error(error)
-            this.loading = false;
             this.toastrService.error("Impossibile modificare prodotto!")
           },
           complete: () => {
-            this.loading = false;
             this.close()
           }
         })
@@ -337,11 +322,9 @@ export class ProductDetailsComponent implements OnInit{
           },
           error: (error:any) => {
             console.error(error)
-            this.loading = false;
             this.toastrService.error("Impossibile modificare prodotto!")
           },
           complete: () => {
-            this.loading = false;
             this.close()
           }
         })

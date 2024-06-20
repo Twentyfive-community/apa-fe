@@ -5,15 +5,11 @@
 
   <div #modalContent class="modal-body" style="height: 650px; overflow-y: auto;">
 
-    <div *ngIf="loading">
-      <apa-spinner></apa-spinner>
-    </div>
-
     <div [ngSwitch]="currentStep">
 
       <div *ngSwitchCase="1">
 
-        <div *ngIf="!loading">
+        <div *ngIf="!(loadingService.loading$ | async)">
 
 
           <h4 class="mb-3 ms-2 me-2 mt-4">Seleziona misura vassoio</h4>

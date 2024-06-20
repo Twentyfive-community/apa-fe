@@ -307,8 +307,8 @@ export class ProductListComponent implements OnInit, AfterViewInit{
 
   disableCategory(){
     this.modalService.openModal(
-      'Sei sicuro di voler cancellare questa categoria?',
-      'Abilita',
+      'Sei sicuro di voler disabilitare questa categoria?',
+      'Disabilita',
       'Annulla',
       'Conferma',
       {
@@ -327,7 +327,7 @@ export class ProductListComponent implements OnInit, AfterViewInit{
   enableCategory(id:string){
     this.modalService.openModal(
       'Sei sicuro di voler abilitare questa categoria?',
-      'Abilita categoria',
+      'Abilita',
       'Annulla',
       'Conferma',
       {

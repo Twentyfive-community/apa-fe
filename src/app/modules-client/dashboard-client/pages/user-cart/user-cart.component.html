@@ -1,7 +1,4 @@
-<div *ngIf="loading">
-  <apa-spinner></apa-spinner>
-</div>
-<div *ngIf="cart.purchases.length > 0 && !loading">
+<div *ngIf="cart.purchases.length > 0 && !(loadingService.loading$ | async)">
 
   <!-- CARD -->
   <div class="row d-flex flex-wrap">

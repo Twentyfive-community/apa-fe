@@ -5,10 +5,8 @@
   </div>
 
   <div class="modal-body">
-    <div *ngIf="loading">
-      <apa-spinner></apa-spinner>
-    </div>
-    <div *ngIf="!loading">
+
+    <div *ngIf="!(loadingService.loading$ | async)">
       <div class="stepper">
         <div *ngFor="let step of steps; let i = index"
              class="step"

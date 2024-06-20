@@ -10,6 +10,7 @@ import {ToastrService} from "ngx-toastr";
 import {Subscription, interval, takeWhile} from "rxjs";
 import {Router} from "@angular/router";
 import {TwentyfiveModalService} from "twentyfive-modal";
+import {LoadingService} from "../../../../services/loading.service";
 
 @Component({
   selector: 'app-user-cart',
@@ -45,6 +46,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
   constructor(private keycloakService: SigningKeycloakService,
               private modalService: TwentyfiveModalService,
               private customerService:CustomerService,
+              public loadingService: LoadingService,
               private toastrService: ToastrService,
               private cartService:CartService,
               private router: Router) {
@@ -92,7 +94,6 @@ export class UserCartComponent implements OnInit, OnDestroy{
       },
       error:(error:any) => {
         console.error(error);
-        this.loading = false;
       },
       complete:() => {
         this.loading = false;
@@ -208,7 +209,6 @@ export class UserCartComponent implements OnInit, OnDestroy{
   }
 
   buyCart() {
-    this.loading = true;
     if(this.imAdmin){
       this.router.navigate(['../dashboard']);
     }
@@ -227,7 +227,6 @@ export class UserCartComponent implements OnInit, OnDestroy{
         error: (error) => {
           console.error(error);
           this.toastrService.error('Impossibile effettuare l\'ordine')
-          this.loading = false;
         },
         complete: () => {
           this.isCollapsed = true

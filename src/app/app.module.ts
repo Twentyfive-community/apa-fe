@@ -7,11 +7,12 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {provideSigningModule} from "twentyfive-keycloak-new";
 import {environment} from "../environments/environment";
 import { HomeComponent } from './components/home/home.component';
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {provideToastr, ToastrModule} from "ngx-toastr";
 import {RxStompServiceService} from "./services/rxstomp/rx-stomp-service.service";
 import {rxStompServiceFactory} from "./services/rxstomp/stomp-factory";
 import {CommonModule} from "@angular/common";
+import {HttpRequestInterceptor} from "./interceptor/http-request.interceptor";
 
 @NgModule({
   declarations: [
@@ -37,7 +38,10 @@ import {CommonModule} from "@angular/common";
     {
       provide: RxStompServiceService,
       useFactory: rxStompServiceFactory,
-    }
+
+    },
+    {provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true},
+
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA,

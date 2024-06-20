@@ -11,6 +11,7 @@ import { Customer } from '../../../../models/Customer';
 import { CartService } from '../../../../services/cart.service';
 import { ToastrService } from 'ngx-toastr';
 import { switchMap, debounceTime, Subject } from 'rxjs';
+import {LoadingService} from "../../../../services/loading.service";
 
 @Component({
   selector: 'app-tray-customized',
@@ -29,7 +30,6 @@ export class TrayCustomizedComponent implements OnInit {
   customerIdkc: string = '';
   customer: Customer = new Customer();
   value: string = '';
-  loading:boolean = true;
   private searchTerms = new Subject<string>();
   private productQuantities: { [id: string]: number } = {}; // Mappa per memorizzare le quantità
 
@@ -39,7 +39,8 @@ export class TrayCustomizedComponent implements OnInit {
     private keycloakService: SigningKeycloakService,
     private customerService: CustomerService,
     private cartService: CartService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    public loadingService: LoadingService
   ) {}
 
   ngOnInit(): void {
@@ -52,10 +53,6 @@ export class TrayCustomizedComponent implements OnInit {
       },
       error:(error:any) =>{
         console.error(error);
-        this.loading = false;
-      },
-      complete:() =>{
-        this.loading = false;
       }
     });
     this.searching();
@@ -124,20 +121,14 @@ export class TrayCustomizedComponent implements OnInit {
   }
 
   getAllCustomizedTray() {
-    this.loading = true;
     this.productService.search(this.value).subscribe({
       next:(response:any) => {
         this.updateProductList(response);
       },
       error:(error:any) => {
         console.error(error);
-        this.loading = false;
-      },
-      complete:() => {
-        this.loading = false;
       }
-      }
-    );
+    });
   }
 
   onInputChange(event: any) {
@@ -145,16 +136,13 @@ export class TrayCustomizedComponent implements OnInit {
   }
 
   saveTray() {
-    this.loading = true;
     this.cartService.addToCartBundleInPurchase(this.customer.id, this.bundleInPurchase).subscribe({
       error: () => {
-        this.loading = false;
         this.toastrService.error("Errore nell'aggiunta del vassoio nel carrello!");
       },
       complete: () => {
         this.toastrService.success("Vassoio aggiunto al carrello con successo");
         this.close();
-        this.loading = false;
       }
     });
   }
@@ -164,7 +152,6 @@ export class TrayCustomizedComponent implements OnInit {
   }
 
   searching(){
-    this.loading = true;
     this.searchTerms.pipe(
       debounceTime(300), // Attendi 300ms dopo ogni tasto premuto
       switchMap((term: string) => this.productService.search(term))).subscribe({
@@ -173,13 +160,8 @@ export class TrayCustomizedComponent implements OnInit {
         },
         error:(error:any) => {
           console.error(error);
-          this.loading = false;
-        },
-        complete:() => {
-          this.loading = false;
         }
-      }
-    );
+      });
   }
   close() {
     this.modalService.close();

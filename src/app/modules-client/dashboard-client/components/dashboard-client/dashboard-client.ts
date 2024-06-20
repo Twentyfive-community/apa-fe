@@ -3,6 +3,8 @@ import {NavbarTheme} from "twentyfive-style";
 import {CustomerDetails} from "../../../../models/Customer";
 import {SigningKeycloakService} from "twentyfive-keycloak-new";
 import {CustomerService} from "../../../../services/customer.service";
+import {LoadingService} from "../../../../services/loading.service";
+import {delay} from "rxjs";
 
 @Component({
   selector: 'app-dashboard-client',
@@ -11,6 +13,7 @@ import {CustomerService} from "../../../../services/customer.service";
 })
 export class DashboardClient implements OnInit{
 
+  loading: boolean = false;
 
   customer:CustomerDetails =new CustomerDetails()
   customerIdkc : string = ''
@@ -78,12 +81,23 @@ export class DashboardClient implements OnInit{
   }
 
   constructor(private signingKeycloakService: SigningKeycloakService,
-              private customerService:CustomerService,) {
+              private customerService:CustomerService,
+              private loadingService: LoadingService) {
   }
 
 
   ngOnInit(): void{
     this.loadUserProfile();
+    this.listenToLoading()
+  }
+
+  listenToLoading(): void {
+    console.log('partito!')
+    this.loadingService.loading$
+      .pipe(delay(0)) // This prevents a ExpressionChangedAfterItHasBeenCheckedError for subsequent requests
+      .subscribe((loading) => {
+        this.loading = loading;
+      });
   }
 
 

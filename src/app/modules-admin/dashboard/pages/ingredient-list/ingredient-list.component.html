@@ -63,6 +63,7 @@
         [maxSize]="maxSize"
         [model]="pageSize"
         [isPaginated]="true"
+        [page]="currentPage + 1"
         [paginationStyle]="TableTheme.Web"
         (pageChange)="changePage($event)"
         (sortableChange)="sortingColumn($event)"

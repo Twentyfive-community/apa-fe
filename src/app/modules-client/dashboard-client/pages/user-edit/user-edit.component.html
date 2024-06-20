@@ -11,11 +11,8 @@
 </div>
 
 <hr/>
-<div *ngIf="loading">
-  <apa-spinner></apa-spinner>
-</div>
 
-<div *ngIf="!loading">
+<div *ngIf="!(loadingService.loading$ | async)">
   <div class="row mb-4 mt-4">
     <h3 *ngIf="!customerIdkc">Crea Cliente</h3>
     <h3 *ngIf="customerIdkc">Modifica Dati Personali</h3>

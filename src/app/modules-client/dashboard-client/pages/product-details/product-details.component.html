@@ -7,10 +7,7 @@
   </div>
 
   <div class="modal-body">
-    <div *ngIf="loading">
-      <apa-spinner></apa-spinner>
-    </div>
-    <div *ngIf="!loading">
+    <div *ngIf="!(loadingService.loading$ | async)">
       <div class="row mt-4 ms-2 me-2 mb-2">
         <div class="d-flex justify-content-center">
           <ng-container *ngIf="categoryName != 'Vassoi'">

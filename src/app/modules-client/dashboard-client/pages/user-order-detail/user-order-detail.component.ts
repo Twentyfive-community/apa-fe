@@ -11,6 +11,7 @@ import {BundleInPurchase, BundleInPurchaseDetails} from "../../../../models/Bund
 import {TwentyfiveModalService} from "twentyfive-modal";
 import {RxStompServiceService} from "../../../../services/rxstomp/rx-stomp-service.service";
 import {ToastrService} from "ngx-toastr";
+import {LoadingService} from "../../../../services/loading.service";
 
 declare var bootstrap: any;
 @Component({
@@ -28,7 +29,6 @@ export class UserOrderDetailComponent implements OnInit {
   productImages: string[]=[];
   bundleImages: string[]=[];
   customizationsVisible: boolean[] = [];
-  loading:boolean = true;
 
 
   constructor(
@@ -39,7 +39,8 @@ export class UserOrderDetailComponent implements OnInit {
     private productService:ProductService,
     private rxStompService: RxStompServiceService,
     private modalService: TwentyfiveModalService,
-    private toastrService: ToastrService
+    private toastrService: ToastrService,
+    public loadingService: LoadingService
   ) {}
 
   loadBootstrapJS(): void {
@@ -92,12 +93,7 @@ export class UserOrderDetailComponent implements OnInit {
 
       },
       error: (err) => {
-        this.loading = false;
         console.error('Error loading completed order details:', err)
-      },
-      complete: () => {
-        console.log("setto a false il loading!",this.loading);
-        this.loading = false;
       }
     });
   }
@@ -110,10 +106,6 @@ export class UserOrderDetailComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading active order details:', err)
-        this.loading = false;
-      },
-      complete:() => {
-        this.loading = false;
       }
     });
   }
@@ -187,7 +179,6 @@ export class UserOrderDetailComponent implements OnInit {
     return this.customizationsVisible[n];
   }
   loadOrders(completed?:boolean){
-    this.loading = true;
     if(this.activeOrders=='true' && !completed)
       this.loadProductsFromActiveOrder();
     else{
