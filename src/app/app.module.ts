@@ -40,7 +40,7 @@ import {HttpRequestInterceptor} from "./interceptor/http-request.interceptor";
       useFactory: rxStompServiceFactory,
 
     },
-    {provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true},
+    // {provide: HTTP_INTERCEPTORS, useClass: HttpRequestInterceptor, multi: true},
 
   ],
   schemas: [
