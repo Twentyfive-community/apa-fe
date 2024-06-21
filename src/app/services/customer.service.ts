@@ -43,5 +43,8 @@ export class CustomerService {
     return this.http.get(`${this.changeStatusUrl}/${id}`);
   }
 
+  deleteAccount(id: string){
+    return this.http.delete(`${this.baseUrl}/delete-from-user/${id}`);
+  }
 
 }

@@ -126,6 +126,27 @@ export class UserProfileComponent implements OnInit{
           emailConfirmationModal.show();
         })
       });
+  }
 
+  deleteAccount() {
+    this.modalService.openModal(
+      'Attenzione! L\'azione e\' irreversibile! sei sicuro di continuare?',
+      'Cancella Account',
+      'Annulla',
+      'Conferma',
+      {
+        size: 'md',
+        onConfirm: (() => {
+          this.customerService.deleteAccount(this.customer.id).subscribe({
+            next:() =>{
+              this.exit();
+            },
+            error:(err) =>{
+              console.error(err);
+              this.exit();
+            }
+          })
+        })
+      });
   }
 }
