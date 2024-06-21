@@ -76,22 +76,48 @@
 
 
   <section>
-    <h3 class="mb-2">Gestione</h3>
     <div class="row">
-      <div class="col-10">
-        <lib-generic-button-text-with-icon
-          buttonText="Reset password"
-          [iconLeft]="true"
-          prefixIcon="bi bi-arrow-counterclockwise"
-          [buttonStyle]="ButtonTheme.OnlyText"
-          (click)="resetPassword()"
-        ></lib-generic-button-text-with-icon>
+      <!-- Prima sezione di Gestione -->
+      <div class="col-md-6">
+        <h3 class="mb-2">Gestione</h3>
+        <div class="row">
+          <div class="col-10">
+            <lib-generic-button-text-with-icon
+              buttonText="Reset password"
+              [iconLeft]="true"
+              prefixIcon="bi bi-arrow-counterclockwise"
+              [buttonStyle]="ButtonTheme.OnlyText"
+              (click)="resetPassword()"
+            ></lib-generic-button-text-with-icon>
+          </div>
+          <div class="col-2 d-flex align-items-center justify-content-end">
+            <i class="bi bi-chevron-right small-icon"></i>
+          </div>
+        </div>
       </div>
-      <div class="col-1 d-flex align-items-center justify-content-end">
-        <i class="bi bi-chevron-right small-icon" ></i>
+    </div>
+
+    <div class="row mt-4"> <!-- Nuova riga per la seconda sezione -->
+      <!-- Seconda sezione di Gestione -->
+      <div class="col-md-6">
+        <div class="row">
+          <div class="col-10">
+            <lib-generic-button-text-with-icon
+              buttonText="Cancella Account"
+              [iconLeft]="true"
+              prefixIcon="bi bi-trash"
+              [buttonStyle]="ButtonTheme.OnlyText"
+              (click)="deleteAccount()"
+            ></lib-generic-button-text-with-icon>
+          </div>
+          <div class="col-2 d-flex align-items-center justify-content-end">
+            <i class="bi bi-chevron-right small-icon"></i>
+          </div>
+        </div>
       </div>
     </div>
   </section>
+
 
   <div *ngIf="customerIdkc" class="row mt-5">
     <lib-generic-button
