@@ -110,4 +110,13 @@ export class ProductService {
     return this.http.get<string>(`${this.baseWeightedUrl}/imageById/${id}`, { responseType: 'text' as 'json' });
   }
 
+  deleteByIdKg(id: string) {
+    return this.http.delete(`${this.baseKgUrl}/deleteById/${id}`);
+  }
+  deleteByIdWeighted(id: string) {
+    return this.http.delete(`${this.baseWeightedUrl}/deleteById/${id}`);
+  }
+  deleteByIdTray(id: string) {
+    return this.http.delete(`${this.baseTrayUrl}/deleteById/${id}`);
+  }
 }

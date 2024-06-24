@@ -59,6 +59,9 @@ export class IngredientService {
     return this.http.get(`${this.baseUrl}/get/autocomplete`, {params: p});
   }
 
+  deleteById(id:string){
+    return this.http.delete(`${this.baseUrl}/deleteById/${id}`);
+  }
 
 
 }

@@ -17,7 +17,6 @@ export class IngredientEditComponent implements OnInit {
 
   navigationType: 'back' | 'save' | null = null;
 
-
   activeTab: string | null;
   ingredient: Ingredient = new Ingredient();
   originalIngredient: Ingredient = new Ingredient();  // Initialized with empty strings
@@ -41,7 +40,6 @@ export class IngredientEditComponent implements OnInit {
     this.activeTab = this.activatedRoute.snapshot.queryParamMap.get('activeTab');
     this.ingredientId = this.activatedRoute.snapshot.paramMap.get('id');
     if (this.ingredientId) {
-      this.getAllergens();
       this.getIngredientDetails();
     } else {
       this.initializeIngredient();
@@ -69,8 +67,9 @@ export class IngredientEditComponent implements OnInit {
   }
 
   closeChip(allergenToRemove: Allergen) {
-    this.selectedAllergens = this.selectedAllergens.filter(allergen => allergen !== allergenToRemove);
-    this.selectedAllergensNames = this.selectedAllergensNames.filter(allergen => allergen !== allergenToRemove.name);
+    this.selectedAllergens = this.selectedAllergens.filter(allergen => allergen.id !== allergenToRemove.id);
+    this.selectedAllergensNames = this.selectedAllergensNames.filter(name => name !== allergenToRemove.name);
+    this.allergens.push(allergenToRemove); // Re-add the allergen to the available list
   }
 
   close() {
@@ -80,7 +79,8 @@ export class IngredientEditComponent implements OnInit {
 
   getAllergens() {
     this.allergenService.getAll().subscribe((response: any) => {
-      this.allergens = response;
+      this.allergens = response.filter((allergen: Allergen) =>
+        !this.selectedAllergens.some(selected => selected.id === allergen.id));
     });
   }
 
@@ -94,6 +94,7 @@ export class IngredientEditComponent implements OnInit {
           this.selectedAllergensNames.push(allergen.name);
           this.selectedAllergens.push(allergen);
         }
+        this.getAllergens(); // Ensure allergens list is updated after setting selected allergens
       });
     }
   }
@@ -122,16 +123,38 @@ export class IngredientEditComponent implements OnInit {
     }
   }
 
-  toggleAllergen(allergen: any) {
-    const index = this.selectedAllergens.indexOf(allergen);
-    if (index !== -1) {
-      // Rimuovi l'allergene dalla lista degli allergeni selezionati
-      this.selectedAllergens.splice(index, 1);
-      this.selectedAllergensNames.splice(this.selectedAllergensNames.indexOf(allergen.name), 1);
-    } else {
-      // Aggiungi l'allergene alla lista degli allergeni selezionati
+  delete() {
+    this.modalService.openModal(
+      `ATTENZIONE! Procedendo si andra' ad eliminare definitivamente l'ingrediente ${this.ingredient.name}! Procedere?`,
+      'Cancella Ingrediente',
+      'Annulla',
+      'Conferma',
+      {
+        showIcon: true,
+        size: 'md',
+        onConfirm: (() => {
+          this.ingredientService.deleteById(this.ingredientId!).subscribe({
+            error:(err) =>{
+              console.error(err);
+              this.toastrService.error('Errore nell\'eliminare l\'ingrediente!');
+            },
+            complete:() => {
+              this.toastrService.success('Ingrediente eliminato con successo!');
+              this.router.navigate(['../dashboard/ingredienti'], { queryParams: { activeTab: this.activeTab } });
+            }
+          })
+        })
+      });
+  }
+  toggleAllergen(allergen: Allergen) {
+    const allergenId = allergen.id;
+    const index = this.selectedAllergens.findIndex(a => a.id === allergenId);
+    if (index === -1) {
+      // Aggiungi l'allergene alla lista degli allergeni selezionati solo se non è già presente
       this.selectedAllergens.push(allergen);
       this.selectedAllergensNames.push(allergen.name);
+      // Rimuovi l'allergene dalla lista degli allergeni disponibili
+      this.allergens = this.allergens.filter(a => a.id !== allergen.id);
     }
   }
 
@@ -148,9 +171,11 @@ export class IngredientEditComponent implements OnInit {
   }
 
   private isValid(): boolean {
-    return this.ingredientToSave.name!='';
+    return this.ingredientToSave.name != '';
   }
+
   protected readonly ButtonTheme = ButtonTheme;
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
   protected readonly ChipTheme = ChipTheme;
+
 }
