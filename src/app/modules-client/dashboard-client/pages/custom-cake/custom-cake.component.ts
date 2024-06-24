@@ -164,11 +164,6 @@ export class CustomCakeComponent implements OnInit{
      case 'Torta a forma':
        this.currentWeight=0.5;
        this.weightOptions = [];
-       while (this.currentWeight < 3) {
-         this.weightOptions.push(Number(this.currentWeight.toFixed(3)));
-         this.currentWeight += 0.25;
-       }
-
        while (this.currentWeight <= 4) {
          this.weightOptions.push(Number(this.currentWeight.toFixed(3)));
          this.currentWeight += 0.5;
