@@ -41,6 +41,14 @@ export class CategoryService {
     return this.http.get(`${this.baseUrl}/activateById/${id}`);
   }
 
+  deleteCategory(id: string){
+    return this.http.get(`${this.baseUrl}/deleteById/${id}`);
+  }
+
+  setOrderPriorities(priorities: { [key: string]: number }){
+    return this.http.post<boolean>(`${this.baseUrl}/setOrderPriorities`, priorities);
+  }
+
 
 
 

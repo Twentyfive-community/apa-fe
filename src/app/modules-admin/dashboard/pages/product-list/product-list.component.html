@@ -7,6 +7,7 @@
     <ul ngbDropdownMenu class="dropdown-menu">
       <li><a class="dropdown-item" (click)="editCategoryToModify()">Modifica</a></li>
       <li><a class="dropdown-item" (click)="disableCategory()">Disattiva</a></li>
+      <li><a class="dropdown-item" (click)="deleteCategory(category.id)">Elimina</a></li>
     </ul>
   </li>
   <li *ngFor="let category of disabledCategories" class="nav-item" role="presentation" ngbDropdown>
@@ -16,6 +17,7 @@
     </div>
     <ul ngbDropdownMenu class="dropdown-menu">
       <li><a class="dropdown-item" (click)="enableCategory(category.id)">Riattiva</a></li>
+      <li><a class="dropdown-item" (click)="deleteCategory(category.id)">Elimina</a></li>
     </ul>
   </li>
   <i class="align-content-center ms-2 bi bi-plus-circle fs-6"

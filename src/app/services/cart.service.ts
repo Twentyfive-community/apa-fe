@@ -52,4 +52,10 @@ export class CartService {
     return this.http.patch(`${this.baseCartUrl}/modify-bip-cart/${customerId}`, bIP, {params: p})
   }
 
+
+
+
+
+
+
 }

@@ -360,4 +360,23 @@ export class ProductListComponent implements OnInit, AfterViewInit{
   openImage() {
     window.open(this.productDetails.imageUrl, '_blank');
   }
+
+  deleteCategory(id:string) {
+    this.modalService.openModal(
+      'Sei sicuro di voler eliminare definitivamente questa categoria?',
+      'Elimina',
+      'Annulla',
+      'Conferma',
+      {
+        showIcon: true,
+        size: 'md',
+        onConfirm: (() => {
+          this.categoryService.deleteCategory(id).subscribe({
+            next: (() =>{
+              this.getCategories();
+            })
+          });
+        })
+      });
+  }
 }
