@@ -72,7 +72,7 @@ export class CustomCakeComponent implements OnInit{
   price: string='';
   realPrice: number = 0;
 
-  cakeId: string = "664f6efbc19b9d5754fa6ff3";
+  cakeId: string = "6679566c03d8511e7a0d449c";
 
   selectionOptions: string[] = ['Torta classica', 'Torta a forma', 'Drip Cake'];
   weightOptions: number[] = [];
