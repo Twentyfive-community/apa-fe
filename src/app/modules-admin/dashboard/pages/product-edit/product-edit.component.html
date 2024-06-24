@@ -208,11 +208,20 @@
 
 <hr>
 <div class="col-12 d-flex justify-content-end">
+  <div class="me-2"*ngIf="productId">
+    <lib-generic-button
+      buttonText="Elimina"
+      (click)="delete()"
+      [buttonSize]="ButtonSizeTheme.Medium"
+      [buttonStyle]="ButtonTheme.Primary"
+      [customStyles]="{ 'background-color': 'red', 'color': 'white' }"
+    ></lib-generic-button>
+  </div>
   <lib-generic-button
     [type]="'submit'"
     (click)="saveNewProduct()"
-    [buttonSize]="ButtonSizeTheme.Large"
+    [buttonSize]="ButtonSizeTheme.Medium"
     [buttonStyle]="ButtonTheme.Primary"
-    [buttonText]="productId ? 'Modifica ' + (category.name || '') : 'Crea'"
+    [buttonText]="productId ? 'Modifica ' : 'Crea'"
   ></lib-generic-button>
 </div>

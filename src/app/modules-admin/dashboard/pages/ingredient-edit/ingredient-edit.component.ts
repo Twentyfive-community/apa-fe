@@ -125,7 +125,7 @@ export class IngredientEditComponent implements OnInit {
 
   delete() {
     this.modalService.openModal(
-      `ATTENZIONE! Procedendo si andra' ad eliminare definitivamente l'ingrediente ${this.ingredient.name}! Procedere?`,
+      `ATTENZIONE! Procedendo si andra' ad eliminare definitivamente l'ingrediente "${this.ingredient.name}" ! Procedere?`,
       'Cancella Ingrediente',
       'Annulla',
       'Conferma',

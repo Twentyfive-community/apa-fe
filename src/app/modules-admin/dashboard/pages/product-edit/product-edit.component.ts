@@ -327,6 +327,80 @@ export class ProductEditComponent implements OnInit {
     }
   }
 
+  delete() {
+    switch (this.category.type){
+      case 'productKg':
+        this.modalService.openModal(
+          `ATTENZIONE! Procedendo si andra' ad eliminare definitivamente il prodotto "${this.productToAdd.name}" ! Procedere?`,
+          'Cancella Prodotto',
+          'Annulla',
+          'Conferma',
+          {
+            showIcon: true,
+            size: 'md',
+            onConfirm: (() => {
+              this.productService.deleteByIdKg(this.productId!).subscribe({
+                error:(err) =>{
+                  console.error(err);
+                  this.toastrService.error('Errore nell\'eliminare il prodotto!');
+                },
+                complete:() => {
+                  this.toastrService.success('Prodotto eliminato con successo!');
+                  this.router.navigate(['../dashboard/prodotti'], { queryParams: { activeTab: this.categoryId } });
+                }
+              })
+            })
+          });
+        break;
+      case 'productWeighted':
+        this.modalService.openModal(
+          `ATTENZIONE! Procedendo si andra' ad eliminare definitivamente il prodotto "${this.productToAdd.name}" ! Procedere?`,
+          'Cancella Prodotto',
+          'Annulla',
+          'Conferma',
+          {
+            showIcon: true,
+            size: 'md',
+            onConfirm: (() => {
+              this.productService.deleteByIdWeighted(this.productId!).subscribe({
+                error:(err) =>{
+                  console.error(err);
+                  this.toastrService.error('Errore nell\'eliminare il prodotto!');
+                },
+                complete:() => {
+                  this.toastrService.success('Prodotto eliminato con successo!');
+                  this.router.navigate(['../dashboard/prodotti'], { queryParams: { activeTab: this.categoryId } });
+                }
+              })
+            })
+          });
+        break;
+      case 'tray':
+        this.modalService.openModal(
+          `ATTENZIONE! Procedendo si andra' ad eliminare definitivamente il vassoio "${this.productToAdd.name}" ! Procedere?`,
+          'Cancella Vassoio',
+          'Annulla',
+          'Conferma',
+          {
+            showIcon: true,
+            size: 'md',
+            onConfirm: (() => {
+              this.productService.deleteByIdTray(this.productId!).subscribe({
+                error:(err) =>{
+                  console.error(err);
+                  this.toastrService.error('Errore nell\'eliminare il vassoio!');
+                },
+                complete:() => {
+                  this.toastrService.success('Vassoio eliminato con successo!');
+                  this.router.navigate(['../dashboard/prodotti'], { queryParams: { activeTab: this.categoryId } });
+                }
+              })
+            })
+          });
+        break;
+    }
+  }
+
   handleDragOver(event: DragEvent) {
     event.preventDefault(); // Impedisce il comportamento predefinito del browser
   }
