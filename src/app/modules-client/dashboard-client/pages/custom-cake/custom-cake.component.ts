@@ -57,7 +57,8 @@ export class CustomCakeComponent implements OnInit{
   selectedWeight: number;
   selectedBase: string = '';
   selectedForma: string = '';
-  selectedDettaglioForma: string = '';
+  selectedDettaglioForma1: string = '';
+  selectedDettaglioForma2: string = '';
   selectedBagna: string = '';
   selectedFarciture: string[] = [];
   selectedCopertura: string = '';
@@ -428,6 +429,8 @@ export class CustomCakeComponent implements OnInit{
       this.selectedBase = '';
       this.selectedWeight = 0;
       this.selectedForma = '';
+      this.selectedDettaglioForma1 = '';
+      this.selectedDettaglioForma2 = '';
       this.selectedBagna = '';
       this.selectedFarciture = [];
       this.selectedCopertura = '';
@@ -494,12 +497,8 @@ export class CustomCakeComponent implements OnInit{
   }
 
   resetSelectionFromForma(){
-    if(this.selectedForma == 'Lettera')
-      this.selectedDettaglioForma = this.lettere[0]
-    else if(this.selectedForma == 'Numero')
-      this.selectedDettaglioForma = this.numeri[0]
-    else
-      this.selectedDettaglioForma = '';
+    this.selectedDettaglioForma1 = '';
+    this.selectedDettaglioForma2 = '';
     this.selectedBagna = '';
     this.selectedFarciture = [];
     this.selectedCopertura = '';
@@ -510,10 +509,21 @@ export class CustomCakeComponent implements OnInit{
       this.stepCompleted[i]=false;
   }
 
-    selectDettaglioForma(dettaglio: string) {
-        this.selectedDettaglioForma = dettaglio;
-        this.getFarcitureOptions();
-        this.goToNextStep(4);
+    selectDettaglioForma(dettaglio: string, index: number) {
+        if(index == 1){
+          this.selectedDettaglioForma1 = dettaglio;
+        } else if( index == 2){
+          this.selectedDettaglioForma2 = dettaglio;
+        }
+        if(this.selectedForma == "Numero" && this.selectedDettaglioForma1!=''){
+          console.log("CIAO SONO NUMERO 1: "+this.selectedDettaglioForma1);
+          console.log("CIAO SONO NUMERO 2: "+this.selectedDettaglioForma2);
+
+          this.stepCompleted[4]=true;
+          this.getFarcitureOptions();
+          if(this.selectedDettaglioForma2!='')
+            this.goToNextStep(4);
+        }
     }
 
   selectFarcitura(farcitura: string) {
@@ -683,10 +693,11 @@ export class CustomCakeComponent implements OnInit{
     this.productInPurchase.customization = {};
 
     if(this.selectedForma == 'Lettera'){
-      this.productInPurchase.customization.Lettera = this.selectedDettaglioForma;
+      this.productInPurchase.customization.Lettera = this.selectedDettaglioForma1;
     }
     if(this.selectedForma == 'Numero'){
-      this.productInPurchase.customization.Numero = this.selectedDettaglioForma;
+      this.productInPurchase.customization.Numero1 = this.selectedDettaglioForma1;
+      this.productInPurchase.customization.Numero2 = this.selectedDettaglioForma2;
     }
     this.productInPurchase.customization.Tipo = this.selectedType;
     this.productInPurchase.customization.Base = this.selectedBase;
