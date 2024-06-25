@@ -10,7 +10,7 @@ import {CategoryService} from "../../../../services/category.service";
 import {response} from "express";
 import {TwentyfiveModalGenericComponentService} from "twentyfive-modal-generic-component";
 import {CategoryEditComponent} from "../../../../shared/category-edit/category-edit.component";
-
+declare var bootstrap: any;
 @Component({
   selector: 'app-ingredient-list',
   templateUrl: './ingredient-list.component.html',
@@ -61,6 +61,7 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
   categories: Category[] = []
   disabledCategories: Category[] = [];
   changeTab = false;
+  selectedCategoryId: string;
 
   constructor(private ingredientService: IngredientService,
               private categoryService: CategoryService,
@@ -71,8 +72,17 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
   }
 
   ngOnInit(): void {
+    this.loadBootstrapJS();
     this.activeTab = this.activatedRoute.snapshot.queryParamMap.get('activeTab');
     this.getCategories()
+  }
+  loadBootstrapJS(): void {
+    if (!document.querySelector('script[src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"]')) {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js';
+      script.async = true;
+      document.head.appendChild(script);
+    }
   }
 
   ngAfterViewInit() {
@@ -245,5 +255,39 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
           });
         })
       });
+  }
+
+  updateOrderPriorities() {
+    // Crea una mappa delle priorità usando reduce
+    const priorityMap = this.categories.reduce((map, category, index) => {
+      map[category.id] = index;
+      return map;
+    }, {} as { [key: string]: number });
+
+    // Invia la mappa delle priorità al backend
+    this.categoryService.setOrderPriorities(priorityMap).subscribe({
+      next: (() =>{
+        this.getCategories();
+      })
+    });
+  }
+
+  changeCategoryOrder(id: string) {
+    // Open the modal
+    const modal = new bootstrap.Modal(document.getElementById('changeOrderModal'), {});
+    modal.show();
+  }
+
+  confirmChangeOrder() {
+    const currentIndex = this.categories.findIndex(category => category.id === this.activeTab);
+    const newIndex = this.categories.findIndex(category => category.id === this.selectedCategoryId);
+    if (currentIndex >= 0 && newIndex >= 0) {
+      // Swap categories
+      [this.categories[currentIndex], this.categories[newIndex]] = [this.categories[newIndex], this.categories[currentIndex]];
+      this.updateOrderPriorities();
+      // Close the modal
+      const modal = bootstrap.Modal.getInstance(document.getElementById('changeOrderModal'));
+      modal.hide();
+    }
   }
 }

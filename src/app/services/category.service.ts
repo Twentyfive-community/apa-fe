@@ -48,10 +48,4 @@ export class CategoryService {
   setOrderPriorities(priorities: { [key: string]: number }){
     return this.http.post<boolean>(`${this.baseUrl}/setOrderPriorities`, priorities);
   }
-
-
-
-
-
-
 }

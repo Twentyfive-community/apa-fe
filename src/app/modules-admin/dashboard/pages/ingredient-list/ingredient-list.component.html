@@ -6,6 +6,7 @@
       <span ngbDropdownToggle class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"></span>
     </div>
     <ul ngbDropdownMenu class="dropdown-menu">
+      <li><a class="dropdown-item" (click)="changeCategoryOrder(category.id)">Scambia</a></li>
       <li><a class="dropdown-item" (click)="editCategoryToModify()">Modifica</a></li>
       <li><a class="dropdown-item" (click)="disableCategory()">Disattiva</a></li>
       <li><a class="dropdown-item" (click)="deleteCategory(category.id)">Elimina</a></li>
@@ -82,3 +83,24 @@
     <img [src]="allergen.iconUrl" style="max-width: 30px; height: auto; position: relative;" [tooltip]="allergen.name">
   </ng-container>
 </ng-template>
+
+<div class="modal fade" id="changeOrderModal" tabindex="-1" aria-labelledby="changeOrderModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="changeOrderModalLabel">Cambia Ordine Categoria</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label for="categorySelect">Seleziona Categoria:</label>
+        <select id="categorySelect" class="form-select" [(ngModel)]="selectedCategoryId">
+          <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+        <button type="button" class="btn btn-primary" (click)="confirmChangeOrder()">Conferma</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -18,7 +18,7 @@ import {CategoryEditComponent} from "../../../../shared/category-edit/category-e
 import {
   TwentyfiveModalGenericComponentService
 } from "twentyfive-modal-generic-component";
-
+declare var bootstrap: any;
 @Component({
   selector: 'app-product-list',
   templateUrl: './product-list.component.html',
@@ -104,6 +104,7 @@ export class ProductListComponent implements OnInit, AfterViewInit{
 
   productDetails: ProductDetails = new ProductDetails();
   trayDetails: TrayDetails = new TrayDetails();
+  selectedCategoryId: string;
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
@@ -113,6 +114,7 @@ export class ProductListComponent implements OnInit, AfterViewInit{
               private productService:ProductService,
               private genericModalService:TwentyfiveModalGenericComponentService) {}
   ngOnInit(): void {
+    this.loadBootstrapJS();
     this.activeTab = this.activatedRoute.snapshot.queryParamMap.get('activeTab');
     this.getCategories();
   }
@@ -140,6 +142,15 @@ export class ProductListComponent implements OnInit, AfterViewInit{
     this.categoryService.getAllDisabled(this.categoryType).subscribe((response: any) => {
       this.disabledCategories = response;
     });
+  }
+
+  loadBootstrapJS(): void {
+    if (!document.querySelector('script[src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"]')) {
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js';
+      script.async = true;
+      document.head.appendChild(script);
+    }
   }
   getAll(page?: number){
     switch (this.categoryActive) {
@@ -357,6 +368,7 @@ export class ProductListComponent implements OnInit, AfterViewInit{
   protected readonly ButtonTheme = ButtonTheme;
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
 
+
   openImage() {
     window.open(this.productDetails.imageUrl, '_blank');
   }
@@ -378,5 +390,41 @@ export class ProductListComponent implements OnInit, AfterViewInit{
           });
         })
       });
+  }
+
+  updateOrderPriorities() {
+    // Crea una mappa delle priorità usando reduce
+    const priorityMap = this.navCategories.reduce((map, category, index) => {
+      map[category.id] = index;
+      return map;
+    }, {} as { [key: string]: number });
+
+    // Invia la mappa delle priorità al backend
+    this.categoryService.setOrderPriorities(priorityMap).subscribe({
+      next: (() =>{
+        this.getCategories();
+      })
+    });
+  }
+
+  changeCategoryOrder(id: string) {
+    // Open the modal
+    const modal = new bootstrap.Modal(document.getElementById('changeOrderModal'), {});
+    modal.show();
+  }
+
+  confirmChangeOrder() {
+    const currentIndex = this.navCategories.findIndex(category => category.id === this.activeTab);
+    const newIndex = this.navCategories.findIndex(category => category.id === this.selectedCategoryId);
+    if(this.navCategories[currentIndex]!=this.navCategories[newIndex]) {
+      if (currentIndex >= 0 && newIndex >= 0) {
+        // Swap categories
+        [this.navCategories[currentIndex], this.navCategories[newIndex]] = [this.navCategories[newIndex], this.navCategories[currentIndex]];
+        this.updateOrderPriorities();
+        // Close the modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('changeOrderModal'));
+        modal.hide();
+      }
+    }
   }
 }
