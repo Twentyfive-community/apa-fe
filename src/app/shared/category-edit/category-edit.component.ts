@@ -15,6 +15,7 @@ export class CategoryEditComponent implements OnInit{
 
   // Mappa di traduzione per visualizzare le categorie in italiano
   categoryTypeTranslationMap: { [key: string]: string } = {
+    ingredienti: 'Ingredienti',
     productKg: 'Prodotto al kg',
     productWeighted: 'Prodotto al pezzo',
     tray: 'Vassoio'
@@ -55,18 +56,23 @@ export class CategoryEditComponent implements OnInit{
 
 
   saveNewCategory(){
-    if(this.categoryId=='' && !this.categoryType)
+    if(this.categoryId=='' && !this.categoryType){
       this.category.type="ingredienti"
-    this.categoryService.saveCategory(this.category).subscribe({
-      error:() =>{
-        this.toastrService.error("Errore nel salvare la categoria");
-        this.close()
-      },
-      complete:() =>{
-        this.toastrService.success("Categoria salvata con successo");
-        this.close()
-      }
-    });
+    }
+    if (this.isValid()){
+      this.categoryService.saveCategory(this.category).subscribe({
+        error:() =>{
+          this.toastrService.error("Errore nel salvare la categoria");
+          this.close()
+        },
+        complete:() =>{
+          this.toastrService.success("Categoria salvata con successo");
+          this.close()
+        }
+      });
+    } else {
+      this.toastrService.error("Compilare nome e scegliere un tipo categoria apposita!");
+    }
   }
 
   setActiveCategory(category: string) {
@@ -74,6 +80,9 @@ export class CategoryEditComponent implements OnInit{
     this.category.type=this.selectedCategoryName;
   }
 
+  isValid(){
+    return this.category.name && this.category.type;
+  }
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
   protected readonly ButtonTheme = ButtonTheme;
 }
