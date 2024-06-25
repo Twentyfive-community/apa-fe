@@ -69,18 +69,6 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
 
   tableActions: any[] = [
     {
-      icon: 'bi bi-pencil-square',
-      action: async (myRow: any) => {
-        this.router.navigate(['/dashboard/modifica-ordine/', myRow.id], {relativeTo: this.activatedRouteRoute});
-      },
-      actionName: 'Modifica',
-      tooltipText: 'Modifica',
-      placement: 'top',
-      showFunction: () => {
-        return true;
-      }
-    },
-    {
       icon: 'bi bi-printer-fill',
       action: async (myRow: any) => {
         this.downloadPdf(myRow.id)

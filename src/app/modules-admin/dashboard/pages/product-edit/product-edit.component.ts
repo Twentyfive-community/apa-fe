@@ -256,7 +256,7 @@ export class ProductEditComponent implements OnInit {
     switch (this.category.type) {
       case "productKg":
         if (this.selectedIngredients.length == 0 && this.productToAdd.name != "Torta Personalizzata") {
-          this.toastrService.error("Inserire almeno un ingrediente sono qui!");
+          this.toastrService.error("Inserire almeno un ingrediente!");
           return false;
         }
         if (!(this.productToAdd.pricePerKg) || this.productToAdd.pricePerKg <= 0) {
