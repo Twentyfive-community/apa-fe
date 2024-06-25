@@ -92,7 +92,6 @@ export class DashboardClient implements OnInit{
   }
 
   listenToLoading(): void {
-    console.log('partito!')
     this.loadingService.loading$
       .pipe(delay(0)) // This prevents a ExpressionChangedAfterItHasBeenCheckedError for subsequent requests
       .subscribe((loading) => {

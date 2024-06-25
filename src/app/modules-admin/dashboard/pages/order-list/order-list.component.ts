@@ -29,7 +29,6 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
 
   sortColumn: string = '';
   sortDirection: string = '';
-  loading = true;
 
   newSubscriptionText: any;
   cancelSubscriptionText: any;
@@ -97,7 +96,6 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
     this.cancelOrderAudio.src = 'assets/sounds/order-canceled.mp3';
   }
 
-
   ngOnInit(): void {
     this.orderService.getAllStatuses().subscribe((response:any) =>{
       this.statuses=response;
@@ -136,10 +134,6 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
         error:(err) => {
         console.error(err);
         this.toastrService.error("Errore nel recuperare gli ordini attivi!");
-        this.loading = false;
-      },
-        complete:() => {
-        this.loading = false;
       }
     })
   }
@@ -154,18 +148,15 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
   sortingColumn(event: any) {
     this.sortColumn = event.sortColumn;
     this.sortDirection = event.sortDirection;
-    this.loading = true;
     this.getAll(this.currentPage-1)
   }
 
   changePage(event: number) {
-    this.loading = true;
     this.currentPage = event;
     this.getAll(this.currentPage-1);
   }
 
   selectSize(event: any) {
-    this.loading = true;
     this.pageSize = event;
     this.getAll(this.currentPage-1);
   }

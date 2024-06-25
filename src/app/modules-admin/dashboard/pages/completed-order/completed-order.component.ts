@@ -22,7 +22,6 @@ export class CompletedOrderComponent implements OnInit{
   currentPage: number = 0;
   maxSize: number = 5;
   collectionSize: number = 0;
-  loading: boolean = true;
 
   sortColumn: string = '';
   sortDirection: string = '';
@@ -105,7 +104,6 @@ export class CompletedOrderComponent implements OnInit{
   }
 
   getAll(page?: number) {
-    this.loading = true;
     this.completedOrderService.getAll(page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection).subscribe( {
       next:(res:any) =>{
         this.data = res.content
@@ -114,10 +112,6 @@ export class CompletedOrderComponent implements OnInit{
       error:(err) => {
         console.error(err);
         this.toastrService.error("Errore nel recuperare gli ordini completati!");
-        this.loading = false;
-      },
-      complete:() => {
-        this.loading = false;
       }
     })
   }
