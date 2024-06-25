@@ -281,13 +281,15 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
   confirmChangeOrder() {
     const currentIndex = this.categories.findIndex(category => category.id === this.activeTab);
     const newIndex = this.categories.findIndex(category => category.id === this.selectedCategoryId);
-    if (currentIndex >= 0 && newIndex >= 0) {
-      // Swap categories
-      [this.categories[currentIndex], this.categories[newIndex]] = [this.categories[newIndex], this.categories[currentIndex]];
-      this.updateOrderPriorities();
-      // Close the modal
-      const modal = bootstrap.Modal.getInstance(document.getElementById('changeOrderModal'));
-      modal.hide();
+    if(this.categories[currentIndex]!=this.categories[newIndex]) {
+      if (currentIndex >= 0 && newIndex >= 0) {
+        // Swap categories
+        [this.categories[currentIndex], this.categories[newIndex]] = [this.categories[newIndex], this.categories[currentIndex]];
+        this.updateOrderPriorities();
+        // Close the modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('changeOrderModal'));
+        modal.hide();
+      }
     }
   }
 }
