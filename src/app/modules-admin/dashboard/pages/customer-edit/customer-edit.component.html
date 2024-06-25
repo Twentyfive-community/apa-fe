@@ -41,6 +41,7 @@
       [value]="customer.email"
       [readOnly]="customerId != null"
       (input)="onInputChange($event, 'email')"
+      [disabled]="true"
     ></lib-twentyfive-input>
   </div>
   <div class="row mt-4">
@@ -64,21 +65,35 @@
 <div class="row mt-5">
   <hr>
 </div>
+<div class="d-flex justify-content-between mt-2 align-items-center">
 
-<div class=" row float-end" *ngIf="!customerId">
+  <div class="d-flex justify-content-end flex-grow-1">
     <lib-generic-button
-      buttonText="Crea"
-      (click)="saveNewCustomer()"
+      buttonText="Annulla"
+      (click)="close()"
       [buttonSize]="ButtonSizeTheme.Medium"
       [buttonStyle]="ButtonTheme.Primary"
+      [customStyles]="{ 'background-color': 'gray', 'color': 'white' }"
+      class="me-2"
     ></lib-generic-button>
-</div>
-<div class=" row float-end" *ngIf="customerId">
-  <lib-generic-button
-    buttonText="Modifica"
-    (click)="saveNewCustomer()"
-    [buttonSize]="ButtonSizeTheme.Medium"
-    [buttonStyle]="ButtonTheme.Primary"
-  ></lib-generic-button>
+
+    <div *ngIf="customerId">
+      <lib-generic-button
+        buttonText="Modifica"
+        (click)="saveNewCustomer()"
+        [buttonSize]="ButtonSizeTheme.Medium"
+        [buttonStyle]="ButtonTheme.Primary"
+      ></lib-generic-button>
+    </div>
+
+    <div *ngIf="!customerId">
+      <lib-generic-button
+        buttonText="Crea"
+        (click)="saveNewCustomer()"
+        [buttonSize]="ButtonSizeTheme.Medium"
+        [buttonStyle]="ButtonTheme.Primary"
+      ></lib-generic-button>
+    </div>
+  </div>
 </div>
 

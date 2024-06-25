@@ -207,21 +207,44 @@
 
 
 <hr>
-<div class="col-12 d-flex justify-content-end">
-  <div class="me-2"*ngIf="productId">
+<div class="d-flex justify-content-between mt-2 align-items-center">
+  <div *ngIf="productId" class="d-flex">
     <lib-generic-button
       buttonText="Elimina"
       (click)="delete()"
       [buttonSize]="ButtonSizeTheme.Medium"
       [buttonStyle]="ButtonTheme.Primary"
       [customStyles]="{ 'background-color': 'red', 'color': 'white' }"
+      class="me-2"
     ></lib-generic-button>
   </div>
-  <lib-generic-button
-    [type]="'submit'"
-    (click)="saveNewProduct()"
-    [buttonSize]="ButtonSizeTheme.Medium"
-    [buttonStyle]="ButtonTheme.Primary"
-    [buttonText]="productId ? 'Modifica ' : 'Crea'"
-  ></lib-generic-button>
+
+  <div class="d-flex justify-content-end flex-grow-1">
+    <lib-generic-button
+      buttonText="Annulla"
+      (click)="close()"
+      [buttonSize]="ButtonSizeTheme.Medium"
+      [buttonStyle]="ButtonTheme.Primary"
+      [customStyles]="{ 'background-color': 'gray', 'color': 'white' }"
+      class="me-2"
+    ></lib-generic-button>
+
+    <div *ngIf="productId">
+      <lib-generic-button
+        buttonText="Modifica"
+        (click)="saveNewProduct()"
+        [buttonSize]="ButtonSizeTheme.Medium"
+        [buttonStyle]="ButtonTheme.Primary"
+      ></lib-generic-button>
+    </div>
+
+    <div *ngIf="!productId">
+      <lib-generic-button
+        buttonText="Crea"
+        (click)="saveNewProduct()"
+        [buttonSize]="ButtonSizeTheme.Medium"
+        [buttonStyle]="ButtonTheme.Primary"
+      ></lib-generic-button>
+    </div>
+  </div>
 </div>

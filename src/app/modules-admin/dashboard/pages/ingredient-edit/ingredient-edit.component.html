@@ -88,28 +88,46 @@
   <hr>
 </div>
 
-<div class="d-flex justify-content-end mt-4" *ngIf="ingredientId">
-  <lib-generic-button
-    buttonText="Elimina"
-    (click)="delete()"
-    [buttonSize]="ButtonSizeTheme.Medium"
-    [buttonStyle]="ButtonTheme.Primary"
-    [customStyles]="{ 'background-color': 'red', 'color': 'white' }"
-    class="me-2"
-  ></lib-generic-button>
-  <lib-generic-button
-    buttonText="Modifica"
-    (click)="saveNewIngredient()"
-    [buttonSize]="ButtonSizeTheme.Medium"
-    [buttonStyle]="ButtonTheme.Primary"
-  ></lib-generic-button>
+<div class="d-flex justify-content-between mt-2 align-items-center">
+  <div *ngIf="ingredientId" class="d-flex">
+    <lib-generic-button
+      buttonText="Elimina"
+      (click)="delete()"
+      [buttonSize]="ButtonSizeTheme.Medium"
+      [buttonStyle]="ButtonTheme.Primary"
+      [customStyles]="{ 'background-color': 'red', 'color': 'white' }"
+      class="me-2"
+    ></lib-generic-button>
+  </div>
+
+  <div class="d-flex justify-content-end flex-grow-1">
+    <lib-generic-button
+      buttonText="Annulla"
+      (click)="close()"
+      [buttonSize]="ButtonSizeTheme.Medium"
+      [buttonStyle]="ButtonTheme.Primary"
+      [customStyles]="{ 'background-color': 'gray', 'color': 'white' }"
+      class="me-2"
+    ></lib-generic-button>
+
+    <div *ngIf="ingredientId">
+      <lib-generic-button
+        buttonText="Modifica"
+        (click)="saveNewIngredient()"
+        [buttonSize]="ButtonSizeTheme.Medium"
+        [buttonStyle]="ButtonTheme.Primary"
+      ></lib-generic-button>
+    </div>
+
+    <div *ngIf="!ingredientId">
+      <lib-generic-button
+        buttonText="Crea"
+        (click)="saveNewIngredient()"
+        [buttonSize]="ButtonSizeTheme.Medium"
+        [buttonStyle]="ButtonTheme.Primary"
+      ></lib-generic-button>
+    </div>
+  </div>
 </div>
 
-<div class="d-flex justify-content-end mt-4" *ngIf="!ingredientId">
-  <lib-generic-button
-    buttonText="Crea"
-    (click)="saveNewIngredient()"
-    [buttonSize]="ButtonSizeTheme.Medium"
-    [buttonStyle]="ButtonTheme.Primary"
-  ></lib-generic-button>
-</div>
+
