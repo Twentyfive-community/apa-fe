@@ -71,6 +71,7 @@
                   <app-generic-card class="w-100"
                                     [title]="product.name"
                                     [ingredientList]="product.ingredients"
+                                    [allergens]="product.allergens"
                                     [price]="product.pricePerKg+'/kg'"
                                     [imageUrl]="product.imageUrl"
                                     (click)="modalProduct(product.id)">
@@ -81,6 +82,7 @@
                   <app-generic-card class="w-100"
                                     [title]="product.name"
                                     [ingredientList]="product.ingredients"
+                                    [allergens]="product.allergens"
                                     [price]="product.pricePerKg+'/kg'"
                                     [imageUrl]="product.imageUrl"
                                     (click)="goToLogin()">

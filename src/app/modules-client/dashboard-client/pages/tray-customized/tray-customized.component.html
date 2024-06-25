@@ -64,7 +64,7 @@
               [title]="'' + weighted.name"
               [currentWeight]="bundleInPurchase.totalWeight"
               [weight]="weighted.realWeight"
-              [allergens]="allergens(weighted.allergens)"
+              [allergens]="weighted.allergens"
               [quantity]="weighted.quantity"
               [totalWeight]="bundleInPurchase.measure.weight"
               (resultChange)="updateResult($event, weighted.id, weighted.realWeight)"
