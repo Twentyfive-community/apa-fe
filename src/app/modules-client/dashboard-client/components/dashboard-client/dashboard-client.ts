@@ -17,68 +17,58 @@ export class DashboardClient implements OnInit{
 
   customer:CustomerDetails =new CustomerDetails()
   customerIdkc : string = ''
-  imAdmin: string=''
-  navbarItems: any[] = [];
-  adminItems: any[] = [];
 
+  navbarItems: any[] = [
+    {
+      title: "Profilo",
+      icon: "bi bi-person",
+      navigationUrl: "profilo",
+      disableClick: false,
+      labelColor: "",
+    },
+    {
+      title: "Carrello",
+      icon: "bi bi-cart",
+      navigationUrl: "carrello",
+      disableClick: false,
+      labelColor: "",
+    },
+  ];
 
+  notLoggedItem: any[] = [
+    {
+      title: "Profilo",
+      icon: "bi bi-person",
+      navigationUrl: "../dashboard",
+      disableClick: false,
+      labelColor: "",
+    },
+    {
+      title: "Carrello",
+      icon: "bi bi-cart",
+      navigationUrl: "../dashboard",
+      disableClick: false,
+      labelColor: "",
+    },
+  ];
 
+  adminItems: any[] = [
+    {
+      title: "Admin",
+      icon: "bi bi-motherboard",
+      navigationUrl: "../dashboard",
+      disableClick: false,
+      labelColor: "",
+    },
+    {
+      title: "Carrello",
+      icon: "bi bi-cart",
+      navigationUrl: "carrello",
+      disableClick: false,
+      labelColor: "",
+    },
+  ];
 
-  private updateNavbarItems() {
-    if (this.customerIdkc !== '') {
-      this.navbarItems = [
-        {
-          title: "Profilo",
-          icon: "bi bi-person",
-          navigationUrl: "profilo",
-          disableClick: false,
-          labelColor: "",
-        },
-        {
-          title: "Carrello",
-          icon: "bi bi-cart",
-          navigationUrl: "carrello",
-          disableClick: false,
-          labelColor: "",
-        },
-      ];
-    }
-    else{
-      this.navbarItems = [
-        {
-          title: "Profilo",
-          icon: "bi bi-person",
-          navigationUrl: "../dashboard",
-          disableClick: false,
-          labelColor: "",
-        },
-        {
-          title: "Carrello",
-          icon: "bi bi-cart",
-          navigationUrl: "../dashboard",
-          disableClick: false,
-          labelColor: "",
-        },
-      ];
-    }
-
-    this.adminItems = [
-      {
-        title: "Admin",
-        icon: "bi bi-motherboard",
-        navigationUrl: "../dashboard",
-        disableClick: false,
-        labelColor: "",
-      },
-      {
-        title: "Carrello",
-        icon: "bi bi-cart",
-        navigationUrl: "carrello",
-        disableClick: false,
-        labelColor: "",
-      },
-    ];
-  }
 
   constructor(private signingKeycloakService: SigningKeycloakService,
               private customerService:CustomerService,
@@ -101,30 +91,26 @@ export class DashboardClient implements OnInit{
 
 
   assignItems(){
-    if(this.imAdmin)return this.adminItems;
-    else return this.navbarItems;
+    let keycloakService = this.signingKeycloakService as any;
+
+    if(keycloakService.loggedUserRoles().includes('admin')) {
+      return this.adminItems
+    } else if (keycloakService.loggedUserRoles().includes('customer')) {
+      return this.navbarItems
+    } else {
+      return this.notLoggedItem
+    }
   }
 
   private loadUserProfile() {
     let keycloakService = this.signingKeycloakService as any;
-    if(keycloakService.keycloakService._instance.authenticated){
-      keycloakService.keycloakService.loadUserProfile().then((profile: any) => {
-        this.customerIdkc = profile.id;
-        if (this.customerIdkc != null) {
-          this.customerService.getCustomerByKeycloakId(this.customerIdkc).subscribe((res: any) => {
-            this.customer = res;
-            this.updateNavbarItems(); // Aggiorna navbarItems dopo aver ottenuto il cliente
-          });
-        }
 
-        this.imAdmin = keycloakService.loggedUserRoles().includes('admin');
-        this.updateNavbarItems(); // Aggiorna navbarItems anche se l'utente è admin
-      }).catch((err: any) => {
-        console.error('Failed to load user profile', err);
-        this.updateNavbarItems(); // Aggiorna navbarItems comunque per gestire il caso di errore
+    this.customerIdkc = keycloakService.keycloakService._userProfile.id;
+
+    if (this.customerIdkc) {
+      this.customerService.getCustomerByKeycloakId(this.customerIdkc).subscribe((res: any) => {
+        this.customer = res;
       });
-    } else {
-      this.updateNavbarItems();
     }
   }
 
