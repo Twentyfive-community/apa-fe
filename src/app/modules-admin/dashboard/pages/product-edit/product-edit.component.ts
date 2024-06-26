@@ -417,8 +417,6 @@ export class ProductEditComponent implements OnInit {
   }
 
   hasChanges(): boolean {
-    console.log('prodotto originale', this.originalProduct);
-    console.log('prodotto modificato', this.productToAdd);
     return !isEqual(this.productToAdd,this.originalProduct);
   }
     handleDragOver(event: DragEvent) {
