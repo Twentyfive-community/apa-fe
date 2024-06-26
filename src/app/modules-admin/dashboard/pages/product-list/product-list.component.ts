@@ -105,6 +105,7 @@ export class ProductListComponent implements OnInit, AfterViewInit{
   productDetails: ProductDetails = new ProductDetails();
   trayDetails: TrayDetails = new TrayDetails();
   selectedCategoryId: string;
+  selectedCategoryToChange: string;
 
   constructor(private router: Router,
               private activatedRoute: ActivatedRoute,
@@ -399,32 +400,40 @@ export class ProductListComponent implements OnInit, AfterViewInit{
       return map;
     }, {} as { [key: string]: number });
 
+
     // Invia la mappa delle priorità al backend
     this.categoryService.setOrderPriorities(priorityMap).subscribe({
-      next: (() =>{
-        this.getCategories();
-      })
+
     });
   }
 
   changeCategoryOrder(id: string) {
+    this.selectedCategoryToChange=id;
     // Open the modal
     const modal = new bootstrap.Modal(document.getElementById('changeOrderModal'), {});
     modal.show();
+
   }
 
   confirmChangeOrder() {
-    const currentIndex = this.navCategories.findIndex(category => category.id === this.activeTab);
+    const currentIndex = this.navCategories.findIndex(category => category.id === this.selectedCategoryToChange);
     const newIndex = this.navCategories.findIndex(category => category.id === this.selectedCategoryId);
-    if(this.navCategories[currentIndex]!=this.navCategories[newIndex]) {
-      if (currentIndex >= 0 && newIndex >= 0) {
-        // Swap categories
-        [this.navCategories[currentIndex], this.navCategories[newIndex]] = [this.navCategories[newIndex], this.navCategories[currentIndex]];
-        this.updateOrderPriorities();
-        // Close the modal
-        const modal = bootstrap.Modal.getInstance(document.getElementById('changeOrderModal'));
-        modal.hide();
-      }
+
+    if (currentIndex >= 0 && newIndex >= 0 && currentIndex !== newIndex) {
+
+      // Clona l'array e scambia gli elementi
+      const newCategories = [...this.navCategories];
+      const tmp = newCategories[currentIndex];
+      newCategories[currentIndex] = newCategories[newIndex];
+      newCategories[newIndex] = tmp;
+
+      // Aggiorna l'array originale con quello modificato
+      this.navCategories = newCategories;
+
+      // Chiudi il modal e aggiorna le priorità
+      const modal = bootstrap.Modal.getInstance(document.getElementById('changeOrderModal'));
+      modal.hide();
+      this.updateOrderPriorities();
     }
   }
 }

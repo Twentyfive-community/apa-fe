@@ -62,6 +62,7 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
   disabledCategories: Category[] = [];
   changeTab = false;
   selectedCategoryId: string;
+ selectedCategoryToChange: string;
 
   constructor(private ingredientService: IngredientService,
               private categoryService: CategoryService,
@@ -261,36 +262,45 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
     // Crea una mappa delle priorità usando reduce
     const priorityMap = this.categories.reduce((map, category, index) => {
       map[category.id] = index;
+
       return map;
     }, {} as { [key: string]: number });
 
+
+
     // Invia la mappa delle priorità al backend
     this.categoryService.setOrderPriorities(priorityMap).subscribe({
-      next: (() =>{
-        this.getCategories();
-      })
+
     });
   }
 
   changeCategoryOrder(id: string) {
+
+    this.selectedCategoryToChange=id;
     // Open the modal
-    const modal = new bootstrap.Modal(document.getElementById('changeOrderModal'), {});
+    const modal = new bootstrap.Modal(document.getElementById('changeOrderModalI'), {});
     modal.show();
   }
 
   confirmChangeOrder() {
-    const currentIndex = this.categories.findIndex(category => category.id === this.activeTab);
+    const currentIndex = this.categories.findIndex(category => category.id === this.selectedCategoryToChange);
     const newIndex = this.categories.findIndex(category => category.id === this.selectedCategoryId);
-    if(currentIndex!=newIndex) {
-      if (currentIndex >= 0 && newIndex >= 0) {
-        var tmp= this.categories[currentIndex];
-        this.categories[currentIndex]=this.categories[newIndex];
-        this.categories[newIndex]=tmp;
-        this.updateOrderPriorities();
-        // Close the modal
-        const modal = bootstrap.Modal.getInstance(document.getElementById('changeOrderModal'));
-        modal.hide();
-      }
+
+    if (currentIndex >= 0 && newIndex >= 0 && currentIndex !== newIndex) {
+
+      // Clona l'array e scambia gli elementi
+      const newCategories = [...this.categories];
+      const tmp = newCategories[currentIndex];
+      newCategories[currentIndex] = newCategories[newIndex];
+      newCategories[newIndex] = tmp;
+
+      // Aggiorna l'array originale con quello modificato
+      this.categories = newCategories;
+
+      // Chiudi il modal e aggiorna le priorità
+      const modal = bootstrap.Modal.getInstance(document.getElementById('changeOrderModalI'));
+      modal.hide();
+      this.updateOrderPriorities();
     }
   }
 }

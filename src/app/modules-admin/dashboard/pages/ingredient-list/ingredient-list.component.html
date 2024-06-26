@@ -85,17 +85,19 @@
   </ng-container>
 </ng-template>
 
-<div class="modal fade" id="changeOrderModal" tabindex="-1" aria-labelledby="changeOrderModalLabel" aria-hidden="true">
+<div class="modal fade" id="changeOrderModalI" tabindex="-1" aria-labelledby="changeOrderModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="changeOrderModalLabel">Cambia Ordine Categoria</h5>
+        <h5 class="modal-title" id="changeOrderModalLabel">Scambia con ...</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <label for="categorySelect">Seleziona Categoria:</label>
+        <label for="categorySelect">Seleziona la categoria:</label>
         <select id="categorySelect" class="form-select" [(ngModel)]="selectedCategoryId">
-          <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+          <option *ngFor="let category of categories" [value]="category.id" >
+            {{ category.name }}
+          </option>
         </select>
       </div>
       <div class="modal-footer">
@@ -105,3 +107,4 @@
     </div>
   </div>
 </div>
+
