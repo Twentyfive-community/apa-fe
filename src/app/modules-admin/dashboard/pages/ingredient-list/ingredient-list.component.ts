@@ -296,11 +296,11 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
 
       // Aggiorna l'array originale con quello modificato
       this.categories = newCategories;
-
-      // Chiudi il modal e aggiorna le priorità
-      const modal = bootstrap.Modal.getInstance(document.getElementById('changeOrderModalI'));
-      modal.hide();
-      this.updateOrderPriorities();
     }
+
+    // Chiudi il modal e aggiorna le priorità
+    const modal = bootstrap.Modal.getInstance(document.getElementById('changeOrderModalI'));
+    modal.hide();
+    this.updateOrderPriorities();
   }
 }

@@ -430,10 +430,11 @@ export class ProductListComponent implements OnInit, AfterViewInit{
       // Aggiorna l'array originale con quello modificato
       this.navCategories = newCategories;
 
-      // Chiudi il modal e aggiorna le priorità
-      const modal = bootstrap.Modal.getInstance(document.getElementById('changeOrderModal'));
-      modal.hide();
-      this.updateOrderPriorities();
+
     }
+    // Chiudi il modal e aggiorna le priorità
+    const modal = bootstrap.Modal.getInstance(document.getElementById('changeOrderModal'));
+    modal.hide();
+    this.updateOrderPriorities();
   }
 }
