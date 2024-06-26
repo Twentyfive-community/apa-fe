@@ -78,6 +78,7 @@
       placeholder="Peso"
       inputType="number"
       [value]="weight.toString()"
+      [stepValue]="0.001"
       (input)="onInputChangeProduct($event, 'weight')"
     ></lib-twentyfive-input>
   </div>
@@ -113,6 +114,7 @@
         placeholder="Peso (kg)"
         inputType="number"
         [value]="measure.weight.toString()"
+        [stepValue]="0.05"
         (input)="onInputChangeProduct($event, 'weightMeasure', j)"
         style="margin-right: 5px;"
       ></lib-twentyfive-input>
@@ -133,6 +135,7 @@
       <lib-twentyfive-input
         placeholder="Peso (kg)"
         inputType="number"
+        [stepValue]="0.05"
         [value]="measure[i].weight.toString()"
         (input)="onInputChangeProduct($event, 'weightMeasure', i)"
         style="margin-right: 5px;"
@@ -161,6 +164,7 @@
             labelText="Peso MIN (kg)"
             placeholder="Peso MIN (kg)"
             inputType="number"
+            [stepValue]="0.5"
             [value]="minWeight.toString()"
             (input)="onInputChangeProduct($event, 'minWeight')"
           ></lib-twentyfive-input>
@@ -170,6 +174,7 @@
             labelText="Peso MAX (kg)"
             placeholder="Peso MAX (kg)"
             inputType="number"
+            [stepValue]="0.5"
             [value]="maxWeight.toString()"
             (input)="onInputChangeProduct($event, 'maxWeight')"
           ></lib-twentyfive-input>

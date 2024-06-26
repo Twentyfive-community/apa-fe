@@ -5,11 +5,11 @@ import {TwentyfiveModalService} from "twentyfive-modal";
 import {Category} from "../../../../models/Category";
 import {CategoryService} from "../../../../services/category.service";
 import {ProductService} from "../../../../services/product.service";
-import {ProductDetails, ProductToEdit, TrayDetails, WeightRange} from "../../../../models/Product";
+import {ProductToEdit} from "../../../../models/Product";
 import {IngredientService} from "../../../../services/ingredient.service";
 import {ToastrService} from "ngx-toastr";
-import {Measure} from "../../../../models/Measure";
 import {environment} from "../../../../../environments/environment";
+import {cloneDeep, isEqual} from "lodash";
 
 @Component({
   selector: 'app-product-edit',
@@ -33,6 +33,10 @@ export class ProductEditComponent implements OnInit {
 
   productToAdd: ProductToEdit = new ProductToEdit();
 
+  originalProduct: ProductToEdit = new ProductToEdit();
+  originalMeasure: { label: string, weight: number }[] = [
+    {label: '', weight: 0}
+  ];
   ingredientNames: any = [];
   selectedIngredients: string[] = [];
 
@@ -44,7 +48,6 @@ export class ProductEditComponent implements OnInit {
     {label: '', weight: 0}
   ];
   i = 0;
-
   constructor(private router: Router,
               private modalService: TwentyfiveModalService,
               private toastrService: ToastrService,
@@ -64,6 +67,7 @@ export class ProductEditComponent implements OnInit {
           this.getProductDetails(this.productId);
         } else {
           this.productToAdd.categoryId = this.categoryId;
+          this.originalProduct.categoryId = this.categoryId;
         }
         if (!(this.category.type == "tray")) {
           this.getAllIngredients();
@@ -83,9 +87,12 @@ export class ProductEditComponent implements OnInit {
       case 'productKg':
         this.productService.getByIdKg(event).subscribe((response: any) => {
           this.productToAdd = response;
+          this.originalProduct = cloneDeep(response);
           this.productToAdd.categoryId = this.categoryId;
+          this.originalProduct.categoryId = this.categoryId;
           this.pricePerKg = parseFloat(response.pricePerKg.replace('€ ', ''));
           this.productToAdd.pricePerKg = this.pricePerKg;
+          this.originalProduct.pricePerKg = cloneDeep(this.pricePerKg);
           this.minWeight = this.productToAdd.weightRange.minWeight;
           this.maxWeight = this.productToAdd.weightRange.maxWeight;
           this.selectedIngredients = response.ingredients;
@@ -94,20 +101,28 @@ export class ProductEditComponent implements OnInit {
       case 'productWeighted':
         this.productService.getByIdWeighted(event).subscribe((response: any) => {
           this.productToAdd = response;
+          this.originalProduct = cloneDeep(response);
           this.productToAdd.categoryId = this.categoryId;
+          this.originalProduct.categoryId = this.categoryId;
           this.weight = parseFloat(response.weight.replace('Kg ', ''));
           this.productToAdd.weight = this.weight;
+          this.originalProduct.weight = cloneDeep(this.weight);
           this.selectedIngredients = response.ingredients;
         })
         break;
       case 'tray':
         this.productService.getByIdTray(event).subscribe((response: any) => {
           this.productToAdd = response;
+          this.originalProduct = cloneDeep(response);
+          this.originalProduct.measures = cloneDeep(response.measuresList);
           this.productToAdd.categoryId = this.categoryId;
+          this.originalProduct.categoryId = this.categoryId;
           this.productToAdd.measures = response.measuresList;
           this.measure = this.productToAdd.measures.slice();
+          this.originalMeasure = cloneDeep(this.originalProduct.measures);
           this.i = this.measure.length;
           this.measure[this.i] = {label: '', weight: 0};
+          this.originalMeasure[this.i] = {label: '', weight: 0};
           this.pricePerKg = this.productToAdd.pricePerKg;
         })
         break;
@@ -130,27 +145,27 @@ export class ProductEditComponent implements OnInit {
         this.productToAdd.name = event.target.value;
         break;
       case 'weight':
-        this.productToAdd.weight = event.target.value;
+        this.productToAdd.weight = Number(event.target.value);
         break;
       case 'description':
         this.productToAdd.description = event.target.value;
         break;
       case 'pricePerKg':
-        this.productToAdd.pricePerKg = event.target.value;
+        this.productToAdd.pricePerKg = Number(event.target.value);
         break;
       case 'minWeight':
-        this.productToAdd.weightRange.minWeight = event.target.value;
+        this.productToAdd.weightRange.minWeight = Number(event.target.value);
         this.minWeight = this.productToAdd.weightRange.minWeight;
         break;
       case 'maxWeight':
-        this.productToAdd.weightRange.maxWeight = event.target.value;
+        this.productToAdd.weightRange.maxWeight = Number(event.target.value);
         this.maxWeight = this.productToAdd.weightRange.maxWeight;
         break;
       case 'labelMeasure':
         this.measure[index ?? 0].label = event.target.value;
         break;
       case 'weightMeasure':
-        this.measure[index ?? 0].weight = event.target.value;
+        this.measure[index ?? 0].weight = Number(event.target.value);
         break;
     }
   }
@@ -401,7 +416,12 @@ export class ProductEditComponent implements OnInit {
     }
   }
 
-  handleDragOver(event: DragEvent) {
+  hasChanges(): boolean {
+    console.log('prodotto originale', this.originalProduct);
+    console.log('prodotto modificato', this.productToAdd);
+    return !isEqual(this.productToAdd,this.originalProduct);
+  }
+    handleDragOver(event: DragEvent) {
     event.preventDefault(); // Impedisce il comportamento predefinito del browser
   }
 
