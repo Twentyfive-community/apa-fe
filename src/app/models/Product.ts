@@ -104,7 +104,8 @@ export class ProductInPurchase {
   weight: number;
   quantity: number;
   shape: string;
-  customization: Customization[] =[];
+  customization:any;
+  //customization: Customization[] =[];
   notes: string;
   attachment: string;
   deliveryDate: string;
@@ -122,7 +123,7 @@ export class ProductStat {
   buyingCount: number;
 }
 
-export class Customization {
+/*export class Customization {
   name: string;
   value: string[] = [];
 
@@ -130,4 +131,4 @@ export class Customization {
     this.name = name;
     this.value = value;
   }
-}
+}*/
