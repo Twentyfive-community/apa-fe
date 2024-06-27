@@ -104,7 +104,7 @@ export class ProductInPurchase {
   weight: number;
   quantity: number;
   shape: string;
-  customization: any;
+  customization: Customization[] =[];
   notes: string;
   attachment: string;
   deliveryDate: string;
@@ -120,4 +120,14 @@ export class ProductStat {
   id: string;
   type: string;
   buyingCount: number;
+}
+
+export class Customization {
+  name: string;
+  value: string[] = [];
+
+  constructor(name:string, value:string[]) {
+    this.name = name;
+    this.value = value;
+  }
 }
