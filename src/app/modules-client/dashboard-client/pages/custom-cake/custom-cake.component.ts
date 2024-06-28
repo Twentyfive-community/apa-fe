@@ -526,7 +526,7 @@ export class CustomCakeComponent implements OnInit{
           this.selectedDettaglioForma1.push(dettaglio);
           console.log("CIAO SONO NUMERO1: ",this.selectedDettaglioForma1);
         } else if( index == 2){
-          this.selectedDettaglioForma2.push(dettaglio);
+          this.selectedDettaglioForma1.push(dettaglio);
           console.log("CIAO SONO NUMERO2: ",this.selectedDettaglioForma2);
         }
 
@@ -724,8 +724,7 @@ export class CustomCakeComponent implements OnInit{
       this.productInPurchase.customization.push(new Customization("Lettera", this.selectedDettaglioForma1))
     }
     if(this.selectedForma == 'Numero'){
-      this.productInPurchase.customization.push(new Customization("Numero 1", this.selectedDettaglioForma1))
-      this.productInPurchase.customization.push(new Customization("Numero 2", this.selectedDettaglioForma2))
+      this.productInPurchase.customization.push(new Customization("Numeri", this.selectedDettaglioForma1))
     }
 
     this.productInPurchase.customization.push(new Customization("Farciture", this.selectedFarciture))
