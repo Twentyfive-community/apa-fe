@@ -47,7 +47,7 @@ export class TrayCustomizedComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCustomer();
-    this.productService.getByIdTray('664c677cdb11452a067bbdf5').subscribe({
+    this.productService.getByIdTray('667ed64eb61df4313c6f4153').subscribe({
       next:(response:any)=>{
         this.trayDetails = response;
         this.bundleInPurchase.id = response.id;
