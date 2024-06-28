@@ -39,9 +39,8 @@
           </button>
         </p>
         <ul *ngIf="showCustomizations">
-          <li *ngFor="let item of product.customization | keyvalue">
-            <b>{{item.key}}:</b><br>
-            {{item.value}}
+          <li *ngFor="let item of product.customization">
+            <b>{{item.name}}:</b><br>{{item.value}}
           </li>
         </ul>
       </div>
