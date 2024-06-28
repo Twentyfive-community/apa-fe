@@ -211,32 +211,6 @@ export class CartProductCardComponent implements OnInit{
 
   goToEdit() {
     switch (this.type) {
-      case 'Torta Personalizzata':
-        let customCakeModal = this.genericModalService.open(CustomCakeComponent, "md", {});
-        customCakeModal.componentInstance.customer.id = this.customerId;
-        customCakeModal.componentInstance.selectedWeight = this.product.weight
-        customCakeModal.componentInstance.selectedForma = this.product.shape
-        customCakeModal.componentInstance.customization.Type = this.product.customization.Type
-        customCakeModal.componentInstance.customization.Bagna = this.product.customization.Bagna
-        customCakeModal.componentInstance.customization.Copertura = this.product.customization.Copertura
-        customCakeModal.componentInstance.customization.Farciture = this.product.customization.Farciture
-        customCakeModal.componentInstance.customization.Frutta = this.product.customization.Frutta
-        customCakeModal.componentInstance.customization.Gocce = this.product.customization.Gocce
-        customCakeModal.componentInstance.customization.Granelle = this.product.customization.Granelle
-        customCakeModal.componentInstance.customization.Base = this.product.customization.Base
-        customCakeModal.componentInstance.attachment = this.product.attachment
-
-        console.log("custom 1: " + customCakeModal.componentInstance.customization.Type)
-        console.log("custom 2: " + customCakeModal.componentInstance.customization.Bagna)
-        console.log("custom 3: " + customCakeModal.componentInstance.customization.Copertura)
-        console.log("custom 4: " + customCakeModal.componentInstance.customization.Farciture)
-        console.log("custom 5: " + customCakeModal.componentInstance.customization.Frutta)
-        console.log("custom 6: " + customCakeModal.componentInstance.customization.Gocce)
-        console.log("custom 7: " + customCakeModal.componentInstance.customization.Granelle)
-        console.log("custom 8: " + customCakeModal.componentInstance.customization.Base)
-
-        customCakeModal.result.finally( () => {})
-        break;
       case 'Vassoio Personalizzato':
         this.toastrService.info('Vassoio Personalizzato');
         let customTrayModal = this.genericModalService.open(TrayCustomizedComponent, "md", {});
