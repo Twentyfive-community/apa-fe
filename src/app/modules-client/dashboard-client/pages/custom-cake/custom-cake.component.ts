@@ -524,18 +524,22 @@ export class CustomCakeComponent implements OnInit{
     selectDettaglioForma(dettaglio: string, index: number) {
         if(index == 1){
           this.selectedDettaglioForma1.push(dettaglio);
+          console.log("CIAO SONO NUMERO1: ",this.selectedDettaglioForma1);
         } else if( index == 2){
           this.selectedDettaglioForma2.push(dettaglio);
+          console.log("CIAO SONO NUMERO2: ",this.selectedDettaglioForma2);
         }
-        if(this.selectedForma == "Numero" && this.selectedDettaglioForma1.length==0){
-          console.log("CIAO SONO NUMERO 1: "+this.selectedDettaglioForma1);
-          console.log("CIAO SONO NUMERO 2: "+this.selectedDettaglioForma2);
+
+        if(this.selectedForma == "Numero" && this.selectedDettaglioForma1.length>0){
 
           this.stepCompleted[4]=true;
           this.getFarcitureOptions();
           if(this.selectedDettaglioForma2.length!=0)
             this.goToNextStep(4);
         }
+
+        if(this.selectedForma == "Lettera" && this.selectedDettaglioForma1.length>0)
+          this.goToNextStep(4);
     }
 
   selectFarcitura(farcitura: string) {
