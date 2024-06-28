@@ -504,6 +504,18 @@ export class CustomCakeComponent implements OnInit{
       this.stepCompleted[i]=false;
   }
 
+  resetSelectionFromFarciture(){
+    this.selectedBagna = '';
+    this.selectedFrutta = [];
+    this.selectedGocce = [];
+    this.selectedCopertura = '';
+    this.selectedGranelle = [];
+    for(let i=5; i<this.stepCompleted.length; i++)
+      this.stepCompleted[i]=false;
+  }
+
+
+
     selectDettaglioForma(dettaglio: string, index: number) {
         if(index == 1){
           this.selectedDettaglioForma1 = dettaglio;
@@ -538,6 +550,8 @@ export class CustomCakeComponent implements OnInit{
     const index = this.selectedFarciture.indexOf(farcitura);
     if (index > -1) {
       this.selectedFarciture.splice(index, 1);
+      if(this.selectedFarciture.length==0)
+        this.resetSelectionFromFarciture();
     }
   }
 
@@ -605,6 +619,8 @@ export class CustomCakeComponent implements OnInit{
     const index = this.selectedGranelle.indexOf(granella);
     if (index > -1) {
       this.selectedGranelle.splice(index, 1);
+      if(this.selectedGranelle.length == 0)
+        this.stepCompleted[9]=false;
     }
   }
 
