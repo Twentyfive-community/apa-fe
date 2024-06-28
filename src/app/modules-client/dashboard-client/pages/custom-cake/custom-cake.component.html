@@ -122,7 +122,7 @@
                 <!-- Dropdown personalizzata per Farcitura -->
                 <div ngbDropdown class="dropdown">
                   <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedFarciture.length === 2" id="farcituraDropdown">
-                    Seleziona farciture
+                    Seleziona farciture (max 2)
                   </button>
                   <ul ngbDropdownMenu aria-labelledby="farcituraDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
                     <li *ngFor="let farcitura of farcitureOptions" class="dropdown-item" (click)="selectFarcitura(farcitura)" [class.disabled]="selectedFarciture.length === 2">
@@ -131,23 +131,17 @@
                   </ul>
                 </div>
 
-                <!-- Seconda dropdown per le farciture selezionate -->
+                <!-- Chips per le farciture selezionate -->
                 <div *ngIf="selectedFarciture.length > 0" class="mt-2">
-                  <div ngbDropdown class="dropdown">
-                    <button class="btn btn-outline-dark" ngbDropdownToggle id="selectedFarcitureDropdown">
-                      Farciture selezionate
-                    </button>
-                    <ul ngbDropdownMenu aria-labelledby="selectedFarcitureDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
-                      <li *ngFor="let farcitura of selectedFarciture" class="dropdown-item">
-                        {{ farcitura }}
-                        <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Close" (click)="removeFarcitura(farcitura)"></button>
-                      </li>
-                    </ul>
+                  <div *ngFor="let farcitura of selectedFarciture" class="chip">
+                    {{ farcitura }}
+                    <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Close" (click)="removeFarcitura(farcitura)"></button>
                   </div>
                 </div>
 
                 <small *ngIf="selectedFarciture.length === 2" class="text-muted">Hai selezionato il massimo di 2 farciture</small>
               </ng-container>
+
 
 
               <ng-container *ngIf="step === 'Bagna'">
@@ -171,7 +165,7 @@
                     <!-- Dropdown per la selezione di frutta -->
                     <div ngbDropdown class="dropdown">
                       <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedFrutta.length + selectedGocce.length >= 3" id="fruttaDropdown">
-                        Seleziona frutta
+                        Seleziona frutta (max 3 tra frutta e gocce)
                       </button>
                       <ul ngbDropdownMenu aria-labelledby="fruttaDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
                         <li *ngFor="let frutta of fruttaOptions" class="dropdown-item" (click)="selectFrutta(frutta)" [class.disabled]="selectedFrutta.length + selectedGocce.length >= 3">
@@ -182,9 +176,9 @@
                   </div>
                   <div class="col">
                     <!-- Dropdown per la selezione di gocce -->
-                    <div ngbDropdown class="dropdown">
+                    <div ngbDropdown class="mt-2 dropdown">
                       <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedFrutta.length + selectedGocce.length >= 3" id="gocceDropdown">
-                        Seleziona gocce
+                        Seleziona gocce (max 3 tra frutta e gocce)
                       </button>
                       <ul ngbDropdownMenu aria-labelledby="gocceDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
                         <li *ngFor="let goccia of gocceOptions" class="dropdown-item" (click)="selectGoccia(goccia)" [class.disabled]="selectedFrutta.length + selectedGocce.length >= 3">
@@ -195,22 +189,15 @@
                   </div>
                 </div>
 
-                <!-- Seconda dropdown per le frutte e gocce selezionate -->
+                <!-- Chips per frutta e gocce selezionate -->
                 <div *ngIf="selectedFrutta.length + selectedGocce.length > 0" class="mt-2">
-                  <div ngbDropdown class="dropdown">
-                    <button class="btn btn-outline-dark" ngbDropdownToggle id="selectedItemsDropdown">
-                      Selezioni
-                    </button>
-                    <ul ngbDropdownMenu aria-labelledby="selectedItemsDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
-                      <li *ngFor="let item of selectedFrutta" class="dropdown-item">
-                        {{ item }}
-                        <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Close" (click)="removeFrutta(item)"></button>
-                      </li>
-                      <li *ngFor="let item of selectedGocce" class="dropdown-item">
-                        {{ item }}
-                        <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Close" (click)="removeGoccia(item)"></button>
-                      </li>
-                    </ul>
+                  <div *ngFor="let item of selectedFrutta" class="chip">
+                    {{ item }}
+                    <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Close" (click)="removeFrutta(item)"></button>
+                  </div>
+                  <div *ngFor="let item of selectedGocce" class="chip">
+                    {{ item }}
+                    <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Close" (click)="removeGoccia(item)"></button>
                   </div>
                 </div>
 
@@ -239,7 +226,7 @@
               <ng-container *ngIf="step === 'Granelle'">
                 <div ngbDropdown class="dropdown">
                   <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedGranelle.length === 2 || granelleOptions[0] === 'NO GRANELLE'" id="granellaDropdown">
-                    Seleziona granelle
+                    Seleziona granelle (max 2)
                   </button>
                   <ul ngbDropdownMenu aria-labelledby="granellaDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
                     <li *ngFor="let granella of granelleOptions" class="dropdown-item" (click)="selectGranella(granella)" [class.disabled]="selectedGranelle.length === 2 || granelleOptions[0] === 'NO GRANELLE'">
@@ -248,18 +235,11 @@
                   </ul>
                 </div>
 
-                <!-- Seconda dropdown per le granelle selezionate -->
+                <!-- Chips per le granelle selezionate -->
                 <div *ngIf="selectedGranelle.length > 0 && granelleOptions[0] !== 'NO GRANELLE'" class="mt-2">
-                  <div ngbDropdown class="dropdown">
-                    <button class="btn btn-outline-dark" ngbDropdownToggle id="selectedGranelleDropdown">
-                      Granelle selezionate
-                    </button>
-                    <ul ngbDropdownMenu aria-labelledby="selectedGranelleDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
-                      <li *ngFor="let granella of selectedGranelle" class="dropdown-item">
-                        {{ granella }}
-                        <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Close" (click)="removeGranella(granella)"></button>
-                      </li>
-                    </ul>
+                  <div *ngFor="let granella of selectedGranelle" class="chip">
+                    {{ granella }}
+                    <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Close" (click)="removeGranella(granella)"></button>
                   </div>
                 </div>
 
