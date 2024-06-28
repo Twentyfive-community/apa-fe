@@ -151,3 +151,25 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="delateConfirmationModal" tabindex="-1" aria-labelledby="delateConfirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="delateConfirmationModalLabel">Cancella profilo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body mb-0">
+        Attenzione, procedendo eliminerai il tuo profilo definitivamente. Per procedere inserisci qui sotto la tua e-mail e premi conferma.
+        <div class="mb-3 mt-3">
+          <label for="emailInput" class="form-label">Email</label>
+          <input type="email" class="form-control" id="emailInput" [(ngModel)]="emailInput">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDeleteAccount()">Conferma</button>
+      </div>
+    </div>
+  </div>
+</div>

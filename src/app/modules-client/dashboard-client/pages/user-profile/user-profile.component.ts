@@ -17,6 +17,7 @@ declare var bootstrap: any;
 export class UserProfileComponent implements OnInit{
   customer:CustomerDetails =new CustomerDetails()
   customerIdkc :string =''
+  emailInput: string;
 
   constructor(private signingKeycloakService: SigningKeycloakService,
               private router: Router,
@@ -129,24 +130,24 @@ export class UserProfileComponent implements OnInit{
   }
 
   deleteAccount() {
-    this.modalService.openModal(
-      'Attenzione! L\'azione e\' irreversibile! sei sicuro di continuare?',
-      'Cancella Account',
-      'Annulla',
-      'Conferma',
-      {
-        size: 'md',
-        onConfirm: (() => {
-          this.customerService.deleteAccount(this.customer.id).subscribe({
-            next:() =>{
-              this.exit();
-            },
-            error:(err) =>{
-              console.error(err);
-              this.exit();
-            }
-          })
-        })
-      });
+    const delateConfirmationModal = new bootstrap.Modal(document.getElementById('delateConfirmationModal'), {
+      keyboard: false
+    });
+    delateConfirmationModal.show();
+  }
+
+  async confirmDeleteAccount() {
+    if (this.emailInput !== this.customer.email) {
+      alert('L\'indirizzo email inserito non è corretto.');
+      return;
+    }
+
+    try {
+      await this.customerService.deleteAccount(this.customer.id).toPromise();
+      this.exit();
+    } catch (error) {
+      console.error(error);
+      this.exit();
+    }
   }
 }
