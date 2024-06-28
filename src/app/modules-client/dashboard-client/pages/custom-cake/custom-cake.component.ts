@@ -729,8 +729,12 @@ export class CustomCakeComponent implements OnInit{
 
     this.productInPurchase.customization.push(new Customization("Farciture", this.selectedFarciture))
     this.productInPurchase.customization.push(new Customization("Bagna", this.selectedBagna))
-    this.productInPurchase.customization.push(new Customization("Frutta", this.selectedFrutta))
-    this.productInPurchase.customization.push(new Customization("Gocce", this.selectedGocce))
+    if(this.selectedFrutta.length>0){
+      this.productInPurchase.customization.push(new Customization("Frutta", this.selectedFrutta))
+    }
+    if(this.selectedGocce.length>0){
+      this.productInPurchase.customization.push(new Customization("Gocce", this.selectedGocce))
+    }
     this.productInPurchase.customization.push(new Customization("Copertura", this.selectedCopertura))
     this.productInPurchase.customization.push(new Customization("Granelle", this.selectedGranelle))
 
