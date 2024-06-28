@@ -30,7 +30,7 @@
       <p *ngIf="product.shape"><b>Forma:</b> {{product.shape}}</p>
     </div>
 
-    <div *ngIf="product.customization != null">
+    <div *ngIf="product.customization.length>0">
       <div>
         <p>
           <b>Personalizzazioni</b>
