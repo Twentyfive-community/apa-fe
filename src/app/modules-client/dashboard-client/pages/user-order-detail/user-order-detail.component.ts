@@ -74,11 +74,11 @@ export class UserOrderDetailComponent implements OnInit {
 
   getCustomization(pip: ProductInPurchase): [string, string][] {
     const customizationArray: [string, string][] = [];
-    for (const key in pip.customization) {
+    /*for (const key in pip.customization) {
       if (pip.customization.hasOwnProperty(key)) {
         customizationArray.push([key, pip.customization[key]]);
       }
-    }
+    }*/
     return customizationArray;
   }
 

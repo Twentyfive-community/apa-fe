@@ -37,7 +37,7 @@
           </div>
           <hr>
           <div >
-            <div class="mt-2 mb-1" *ngIf="getCustomization(product).length > 0">
+            <div class="mt-2 mb-1" *ngIf="product.customization.length > 0">
               <h6>
                 <button (click)="toggleCustomization(product)" class="btn btn-link p-0 custom-button ms-2">
                   Personalizzazioni
@@ -45,8 +45,8 @@
                 </button>
               </h6>
               <ul *ngIf="getCustomizationVisible(product)" class="list-unstyled ms-3 text-muted">
-                <li *ngFor="let customization of getCustomization(product)">
-                  <b>{{ customization[0] }}:</b> {{ customization[1] }}
+                <li *ngFor="let customization of product.customization">
+                  <b>{{ customization.name }}:</b> {{ customization.value }}
                 </li>
                 <hr>
               </ul>
