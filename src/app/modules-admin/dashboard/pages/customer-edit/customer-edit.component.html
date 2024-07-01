@@ -41,7 +41,7 @@
       [value]="customer.email"
       [readOnly]="customerId != null"
       (input)="onInputChange($event, 'email')"
-      [disabled]="true"
+      [disabled]="isNew()"
     ></lib-twentyfive-input>
   </div>
   <div class="row mt-4">
