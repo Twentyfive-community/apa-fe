@@ -110,7 +110,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
         type = 'Vassoio Personalizzato';
       } else if (product.measure) {
         type = 'tray';
-      } else if (!product.customization) {
+      } else if (product.customization.length == 0 ) {
         type = 'productKg';
       } else {
         type = 'Altro';
