@@ -125,4 +125,7 @@ export class CustomerEditComponent implements OnInit{
   protected readonly ButtonTheme = ButtonTheme;
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
 
+  isNew():boolean {
+    return this.customerId? true : false;
+  }
 }
