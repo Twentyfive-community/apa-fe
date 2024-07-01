@@ -2,10 +2,9 @@ export const environment = {
   production: false,
 
   keycloakurl: 'http://80.211.123.141:9001',
-  realmname: 'Antica-Pasticceria',
+  realmname: 'Antica-Pasticceria-v2',
   clientid: 'apa-app',
-  redirecturi: 'http://80.211.123.141:5564/dashboard/ordini',
-  //backendUrl: 'http://80.211.123.141:8104/apa-api-layer',
+  redirecturi: '',
   backendUrl: 'http://localhost:8080',
 
 

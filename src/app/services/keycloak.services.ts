@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { KeycloakService, KeycloakOptions } from 'keycloak-angular';
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {catchError, throwError} from "rxjs";
+import {environment} from "../../environments/environment";
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ import {catchError, throwError} from "rxjs";
 export class KeycloakCustomService {
 
   private url_keycloak:string='http://80.211.123.141:9001';
-  private realm:string='Antica-Pasticceria';
+  private realm:string= `${environment.realmname}`;
   private clientId:string='apa-app';
   private redirect_url:string="";
 
