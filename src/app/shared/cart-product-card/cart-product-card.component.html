@@ -70,7 +70,7 @@
     </div>
 
     <div *ngIf="product.allergens">
-      <b>ALLRGENI:</b><br>
+      <b>ALLERGENI:</b><br>
       <ng-container *ngFor="let allergen of product.allergens; let i = index">
         <span *ngIf="i !== 0">&nbsp;</span>
         <img [src]="allergen.iconUrl" style="max-width: 25px; height: auto; position: relative;" [tooltip]="allergen.name">
