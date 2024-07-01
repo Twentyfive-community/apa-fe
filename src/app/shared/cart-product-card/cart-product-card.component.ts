@@ -61,19 +61,17 @@ export class CartProductCardComponent implements OnInit{
   getProduct() {
     if(this.product.weightedProducts !== undefined) {
       this.productService.getByIdTray(this.product.id).subscribe((res:any) => {
-        // console.log('vassoio')
 
         this.product.name = res.name;
         this.product.imageUrl = res.imageUrl;
         this.product.price = `€ ${res.pricePerKg.toFixed(2)}`;
         this.product.toBuy = true
 
-        // console.log(this.product)
       })
     } else {
       this.productService.getByIdKg(this.product.id).subscribe((res:any) => {
-        // console.log('torta')
         this.product.name = res.name;
+        this.product.allergens = res.allergens
         this.product.imageUrl = res.imageUrl;
         this.product.price = res.pricePerKg;
         this.product.toBuy = true
@@ -97,15 +95,11 @@ export class CartProductCardComponent implements OnInit{
   }
 
   obtainMinimumPickupDateTime() {
-    // console.log(this.product.quantity)
     this.cartService.obtainMinimumPickupDateTime(this.customerId, this.position).subscribe((res: any) => {
-      // console.log(res)
       const keys = Object.keys(res);
       if (keys.length > 0) {
         this.minDate = keys[0]; // La prima data è la minima
         this.minTime = res[this.minDate][0]; // Il primo orario della data minima è il più piccolo
-        // console.log(this.position)
-        // console.log(this.minDate + ' ' + this.minTime)
         this.product.deliveryDate = this.minDate
       }
     });
@@ -116,23 +110,19 @@ export class CartProductCardComponent implements OnInit{
   }
 
   toggleSelection() {
-    // console.log(this.product.toBuy)
     this.toBuyChange.emit(this.product.id);
   }
 
   increaseQuantity() {
     this.product.quantity++;
-    // console.log('increaseQuantity > quantity ' + this.product.quantity)
 
     this.calcTotalPrice()
     this.quantityChange.next()
-    // console.log('increaseQuantity > totalPrice ' + this.product.totalPrice);
   }
 
   decreaseQuantity() {
     if (this.product.quantity > 1) {
       this.product.quantity--;
-      // console.log('decreaseQuantity > quantity ' + this.product.quantity)
       this.calcTotalPrice()
       this.quantityChange.next()
 
@@ -171,8 +161,6 @@ export class CartProductCardComponent implements OnInit{
       //torte
       this.product.totalPrice = (priceAsNumber * this.product.weight) * this.product.quantity;
     }
-    // this.selectionChange.emit()
-    // console.log(this.product.totalPrice)
   }
 
   modifyCart(): Observable<any> {

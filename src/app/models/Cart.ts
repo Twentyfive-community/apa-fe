@@ -1,6 +1,7 @@
 import {Measure} from "./Measure";
 import {PieceInPurchaseDetails} from "./Bundle";
 import {Customization} from "./Product";
+import {Allergen} from "./Allergen";
 
 export class Cart {
 
@@ -17,6 +18,7 @@ export class ItemInPurchase {
   imageUrl: string;
   price: string;
 
+  allergens: Allergen[];
   quantity: number; //generico
   totalPrice: number; //generico
   notes: string; //generico
