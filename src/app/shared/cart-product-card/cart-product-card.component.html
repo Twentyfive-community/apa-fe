@@ -30,7 +30,7 @@
       <p *ngIf="product.shape"><b>Forma:</b> {{product.shape}}</p>
     </div>
 
-    <div *ngIf="product.customization.length>0">
+    <div *ngIf="product.customization && product.customization.length > 0">
       <div>
         <p>
           <b>Personalizzazioni</b>
@@ -69,8 +69,15 @@
       </ul>
     </div>
 
+    <div *ngIf="product.allergens">
+      <b>ALLRGENI:</b><br>
+      <ng-container *ngFor="let allergen of product.allergens; let i = index">
+        <span *ngIf="i !== 0">&nbsp;</span>
+        <img [src]="allergen.iconUrl" style="max-width: 25px; height: auto; position: relative;" [tooltip]="allergen.name">
+      </ng-container>
+    </div>
 
-    <div >
+    <div>
       <hr/>
 
       <p><b>Data e ora di ritiro minime:</b> {{ product.deliveryDate | date:'dd/MM/yyyy' }} {{minTime}}</p>

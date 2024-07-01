@@ -7,8 +7,6 @@ export const environment = {
   redirecturi: '',
   backendUrl: 'http://localhost:8080',
 
-
-
   showCookiePopup: true,
   cookieKey: 'cookieResponse',
 
