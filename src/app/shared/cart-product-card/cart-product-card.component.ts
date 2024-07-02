@@ -63,17 +63,21 @@ export class CartProductCardComponent implements OnInit{
       this.productService.getByIdTray(this.product.id).subscribe((res:any) => {
 
         this.product.name = res.name;
-        this.product.allergens = res.allergens
+        // se è un vassoio personalizzato allora ha gli allergeni direttamente nel productinpurchase e non con l'id del prodotto
+        if (this.product.allergens==null){
+          this.product.allergens = res.allergens
+        }
         this.product.imageUrl = res.imageUrl;
         this.product.price = `€ ${res.pricePerKg.toFixed(2)}`;
         this.product.toBuy = true
-
       })
     } else {
       this.productService.getByIdKg(this.product.id).subscribe((res:any) => {
         this.product.name = res.name;
-        this.product.allergens = res.allergens
-        this.product.imageUrl = res.imageUrl;
+        // se è una torta personalizzato allora ha gli allergeni direttamente nel productinpurchase e non con l'id del prodotto
+        if (this.product.allergens==null){
+          this.product.allergens = res.allergens
+        }        this.product.imageUrl = res.imageUrl;
         this.product.price = res.pricePerKg;
         this.product.toBuy = true
         /*

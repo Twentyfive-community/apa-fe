@@ -10,6 +10,8 @@ import {IngredientService} from "../../../../services/ingredient.service";
 import {ToastrService} from "ngx-toastr";
 import {environment} from "../../../../../environments/environment";
 import {cloneDeep, isEqual} from "lodash";
+import {Allergen} from "../../../../models/Allergen";
+import {AllergenService} from "../../../../services/allergen.service";
 
 @Component({
   selector: 'app-product-edit',
@@ -48,13 +50,20 @@ export class ProductEditComponent implements OnInit {
     {label: '', weight: 0}
   ];
   i = 0;
+
+
+  allergens: Allergen[] = [];
+  selectedAllergens: Allergen[] = [];
+  selectedAllergensNames: string[] = [];
   constructor(private router: Router,
               private modalService: TwentyfiveModalService,
               private toastrService: ToastrService,
               private activatedRoute: ActivatedRoute,
               private productService: ProductService,
               private categoryService: CategoryService,
-              public ingredientService: IngredientService) {
+              public ingredientService: IngredientService,
+              private allergenService: AllergenService
+  ) {
   }
 
   ngOnInit(): void {
@@ -71,6 +80,8 @@ export class ProductEditComponent implements OnInit {
         }
         if (!(this.category.type == "tray")) {
           this.getAllIngredients();
+        } else if (this.category.type == "tray"){
+          this.getAllergens();
         }
       })
     }
@@ -124,6 +135,12 @@ export class ProductEditComponent implements OnInit {
           this.measure[this.i] = {label: '', weight: 0};
           this.originalMeasure[this.i] = {label: '', weight: 0};
           this.pricePerKg = this.productToAdd.pricePerKg;
+          this.productToAdd.allergenNames=[];
+          for (const allergen of response.allergens) {
+            this.productToAdd.allergenNames.push(allergen.name);
+            this.selectedAllergens.push(allergen);
+          }
+          this.getAllergens(); // Ensure allergens list is updated after setting selected allergens
         })
         break;
     }
@@ -414,6 +431,30 @@ export class ProductEditComponent implements OnInit {
           });
         break;
     }
+  }
+
+  getAllergens() {
+    this.allergenService.getAll().subscribe((response: any) => {
+      this.allergens = response.filter((allergen: Allergen) =>
+        !this.selectedAllergens.some(selected => selected.id === allergen.id));
+    });
+  }
+
+  toggleAllergen(allergen: Allergen) {
+    const allergenId = allergen.id;
+    const index = this.selectedAllergens.findIndex(a => a.id === allergenId);
+    if (index === -1) {
+      // Aggiungi l'allergene alla lista degli allergeni selezionati solo se non è già presente
+      this.selectedAllergens.push(allergen);
+      this.productToAdd.allergenNames.push(allergen.name);
+      // Rimuovi l'allergene dalla lista degli allergeni disponibili
+      this.allergens = this.allergens.filter(a => a.id !== allergen.id);
+    }
+  }
+  closeChip(allergenToRemove: Allergen) {
+    this.selectedAllergens = this.selectedAllergens.filter(allergen => allergen.id !== allergenToRemove.id);
+    this.productToAdd.allergenNames = this.productToAdd.allergenNames.filter(name => name !== allergenToRemove.name);
+    this.allergens.push(allergenToRemove); // Re-add the allergen to the available list
   }
 
   hasChanges(): boolean {

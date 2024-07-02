@@ -13,6 +13,7 @@ import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
 import {CustomerDetails} from "../../../../models/Customer";
 import {Measure} from "../../../../models/Measure";
 import {LoadingService} from "../../../../services/loading.service";
+import {Allergen} from "../../../../models/Allergen";
 
 @Component({
   selector: 'app-custom-cake',
@@ -86,8 +87,7 @@ export class CustomCakeComponent implements OnInit{
   gocceOptions: string[] = [];
   granelleOptions: string[] = [];
 
-  //AGGIUNGI DECORAZIONI DOPO
-
+  allergens: Allergen[] = [];
 
 
 
@@ -750,7 +750,7 @@ export class CustomCakeComponent implements OnInit{
       this.toastrService.error("Compilare tutti i campi necessari");
     }
     else{
-        console.log(this.productInPurchase);
+      //fixme aggiungere allergeni
       this.cartService.addToCartProductInPurchase(this.customer.id, this.productInPurchase).subscribe({
         error: (error:any) => {
           console.error(error);
