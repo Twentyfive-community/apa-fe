@@ -97,6 +97,7 @@
                   <app-generic-card class="w-100"
                                     [title]="tray.name"
                                     [description]="tray.description"
+                                    [allergens]="tray.allergens"
                                     [price]="'€'+tray.pricePerKg+'/kg'"
                                     [imageUrl]="tray.imageUrl"
                                     (click)="modalProduct(tray.id)">

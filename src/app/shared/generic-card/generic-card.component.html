@@ -12,14 +12,14 @@
         <ng-container *ngIf="ingredientList">
           <p class="card-text text-truncate" style="font-size: small; color: gray">Ingredienti: {{ ingredientList.join(', ') }}</p>
         </ng-container>
+        <ng-container *ngIf="description">
+          <p class="card-text text-truncate" style="font-size: small; color: gray"> {{ description }}</p>
+        </ng-container>
         <ng-container *ngIf="allergens">
           <ng-container *ngFor="let allergen of allergens; let i = index">
             <span *ngIf="i !== 0">&nbsp;</span>
             <img [src]="allergen.iconUrl" style="max-width: 25px; height: auto; position: relative;" [tooltip]="allergen.name">
           </ng-container>
-        </ng-container>
-        <ng-container *ngIf="description">
-          <p class="card-text text-truncate" style="font-size: small; color: gray"> {{ description }}</p>
         </ng-container>
       </div>
       <div>

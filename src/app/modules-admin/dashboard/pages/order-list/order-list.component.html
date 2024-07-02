@@ -45,7 +45,7 @@
         <p *ngIf="product.weight && !product.customization"><b>Peso:</b> {{ product.weight }} Kg</p>
         <p *ngIf="product.quantity"><b>Quantità:</b> {{ product.quantity }}</p>
         <p *ngIf="product.shape && !product.customization"><b>Forma:</b> {{ product.shape }}</p>
-        <div *ngIf="product.customization">
+        <div *ngIf="product.customization && product.customization.length>0">
           <p><b>Personalizzazioni:</b></p>
           <ul *ngFor="let item of product.customization">
             <li><b>{{ item.name }}:</b> {{ item.value }}</li>

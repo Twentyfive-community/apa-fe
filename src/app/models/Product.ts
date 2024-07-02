@@ -43,16 +43,18 @@ export class ProductToEdit {
   imageUrl: string;
   active: boolean;
   weight: number;
-  stats: ProductStat
+  allergenNames: string[]=[];
+  stats: ProductStat;
   pricePerKg: number;
   weightRange:WeightRange = new WeightRange();
   customized: boolean;
-  measures: Measure[] = []
+  measures: Measure[] = [];
 }
 export class Tray {
   id: string;
   name: string;
   personalized: boolean;
+  allergens: Allergen[];
   measures: string;
   description: string;
   active: boolean;

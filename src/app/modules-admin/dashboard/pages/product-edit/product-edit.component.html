@@ -156,9 +156,44 @@
     (click)="addMeasure()"
     [buttonStyle]="ButtonTheme.Primary"
   ></lib-generic-button-text-with-icon>
+
+  <div class="row mt-4 mb-4" *ngIf="allergens.length > 0 && !productToAdd.customized">
+    <div class="col-12">
+      <label for="allergenDropdown" class="ms-1 form-label">Allergeni</label>
+      <div ngbDropdown class="dropdown mt-2">
+        <button ngbDropdownToggle class="btn btn-outline-dark" type="button" id="allergenDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          Seleziona allergeni
+        </button>
+
+        <ul ngbDropdownMenu class="dropdown-menu" aria-labelledby="allergenDropdown" style="max-height: 200px; overflow-y: auto;">
+          <li *ngFor="let allergen of allergens" class="dropdown-item" (click)="toggleAllergen(allergen)">
+            <div class="form-check">
+              <input type="checkbox" [checked]="selectedAllergens.includes(allergen)" style="display: none;">
+              <label class="form-check-label" style="cursor: pointer;">
+                <img [src]="allergen.iconUrl" class="small-icon">{{ allergen.name }}
+              </label>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
 </div>
 
-
+<div class="col-12">
+  <div class="row mt-3">
+    <div class="d-flex flex-wrap">
+      <div *ngFor="let allergen of selectedAllergens" class="me-2 mb-2">
+        <lib-twentyfive-chip
+          [chipText]="allergen.name"
+          [chipStyle]="ChipTheme.Secondary"
+          [chipImg]="allergen.iconUrl"
+          (closeChip)="closeChip(allergen)"
+        ></lib-twentyfive-chip>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <div *ngIf="category.type=='productKg'" class="row mt-4 mb-2" >
