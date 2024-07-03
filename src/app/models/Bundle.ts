@@ -26,6 +26,7 @@ export class BundleInPurchaseDetails{
   measure: Measure;
   totalWeight: number;
   quantity: number = 1;
+  location: string;
   totalPrice: number;
   weightedProducts:PieceInPurchaseDetails[] = [];
 }

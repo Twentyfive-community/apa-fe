@@ -21,4 +21,8 @@ export class SettingService {
   isAlertOn(){
     return this.http.get(`${this.baseSettingUrl}/alert`);
   }
+
+  getAllLocations(){
+    return this.http.get(`${this.baseSettingUrl}/getAllLocations`);
+  }
 }

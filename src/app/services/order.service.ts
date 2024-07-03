@@ -19,6 +19,10 @@ export class OrderService {
     let p = Utils.createHttpParams({'page': page, 'size': size, 'sortColumn': column, 'sortDirection': direction});
     return this.http.get<Order[]>(`${this.baseUrl}/getAll`, {params: p});
   }
+  getAllWithStatus(page: number, size: number, column: string, direction: string, status: string): Observable<Order[]> {
+    let p = Utils.createHttpParams({'page': page, 'size': size, 'sortColumn': column, 'sortDirection': direction,'status': status});
+    return this.http.get<Order[]>(`${this.baseUrl}/getAllWithStatus`, {params: p});
+  }
 
   getOrderDetails(id: string) {
     return this.http.get(`${this.baseUrl}/details/${id}`)

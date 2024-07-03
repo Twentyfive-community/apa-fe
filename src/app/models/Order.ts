@@ -1,4 +1,4 @@
-import {BundleInPurchase, BundleInPurchaseDetails} from "./Bundle";
+import {BundleInPurchaseDetails} from "./Bundle";
 import {ProductInPurchase} from "./Product";
 
 export class Order {

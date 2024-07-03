@@ -106,10 +106,10 @@ export class ProductInPurchase {
   weight: number;
   quantity: number;
   shape: string;
-  //customization:any;
   customization: Customization[] =[];
   notes: string;
   attachment: string;
+  location: string;
   deliveryDate: string;
   totalPrice: number;
 }

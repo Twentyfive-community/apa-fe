@@ -35,7 +35,7 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
   isAlertOn: boolean;
   newOrderAudio:HTMLAudioElement;
   cancelOrderAudio:HTMLAudioElement;
-
+  locations:string[]=[]
 
   headers: any[] = [
     {name: 'ID', value: 'id', sortable: false},
@@ -117,6 +117,7 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
       this.toastr.error(message.body);
       this.getAll();
     });
+    this.getAllLocations()
     this.getAll();
   }
 
@@ -269,5 +270,11 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
           }
         });
     }
+  }
+
+  getAllLocations() {
+    this.settingService.getAllLocations().subscribe((res:any)=>{
+      this.locations=res;
+    })
   }
 }
