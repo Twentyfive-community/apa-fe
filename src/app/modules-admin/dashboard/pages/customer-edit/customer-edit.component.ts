@@ -68,6 +68,7 @@ export class CustomerEditComponent implements OnInit{
   saveNewCustomer(){
     this.navigationType="save"
     if (this.isValid()){
+      this.customer.role="customer";
       this.customerService.saveCustomer(this.customer).subscribe({
         error:(error) =>{
           console.error(error);

@@ -12,7 +12,7 @@ export class CustomerService {
 
   private baseUrl: string = `${environment.backendUrl}/customers`;
   private saveUrl: string = `${this.baseUrl}/save`;
-  private getAllUrl: string = `${this.baseUrl}/getAll`;
+  private getAllUrl: string = `${this.baseUrl}/getAllCustomers`;
   private changeStatusUrl: string = `${this.baseUrl}/changeStatus`;
 
   constructor(private http: HttpClient) {

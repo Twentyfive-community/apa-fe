@@ -5,6 +5,7 @@ export class Customer{
   lastName: string;          // Last name of the customer
   email: string;             // Email address of the customer
   phoneNumber: string;       // Phone number of the customer
+  role: string;              // Customer role
   note: string;
   enabled: boolean;
 }
