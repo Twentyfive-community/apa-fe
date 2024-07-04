@@ -19,6 +19,7 @@ import { UserCartComponent } from './pages/user-cart/user-cart.component';
 import {TooltipModule} from "ngx-bootstrap/tooltip";
 import {TwentyfiveAutocompleteSyncAsyncModule} from "twentyfive-autocomplete-sync-async";
 import {TwentyfiveSpinnerModule} from "twentyfive-spinner";
+import { AdminCustomBuyComponent } from './pages/admin-custom-buy/admin-custom-buy.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import {TwentyfiveSpinnerModule} from "twentyfive-spinner";
     ProductDetailsComponent,
     CustomCakeComponent,
     TrayCustomizedComponent,
-    UserCartComponent
+    UserCartComponent,
+    AdminCustomBuyComponent
   ],
     imports: [
         DashboardClientRoutingModule,

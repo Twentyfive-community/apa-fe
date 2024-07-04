@@ -11,6 +11,20 @@ export class Cart {
 
 }
 
+export class BuyInfos {
+  positions: number[];
+  selectedPickupDateTime: string;
+  note: string;
+  customInfo: CustomInfo = new CustomInfo();
+}
+
+export class CustomInfo {
+  firstName: string;
+  lastName: string;
+  email: string;
+  note: string;
+  phoneNumber: string;
+}
 export class ItemInPurchase {
   id: string; //generico
 

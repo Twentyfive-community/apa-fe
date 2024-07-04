@@ -5,6 +5,7 @@ import {Utils} from "../shared/utils/utils";
 import {Customer} from "../models/Customer";
 import {ProductInPurchase, ProductToEdit} from "../models/Product";
 import {BundleInPurchase} from "../models/Bundle";
+import {BuyInfos} from "../models/Cart";
 
 @Injectable({
   providedIn: 'root'
@@ -36,8 +37,7 @@ export class CartService {
     return this.http.post(`${this.baseCartUrl}/pickup-dateTimes/${idCustomer}`, position);
   }
 
-  buyFromCart(customerId: string, positions: number[], selectedPickupDateTime: string, note: string) {
-    let buyInfos = { positions, selectedPickupDateTime, note };
+  buyFromCart(customerId: string,buyInfos:BuyInfos) {
     return this.http.post(`${this.baseCartUrl}/buy-from-cart/${customerId}`, buyInfos);
   }
 
