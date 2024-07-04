@@ -1,20 +1,16 @@
 import {Component, OnInit} from '@angular/core';
-import {ButtonSizeTheme, ButtonTheme, TableHeadTheme, TableTheme} from 'twentyfive-style';
 import {Customer} from "../../../../models/Customer";
 import {CustomerService} from "../../../../services/customer.service";
 import {Router} from "@angular/router";
 import {TwentyfiveModalService} from "twentyfive-modal";
+import {ButtonSizeTheme, ButtonTheme, TableHeadTheme, TableTheme } from 'twentyfive-style';
 
 @Component({
-  selector: 'app-clienti',
-  templateUrl: './customer-list.component.html',
-  styleUrl: './customer-list.component.scss'
+  selector: 'app-employees-list',
+  templateUrl: './employee-list.component.html',
+  styleUrl: './employee-list.component.scss'
 })
-export class CustomerListComponent implements OnInit{
-  protected readonly ButtonTheme = ButtonTheme
-  protected readonly ButtonSizeTheme = ButtonSizeTheme
-  protected readonly TableHeadTheme = TableHeadTheme
-  protected readonly TableTheme = TableTheme
+export class EmployeeListComponent implements OnInit{
 
   currentPage: number = 0;
   maxSize: number = 5;
@@ -25,10 +21,10 @@ export class CustomerListComponent implements OnInit{
 
   headers: any[] = [
     { name:'Cognome', value:'lastName'},
-    { name:'Nome',    value:'firstName'},
-    { name:'Email',   value:'email'},
+    { name:'Nome', value:'firstName'},
+    { name:'Email', value:'email'},
     { name:'Numero di telefono', value:'phoneNumber'},
-    { name:'Note', value:'note'}
+    { name:'Ruolo', value:'role'}
   ]
 
   paginationElements: any[] = [
@@ -46,13 +42,14 @@ export class CustomerListComponent implements OnInit{
     }
   ];
 
-  customers: Customer[] = []
+  //ToDo: a fine v2 customer sarà User
+  employees: Customer[] = []
 
   tableActions: any[]=[
     {
       icon:'bi bi-pencil-square',
       action: async(event: any) =>{
-        this.router.navigate(['/dashboard/editingClienti', event.id])
+        this.router.navigate(['/dashboard/modifica-dipendente', event.id])
       },
       actionName:'Modifica',
       toolTipText:'Modifica',
@@ -62,9 +59,6 @@ export class CustomerListComponent implements OnInit{
     }
   ]
 
-
-
-
   constructor(private customerService: CustomerService,
               private router: Router,
               private modalService: TwentyfiveModalService
@@ -72,19 +66,28 @@ export class CustomerListComponent implements OnInit{
   }
 
   ngOnInit(): void {
-
     this.getAll();
   }
 
   getAll(page?: number){
-    this.customerService.getAllCustomer(page? page : 0, this.pageSize, this.sortColumn, this.sortDirection).subscribe((response: any) => {
-        this.customers = response.content;
-        this.maxSize = response.totalElements;
+    this.customerService.getAllEmployees(page? page : 0, this.pageSize, this.sortColumn, this.sortDirection).subscribe((res: any) => {
+      this.employees = res.content.map((employee: any) => new Customer(
+        employee.id,
+        employee.idKeycloak,
+        employee.firstName,
+        employee.lastName,
+        employee.email,
+        employee.phoneNumber,
+        employee.role,
+        employee.note,
+        employee.enabled
+      ));
+      this.maxSize = res.totalElements;
     })
   }
 
   goToDetails(event: any){
-    this.router.navigate(['/dashboard/dettagliClienti', event.id])
+    //per ora non utilizzato
   }
 
   changeStatus(event: any){
@@ -112,6 +115,8 @@ export class CustomerListComponent implements OnInit{
     this.getAll()
   }
 
-
-
+  protected readonly ButtonTheme = ButtonTheme
+  protected readonly ButtonSizeTheme = ButtonSizeTheme
+  protected readonly TableHeadTheme = TableHeadTheme
+  protected readonly TableTheme = TableTheme
 }

@@ -14,6 +14,8 @@ import {ProductEditComponent} from "./pages/product-edit/product-edit.component"
 import {IngredientGuard} from "./guards/ingredient.guard";
 import {ProductGuard} from "./guards/product.guard";
 import {CustomerGuard} from "./guards/customer.guard";
+import {EmployeeListComponent} from "./pages/employee-list/employee-list.component";
+import {EmployeeEditComponent} from "./pages/employee-edit/employee-edit.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'ordini', pathMatch: 'full'},
@@ -39,6 +41,10 @@ const routes: Routes = [
     {path: 'ingredienti', component: IngredientListComponent, data: {title: 'Ingredienti'}},
     {path: 'editingIngredienti', component: IngredientEditComponent, data: {title: 'Crea Ingrediente'}, canDeactivate: [IngredientGuard]},
     {path: 'editingIngredienti/:id', component: IngredientEditComponent, data: {title: 'Modifica Ingrediente'}, canDeactivate: [IngredientGuard]},
+
+    {path: 'dipendenti', component: EmployeeListComponent, data: {title: 'Dipendenti'}},
+    {path: 'crea-dipendente', component: EmployeeEditComponent, data: {title: 'Crea Dipendente'}},
+    {path: 'modifica-dipendente/:id', component: EmployeeEditComponent, data: {title: 'Modifica Dipendente'}},
   ]
 }];
 
