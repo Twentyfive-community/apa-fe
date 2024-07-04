@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Utils} from "../shared/utils/utils";
-import {Order} from "../models/Order";
+import {Order, OrderDetails} from "../models/Order";
 import {catchError, map, Observable, throwError} from "rxjs";
 
 @Injectable({
@@ -29,6 +29,9 @@ export class OrderService {
   }
   getAllStatuses() {
     return this.http.get(`${this.baseUrl}/getAllStatuses`);
+  }
+  save(order:OrderDetails){
+    return this.http.post(`${this.baseUrl}/save`,order);
   }
   changeOrderStatus(id:string,status:string) {
     let p = Utils.createHttpParams({'status':status})

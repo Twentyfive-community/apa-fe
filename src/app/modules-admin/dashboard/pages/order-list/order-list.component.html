@@ -41,9 +41,16 @@
   <ng-template #templateRef>
     <div>
       <div class="m-2 mt-0 mb-0" *ngFor="let product of orderDetails.products">
-        <h3 class="mb-4">{{ product.name.toUpperCase() }}</h3>
+        <div class="d-flex justify-content-between align-items-center">
+          <h3 class="mb-4">{{ product.name.toUpperCase() }}</h3>
+          <select (change)="onDropdownChange($event, product)">
+            <option disabled selected value="">Seleziona un luogo per il prodotto</option>
+            <option *ngFor="let location of locations" [value]="location">{{ location }}</option>
+          </select>
+        </div>
         <p *ngIf="product.weight && !product.customization"><b>Peso:</b> {{ product.weight }} Kg</p>
         <p *ngIf="product.quantity"><b>Quantità:</b> {{ product.quantity }}</p>
+        <p><b>Luogo:</b> {{ product.location ? product.location : 'NESSUN LUOGO SELEZIONATO' }}</p>
         <p *ngIf="product.shape && !product.customization"><b>Forma:</b> {{ product.shape }}</p>
         <div *ngIf="product.customization && product.customization.length>0">
           <p><b>Personalizzazioni:</b></p>
@@ -53,10 +60,8 @@
             <li class="mb-3" *ngIf="item.name == 'Base'"><b>Forma:</b> {{ product.shape }}</li>
           </ul>
         </div>
-
         <p><b>Testo decorativo:</b> {{ product.notes ? product.notes : 'Nessuna nota' }}</p>
         <p *ngIf="product.totalPrice"><b>Prezzo totale prodotto:</b> {{ product.totalPrice }} €</p>
-
         <p class="flex-grow-1"><b>ALLEGATO:</b></p>
         <div *ngIf="product.attachment" class="d-flex align-items-center">
           <img (click)="openImage(product.attachment)" [src]="product.attachment" style="max-width: 120px; height: auto; cursor: pointer; position: relative;">
@@ -86,7 +91,8 @@
       </div>
     </div>
 
-    <div class="m-2 mt-0 mb-0">
+
+  <div class="m-2 mt-0 mb-0">
       <h4 class="mb-4">Info:</h4>
       <p><b>Note sul cliente:</b> {{ orderDetails.customerNote ? orderDetails.customerNote : 'Nessuna nota' }}</p>
       <p><b>Note sull'ordine:</b> {{ orderDetails.orderNote ? orderDetails.orderNote : 'Nessuna nota' }}</p>
@@ -94,6 +100,7 @@
       <p *ngIf="orderDetails.phoneNumber"><b>Numero di Telefono:</b> {{ orderDetails.phoneNumber }}</p>
     </div>
   </ng-template>
+
 
 
   <ng-template #templateColumnRef let-product>

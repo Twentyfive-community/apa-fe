@@ -277,4 +277,17 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
       this.locations=res;
     })
   }
+
+  onDropdownChange(event: any, product: any) {
+    product.location = event.target.value;
+    this.orderDetails.status="RICEVUTO";
+    this.orderService.save(this.orderDetails).subscribe({
+      next:() =>{
+        this.getAll();
+      },
+      error:(err:any)=>{
+        console.error(err);
+      }
+    });
+  }
 }
