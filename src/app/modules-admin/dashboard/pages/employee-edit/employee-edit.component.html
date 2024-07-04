@@ -1,0 +1,95 @@
+<div class="row mb-4">
+  <div class="col-12 col-lg-3">
+    <lib-generic-button-text-with-icon
+      buttonText="Torna Indietro"
+      [iconLeft]="true"
+      prefixIcon="bi bi-arrow-left"
+      [buttonStyle]="ButtonTheme.OnlyText"
+      (click)="close()"
+    ></lib-generic-button-text-with-icon>
+  </div>
+</div>
+
+<hr/>
+
+<div class="row mb-4 mt-4">
+  <h3 *ngIf="!employeeId">Crea Dipendente</h3>
+  <h3 *ngIf="employeeId">Modifica Dipendente</h3>
+</div>
+
+<div class="col-3">
+  <div class="row mt-4">
+    <lib-twentyfive-input
+      labelText="Nome"
+      placeholder="Nome"
+      [value]="employee.firstName"
+      (input)="onInputChange($event, 'name')"
+    ></lib-twentyfive-input>
+  </div>
+  <div class="row mt-4">
+    <lib-twentyfive-input
+      labelText="Cognome"
+      placeholder="Cognome"
+      [value]="employee.lastName"
+      (input)="onInputChange($event, 'surname')"
+    ></lib-twentyfive-input>
+  </div>
+  <div class="row mt-4">
+    <lib-twentyfive-input
+      labelText="Email"
+      placeholder="Email"
+      [value]="employee.email"
+      [readOnly]="employeeId != null"
+      (input)="onInputChange($event, 'email')"
+      [disabled]="employeeId != null"
+    ></lib-twentyfive-input>
+  </div>
+  <div class="row mt-4">
+    <lib-twentyfive-input
+      labelText="Numero di Telefono"
+      placeholder="Numero di Telefono"
+      [value]="employee.phoneNumber"
+      (input)="onInputChange($event, 'phoneNumber')"
+    ></lib-twentyfive-input>
+  </div>
+  <div class="row mt-4">
+    <b>{{employee.role}}</b>
+  </div>
+</div>
+
+<div class="row mt-5">
+  <hr>
+</div>
+<div class="d-flex justify-content-between mt-2 align-items-center">
+
+  <div class="d-flex justify-content-end flex-grow-1">
+    <lib-generic-button
+      buttonText="Annulla"
+      (click)="close()"
+      [buttonSize]="ButtonSizeTheme.Medium"
+      [buttonStyle]="ButtonTheme.Primary"
+      [customStyles]="{ 'background-color': 'gray', 'color': 'white' }"
+      class="me-2"
+    ></lib-generic-button>
+
+    <div *ngIf="employeeId">
+      <lib-generic-button
+        buttonText="Modifica"
+        (click)="saveEmployee()"
+        [buttonSize]="ButtonSizeTheme.Medium"
+        [buttonStyle]="ButtonTheme.Primary"
+      ></lib-generic-button>
+    </div>
+
+    <div *ngIf="!employeeId">
+      <lib-generic-button
+        buttonText="Crea"
+        (click)="saveEmployee()"
+        [buttonSize]="ButtonSizeTheme.Medium"
+        [buttonStyle]="ButtonTheme.Primary"
+      ></lib-generic-button>
+
+    </div>
+  </div>
+</div>
+

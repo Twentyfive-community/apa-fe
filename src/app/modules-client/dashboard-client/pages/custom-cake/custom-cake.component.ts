@@ -53,7 +53,7 @@ export class CustomCakeComponent implements OnInit{
   customer: CustomerDetails = new CustomerDetails();
   customerIdkc: string = '';
 
-  currentStep = -1;
+  currentStep = 0;
   currentWeight: number;
   selectedType: string[] = ['Torta classica'];
   selectedWeight: number;

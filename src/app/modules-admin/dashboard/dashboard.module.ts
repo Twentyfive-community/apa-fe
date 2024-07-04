@@ -23,6 +23,8 @@ import {TooltipModule} from "ngx-bootstrap/tooltip";
 import { OrderRedoComponent } from './pages/order-redo/order-redo.component';
 import {TwentyfiveTimepickerModule} from "twentyfive-timepicker";
 import {TwentyfiveDatepickerModule} from "twentyfive-datepicker";
+import { EmployeeListComponent } from './pages/employee-list/employee-list.component';
+import { EmployeeEditComponent } from './pages/employee-edit/employee-edit.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,8 @@ import {TwentyfiveDatepickerModule} from "twentyfive-datepicker";
     IngredientListComponent,
     IngredientEditComponent,
     OrderRedoComponent,
+    EmployeeListComponent,
+    EmployeeEditComponent,
   ],
   imports: [
     DashboardRoutingModule,

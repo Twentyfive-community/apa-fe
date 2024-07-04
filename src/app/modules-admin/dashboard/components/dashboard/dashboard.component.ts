@@ -49,6 +49,13 @@ export class DashboardComponent implements OnInit{
       labelColor: ""
     },
     {
+      title: "Dipendenti",
+      icon: "bi bi-person-fill-gear",
+      navigationUrl: "dipendenti",
+      disableClick: false,
+      labelColor: ""
+    },
+    {
       title: "Catalogo",
       icon: "bi bi-journal-richtext",
       navigationUrl: "../catalogo",

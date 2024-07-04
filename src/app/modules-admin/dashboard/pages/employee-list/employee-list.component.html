@@ -1,0 +1,42 @@
+<div class="row mt-2 ms-lg-3 me-lg-3">
+
+  <div class="col-12 pb-3">
+    <lib-generic-button-text-with-icon
+      buttonText="Crea dipendente"
+      suffixIcon="bi bi-plus-circle"
+      [buttonSize]="ButtonSizeTheme.ExtraLarge"
+      [buttonStyle]="ButtonTheme.Primary"
+      [iconLeft]="false"
+      [customStyles]="{'display':'inline-block'}"
+      routerLink='/dashboard/crea-dipendente'
+    ></lib-generic-button-text-with-icon>
+  </div>
+
+  <div class="mt-4 row ">
+    <div class="col-12">
+      <lib-twentyfive-table
+        [maxWidthValue]="'6vw'"
+        [headers]="headers"
+        [showSwitch]="true"
+        [checkedField]="'enabled'"
+        [sortable]="true"
+        [dropdownElements]="paginationElements"
+        [tableHeadStyle]="TableHeadTheme.Primary"
+        [tableStyle]="TableTheme.Web"
+        [actions]="tableActions"
+        [showActions]="true"
+        [rows]="employees"
+        (rowClicked)="goToDetails($event)"
+        [pageSize]="pageSize"
+        [collectionSize]="maxSize"
+        [maxSize]="maxSize"
+        [model]="pageSize"
+        [isPaginated]="true"
+        (sortableChange)="sortingColumn($event)"
+        (pageChange)="changePage($event)"
+        (modelChange)="selectSize($event)"
+        (switchClick)="changeStatus($event)"
+      ></lib-twentyfive-table>
+    </div>
+  </div>
+</div>
