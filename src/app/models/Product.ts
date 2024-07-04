@@ -4,6 +4,7 @@ import {Measure} from "./Measure";
 export class ProductKg {
   id: string;
   name: string;
+  description: string;
   allergens: Allergen[];
   ingredients: string[];
   pricePerKg: string;
