@@ -47,11 +47,6 @@
     </div>
 
 
-    <div *ngIf="this.product.notes && this.product.notes != ''">
-      <p><b>Testo Decorativo:</b> {{ product.notes }}</p>
-    </div>
-
-
         <!-- Specific details for Vassoio -->
     <div *ngIf="product.totalWeight">
       <p><b>Misura:</b> {{product.measure.label}} ({{product.measure.weight}} kg)</p>
