@@ -303,11 +303,13 @@ export class CustomCakeComponent implements OnInit{
 
   getFarcitureOptions(){
     this.ingredientService.getAllByNameCategories('Crema', 'ingredienti').subscribe((response: any) =>{
-      this.ingredientsObject=response;
-      for(let ingrediente of this.ingredientsObject){
-        this.farcitureOptions.push(ingrediente.name);
+      this.ingredientsObject = response;
+      for (let ingrediente of this.ingredientsObject) {
+        if (!this.farcitureOptions.includes(ingrediente.name)) {
+          this.farcitureOptions.push(ingrediente.name);
+        }
       }
-    })
+    });
   }
 
   getBagneOptions(){
@@ -587,7 +589,7 @@ export class CustomCakeComponent implements OnInit{
       this.noFrutta = false;
       this.selectedFrutta.push(frutta);
     }
-    if ((this.selectedFrutta.length + this.selectedGocce.length) >= 3) {
+    if ((this.selectedFrutta.length + this.selectedGocce.length) >= 3 || this.notFruttaAndGoccia()) {
       this.goToNextStep(7); // Passa direttamente allo step successivo
     }
   }
@@ -607,7 +609,7 @@ export class CustomCakeComponent implements OnInit{
       this.noGoccia = false;
       this.selectedGocce.push(goccia);
     }
-    if ((this.selectedFrutta.length + this.selectedGocce.length) >= 3) {
+    if ((this.selectedFrutta.length + this.selectedGocce.length) >= 3 || this.notFruttaAndGoccia()) {
       this.goToNextStep(7); // Passa direttamente allo step successivo
     }
   }
@@ -630,6 +632,7 @@ export class CustomCakeComponent implements OnInit{
     if(granella == 'Nessuna granella'){
       this.selectedGranelle=[];
       this.noGranelle=true;
+      this.goToNextStep(9);
     }
     else if (!this.selectedGranelle.includes(granella) && this.selectedGranelle.length < 2) {
       this.noGranelle = false;
@@ -657,6 +660,9 @@ export class CustomCakeComponent implements OnInit{
     }
   }
 
+  notFruttaAndGoccia(){
+    return this.noFrutta && this.noGoccia;
+  }
 
   handleDragOver(event: DragEvent) {
     event.preventDefault(); // Impedisce il comportamento predefinito del browser
