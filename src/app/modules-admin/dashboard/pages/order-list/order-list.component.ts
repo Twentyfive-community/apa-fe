@@ -107,14 +107,20 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
       if(this.isAlertOn){
         this.playNotificationSound('new');
       }
-      this.toastr.success(message.body);
+      this.toastrService.success(message.body, 'Ordine arrivato!', {
+        timeOut: 0,               // Disabilita il timeout automatico
+        tapToDismiss: true       // Richiede un click esplicito per chiudere
+      });
       this.getAll();
     });
     this.cancelSubscriptionText = this.rxStompService.watch('/cancel_apa_order').subscribe((message: any) => {
       if(this.isAlertOn){
         this.playNotificationSound('cancel');
       }
-      this.toastr.error(message.body);
+      this.toastrService.error(message.body, 'Ordine cancellato!', {
+        timeOut: 0,               // Disabilita il timeout automatico
+        tapToDismiss: true       // Richiede un click esplicito per chiudere
+      });
       this.getAll();
     });
     this.getAll();
