@@ -105,7 +105,7 @@ export class CatalogueComponent implements OnInit {
   }
 
   modalProduct(productId: string){
-    let r = this.genericModalService.open(ProductDetailsComponent, "s", {});
+    let r = this.genericModalService.open(ProductDetailsComponent, "md", {});
     r.componentInstance.productId = productId;
     r.componentInstance.categoryType = this.categoryActive;
     r.componentInstance.categoryName = this.categoryName;

@@ -34,6 +34,15 @@
 
       <div class="row m-1">
         <ng-container *ngIf="categoryName != 'Vassoi'">
+          <p style="font-size: small; color: grey;">{{productDetails.description}}</p>
+        </ng-container>
+        <ng-container *ngIf="categoryName === 'Vassoi'">
+          <p style="font-size: small; color: grey;">{{trayDetails.description}}</p>
+        </ng-container>
+      </div>
+
+      <div class="row m-1">
+        <ng-container *ngIf="categoryName != 'Vassoi'">
         <p style="font-size: medium; color: grey;">{{ productDetails.pricePerKg+'/kg' }}</p>
         </ng-container>
         <ng-container *ngIf="categoryName === 'Vassoi'">
@@ -45,10 +54,6 @@
         <ng-container *ngIf="categoryName != 'Vassoi'">
         <p class="mb-1" style="font-size: large">Ingredienti</p>
           <p style="font-size: small; color: grey;">{{productDetails.ingredients}}</p>
-        </ng-container>
-        <ng-container *ngIf="categoryName === 'Vassoi'">
-          <p class="mb-1" style="font-size: large">Descrizione</p>
-          <p style="font-size: small; color: grey;">{{trayDetails.description}}</p>
         </ng-container>
       </div>
 

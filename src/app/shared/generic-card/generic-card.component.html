@@ -6,7 +6,7 @@
     <div class="col-8 d-flex flex-column justify-content-between">
       <div>
         <h5 [ngClass]="{ 'card-title': true, 'long': title.length > 20 }">{{ title }}</h5>
-        <ng-container *ngIf="description">
+        <ng-container>
           <p class="card-text text-truncate" style="font-size: small; color: gray"> {{ description }}</p>
         </ng-container>
         <ng-container *ngIf="weight">
