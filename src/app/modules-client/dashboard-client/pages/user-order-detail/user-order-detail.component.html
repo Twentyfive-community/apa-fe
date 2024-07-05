@@ -141,7 +141,7 @@
           [buttonStyle]="ButtonTheme.Primary"
         ></lib-generic-button>
       </div>
-      <div class="col-auto">
+      <div *ngIf="activeOrders=='false'" class="col-auto">
         <lib-generic-button
           (click)="addFromCompletedOrder()"
           buttonText="Riaggiungi al carrello"
