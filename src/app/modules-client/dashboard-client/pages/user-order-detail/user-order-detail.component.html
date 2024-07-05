@@ -143,6 +143,14 @@
       </div>
       <div class="col-auto">
         <lib-generic-button
+          (click)="addFromCompletedOrder()"
+          buttonText="Riaggiungi al carrello"
+          [buttonSize]="ButtonSizeTheme.Medium"
+          [buttonStyle]="ButtonTheme.Primary"
+        ></lib-generic-button>
+      </div>
+      <div class="col-auto">
+        <lib-generic-button
           (click)="contactUs()"
           buttonText="Contattaci"
           [buttonSize]="ButtonSizeTheme.Medium"

@@ -53,9 +53,8 @@ export class CartService {
   }
 
 
-
-
-
-
-
+  addFromCompletedOrder(customerId: string, orderId: string) {
+    let p = Utils.createHttpParams({'idOrder':orderId});
+    return this.http.get(`${this.baseCartUrl}/add-from-completed-order/${customerId}`, {params: p})
+  }
 }

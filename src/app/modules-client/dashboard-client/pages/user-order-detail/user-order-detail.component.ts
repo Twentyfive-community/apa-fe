@@ -12,6 +12,7 @@ import {TwentyfiveModalService} from "twentyfive-modal";
 import {RxStompServiceService} from "../../../../services/rxstomp/rx-stomp-service.service";
 import {ToastrService} from "ngx-toastr";
 import {LoadingService} from "../../../../services/loading.service";
+import {CartService} from "../../../../services/cart.service";
 
 declare var bootstrap: any;
 @Component({
@@ -40,6 +41,7 @@ export class UserOrderDetailComponent implements OnInit {
     private rxStompService: RxStompServiceService,
     private modalService: TwentyfiveModalService,
     private toastrService: ToastrService,
+    private cartService: CartService,
     public loadingService: LoadingService
   ) {}
 
@@ -223,5 +225,29 @@ export class UserOrderDetailComponent implements OnInit {
       }
     });
 
+  }
+
+  addFromCompletedOrder() {
+    this.modalService.openModal(
+      `Sei sicuro di voler riaggiungere i prodotti al carrello?`,
+      'Riaggiungi prodotti al carrello',
+      'Annulla',
+      'Conferma',
+      {
+        showIcon: true,
+        size: 'md',
+        onConfirm: (() => {
+          this.cartService.addFromCompletedOrder(this.customerId,this.orderId).subscribe({
+            error:(err:any) =>{
+              console.error(err);
+              this.toastrService.error('Errore nell\'inserire i prodotti nel carrello!');
+            },
+            complete:() => {
+              this.toastrService.success('Prodotti inseriti nel carrello con successo!');
+              this.router.navigate(['../catalogo/carrello']);
+            }
+          })
+        })
+      });
   }
 }
