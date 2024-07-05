@@ -69,7 +69,7 @@ export class CustomCakeComponent implements OnInit{
   selectedGranelle: string[] = [];
   selectedNote: string[] = [''];
   note: string='';
-  selectedColor: string[]=[];
+  selectedColor: string[]=[''];
 
   file: File | null;
   abbreviatedFileName: string = '';
@@ -727,7 +727,7 @@ export class CustomCakeComponent implements OnInit{
     this.productInPurchase.id=this.cakeId!
     this.productInPurchase.name = this.productDetails.name
     this.productInPurchase.quantity = 1
-    this.productInPurchase.notes = this.note;
+    //this.productInPurchase.notes = this.note;
     this.productInPurchase.weight=this.selectedWeight
     this.productInPurchase.shape=this.selectedForma
     this.productInPurchase.totalPrice=this.realPrice //la quantità è 1 di default, basta peso * priceAlKG
@@ -759,12 +759,12 @@ export class CustomCakeComponent implements OnInit{
     }
     if(this.selectedNote[0]!==''){
       this.productInPurchase.customization.push(new Customization("Testo Decorativo", this.selectedNote))
-    }
-    if(this.selectedColor.length>0){
-      this.productInPurchase.customization.push(new Customization("Colore Testo", this.selectedColor))
-    } else {
-      this.selectedColor[0]='Nero';
-      this.productInPurchase.customization.push(new Customization("Colore Testo", this.selectedColor))
+      if (this.selectedColor[0]!==''){
+        this.productInPurchase.customization.push(new Customization("Colore Testo", this.selectedColor))
+      } else {
+        this.selectedColor[0]='Nero';
+        this.productInPurchase.customization.push(new Customization("Colore Testo", this.selectedColor))
+      }
     }
 
 
