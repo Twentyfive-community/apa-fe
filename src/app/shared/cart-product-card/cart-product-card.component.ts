@@ -170,7 +170,7 @@ export class CartProductCardComponent implements OnInit{
 
   modifyCart(): Observable<any> {
     let index = this.position[0];
-    if(this.type == 'productKg') {
+    if(this.type == 'productKg' || this.type == 'Torta Personalizzata') {
       return this.cartService.modifyPipInCart(this.customerId, index, this.product).pipe(
         tap({
           next: () => {
