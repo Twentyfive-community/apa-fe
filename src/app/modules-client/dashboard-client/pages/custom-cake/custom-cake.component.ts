@@ -12,7 +12,6 @@ import {environment} from "../../../../../environments/environment";
 import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
 import {CustomerDetails} from "../../../../models/Customer";
 import {Measure} from "../../../../models/Measure";
-import {LoadingService} from "../../../../services/loading.service";
 import {Allergen} from "../../../../models/Allergen";
 
 @Component({
@@ -30,8 +29,7 @@ export class CustomCakeComponent implements OnInit{
               private ingredientService: IngredientService,
               private customerService: CustomerService,
               private cartService: CartService,
-              private toastrService: ToastrService,
-              public loadingService: LoadingService) {
+              private toastrService: ToastrService) {
   }
 
  productDetails: ProductDetails;
@@ -77,6 +75,7 @@ export class CustomCakeComponent implements OnInit{
   realPrice: number = 0;
 
   cakeId: string = "6679566c03d8511e7a0d449c";
+  loading:boolean = true;
 
   selectionOptions: string[] = ['Torta classica', 'Torta a forma', 'Drip Cake'];
   weightOptions: number[] = [];
@@ -106,6 +105,10 @@ export class CustomCakeComponent implements OnInit{
       },
       error:(error:any) =>{
         console.error(error)
+        this.loading = false;
+      },
+      complete:()=>{
+        this.loading = false;
       }
     })
     this.getCustomer();
@@ -727,6 +730,7 @@ export class CustomCakeComponent implements OnInit{
   }
 
   saveNewProductInPurchase() {
+    this.loading = true;
     if (this.file) {
       this.uploadImage();
     }
@@ -789,11 +793,13 @@ export class CustomCakeComponent implements OnInit{
       this.cartService.addToCartProductInPurchase(this.customer.id, this.productInPurchase).subscribe({
         error: (error:any) => {
           console.error(error);
+          this.loading = false;
           this.toastrService.error("Errore nell'aggiunta del prodotto nel carrello!");
         },
         complete: () => {
           this.toastrService.success("Prodotto aggiunto al carrello con successo");
           this.close();
+          this.loading = false;
         }
       })
     }

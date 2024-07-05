@@ -10,7 +10,6 @@ import {ToastrService} from "ngx-toastr";
 import {Subscription, interval, takeWhile} from "rxjs";
 import {Router} from "@angular/router";
 import {TwentyfiveModalService} from "twentyfive-modal";
-import {LoadingService} from "../../../../services/loading.service";
 import {TwentyfiveModalGenericComponentService} from "twentyfive-modal-generic-component";
 import {CategoryEditComponent} from "../../../../shared/category-edit/category-edit.component";
 import {AdminCustomBuyComponent} from "../admin-custom-buy/admin-custom-buy.component";
@@ -50,7 +49,6 @@ export class UserCartComponent implements OnInit, OnDestroy{
               private modalService: TwentyfiveModalService,
               private genericModalService: TwentyfiveModalGenericComponentService,
               private customerService:CustomerService,
-              public loadingService: LoadingService,
               private toastrService: ToastrService,
               private cartService:CartService,
               private router: Router) {
@@ -98,6 +96,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
       },
       error:(error:any) => {
         console.error(error);
+        this.loading = false;
       },
       complete:() => {
         this.loading = false;
@@ -213,6 +212,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
   }
 
   buyCart() {
+    this.loading = true;
      this.buyInfos.positions = this.itemToBuy
       .filter(item => item.toBuy)
       .map(item => item.index);
@@ -232,6 +232,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
           },
           error: (error) => {
             console.error(error);
+            this.loading = false;
             this.toastrService.error('Impossibile effettuare l\'ordine')
           },
           complete: () => {
@@ -239,6 +240,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
             this.selectedDate = null;
             this.selectedTime = '';
             this.buyInfos.note = '';
+            this.loading = false;
             this.getCart()
           }
         })

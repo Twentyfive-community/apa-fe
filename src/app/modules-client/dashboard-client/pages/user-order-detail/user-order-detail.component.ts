@@ -7,11 +7,10 @@ import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
 import {OrderDetails} from "../../../../models/Order";
 import {CompletedorderService} from "../../../../services/completedorder.service";
 import {ProductService} from "../../../../services/product.service";
-import {BundleInPurchase, BundleInPurchaseDetails} from "../../../../models/Bundle";
+import {BundleInPurchaseDetails} from "../../../../models/Bundle";
 import {TwentyfiveModalService} from "twentyfive-modal";
 import {RxStompServiceService} from "../../../../services/rxstomp/rx-stomp-service.service";
 import {ToastrService} from "ngx-toastr";
-import {LoadingService} from "../../../../services/loading.service";
 import {CartService} from "../../../../services/cart.service";
 
 declare var bootstrap: any;
@@ -31,6 +30,7 @@ export class UserOrderDetailComponent implements OnInit {
   bundleImages: string[]=[];
   customizationsVisible: boolean[] = [];
 
+  loading: boolean = true;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -42,8 +42,7 @@ export class UserOrderDetailComponent implements OnInit {
     private modalService: TwentyfiveModalService,
     private toastrService: ToastrService,
     private cartService: CartService,
-    public loadingService: LoadingService
-  ) {}
+    ) {}
 
   loadBootstrapJS(): void {
     if (!document.querySelector('script[src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"]')) {
@@ -55,6 +54,7 @@ export class UserOrderDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loading = true;
     this.loadBootstrapJS();
     this.activeOrders = this.activatedRoute.snapshot.queryParamMap.get('activeOrders');
     this.customerId= this.activatedRoute.snapshot.queryParamMap.get('customerId')!;
@@ -87,15 +87,17 @@ export class UserOrderDetailComponent implements OnInit {
 
 
   loadProductsFromCompletedOrder(): void {
-    console.log("sto caricando!")
     this.completedOrderService.getOrderDetails(this.orderId).subscribe({
       next: (orderDetails: any) => {
         this.orderDetails = orderDetails;
         this.loadImages();
-
       },
       error: (err) => {
+        this.loading = false;
         console.error('Error loading completed order details:', err)
+      },
+      complete: () => {
+        this.loading = false;
       }
     });
   }
@@ -108,6 +110,10 @@ export class UserOrderDetailComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error loading active order details:', err)
+        this.loading = false;
+      },
+      complete:() => {
+        this.loading = false;
       }
     });
   }
@@ -181,6 +187,7 @@ export class UserOrderDetailComponent implements OnInit {
     return this.customizationsVisible[n];
   }
   loadOrders(completed?:boolean){
+    this.loading = true;
     if(this.activeOrders=='true' && !completed)
       this.loadProductsFromActiveOrder();
     else{

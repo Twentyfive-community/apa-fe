@@ -1,4 +1,8 @@
-<div *ngIf="!(loadingService.loading$ | async)">
+<div *ngIf="loading">
+  <apa-spinner></apa-spinner>
+</div>
+
+<div *ngIf="!loading">
   <section>
     <div class="row">
       <div class="col-10">

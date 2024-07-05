@@ -7,7 +7,6 @@ import {SigningKeycloakService} from "twentyfive-keycloak-new";
 import {Customer, CustomerDetails} from "../../../../models/Customer";
 import {KeycloakCustomService} from "../../../../services/keycloak.services";
 import {KeycloakPasswordRecoveryService} from "../../../../services/passwordrecovery.service";
-import {LoadingService} from "../../../../services/loading.service";
 declare var bootstrap: any;
 @Component({
   selector: 'app-user-profile',
@@ -19,12 +18,13 @@ export class UserProfileComponent implements OnInit{
   customerIdkc :string =''
   emailInput: string;
 
+  loading: boolean = true;
+
   constructor(private signingKeycloakService: SigningKeycloakService,
               private router: Router,
               private passwordRecoveryService: KeycloakPasswordRecoveryService,
               private customerService:CustomerService,
-              private modalService: TwentyfiveModalService,
-              public loadingService: LoadingService) {
+              private modalService: TwentyfiveModalService) {
   }
 
   ngOnInit(): void {
@@ -38,12 +38,17 @@ export class UserProfileComponent implements OnInit{
     let keycloackService=(this.signingKeycloakService)as any;
     this.customerIdkc=keycloackService.keycloakService._userProfile.id;
     if(this.customerIdkc!=null){
+      this.loading = true;
       this.customerService.getCustomerByKeycloakId(this.customerIdkc).subscribe(  {
         next:(res:any)=>{
           this.customer = res
         },
         error:(error) =>{
           console.error(error);
+          this.loading = false;
+        },
+        complete:()=>{
+          this.loading = false;
         }
       })
     }
