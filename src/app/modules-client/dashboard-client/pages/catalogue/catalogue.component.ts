@@ -127,7 +127,7 @@ export class CatalogueComponent implements OnInit {
   }
 
   modalCustomCake(){
-    let r = this.genericModalService.open(CustomCakeComponent, "s", {});
+    let r = this.genericModalService.open(CustomCakeComponent, "lg", {});
     r.result.finally( () => {
       this.getAll()
     })
