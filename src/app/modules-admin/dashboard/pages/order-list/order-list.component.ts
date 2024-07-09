@@ -17,6 +17,7 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
 
   @ViewChild('templateRef', { static: true }) templateRef!: TemplateRef<any>;
   @ViewChild('templateColumnRef', {static: true}) templateColumnRef!: TemplateRef<any>;
+  @ViewChild('readStatus', { static: true}) readStatus: TemplateRef<any>
 
   dataDetails: any[] = [new OrderDetails()]
   orderDetails: OrderDetails = new OrderDetails();
@@ -36,8 +37,10 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
   newOrderAudio:HTMLAudioElement;
   cancelOrderAudio:HTMLAudioElement;
 
+  unreadStatus: { [key: string]: boolean } = {}; // tiene traccia dello stato "unread" temporaneo
 
   headers: any[] = [
+    {name: '', value: 'readStatus', sortable: false},
     {name: 'ID', value: 'id', sortable: false},
     {name: 'Cognome', value: 'lastName', sortable: true},
     {name: 'Nome', value: 'firstName', sortable: true},
@@ -128,7 +131,7 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
 
   ngAfterViewInit() {
     this.columnTemplateRefs['status'] = this.templateColumnRef;
-
+    this.columnTemplateRefs['readStatus'] = this.readStatus;
   }
 
   getAll(page?: number) {
@@ -136,6 +139,7 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
       next:(res:any) =>{
         this.data = res.content
         this.collectionSize = res.totalElements;
+        this.updateUnreadStatus();
       },
         error:(err) => {
         console.error(err);
@@ -144,8 +148,19 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
     })
   }
 
+  updateUnreadStatus() {
+    this.data.forEach(order => {
+      this.unreadStatus[order.id] = order.unread;
+    });
+  }
+
+  isUnread(orderId: string): boolean {
+    return this.unreadStatus[orderId];
+  }
+
   getOrderDetails($event:any){
     let orderId = $event.id
+    this.unreadStatus[orderId] = false;
     this.orderService.getOrderDetails(orderId).subscribe((res: any) => {
       this.orderDetails = res
     })

@@ -107,6 +107,15 @@
       </ul>
     </div>
   </ng-template>
+
+  <ng-template #readStatus let-order>
+    <div *ngIf="isUnread(order.id)">
+      <i class="bi bi-envelope-exclamation"></i>
+    </div>
+    <div *ngIf="!isUnread(order.id)">
+      <i class="bi bi-envelope-open"></i>
+    </div>
+  </ng-template>
 </div>
 
 
