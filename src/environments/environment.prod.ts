@@ -8,6 +8,6 @@ export const environment = {
   showCookiePopup: true,
   cookieKey: 'cookieResponse',
 
-  ftpUrl: 'http://80.211.123.141:8087/TwentyfiveMediaManager/twentyfiveserver',
-  ftpDownloadUrl: 'http://80.211.123.141:8087/TwentyfiveMediaManager/twentyfiveserver/downloadkkk/apa/products/'
+  ftpUrl: 'http://80.211.123.141:8106/TwentyfiveMediaManager/twentyfiveserver',
+  ftpDownloadUrl: 'http://80.211.123.141:8106/TwentyfiveMediaManager/twentyfiveserver/downloadkkk/apa/products/'
 };
