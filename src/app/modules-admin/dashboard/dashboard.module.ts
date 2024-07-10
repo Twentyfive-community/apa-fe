@@ -25,6 +25,7 @@ import {TwentyfiveTimepickerModule} from "twentyfive-timepicker";
 import {TwentyfiveDatepickerModule} from "twentyfive-datepicker";
 import { EmployeeListComponent } from './pages/employee-list/employee-list.component';
 import { EmployeeEditComponent } from './pages/employee-edit/employee-edit.component';
+import { BakerListComponent } from './pages/baker-list/baker-list.component';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { EmployeeEditComponent } from './pages/employee-edit/employee-edit.compo
     OrderRedoComponent,
     EmployeeListComponent,
     EmployeeEditComponent,
+    BakerListComponent,
   ],
   imports: [
     DashboardRoutingModule,

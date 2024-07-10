@@ -1,24 +1,23 @@
 import {AfterViewInit, Component, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {ButtonSizeTheme, ButtonTheme, TableHeadTheme, TableTheme} from 'twentyfive-style';
-import {OrderService} from "../../../../services/order.service";
 import {LocationReq, Order, OrderDetails} from "../../../../models/Order";
-import {ToastrService} from "ngx-toastr";
+import {ProductInPurchase} from "../../../../models/Product";
 import {ActivatedRoute, Router} from "@angular/router";
+import {OrderService} from "../../../../services/order.service";
+import {ToastrService} from "ngx-toastr";
 import {TwentyfiveModalService} from "twentyfive-modal";
 import {RxStompServiceService} from "../../../../services/rxstomp/rx-stomp-service.service";
 import {SettingService} from "../../../../services/setting.service";
-import {ProductInPurchase} from "../../../../models/Product";
+import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
 
 @Component({
-  selector: 'app-order',
-  templateUrl: './order-list.component.html',
-  styleUrl: './order-list.component.scss'
+  selector: 'app-baker-list',
+  templateUrl: './baker-list.component.html',
+  styleUrl: './baker-list.component.scss'
 })
-export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
+export class BakerListComponent implements OnInit, AfterViewInit, OnDestroy{
 
   @ViewChild('templateRef', { static: true }) templateRef!: TemplateRef<any>;
   @ViewChild('templateColumnRef', {static: true}) templateColumnRef!: TemplateRef<any>;
-  @ViewChild('readStatus', { static: true}) readStatus: TemplateRef<any>
 
   dataDetails: any[] = [new OrderDetails()]
   orderDetails: OrderDetails = new OrderDetails();
@@ -40,19 +39,16 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
   locations:string[]=[]
   pIPs:ProductInPurchase[] = [];
   locationReq: LocationReq = new LocationReq();
-  unreadStatus: { [key: string]: boolean } = {}; // tiene traccia dello stato "unread" temporaneo
 
   headers: any[] = [
-    {name: '', value: 'readStatus', sortable: false},
     {name: 'ID', value: 'id', sortable: false},
     {name: 'Cognome', value: 'lastName', sortable: true},
     {name: 'Nome', value: 'firstName', sortable: true},
     {name: 'Data Ritiro', value: 'formattedPickupDate', sortable: true},
-    {name: 'Prezzo', value: 'price', sortable: true},
-    {name: 'Status', value: 'status', sortable: true},
+    {name: 'Completa', value: 'status', sortable: false},
   ];
+
   data: Order[] = []
-  statuses: string[] = [];
   extras: any[] = [
     {name: 'ordine', value: 'orderDetails'},
   ]
@@ -95,121 +91,74 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
                private rxStompService: RxStompServiceService,
                private toastr: ToastrService,
                private settingService: SettingService
-             ) {
+  ) {
     this.newOrderAudio = new Audio();
     this.newOrderAudio.src = 'assets/sounds/order-arrived.mp3';
     this.cancelOrderAudio = new Audio();
     this.cancelOrderAudio.src = 'assets/sounds/order-canceled.mp3';
   }
-
   ngOnInit(): void {
-    this.orderService.getAllStatuses().subscribe((response:any) =>{
-      this.statuses=response;
-    });
     this.settingService.isAlertOn().subscribe((response: any) => {
       this.isAlertOn=response;
     });
-    this.newSubscriptionText = this.rxStompService.watch('/new_apa_order').subscribe((message: any) => {
+    this.newSubscriptionText = this.rxStompService.watch('/in_preparation_apa_order').subscribe((message: any) => {
       if(this.isAlertOn){
-        this.playNotificationSound('new');
+        this.playNotificationSound();
       }
       this.toastrService.success(message.body, 'Ordine arrivato!', {
         timeOut: 0,               // Disabilita il timeout automatico
         tapToDismiss: true       // Richiede un click esplicito per chiudere
       });
-      this.getAll();
-    });
-    this.cancelSubscriptionText = this.rxStompService.watch('/cancel_apa_order').subscribe((message: any) => {
-      if(this.isAlertOn){
-        this.playNotificationSound('cancel');
-      }
-      this.toastrService.error(message.body, 'Ordine cancellato!', {
-        timeOut: 0,               // Disabilita il timeout automatico
-        tapToDismiss: true       // Richiede un click esplicito per chiudere
-      });
-      this.getAll();
+      this.getAllInPreparation();
     });
     this.getAllLocations()
-    this.getAll();
+    this.getAllInPreparation();
   }
-
   ngAfterViewInit() {
     this.columnTemplateRefs['status'] = this.templateColumnRef;
-    this.columnTemplateRefs['readStatus'] = this.readStatus;
   }
-
-  getAll(page?: number) {
-    this.orderService.getAll(page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection).subscribe({
+  getAllInPreparation(page?: number) {
+    this.orderService.getAllWithStatus(page ? page : 0 , this.pageSize, this.sortColumn, this.sortDirection,'IN_PREPARAZIONE').subscribe({
       next:(res:any) =>{
         this.data = res.content
         this.collectionSize = res.totalElements;
-        this.updateUnreadStatus();
       },
-        error:(err) => {
+      error:(err) => {
         console.error(err);
-        this.toastrService.error("Errore nel recuperare gli ordini attivi!");
+        this.toastrService.error("Errore nel recuperare gli ordini in preparazione!");
       }
     })
   }
-
-  updateUnreadStatus() {
-    this.data.forEach(order => {
-      this.unreadStatus[order.id] = order.unread;
-    });
-    console.log('unread status', this.unreadStatus)
-  }
-
-  isUnread = (orderId: string): boolean => {
-    return this.unreadStatus[orderId];
-  }
-
-  rowStyles = (data: any): { [key: string]: string } => {
-    if (this.isUnread(data.id)) {
-      return { 'font-weight': 'bold' };
-    } else {
-      return {};
-    }
-  }
-
   getOrderDetails($event:any){
     let orderId = $event.id
     this.locationReq.orderId = orderId;
-    this.unreadStatus[orderId] = false;
     this.orderService.getOrderDetails(orderId).subscribe((res: any) => {
       this.orderDetails = res
       this.pIPs = res.products;
     })
   }
-
   sortingColumn(event: any) {
     this.sortColumn = event.sortColumn;
     this.sortDirection = event.sortDirection;
-    this.getAll(this.currentPage-1)
+    this.getAllInPreparation(this.currentPage-1)
   }
 
   changePage(event: number) {
     this.currentPage = event;
-    this.getAll(this.currentPage-1);
+    this.getAllInPreparation(this.currentPage-1);
   }
 
   selectSize(event: any) {
     this.pageSize = event;
-    this.getAll(this.currentPage-1);
+    this.getAllInPreparation(this.currentPage-1);
   }
 
   openImage(url:string) {
     window.open(url, '_blank');
   }
 
-  private playNotificationSound(type:string) {
-    switch(type){
-      case 'new':
-        this.newOrderAudio.play();
-        break;
-      case 'cancel':
-        this.cancelOrderAudio.play();
-        break;
-    }
+  private playNotificationSound() {
+    this.newOrderAudio.play();
   }
 
   downloadPdf(id: string) {
@@ -233,86 +182,11 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
       this.cancelSubscriptionText.unsubscribe();
     }
   }
-
-  protected readonly ButtonTheme = ButtonTheme;
-  protected readonly ButtonSizeTheme = ButtonSizeTheme;
-
-  stopPropagation(event: Event) {
-    event.stopPropagation();
-  }
-
-  changeStatus(id:string,status:string) {
-    event!.stopPropagation();
-    switch(status){
-      case 'COMPLETO':
-        this.modalService.openModal(
-          'Vuoi segnare questo ordine come completato?',
-          'Completa Ordine',
-          'Annulla',
-          'Conferma',
-          {
-            showIcon: true,
-            size: 'md',
-            onConfirm: (() => {
-              this.orderService.changeOrderStatus(id,status).subscribe({
-                next: () => {
-                  this.toastrService.success('Ordine completato!');
-                },
-                error: () => {
-                  this.toastrService.error('Error fetching order');
-                },
-                complete: () => {
-                  this.getAll(this.currentPage-1);
-                }
-              });
-            })
-          });
-        break;
-      case 'ANNULLATO':
-        this.modalService.openModal(
-          'Sei sicuro di voler annullare questo ordine?',
-          'Annulla Ordine',
-          'Annulla',
-          'Conferma',
-          {
-            showIcon: true,
-            size: 'md',
-            onConfirm: (() => {
-              this.orderService.changeOrderStatus(id,status).subscribe({
-                next: () => {
-                  this.toastrService.success('Ordine annullato con successo');
-                },
-                error: () => {
-                  this.toastrService.error('Error fetching order');
-                },
-                complete: () => {
-                  this.getAll(this.currentPage-1);
-                }
-              });
-            })
-          });
-        break;
-      default:
-        this.orderService.changeOrderStatus(id,status).subscribe({
-          next: () => {
-            this.toastrService.success(`Ordine aggiornato con successo!`);
-          },
-          error: () => {
-            this.toastrService.error('Error fetching order');
-          },
-          complete: () => {
-            this.getAll(this.currentPage-1);
-          }
-        });
-    }
-  }
-
   getAllLocations() {
     this.settingService.getAllLocations().subscribe((res:any)=>{
       this.locations=['Nessun Luogo',...res];
     })
   }
-
   setLocation(location: any, product: any) {
     if (location == 'Nessun Luogo') {
       product.location = null;
@@ -329,6 +203,35 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
         this.toastrService.error("Errore nell\' inserire il luogo");
         console.error(err);
       }
+    });
+  }
+
+  protected readonly ButtonSizeTheme = ButtonSizeTheme;
+  protected readonly ButtonTheme = ButtonTheme;
+
+  sendOrderToAdmin(id:string,event:Event) {
+    event.stopPropagation();
+    this.modalService.openModal(
+    'Vuoi segnare questo ordine come completato?',
+    'Completa Ordine',
+    'Annulla',
+    'Conferma',
+    {
+      showIcon: true,
+      size: 'md',
+      onConfirm: (() => {
+        this.orderService.changeOrderStatus(id,'MODIFICATO_DA_PASTICCERIA').subscribe({
+          next: () => {
+            this.toastrService.success('Ordine completato!');
+          },
+          error: () => {
+            this.toastrService.error('Error fetching order');
+          },
+          complete: () => {
+            this.getAllInPreparation(this.currentPage-1);
+          }
+        });
+      })
     });
   }
 }

@@ -5,6 +5,7 @@ import { CatalogueComponent } from './modules-client/dashboard-client/pages/cata
 import {roleAuthGuard} from "./guard/role-auth.guard";
 import {CustomAuthGuard} from "twentyfive-keycloak-new";
 import {TwentyfiveNotFoundComponent} from "twentyfive-not-found";
+import {BakerListComponent} from "./modules-admin/dashboard/pages/baker-list/baker-list.component";
 
 const routes: Routes = [
 

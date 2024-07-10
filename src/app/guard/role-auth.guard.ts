@@ -8,7 +8,7 @@ export const roleAuthGuard: CanActivateFn = (route, state) => {
 
     const userRoles: string[] = keycloakService.loggedUserRoles();
 
-    if (userRoles.includes('admin')) {
+    if (userRoles.includes('admin') || userRoles.includes('baker')) {
         return true;
     }
 
@@ -16,6 +16,9 @@ export const roleAuthGuard: CanActivateFn = (route, state) => {
         router.navigate(['/catalogo']);
         return false;
     }
-
+    //if (userRoles.includes('baker')){
+      //TODO pagina baker
+      // return false;
+    //}
     return true;
 };

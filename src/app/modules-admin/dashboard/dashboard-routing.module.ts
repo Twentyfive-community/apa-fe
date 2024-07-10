@@ -16,6 +16,7 @@ import {ProductGuard} from "./guards/product.guard";
 import {CustomerGuard} from "./guards/customer.guard";
 import {EmployeeListComponent} from "./pages/employee-list/employee-list.component";
 import {EmployeeEditComponent} from "./pages/employee-edit/employee-edit.component";
+import {BakerListComponent} from "./pages/baker-list/baker-list.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'ordini', pathMatch: 'full'},
@@ -28,6 +29,8 @@ const routes: Routes = [
     {path: 'modifica-ordine/:id', component: OrderEditComponent, data:{title: 'Modifica Ordine'}},
 
     {path: 'ordini-completati', component: CompletedOrderComponent, data:{title: 'Ordini Completati'}},
+
+    {path: 'pasticceria', component: BakerListComponent, data:{title: 'Pasticceria'}},
 
     {path: 'clienti', component: CustomerListComponent, data: {title: 'Clienti'}},
     {path: 'dettagliClienti/:id', component: CustomerDetailsComponent, data: {title: 'Dettagli Cliente'}},

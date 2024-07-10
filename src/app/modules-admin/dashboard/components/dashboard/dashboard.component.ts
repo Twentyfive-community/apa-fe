@@ -12,7 +12,7 @@ import {SigningKeycloakService} from "twentyfive-keycloak-new";
 })
 export class DashboardComponent implements OnInit{
 
-  sidebarItems: any[] = [
+  adminSidebarItems: any[] = [
     {
       title: "Ordini",
       icon: "bi bi-card-list",
@@ -24,6 +24,13 @@ export class DashboardComponent implements OnInit{
       title: "Ordini Completati",
       icon: "bi bi-clipboard-check",
       navigationUrl: "ordini-completati",
+      disableClick: false,
+      labelColor: ""
+    },
+    {
+      title: "Laboratorio",
+      icon: "bi bi-cloud-fog",
+      navigationUrl: "pasticceria",
       disableClick: false,
       labelColor: ""
     },
@@ -69,7 +76,24 @@ export class DashboardComponent implements OnInit{
       labelColor: "",
       isLogout: true
     }
-  ]
+  ];
+
+  bakerSidebarItems: any[] = [
+    {
+      title: "Laboratorio",
+      icon: "bi bi-cloud-fog",
+      navigationUrl: "pasticceria",
+      disableClick: false,
+      labelColor: ""
+    },
+    {
+      title: "Logout",
+      icon: "bi bi-box-arrow-right",
+      disableClick: true,
+      labelColor: "",
+      isLogout: true
+    }
+  ];
 
   title: string = '';
 
@@ -117,7 +141,20 @@ export class DashboardComponent implements OnInit{
         })
     }
   }
-  //
+
+  assignItems() {
+    let keycloakService = this.keycloakService as any;
+    let roles = keycloakService.loggedUserRoles();
+
+    if (roles.includes('admin')) {
+      return this.adminSidebarItems;
+    } else if (roles.includes('baker')) {
+      return this.bakerSidebarItems;
+    }
+
+    return [];
+  }
+
   exit() {
     this.keycloakService.signout();
     this.router.navigate(['../home']);

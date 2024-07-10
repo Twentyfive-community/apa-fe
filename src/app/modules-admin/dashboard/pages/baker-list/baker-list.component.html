@@ -1,0 +1,102 @@
+<div class="mt-4 row web-table">
+  <div class="col-12 m-0">
+    <twentyfive-accordion-table
+      [data]="data"
+      [headers]="headers"
+      [columnTemplateRefs]="columnTemplateRefs"
+      [isPaginated]="true"
+      [isSortable]="true"
+      (sortableEmitter)="sortingColumn($event)"
+      [showActions]="true"
+      [actions]="tableActions"
+      [extras]="extras"
+      [dataDetails]="dataDetails"
+      [singleOpen]="true"
+      [detailsTemplateRef]="templateRef"
+      [page]="currentPage"
+      [pageSize]="pageSize"
+      [maxSize]="maxSize"
+      [collectionSize]="collectionSize"
+      (changePageEmitter)="changePage($event)"
+      (detailsEmitter)="getOrderDetails($event)"
+      (selectEmitter)="selectSize($event)"
+      [dropdownElements]="paginationElements"
+    ></twentyfive-accordion-table>
+  </div>
+</div>
+
+<ng-template #templateRef>
+  <div>
+    <div class="m-2 mt-0 mb-0" *ngFor="let product of orderDetails.products">
+      <div class="d-flex justify-content-between align-items-center">
+        <h3 class="mb-4">{{ product.name.toUpperCase() }}</h3>
+        <div ngbDropdown class="dropdown">
+          <button class="btn btn-outline-dark" ngbDropdownToggle id="locationDropdown">
+            {{product.location? product.location : "Luogo prodotto"}}
+          </button>
+          <ul ngbDropdownMenu aria-labelledby="locationDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
+            <li *ngFor="let location of locations" class="dropdown-item" (click)="setLocation(location, product)">
+              {{ location }}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <p *ngIf="product.weight && !product.customization"><b>Peso:</b> {{ product.weight }} Kg</p>
+      <p *ngIf="product.quantity"><b>Quantità:</b> {{ product.quantity }}</p>
+      <p><b>Luogo:</b> {{ product.location ? product.location : 'NESSUN LUOGO SELEZIONATO' }}</p>
+      <p *ngIf="product.shape && !product.customization"><b>Forma:</b> {{ product.shape }}</p>
+      <div *ngIf="product.customization && product.customization.length>0">
+        <p><b>Personalizzazioni:</b></p>
+        <ul *ngFor="let item of product.customization">
+          <li><b>{{ item.name }}:</b> {{ item.value }}</li>
+          <li class="mt-3 mb-3" *ngIf="item.name == 'Base'"><b>Peso:</b> {{ product.weight }} Kg</li>
+          <li class="mb-3" *ngIf="item.name == 'Base'"><b>Forma:</b> {{ product.shape }}</li>
+        </ul>
+      </div>
+
+      <p class="flex-grow-1"><b>ALLEGATO:</b></p>
+      <div *ngIf="product.attachment" class="d-flex align-items-center">
+        <img (click)="openImage(product.attachment)" [src]="product.attachment" style="max-width: 120px; height: auto; cursor: pointer; position: relative;">
+      </div>
+      <div *ngIf="!product.attachment" class="d-flex align-items-center">
+        <span>Allegato non disponibile</span>
+      </div>
+      <hr/>
+    </div>
+  </div>
+
+  <div>
+    <div class="m-2 mt-0 mb-0" *ngFor="let bundle of orderDetails.bundles">
+      <h4 class="mb-4">{{ bundle.name.toUpperCase() }}</h4>
+      <p *ngIf="bundle.measure.weight"><b>Peso:</b> {{ bundle.measure.weight }} Kg</p>
+      <p *ngIf="bundle.quantity"><b>Quantità:</b> {{ bundle.quantity }}</p>
+      <div *ngIf="bundle.weightedProducts && bundle.weightedProducts.length">
+        <p><b>Mignon:</b></p>
+        <ul>
+          <li *ngFor="let weightedProduct of bundle.weightedProducts">
+            <p><b>x{{ weightedProduct.quantity }}</b> {{ weightedProduct.name }}</p>
+          </li>
+        </ul>
+        <p *ngIf="bundle.totalWeight"><b>Peso Totale Mignon scelti:</b> {{ bundle.totalWeight }} kg</p>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="m-2 mt-0 mb-0">
+    <h4 class="mb-4">Info:</h4>
+    <p><b>Note sul cliente:</b> {{ orderDetails.customerNote ? orderDetails.customerNote : 'Nessuna nota' }}</p>
+    <p><b>Note sull'ordine:</b> {{ orderDetails.orderNote ? orderDetails.orderNote : 'Nessuna nota' }}</p>
+    <p *ngIf="orderDetails.email"><b>E-mail:</b> {{ orderDetails.email }}</p>
+    <p *ngIf="orderDetails.phoneNumber"><b>Numero di Telefono:</b> {{ orderDetails.phoneNumber }}</p>
+  </div>
+</ng-template>
+
+<ng-template #templateColumnRef let-order>
+  <lib-generic-button
+    buttonText="Completa"
+    (click)="sendOrderToAdmin(order.id,$event)"
+    [buttonSize]="ButtonSizeTheme.Small"
+    [buttonStyle]="ButtonTheme.Primary"
+  ></lib-generic-button>
+</ng-template>

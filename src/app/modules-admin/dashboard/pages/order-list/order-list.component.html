@@ -44,10 +44,16 @@
       <div class="m-2 mt-0 mb-0" *ngFor="let product of orderDetails.products">
         <div class="d-flex justify-content-between align-items-center">
           <h3 class="mb-4">{{ product.name.toUpperCase() }}</h3>
-          <select (change)="onDropdownChange($event, product)">
-            <option disabled selected value="">Seleziona un luogo per il prodotto</option>
-            <option *ngFor="let location of locations" [value]="location">{{ location }}</option>
-          </select>
+          <div ngbDropdown class="dropdown">
+            <button class="btn btn-outline-dark" ngbDropdownToggle id="locationDropdown">
+              {{product.location? product.location : "Luogo prodotto"}}
+            </button>
+            <ul ngbDropdownMenu aria-labelledby="locationDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
+              <li *ngFor="let location of locations" class="dropdown-item" (click)="setLocation(location, product)">
+                {{ location }}
+              </li>
+            </ul>
+          </div>
         </div>
         <p *ngIf="product.weight && !product.customization"><b>Peso:</b> {{ product.weight }} Kg</p>
         <p *ngIf="product.quantity"><b>Quantità:</b> {{ product.quantity }}</p>

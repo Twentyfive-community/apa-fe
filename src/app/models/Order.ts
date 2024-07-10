@@ -31,3 +31,9 @@ export class OrderRedoReq {
   pickupTime: any;
   note: string;
 }
+
+export class LocationReq {
+  orderId: string;
+  position: number;
+  location: string;
+}

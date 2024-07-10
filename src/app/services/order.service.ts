@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Utils} from "../shared/utils/utils";
-import {Order, OrderDetails} from "../models/Order";
+import {LocationReq, Order, OrderDetails} from "../models/Order";
 import {catchError, map, Observable, throwError} from "rxjs";
 
 @Injectable({
@@ -61,4 +61,8 @@ export class OrderService {
       'Accept': 'application/pdf'
     });
     return this.http.get(`${this.baseUrl}/print/${id}`, { headers: headers, responseType: 'blob' });
-  }}
+  }
+  setLocationForKg(locationReq: LocationReq){
+    return this.http.put(`${this.baseUrl}/setLocationForKg`, locationReq);
+  }
+}

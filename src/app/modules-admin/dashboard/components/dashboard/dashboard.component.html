@@ -7,12 +7,15 @@
     [navbarLogo]="'assets/images/apa-full-white.svg'"
     [navbarStyle]="NavbarTheme.Primary"
     [showLeftTitle]="true"
-    [sidebarItems]="sidebarItems"
+    [sidebarItems]="adminSidebarItems"
   ></lib-nav>
 </div>
 
 <div class="wrapper">
-  <lib-twentyfive-sidebar [sidebarItems]="sidebarItems" (onClick)="makeLogout($event)"></lib-twentyfive-sidebar>
+  <lib-twentyfive-sidebar
+    [sidebarItems]="assignItems()"
+    (onClick)="makeLogout($event)"
+  ></lib-twentyfive-sidebar>
 
   <div class="container-fluid g-0 h-100">
     <!-- id is used as [id] in other projects -->
