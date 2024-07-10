@@ -16,6 +16,7 @@
       <twentyfive-accordion-table
            [data]="data"
            [headers]="headers"
+           [rowStyles]="rowStyles"
            [columnTemplateRefs]="columnTemplateRefs"
            [isPaginated]="true"
            [isSortable]="true"
@@ -60,7 +61,7 @@
             <li class="mb-3" *ngIf="item.name == 'Base'"><b>Forma:</b> {{ product.shape }}</li>
           </ul>
         </div>
-        <p><b>Testo decorativo:</b> {{ product.notes ? product.notes : 'Nessuna nota' }}</p>
+
         <p *ngIf="product.totalPrice"><b>Prezzo totale prodotto:</b> {{ product.totalPrice }} €</p>
         <p class="flex-grow-1"><b>ALLEGATO:</b></p>
         <div *ngIf="product.attachment" class="d-flex align-items-center">
@@ -113,6 +114,15 @@
           {{ status }}
         </li>
       </ul>
+    </div>
+  </ng-template>
+
+  <ng-template #readStatus let-order>
+    <div *ngIf="isUnread(order.id)">
+      <i class="bi bi-envelope-exclamation"></i>
+    </div>
+    <div *ngIf="!isUnread(order.id)">
+      <i class="bi bi-envelope-open"></i>
     </div>
   </ng-template>
 </div>

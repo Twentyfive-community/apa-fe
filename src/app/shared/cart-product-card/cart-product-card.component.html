@@ -33,7 +33,7 @@
     <div *ngIf="product.customization && product.customization.length > 0">
       <div>
         <p>
-          <b>Personalizzazioni</b>
+          <b class="prevent-select" style="cursor: pointer" (click)="toggleCustomizations()">Personalizzazioni</b>
           <button class="btn btn-link" (click)="toggleCustomizations()">
             <i [ngClass]="{'bi bi-chevron-down': !showCustomizations, 'bi bi-chevron-up': showCustomizations}" style="font-size: 1rem; color: black"></i>
           </button>
@@ -47,17 +47,12 @@
     </div>
 
 
-    <div *ngIf="this.product.notes && this.product.notes != ''">
-      <p><b>Testo Decorativo:</b> {{ product.notes }}</p>
-    </div>
-
-
         <!-- Specific details for Vassoio -->
     <div *ngIf="product.totalWeight">
       <p><b>Misura:</b> {{product.measure.label}} ({{product.measure.weight}} kg)</p>
       <p><b>Peso totale:</b> {{ product.totalWeight }} kg</p>
       <p>
-        <b>Pezzi singoli</b>
+        <b class="prevent-select" style="cursor: pointer" (click)="toggleCustomizations()">Pezzi singoli</b>
         <button class="btn btn-link" (click)="toggleCustomizations()">
           <i [ngClass]="{'bi bi-chevron-down': !showCustomizations, 'bi bi-chevron-up': showCustomizations}" style="font-size: 1rem; color: black"></i>
         </button>

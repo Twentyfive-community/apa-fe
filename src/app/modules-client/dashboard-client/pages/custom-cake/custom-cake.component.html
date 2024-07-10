@@ -6,7 +6,11 @@
 
   <div class="modal-body">
 
-    <div *ngIf="!(loadingService.loading$ | async)">
+    <div *ngIf="loading">
+      <apa-spinner></apa-spinner>
+    </div>
+
+    <div *ngIf="!loading">
       <div class="stepper">
         <div *ngFor="let step of steps; let i = index"
              class="step"
@@ -21,6 +25,7 @@
             <h5 (click)="goToStep(i)" *ngIf="!isSpecialStep(step)">{{ step }}*</h5>
             <h5 (click)="goToStep(i)" *ngIf="step === 'Decorazioni'">{{ step }}</h5>
             <h5 (click)="goToStep(i)" *ngIf="step === 'Frutta e Gocce'">{{ step }}</h5>
+            <h5 (click)="goToStep(i)" *ngIf="step === 'Granelle'">{{ step }}</h5>
             <small  class="text-muted " *ngIf="step === 'Frutta e Gocce'" (click)="goToStep(i)">Seleziona {{ step.toLowerCase() }} della torta (max 3)</small>
             <small  class="text-muted " *ngIf="step === 'Farcitura'" (click)="goToStep(i)">Seleziona {{ step.toLowerCase() }} della torta (max 2)</small>
             <small  class="text-muted " *ngIf="step === 'Granelle'" (click)="goToStep(i)">Seleziona {{ step.toLowerCase() }} della torta (max 2)</small>
@@ -169,7 +174,7 @@
                     <!-- Dropdown per la selezione di frutta -->
                     <div ngbDropdown class="dropdown">
                       <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedFrutta.length + selectedGocce.length >= 3" id="fruttaDropdown">
-                        Seleziona frutta
+                        {{noFrutta? 'Nessuna frutta' : 'Seleziona frutta'}}
                       </button>
                       <ul ngbDropdownMenu aria-labelledby="fruttaDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
                         <li *ngFor="let frutta of fruttaOptions" class="dropdown-item" (click)="selectFrutta(frutta)" [class.disabled]="selectedFrutta.length + selectedGocce.length >= 3">
@@ -182,7 +187,7 @@
                     <!-- Dropdown per la selezione di gocce -->
                     <div ngbDropdown class="dropdown">
                       <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedFrutta.length + selectedGocce.length >= 3" id="gocceDropdown">
-                        Seleziona gocce
+                        {{noGoccia? 'Nessuna goccia' : 'Seleziona gocce'}}
                       </button>
                       <ul ngbDropdownMenu aria-labelledby="gocceDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
                         <li *ngFor="let goccia of gocceOptions" class="dropdown-item" (click)="selectGoccia(goccia)" [class.disabled]="selectedFrutta.length + selectedGocce.length >= 3">
@@ -230,7 +235,7 @@
               <ng-container *ngIf="step === 'Granelle'">
                 <div ngbDropdown class="dropdown">
                   <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedGranelle.length === 2 || granelleOptions[0] === 'NO GRANELLE'" id="granellaDropdown">
-                    Seleziona granelle
+                    {{noGranelle? 'Nessuna granella' : 'Seleziona granelle'}}
                   </button>
                   <ul ngbDropdownMenu aria-labelledby="granellaDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
                     <li *ngFor="let granella of granelleOptions" class="dropdown-item" (click)="selectGranella(granella)" [class.disabled]="selectedGranelle.length === 2 || granelleOptions[0] === 'NO GRANELLE'">
@@ -258,6 +263,19 @@
                   <div class="col">
                     <label for="fraseInput" class="form-label">Aggiungi una frase</label>
                     <input type="text" class="form-control" id="fraseInput" placeholder="Tanti auguri!" (input)="onInputChange($event)">
+                  </div>
+                  <label for="fraseInput" class="form-label">Aggiungi un colore alla frase</label>
+                  <div ngbDropdown class="dropdown">
+                    <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedNote[0] === ''" id="colorDropdown">
+                      {{ selectedColor[0] || 'Seleziona colore scritta' }}
+                    </button>
+                    <ul ngbDropdownMenu aria-labelledby="colorDropdown" class="dropdown-menu">
+                      <li *ngFor="let color of colorOptions" class="dropdown-item">
+                        <button class="dropdown-item" (click)="selectColor(color)">
+                          {{ color }}
+                        </button>
+                      </li>
+                    </ul>
                   </div>
                 </div>
                 <div class="row mt-1 me-2">

@@ -8,6 +8,7 @@ export class Order {
   price: number;
   status: string;
   formattedPickupDate: string;
+  unread: boolean;
 }
 
 export class OrderDetails {

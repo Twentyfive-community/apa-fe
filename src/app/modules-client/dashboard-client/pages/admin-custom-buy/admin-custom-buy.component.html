@@ -1,0 +1,58 @@
+<div class="modal-content">
+
+  <div class="modal-header">
+    <h5 class="modal-title">Compila i campi intestazione ordine</h5>
+    <button type="button" class="btn-close" (click)="close()"></button>
+  </div>
+
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-6 mb-2">
+        <lib-twentyfive-input
+          labelText="Nome"
+          placeholder="Nome"
+          (input)="onInputChange($event,'firstName')"
+        ></lib-twentyfive-input>
+      </div>
+      <div class="col-6 mb-2">
+        <lib-twentyfive-input
+          labelText="Cognome"
+          placeholder="Cognome"
+          (input)="onInputChange($event,'lastName')"
+        ></lib-twentyfive-input>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-6 mb-2">
+        <lib-twentyfive-input
+          labelText="Email"
+          placeholder="Email"
+          (input)="onInputChange($event,'email')"
+        ></lib-twentyfive-input>
+      </div>
+      <div class="col-6 mb-2">
+        <lib-twentyfive-input
+          labelText="Numero di telefono"
+          placeholder="Numero di telefono"
+          (input)="onInputChange($event,'phoneNumber')"
+        ></lib-twentyfive-input>
+      </div>
+    </div>
+    <div class="row mb-2">
+      <h6>Note sul cliente</h6>
+      <div>
+        <textarea [(ngModel)]="buyInfos!.customInfo.note" [ngClass]="InputTheme.Primary" class="form-control"
+                  rows="3" placeholder="Inserisci una nota" style="max-height: 100px; resize: vertical;"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-end mb-3 me-2" >
+    <lib-generic-button
+      buttonText="Ordina"
+      [buttonSize]="ButtonSizeTheme.Medium"
+      [buttonStyle]="ButtonTheme.Primary"
+      (click)="buyFromCart()"
+    ></lib-generic-button>
+  </div>
+</div>

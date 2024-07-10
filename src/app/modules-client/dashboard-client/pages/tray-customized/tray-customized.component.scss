@@ -6,18 +6,22 @@
   object-fit: cover; /* Rimpicciolisci o allunga l'immagine per adattarla al suo contenitore */
 }
 
+.content-container {
+  padding-bottom: 5.5rem;; /* Spazio sufficiente per la sticky box */
+}
+
 .sticky-box {
-  position: sticky;
+  position: sticky; /* Posizione sticky */
   bottom: 0;
   background-color: white;
-  border: 1px solid #ddd;
-  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-  padding: 10px; /* Aumenta il padding */
-  margin-top: 20px; /* Margine superiore per separare dal contenuto precedente */
-  margin-bottom: 0;
+  border-top: 1px solid #ddd;
+  border-radius: 0.375rem;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+  padding: 10px;
   z-index: 1000; /* Assicurati che sia sopra gli altri elementi */
-  min-height: 100px; /* Riduci l'altezza minima per evitare di occupare troppo spazio */
+  box-sizing: border-box; /* Include padding e bordi nelle dimensioni totali */
 }
+
 .gray-text {
   color: lightgray;
 }

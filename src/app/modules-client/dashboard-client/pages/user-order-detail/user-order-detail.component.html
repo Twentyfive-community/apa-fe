@@ -12,8 +12,11 @@
   </div>
   <hr>
 
-  <div class="orders-container row row-cols-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-3 align-content-center justify-content-center g-4">
-    <!-- Product Card -->
+  <div *ngIf="loading">
+    <apa-spinner></apa-spinner>
+  </div>
+
+  <div *ngIf="!loading" class="orders-container row row-cols-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-3 align-content-center justify-content-center g-4">    <!-- Product Card -->
     <div *ngFor="let product of orderDetails.products" class="col px-2">
       <div class="product-details card h-80 mt-2">
         <div class="card-body">
@@ -98,7 +101,7 @@
   </div>
 
   <!-- Order Summary -->
-  <div *ngIf="!(loadingService.loading$ | async)" class="order-summary sticky-bottom mt-5 pt-4 border-top">
+  <div *ngIf="!loading" class="order-summary sticky-bottom mt-5 pt-4 border-top">
     <div class="row align-items-center mb-3">
       <div class="col-6">
         <h6>Data e ora ritiro:</h6>
@@ -137,6 +140,14 @@
         <lib-generic-button
           (click)="cancelOrder(orderId)"
           buttonText="Annulla Ordine"
+          [buttonSize]="ButtonSizeTheme.Medium"
+          [buttonStyle]="ButtonTheme.Primary"
+        ></lib-generic-button>
+      </div>
+      <div *ngIf="activeOrders=='false'" class="col-auto">
+        <lib-generic-button
+          (click)="addFromCompletedOrder()"
+          buttonText="Riaggiungi al carrello"
           [buttonSize]="ButtonSizeTheme.Medium"
           [buttonStyle]="ButtonTheme.Primary"
         ></lib-generic-button>

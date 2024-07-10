@@ -17,6 +17,7 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
 
   @ViewChild('templateRef', { static: true }) templateRef!: TemplateRef<any>;
   @ViewChild('templateColumnRef', {static: true}) templateColumnRef!: TemplateRef<any>;
+  @ViewChild('readStatus', { static: true}) readStatus: TemplateRef<any>
 
   dataDetails: any[] = [new OrderDetails()]
   orderDetails: OrderDetails = new OrderDetails();
@@ -37,7 +38,10 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
   cancelOrderAudio:HTMLAudioElement;
   locations:string[]=[]
 
+  unreadStatus: { [key: string]: boolean } = {}; // tiene traccia dello stato "unread" temporaneo
+
   headers: any[] = [
+    {name: '', value: 'readStatus', sortable: false},
     {name: 'ID', value: 'id', sortable: false},
     {name: 'Cognome', value: 'lastName', sortable: true},
     {name: 'Nome', value: 'firstName', sortable: true},
@@ -107,14 +111,20 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
       if(this.isAlertOn){
         this.playNotificationSound('new');
       }
-      this.toastr.success(message.body);
+      this.toastrService.success(message.body, 'Ordine arrivato!', {
+        timeOut: 0,               // Disabilita il timeout automatico
+        tapToDismiss: true       // Richiede un click esplicito per chiudere
+      });
       this.getAll();
     });
     this.cancelSubscriptionText = this.rxStompService.watch('/cancel_apa_order').subscribe((message: any) => {
       if(this.isAlertOn){
         this.playNotificationSound('cancel');
       }
-      this.toastr.error(message.body);
+      this.toastrService.error(message.body, 'Ordine cancellato!', {
+        timeOut: 0,               // Disabilita il timeout automatico
+        tapToDismiss: true       // Richiede un click esplicito per chiudere
+      });
       this.getAll();
     });
     this.getAllLocations()
@@ -123,7 +133,7 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
 
   ngAfterViewInit() {
     this.columnTemplateRefs['status'] = this.templateColumnRef;
-
+    this.columnTemplateRefs['readStatus'] = this.readStatus;
   }
 
   getAll(page?: number) {
@@ -131,6 +141,7 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
       next:(res:any) =>{
         this.data = res.content
         this.collectionSize = res.totalElements;
+        this.updateUnreadStatus();
       },
         error:(err) => {
         console.error(err);
@@ -139,8 +150,28 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
     })
   }
 
+  updateUnreadStatus() {
+    this.data.forEach(order => {
+      this.unreadStatus[order.id] = order.unread;
+    });
+    console.log('unread status', this.unreadStatus)
+  }
+
+  isUnread = (orderId: string): boolean => {
+    return this.unreadStatus[orderId];
+  }
+
+  rowStyles = (data: any): { [key: string]: string } => {
+    if (this.isUnread(data.id)) {
+      return { 'font-weight': 'bold' };
+    } else {
+      return {};
+    }
+  }
+
   getOrderDetails($event:any){
     let orderId = $event.id
+    this.unreadStatus[orderId] = false;
     this.orderService.getOrderDetails(orderId).subscribe((res: any) => {
       this.orderDetails = res
     })

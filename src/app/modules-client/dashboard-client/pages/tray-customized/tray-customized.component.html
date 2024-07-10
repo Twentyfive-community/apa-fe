@@ -3,16 +3,20 @@
     <button type="button" class="btn-close" (click)="close()"></button>
   </div>
 
-  <div #modalContent class="modal-body" style="height: 650px; overflow-y: auto;">
+  <div #modalContent class="modal-body" style="height: 650px; overflow: hidden;">
+
+    <div *ngIf="loading">
+      <apa-spinner></apa-spinner>
+    </div>
 
     <div [ngSwitch]="currentStep">
 
       <div *ngSwitchCase="1">
 
-        <div *ngIf="!(loadingService.loading$ | async)">
-
+        <div *ngIf="!loading">
 
           <h4 class="mb-3 ms-2 me-2 mt-4">Seleziona misura vassoio</h4>
+
           <div class="mb-3 ms-2 me-2" style="cursor: pointer" *ngFor="let measure of trayDetails.measuresList">
             <app-generic-card
               [title]="'' + measure.label"
@@ -39,19 +43,20 @@
           <hr>
         </div>
 
-        <div *ngIf="!(loadingService.loading$ | async)" class="mb-3 ms-2 me-2" style="height: 650px; overflow-y: auto; overflow-x: hidden">
+        <div *ngIf="!loading" class="content-container mb-3 " style="height: 650px; overflow-y: auto; overflow-x: hidden">
 
           <h4 class="mb-2 large-text">Componi vassoio</h4>
 
-
-          <div class="col-8 row mb-4">
+          <div class="row mb-4 me-2">
             <lib-twentyfive-input
+              style="padding-right: 0"
               placeholder="Cerca Mignon"
+              [showLabel]="false"
               (input)="onSearch($event)"
             ></lib-twentyfive-input>
           </div>
 
-          <div class="mt-5" *ngIf="productListWeighted.length === 0">
+          <div *ngIf="productListWeighted.length === 0" style="margin-bottom: 1rem;">
             <app-no-item-card
               [customText]="'Nessun mignon disponibile'"
             ></app-no-item-card>
@@ -72,7 +77,7 @@
           </div>
 
           <!-- Box visibile con sticky-bottom -->
-          <div class="sticky-box me-2 ms-2">
+          <div class="sticky-box me-2">
             <div class="sized-box">
               <div class="content">
                 <div class="row mt-2 me-2 ms-2 d-flex align-items-center">

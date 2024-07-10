@@ -1,4 +1,8 @@
-<div *ngIf="cart.purchases.length > 0">
+<div *ngIf="loading">
+  <apa-spinner></apa-spinner>
+</div>
+
+<div *ngIf="cart.purchases.length > 0 && !loading">
 
   <!-- CARD -->
   <div class="row d-flex flex-wrap">
@@ -60,7 +64,7 @@
       <div class="row mb-2">
         <h6>Lascia una nota</h6>
         <div>
-        <textarea [disabled]="isDisabled('textarea')" [(ngModel)]="orderNotes" [ngClass]="InputTheme.Primary" class="form-control"
+        <textarea [disabled]="isDisabled('textarea')" [(ngModel)]="buyInfos.note" [ngClass]="InputTheme.Primary" class="form-control"
                   rows="3" placeholder="Inserisci una nota" style="max-height: 100px; resize: vertical;"></textarea>
         </div>
       </div>
@@ -138,7 +142,7 @@
 </div>
 
 <!-- Sezione carrello vuoto-->
-<div *ngIf="cart.purchases.length == 0 && !(loadingService.loading$ | async)" class="mb-5">
+<div *ngIf="cart.purchases.length == 0 && !loading" class="mb-5">
   <div class="card">
     <div class="card-body text-center">
       <h5 class="card-title">Carrello Vuoto</h5>

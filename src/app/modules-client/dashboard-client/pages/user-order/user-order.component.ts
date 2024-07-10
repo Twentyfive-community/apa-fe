@@ -7,7 +7,6 @@ import {OrderService} from "../../../../services/order.service";
 import {TwentyfiveModalService} from "twentyfive-modal";
 import {RxStompServiceService} from "../../../../services/rxstomp/rx-stomp-service.service";
 import {ToastrService} from "ngx-toastr";
-import {LoadingService} from "../../../../services/loading.service";
 declare var bootstrap: any;
 
 @Component({
@@ -29,6 +28,8 @@ export class UserOrderComponent implements OnInit, OnDestroy {
   itemsPerPage: number = 15;
   totalPages: number = 1;
 
+  loading: boolean = true;
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private completedOrderService: CompletedorderService,
@@ -37,7 +38,6 @@ export class UserOrderComponent implements OnInit, OnDestroy {
     private modalService: TwentyfiveModalService,
     private rxStompService: RxStompServiceService,
     private toastrService: ToastrService,
-    public loadingService: LoadingService
   ) { }
 
   ngOnInit(): void {
@@ -55,6 +55,7 @@ export class UserOrderComponent implements OnInit, OnDestroy {
   }
 
   loadOrders() {
+    this.loading = true;
     if (this.activeOrders == 'true') {
       this.loadActiveOrders(this.currentPage - 1, this.itemsPerPage);
     } else {
@@ -77,10 +78,15 @@ export class UserOrderComponent implements OnInit, OnDestroy {
         console.log(response);
         this.orders = response.content;
         this.setupPagination(response.totalPages);
+        this.loading = false;
       },
       error: (error) => {
         this.close();
         console.error('Failed to load orders:', error);
+        this.loading = false;
+      },
+      complete:() =>{
+        this.loading = false;
       }
     });
   }
@@ -101,6 +107,10 @@ export class UserOrderComponent implements OnInit, OnDestroy {
       error: (error) => {
         this.close();
         console.error('Failed to load orders:', error);
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
       }
     });
   }

@@ -3,8 +3,6 @@ import {NavbarTheme} from "twentyfive-style";
 import {CustomerDetails} from "../../../../models/Customer";
 import {SigningKeycloakService} from "twentyfive-keycloak-new";
 import {CustomerService} from "../../../../services/customer.service";
-import {LoadingService} from "../../../../services/loading.service";
-import {delay} from "rxjs";
 
 @Component({
   selector: 'app-dashboard-client',
@@ -71,24 +69,13 @@ export class DashboardClient implements OnInit{
 
 
   constructor(private signingKeycloakService: SigningKeycloakService,
-              private customerService:CustomerService,
-              private loadingService: LoadingService) {
+              private customerService:CustomerService) {
   }
 
 
   ngOnInit(): void{
     this.loadUserProfile();
-    this.listenToLoading()
   }
-
-  listenToLoading(): void {
-    this.loadingService.loading$
-      .pipe(delay(0)) // This prevents a ExpressionChangedAfterItHasBeenCheckedError for subsequent requests
-      .subscribe((loading) => {
-        this.loading = loading;
-      });
-  }
-
 
   assignItems(){
     let keycloakService = this.signingKeycloakService as any;

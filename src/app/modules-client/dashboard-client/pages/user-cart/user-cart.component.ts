@@ -4,13 +4,15 @@ import {SigningKeycloakService} from "twentyfive-keycloak-new";
 import {Customer} from "../../../../models/Customer";
 import {CustomerService} from "../../../../services/customer.service";
 import {CartService} from "../../../../services/cart.service";
-import {Cart} from "../../../../models/Cart";
+import {BuyInfos, Cart} from "../../../../models/Cart";
 import {NgbDate} from "@ng-bootstrap/ng-bootstrap";
 import {ToastrService} from "ngx-toastr";
 import {Subscription, interval, takeWhile} from "rxjs";
 import {Router} from "@angular/router";
 import {TwentyfiveModalService} from "twentyfive-modal";
-import {LoadingService} from "../../../../services/loading.service";
+import {TwentyfiveModalGenericComponentService} from "twentyfive-modal-generic-component";
+import {CategoryEditComponent} from "../../../../shared/category-edit/category-edit.component";
+import {AdminCustomBuyComponent} from "../admin-custom-buy/admin-custom-buy.component";
 
 @Component({
   selector: 'app-user-cart',
@@ -39,14 +41,14 @@ export class UserCartComponent implements OnInit, OnDestroy{
 
   isCollapsed: boolean = true;
 
-  orderNotes: string = '';
+  buyInfos: BuyInfos = new BuyInfos();
 
   private cartReloadSubscription!: Subscription; //Variabile per avviare il reload di this.getCart
 
   constructor(private keycloakService: SigningKeycloakService,
               private modalService: TwentyfiveModalService,
+              private genericModalService: TwentyfiveModalGenericComponentService,
               private customerService:CustomerService,
-              public loadingService: LoadingService,
               private toastrService: ToastrService,
               private cartService:CartService,
               private router: Router) {
@@ -94,6 +96,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
       },
       error:(error:any) => {
         console.error(error);
+        this.loading = false;
       },
       complete:() => {
         this.loading = false;
@@ -209,35 +212,39 @@ export class UserCartComponent implements OnInit, OnDestroy{
   }
 
   buyCart() {
-    if(this.imAdmin){
-      this.router.navigate(['../dashboard']);
-    }
-    const indexToBuy = this.itemToBuy
+    this.loading = true;
+     this.buyInfos.positions = this.itemToBuy
       .filter(item => item.toBuy)
       .map(item => item.index);
 
     if (this.selectedDate && this.selectedTime) {
-      this.selectedPickupDateTime = `${this.formatDate(this.selectedDate)}T${this.selectedTime}`;
-      //console.log("Data e orario selezionati: " + this.selectedPickupDateTime);
-
-      this.cartService.buyFromCart(this.customer.id, indexToBuy, this.selectedPickupDateTime, this.orderNotes).subscribe({
-        next: () => {
-          this.toastrService.success('Ordine effettuato con successo')
-        },
-        error: (error) => {
-          console.error(error);
-          this.toastrService.error('Impossibile effettuare l\'ordine')
-        },
-        complete: () => {
-          this.isCollapsed = true
-          this.selectedDate = null;
-          this.selectedTime = '';
-          this.orderNotes = '';
-          this.getCart()
-        }
-      })
-    } else {
-      this.toastrService.error('Selezionare una data e un orario valido')
+      this.buyInfos.selectedPickupDateTime = `${this.formatDate(this.selectedDate)}T${this.selectedTime}`;
+      if(this.imAdmin){
+          let r = this.genericModalService.open(AdminCustomBuyComponent, "lg", {});
+        r.componentInstance.customerId = this.customer.id;
+        r.componentInstance.buyInfos = this.buyInfos;
+        r.result.finally(() => {
+          })
+      } else {
+        this.cartService.buyFromCart(this.customer.id,this.buyInfos).subscribe({
+          next: () => {
+            this.toastrService.success('Ordine effettuato con successo')
+          },
+          error: (error) => {
+            console.error(error);
+            this.loading = false;
+            this.toastrService.error('Impossibile effettuare l\'ordine')
+          },
+          complete: () => {
+            this.isCollapsed = true
+            this.selectedDate = null;
+            this.selectedTime = '';
+            this.buyInfos.note = '';
+            this.loading = false;
+            this.getCart()
+          }
+        })
+      }
     }
   }
 
@@ -259,8 +266,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
 
     this.selectedDate = null;
     this.selectedTime = '';
-    this.orderNotes = '';
-
+    this.buyInfos.note = '';
     this.obtainCartMinPickupDateTime();
     this.onDateChange(this.selectedDate)
   }

@@ -6,14 +6,14 @@
     <div class="col-8 d-flex flex-column justify-content-between">
       <div>
         <h5 [ngClass]="{ 'card-title': true, 'long': title.length > 20 }">{{ title }}</h5>
+        <ng-container>
+          <p class="card-text text-truncate" style="font-size: small; color: gray"> {{ description }}</p>
+        </ng-container>
         <ng-container *ngIf="weight">
           <p class="card-text text-truncate" style="font-size: small; color: gray">Peso: {{ weight }} Kg</p>
         </ng-container>
         <ng-container *ngIf="ingredientList">
           <p class="card-text text-truncate" style="font-size: small; color: gray">Ingredienti: {{ ingredientList.join(', ') }}</p>
-        </ng-container>
-        <ng-container *ngIf="description">
-          <p class="card-text text-truncate" style="font-size: small; color: gray"> {{ description }}</p>
         </ng-container>
         <ng-container *ngIf="allergens">
           <ng-container *ngFor="let allergen of allergens; let i = index">

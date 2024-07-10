@@ -2,7 +2,7 @@ import {RxStompConfig} from "@stomp/rx-stomp";
 
 export const myRxStompConfig: RxStompConfig = {
   // Which server?
-  brokerURL: 'ws://80.211.123.141:8086/twentyfive-stomp/ws',
+  brokerURL: 'ws://80.211.123.141:8106/twentyfive-stomp/ws',
   //brokerURL: 'ws://localhost:8080/ws',
 
   // Headers
