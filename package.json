@@ -36,7 +36,7 @@
     "ngx-toastr": "^18.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "twentyfive-accordion-table": "^0.0.44",
+    "twentyfive-accordion-table": "^0.0.45",
     "twentyfive-autocomplete-sync-async": "^0.0.59",
     "twentyfive-checkbox": "^0.0.7",
     "twentyfive-chip": "^0.0.8",

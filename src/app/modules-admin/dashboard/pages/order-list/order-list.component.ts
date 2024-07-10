@@ -152,10 +152,19 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
     this.data.forEach(order => {
       this.unreadStatus[order.id] = order.unread;
     });
+    console.log('unread status', this.unreadStatus)
   }
 
-  isUnread(orderId: string): boolean {
+  isUnread = (orderId: string): boolean => {
     return this.unreadStatus[orderId];
+  }
+
+  rowStyles = (data: any): { [key: string]: string } => {
+    if (this.isUnread(data.id)) {
+      return { 'font-weight': 'bold' };
+    } else {
+      return {};
+    }
   }
 
   getOrderDetails($event:any){
