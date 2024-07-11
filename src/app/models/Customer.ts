@@ -8,31 +8,6 @@ export class Customer{
   role: string;              // Customer role
   note: string;
   enabled: boolean;
-
-  private static roleTranslationMap: { [key: string]: string } = {
-    'admin': 'Amministratore',
-    'baker': 'Pasticcere',
-    'customer': 'Cliente'
-  };
-  constructor(id: string = '',
-              idKeycloak: string = '',
-              firstName: string = '',
-              lastName: string = '',
-              email: string = '',
-              phoneNumber: string = '',
-              role: string = '',
-              note: string = '',
-              enabled: boolean = true) {
-    this.id = id;
-    this.idKeycloak = idKeycloak;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.email = email;
-    this.phoneNumber = phoneNumber;
-    this.role = Customer.roleTranslationMap[role] || role;
-    this.note = note;
-    this.enabled = enabled;
-  }
 }
 
 export class CustomerDetails{

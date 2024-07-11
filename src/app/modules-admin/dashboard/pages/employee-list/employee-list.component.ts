@@ -18,6 +18,12 @@ export class EmployeeListComponent implements OnInit{
   sortColumn: string='';
   sortDirection: string='';
 
+  private roleTranslations: { [key: string]: string } = {
+    'admin': 'Amministratore',
+    'baker': 'Pasticcere',
+    'customer': 'Cliente'
+  };
+
 
   headers: any[] = [
     { name:'Cognome', value:'lastName'},
@@ -69,25 +75,25 @@ export class EmployeeListComponent implements OnInit{
     this.getAll();
   }
 
-  getAll(page?: number){
-    this.customerService.getAllEmployees(page? page : 0, this.pageSize, this.sortColumn, this.sortDirection).subscribe((res: any) => {
-      this.employees = res.content.map((employee: any) => new Customer(
-        employee.id,
-        employee.idKeycloak,
-        employee.firstName,
-        employee.lastName,
-        employee.email,
-        employee.phoneNumber,
-        employee.role,
-        employee.note,
-        employee.enabled
-      ));
-      this.maxSize = res.totalElements;
-    })
+  getAll(page?: number) {
+    this.customerService.getAllEmployees(page ? page : 0, this.pageSize, this.sortColumn, this.sortDirection).subscribe({
+      next: (res: any) => {
+        this.employees = res.content.map((employee: Customer) => {
+          return {
+            ...employee,
+            role: this.roleTranslations[employee.role] || employee.role
+          };
+        });
+        this.maxSize = res.totalElements;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    });
   }
 
   goToDetails(event: any){
-    //per ora non utilizzato
+    this.router.navigate(['/dashboard/modifica-dipendente', event.id])
   }
 
   changeStatus(event: any){

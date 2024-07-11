@@ -39,23 +39,9 @@ export class EmployeeEditComponent {
   getEmployee(){
     if(this.employeeId!=null){
       this.customerService.getCustomerDetails(this.employeeId).subscribe( (res:any) =>{
-        console.log('getEmployee res', res)
-        this.employee = new Customer(
-          res.id,
-          res.idKeycloak,
-          res.firstName,
-          res.lastName,
-          res.email,
-          res.phoneNumber,
-          res.role,
-          res.note,
-          res.enabled
-        );
+        this.employee = res
         this.originalEmployee = { ...this.employee };
-        this.selectedRole = this.employee.role;
-
-        console.log('employee', this.employee);
-        console.log('employee OG', this.originalEmployee)
+        this.selectedRole = this.roleTranslations[this.employee.role] || this.employee.role;
       })
     }
   }
@@ -86,11 +72,9 @@ export class EmployeeEditComponent {
   selectRole(role: string) {
     this.selectedRole = role;
     this.employee.role = Object.keys(this.roleTranslations).find(key => this.roleTranslations[key] === this.selectedRole) || this.selectedRole;
-    console.log(this.employee.role)
   }
 
   saveEmployee() {
-    console.log(this.employee)
     if (this.isValid()){
       this.customerService.saveCustomer(this.employee).subscribe({
         error:(error) =>{
