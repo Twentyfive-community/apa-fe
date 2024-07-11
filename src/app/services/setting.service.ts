@@ -25,4 +25,8 @@ export class SettingService {
   getAllLocations(){
     return this.http.get(`${this.baseSettingUrl}/getAllLocations`);
   }
+
+  getAllRoles() {
+    return this.http.get(`${this.baseSettingUrl}/getAllRoles`);
+  }
 }

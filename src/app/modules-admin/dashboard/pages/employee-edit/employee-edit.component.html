@@ -17,7 +17,7 @@
   <h3 *ngIf="employeeId">Modifica Dipendente</h3>
 </div>
 
-<div class="col-3">
+<div class="col-4">
   <div class="row mt-4">
     <lib-twentyfive-input
       labelText="Nome"
@@ -52,9 +52,23 @@
       (input)="onInputChange($event, 'phoneNumber')"
     ></lib-twentyfive-input>
   </div>
+
   <div class="row mt-4">
-    <b>{{employee.role}}</b>
+    <div class="col-12">
+      <label for="rolesDropdown" class="ms-1 form-label">Ruolo</label>
+      <div ngbDropdown class="dropdown mt-2">
+        <button ngbDropdownToggle class="btn btn-outline-primary w-100" id="rolesDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          {{ selectedRole ? selectedRole : 'Seleziona Ruolo' }}
+        </button>
+        <ul ngbDropdownMenu class="dropdown-menu" aria-labelledby="rolesDropdown"  style="max-height: 200px; overflow-y: auto;">
+          <li class="dropdown-item" *ngFor="let role of roles" (click)="selectRole(role)">
+            {{ role }}
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
+
 </div>
 
 <div class="row mt-5">
