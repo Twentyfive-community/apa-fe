@@ -31,11 +31,11 @@ export class BakerListComponent implements OnInit, AfterViewInit, OnDestroy{
   sortColumn: string = '';
   sortDirection: string = '';
 
-  newSubscriptionText: any;
-  cancelSubscriptionText: any;
+  bakerSubscriptionText: any;
+  changedSubscriptionText: any;
   isAlertOn: boolean;
   newOrderAudio:HTMLAudioElement;
-  cancelOrderAudio:HTMLAudioElement;
+  changedOrderAudio:HTMLAudioElement;
   locations:string[]=[]
   pIPs:ProductInPurchase[] = [];
   locationReq: LocationReq = new LocationReq();
@@ -94,22 +94,36 @@ export class BakerListComponent implements OnInit, AfterViewInit, OnDestroy{
   ) {
     this.newOrderAudio = new Audio();
     this.newOrderAudio.src = 'assets/sounds/order-arrived.mp3';
-    this.cancelOrderAudio = new Audio();
-    this.cancelOrderAudio.src = 'assets/sounds/order-canceled.mp3';
+    this.changedOrderAudio = new Audio();
+    this.changedOrderAudio.src = 'assets/sounds/order-canceled.mp3';
   }
   ngOnInit(): void {
     this.settingService.isAlertOn().subscribe((response: any) => {
       this.isAlertOn=response;
     });
-    this.newSubscriptionText = this.rxStompService.watch('/in_preparation_apa_order').subscribe((message: any) => {
+    this.bakerSubscriptionText = this.rxStompService.watch('/in_preparation_apa_order').subscribe((message: any) => {
       if(this.isAlertOn){
-        this.playNotificationSound();
+        this.playNotificationSound("new");
       }
       this.toastrService.success(message.body, 'Ordine arrivato!', {
         timeOut: 0,               // Disabilita il timeout automatico
         tapToDismiss: true       // Richiede un click esplicito per chiudere
       });
-      this.getAllInPreparation();
+      setTimeout(() => {
+        this.getAllInPreparation(this.currentPage - 1);
+      }, 1000);  // Ritarda di 1 secondo (1000 millisecondi). Modifica il tempo di ritardo se necessario.
+    });
+    this.changedSubscriptionText = this.rxStompService.watch('/changed_apa_order').subscribe((message: any) => {
+      if(this.isAlertOn){
+        this.playNotificationSound("changed");
+      }
+      this.toastrService.error(message.body, 'Un Ordine ha cambiato stato!', {
+        timeOut: 0,               // Disabilita il timeout automatico
+        tapToDismiss: true       // Richiede un click esplicito per chiudere
+      });
+      setTimeout(() => {
+        this.getAllInPreparation();
+      }, 1500);  // Ritarda di 1 secondo (1000 millisecondi). Modifica il tempo di ritardo se necessario.
     });
     this.getAllLocations()
     this.getAllInPreparation();
@@ -157,8 +171,15 @@ export class BakerListComponent implements OnInit, AfterViewInit, OnDestroy{
     window.open(url, '_blank');
   }
 
-  private playNotificationSound() {
-    this.newOrderAudio.play();
+  private playNotificationSound(type:string) {
+    switch(type){
+      case 'new':
+        this.newOrderAudio.play();
+        break;
+      case 'changed':
+        this.changedOrderAudio.play();
+        break;
+    }
   }
 
   downloadPdf(id: string) {
@@ -175,11 +196,11 @@ export class BakerListComponent implements OnInit, AfterViewInit, OnDestroy{
   }
 
   ngOnDestroy(): void {
-    if (this.newSubscriptionText) {
-      this.newSubscriptionText.unsubscribe();
+    if (this.bakerSubscriptionText) {
+      this.bakerSubscriptionText.unsubscribe();
     }
-    if (this.cancelSubscriptionText) {
-      this.cancelSubscriptionText.unsubscribe();
+    if (this.changedSubscriptionText) {
+      this.changedSubscriptionText.unsubscribe();
     }
   }
   getAllLocations() {
@@ -234,4 +255,6 @@ export class BakerListComponent implements OnInit, AfterViewInit, OnDestroy{
       })
     });
   }
+
+
 }
