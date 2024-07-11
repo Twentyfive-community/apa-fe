@@ -6,6 +6,7 @@ import {roleAuthGuard} from "./guard/role-auth.guard";
 import {CustomAuthGuard} from "twentyfive-keycloak-new";
 import {TwentyfiveNotFoundComponent} from "twentyfive-not-found";
 import {BakerListComponent} from "./modules-admin/dashboard/pages/baker-list/baker-list.component";
+import {catalogueGuard} from "./guard/catalogue.guard";
 
 const routes: Routes = [
 
@@ -17,10 +18,9 @@ const routes: Routes = [
   {
     path: 'catalogo',
     loadChildren: () => import('./modules-client/dashboard-client/dashboard-client.module').then(m => m.DashboardClientModule),
-    canActivate: [CustomAuthGuard]
+    canActivate: [CustomAuthGuard, catalogueGuard]
   },
-  {path: 'home', loadChildren: () => import('./modules-client/dashboard-client/dashboard-client.module').then(m => m.DashboardClientModule)},
-  {path: '', redirectTo: 'home', pathMatch: 'full'},
+  {path: '', redirectTo: 'catalogo', pathMatch: 'full'},
   {path: '**', component: TwentyfiveNotFoundComponent}
 
 ];
