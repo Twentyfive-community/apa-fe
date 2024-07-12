@@ -12,11 +12,15 @@ import {provideToastr, ToastrModule} from "ngx-toastr";
 import {RxStompServiceService} from "./services/rxstomp/rx-stomp-service.service";
 import {rxStompServiceFactory} from "./services/rxstomp/stomp-factory";
 import {CommonModule} from "@angular/common";
+import {MenuComponent} from "./components/menu/menu.component";
+import {SharedModule} from "./shared/shared.module";
+import {NgbAccordionModule, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    MenuComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +29,9 @@ import {CommonModule} from "@angular/common";
     provideSigningModule(environment),
     HttpClientModule,
     ToastrModule.forRoot(),
-    CommonModule,
+    NgbModule,
+    NgbAccordionModule,
+    SharedModule,
   ],
   providers: [
 

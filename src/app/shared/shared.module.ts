@@ -58,6 +58,9 @@ import { NoItemCardComponent } from './no-item-card/no-item-card.component';
     CartProductCardComponent,
     ApaSpinnerComponent,
     NoItemCardComponent,
+    NgbDropdown,
+    NgbDropdownMenu,
+    NgbDropdownToggle,
   ]
 })
 export class SharedModule {

@@ -10,7 +10,7 @@ export class MenuItem {
   name: string;
   categoryId: string;
   description: string;
-  price: number;
+  price: string;
   allergens: Allergen[] ;
   imageUrl: string;
 }
