@@ -11,12 +11,10 @@ import {IngredientListComponent} from "./pages/ingredient-list/ingredient-list.c
 import {IngredientEditComponent} from "./pages/ingredient-edit/ingredient-edit.component";
 import {ProductListComponent} from "./pages/product-list/product-list.component";
 import {ProductEditComponent} from "./pages/product-edit/product-edit.component";
-import {IngredientGuard} from "./guards/ingredient.guard";
-import {ProductGuard} from "./guards/product.guard";
-import {CustomerGuard} from "./guards/customer.guard";
 import {EmployeeListComponent} from "./pages/employee-list/employee-list.component";
 import {EmployeeEditComponent} from "./pages/employee-edit/employee-edit.component";
 import {BakerListComponent} from "./pages/baker-list/baker-list.component";
+import {GenericDeactivateGuard} from "./guards/generic-deactivate.guard";
 
 const routes: Routes = [
   {path: '', redirectTo: 'ordini', pathMatch: 'full'},
@@ -34,20 +32,20 @@ const routes: Routes = [
 
     {path: 'clienti', component: CustomerListComponent, data: {title: 'Clienti'}},
     {path: 'dettagliClienti/:id', component: CustomerDetailsComponent, data: {title: 'Dettagli Cliente'}},
-    {path: 'editingClienti', component: CustomerEditComponent, data: {title: 'Crea Cliente'}, canDeactivate: [CustomerGuard]},
-    {path: 'editingClienti/:id', component: CustomerEditComponent, data: {title: 'Modifica Cliente'}, canDeactivate: [CustomerGuard]},
+    {path: 'editingClienti', component: CustomerEditComponent, data: {title: 'Crea Cliente'}, canDeactivate: [GenericDeactivateGuard]},
+    {path: 'editingClienti/:id', component: CustomerEditComponent, data: {title: 'Modifica Cliente'}, canDeactivate: [GenericDeactivateGuard]},
 
     {path: 'prodotti', component: ProductListComponent, data: {title: 'Prodotti'}},
-    {path: 'editingProdotti', component: ProductEditComponent, data: {title: 'Crea Prodotto'}, canDeactivate: [ProductGuard]},
-    {path: 'editingProdotti/:id', component: ProductEditComponent, data: {title: 'Modifica Prodotto'}, canDeactivate: [ProductGuard]},
+    {path: 'editingProdotti', component: ProductEditComponent, data: {title: 'Crea Prodotto'}, canDeactivate: [GenericDeactivateGuard]},
+    {path: 'editingProdotti/:id', component: ProductEditComponent, data: {title: 'Modifica Prodotto'}, canDeactivate: [GenericDeactivateGuard]},
 
     {path: 'ingredienti', component: IngredientListComponent, data: {title: 'Ingredienti'}},
-    {path: 'editingIngredienti', component: IngredientEditComponent, data: {title: 'Crea Ingrediente'}, canDeactivate: [IngredientGuard]},
-    {path: 'editingIngredienti/:id', component: IngredientEditComponent, data: {title: 'Modifica Ingrediente'}, canDeactivate: [IngredientGuard]},
+    {path: 'editingIngredienti', component: IngredientEditComponent, data: {title: 'Crea Ingrediente'}, canDeactivate: [GenericDeactivateGuard]},
+    {path: 'editingIngredienti/:id', component: IngredientEditComponent, data: {title: 'Modifica Ingrediente'}, canDeactivate: [GenericDeactivateGuard]},
 
     {path: 'dipendenti', component: EmployeeListComponent, data: {title: 'Dipendenti'}},
-    {path: 'crea-dipendente', component: EmployeeEditComponent, data: {title: 'Crea Dipendente'}},
-    {path: 'modifica-dipendente/:id', component: EmployeeEditComponent, data: {title: 'Modifica Dipendente'}},
+    {path: 'crea-dipendente', component: EmployeeEditComponent, data: {title: 'Crea Dipendente'}, canDeactivate: [GenericDeactivateGuard]},
+    {path: 'modifica-dipendente/:id', component: EmployeeEditComponent, data: {title: 'Modifica Dipendente'},  canDeactivate: [GenericDeactivateGuard]},
   ]
 }];
 
