@@ -19,6 +19,10 @@ export class CategoryService {
     let p = Utils.createHttpParams({'types': types});
     return this.http.get(`${this.baseUrl}/getAll`, {params: p});
   }
+  getAllByIdSection(id:string) {
+    return this.http.get(`${this.baseUrl}/getAllByIdSection/${id}`);
+  }
+
   getAllDisabled(types: string[]) {
     let p = Utils.createHttpParams({'types': types});
     return this.http.get(`${this.baseUrl}/getAllDisabled`, {params: p});
@@ -48,4 +52,6 @@ export class CategoryService {
   setOrderPriorities(priorities: { [key: string]: number }){
     return this.http.post<boolean>(`${this.baseUrl}/setOrderPriorities`, priorities);
   }
+
+
 }
