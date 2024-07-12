@@ -6,6 +6,7 @@ import {TwentyfiveModalService} from "twentyfive-modal";
 import {ToastrService} from "ngx-toastr";
 import {ButtonSizeTheme, ButtonTheme } from 'twentyfive-style';
 import {SettingService} from "../../../../services/setting.service";
+import {isEqual} from "lodash";
 
 @Component({
   selector: 'app-employee-edit',
@@ -13,6 +14,8 @@ import {SettingService} from "../../../../services/setting.service";
   styleUrl: './employee-edit.component.scss'
 })
 export class EmployeeEditComponent {
+
+  navigationType: 'back' | 'save' | null = null;
 
   originalEmployee: Customer = new Customer()
   employee: Customer = new Customer()
@@ -75,6 +78,7 @@ export class EmployeeEditComponent {
   }
 
   saveEmployee() {
+    this.navigationType="save";
     if (this.isValid()){
       this.customerService.saveCustomer(this.employee).subscribe({
         error:(error) =>{
@@ -121,9 +125,12 @@ export class EmployeeEditComponent {
     return true;
   }
 
+  hasChanges(): boolean {
+    return !isEqual(this.employee,this.originalEmployee);
+  }
 
   close() {
-    // this.navigationType="back"
+    this.navigationType="back"
     this.router.navigate(['../dashboard/dipendenti']);
   }
 
