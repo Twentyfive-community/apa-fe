@@ -42,11 +42,9 @@
           <li class="my-2" *ngFor="let item of product.customization">
             <b>{{item.name}}:</b><br>{{item.value}}
           </li>
-
           <li *ngIf="product.attachment">
             <b>Ostia:</b><br>
-            <a [href]="product.attachment" target="_blank">{{ extractFilename(product.attachment) }}</a>
-          </li>
+            <a [href]="product.attachment" target="_blank">{{ extractFilename(product.attachment) }}</a>          </li>
         </ul>
       </div>
     </div>
