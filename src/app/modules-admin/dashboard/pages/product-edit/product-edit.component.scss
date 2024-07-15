@@ -8,28 +8,61 @@
    font-size: 1.25rem !important; /* Imposta la dimensione del font simile a un h5 */
    font-weight: 500; /* Assicurati che l'etichetta abbia un peso del carattere simile a un h5 */
  }
+
 .drop-zone {
-  border: 2px dashed #ccc; /* Bordo tratteggiato grigio */
-  padding: 20px; /* Spaziatura interna */
-  background-color: #f0f0f0; /* Sfondo grigio */
-  font-weight: bold; /* Testo in grassetto */
-  height:200px;
-  width:400px;
-}
-.image-container {
-  max-width: 150px;
-  max-height: 150px;
+  border: 2px dashed #ccc;
+  background-color: #f0f0f0;
+  font-weight: bold;
+  width: 400px;
+  height: 200px;
+  padding: 20px;
+  margin: 1px;
+  box-sizing: border-box; /* Assicura che padding e border siano inclusi nelle dimensioni totali */
+  position: relative;
   overflow: hidden;
+  display: flex; /* Utilizzo di flex per centrare il contenuto verticalmente */
+  justify-content: center; /* Centra il contenuto orizzontalmente */
+  align-items: center; /* Centra il contenuto verticalmente */
+}
+
+.image-container {
+  max-width: 100%; /* Larghezza massima consentita */
+  max-height: 200px; /* Altezza massima consentita, personalizzala secondo le tue esigenze */
+  overflow: hidden; /* Nasconde l'overflow dell'immagine */
+  display: flex; /* Usa flexbox per centrare l'immagine verticalmente */
+  justify-content: center; /* Centra l'immagine orizzontalmente */
 }
 
 .image-preview {
-  width: 100%;
-  height: auto;
+  max-width: 100%; /* Larghezza massima dell'immagine rispetto al contenitore */
+  max-height: 100%; /* Altezza massima dell'immagine rispetto al contenitore */
+  width: auto; /* Larghezza automatica per mantenere le proporzioni */
+  height: auto; /* Altezza automatica per mantenere le proporzioni */
+  display: block; /* Imposta l'immagine come blocco per gestire correttamente i margini */
+  object-fit: contain; /* Assicura che l'immagine si adatti mantenendo le proporzioni */
 }
 
-.small-icon{
-  width: 24px;  /* Imposta la larghezza desiderata */
+
+
+
+.position-absolute {
+  position: absolute;
+}
+
+.top-50 {
+  top: 50%;
+}
+
+.translate-middle-y {
+  transform: translateY(-50%);
+}
+
+
+
+.small-icon {
+  width: 24px; /* Imposta la larghezza desiderata */
   height: 24px; /* Imposta l'altezza desiderata */
   object-fit: contain; /* Assicura che l'immagine si adatti alle dimensioni senza distorsioni */
 }
+
 
