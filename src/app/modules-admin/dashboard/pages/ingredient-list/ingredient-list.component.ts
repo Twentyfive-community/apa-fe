@@ -127,7 +127,10 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
           this.categoryService.disableCategory(this.activeTab!).subscribe({
             next: (() => {
               this.getCategories();
-            })
+            }),
+            complete:() =>{
+              this.activeTab = this.categories[0].id;
+            }
           });
         })
       });
@@ -252,7 +255,10 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
           this.categoryService.deleteCategory(id).subscribe({
             next: (() =>{
               this.getCategories();
-            })
+            }),
+            complete:() =>{
+              this.activeTab = this.categories[0].id;
+            }
           });
         })
       });

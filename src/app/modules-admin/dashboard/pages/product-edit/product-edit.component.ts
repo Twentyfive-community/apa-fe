@@ -54,7 +54,6 @@ export class ProductEditComponent implements OnInit {
 
   allergens: Allergen[] = [];
   selectedAllergens: Allergen[] = [];
-  selectedAllergensNames: string[] = [];
   constructor(private router: Router,
               private modalService: TwentyfiveModalService,
               private toastrService: ToastrService,
