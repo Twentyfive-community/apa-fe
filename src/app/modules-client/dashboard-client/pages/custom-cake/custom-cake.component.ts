@@ -13,6 +13,7 @@ import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
 import {CustomerDetails} from "../../../../models/Customer";
 import {Measure} from "../../../../models/Measure";
 import {Allergen} from "../../../../models/Allergen";
+import {catchError, forkJoin, of} from "rxjs";
 
 @Component({
   selector: 'app-custom-cake',
@@ -318,7 +319,7 @@ export class CustomCakeComponent implements OnInit{
   }
 
   getBagneOptions(){
-    if(this.selectedBase[0] == 'Millefoglie' || this.selectedBase[0] == 'Red Velvet'){
+    if(this.selectedBase[0] == 'Millefoglie' || this.selectedBase[0] == 'Red Velvet' || this.selectedBase[0] == 'Pan di Spagna al Cacao'){
       this.bagnaOptions=['NO BAGNE'];
       this.selectedBagna[0] = this.bagnaOptions[0];
       this.getFruttaOptions();
@@ -344,7 +345,6 @@ export class CustomCakeComponent implements OnInit{
         this.fruttaOptions.push(ingrediente.name);
       }
       this.stepCompleted[7]=true;
-      this.getCopertureOptions();
     })
   }
 
@@ -381,27 +381,48 @@ export class CustomCakeComponent implements OnInit{
         }
         else if(this.selectedBase[0]=='Diplomatica'){
           this.coperturaOptions=['Zucchero a velo'];
+          this.selectedCopertura.push(this.coperturaOptions[0]);
+
         }
         else if(this.selectedBase[0]=='Mimosa'){
           this.coperturaOptions=['Pan di Spagna sbriciolato']
+          this.selectedCopertura.push(this.coperturaOptions[0]);
+
         }
         else if(this.selectedBase[0]=='Red Velvet'){
           this.coperturaOptions=['Panna'];
-        }
-        else{
-          this.ingredientService.getAllByNameCategories('Coperture', 'ingredienti').subscribe((response: any) =>{
-            this.ingredientsObject=response;
-            for(let ingrediente of this.ingredientsObject){
-              this.coperturaOptions.push(ingrediente.name);
-            }
-          })
-          this.coperturaOptions.push('Crema Chantilly Leggera');
-        }
-        break;
-    }
-    this.selectedCopertura[0]=this.coperturaOptions[0];
-  }
+          this.selectedCopertura.push(this.coperturaOptions[0]);
 
+        }
+        else {
+          const coperturaObservable = this.ingredientService.getAllByNameCategories('Coperture', 'ingredienti');
+          forkJoin({
+            coperturaResponse: coperturaObservable.pipe(
+              catchError(error => {
+                console.error('Errore nella chiamata HTTP per coperture', error);
+                return of(null); // Gestisci l'errore, se necessario
+              })
+            )
+          }).subscribe({
+            next: (responses: any) => {
+              const coperturaResponse = responses.coperturaResponse;
+
+              if (coperturaResponse) {
+                this.ingredientsObject = coperturaResponse;
+                for (let ingrediente of this.ingredientsObject) {
+                  this.coperturaOptions.push(ingrediente.name);
+                }
+                this.selectedCopertura.push(this.coperturaOptions[0]);
+              }
+            },
+            error: (error) => {
+              console.error('Errore generico nella forkJoin', error);
+              // Gestisci l'errore generico, se necessario
+            }
+          });
+        }
+    }
+  }
   getGranelleOptions(){
     this.stepCompleted[9]=true;
     if(this.selectedType[0]=='Torta a forma' || this.selectedType[0]=='Drip Cake'){
