@@ -70,6 +70,7 @@ export class CartProductCardComponent implements OnInit{
         this.product.imageUrl = res.imageUrl;
         this.product.price = `€ ${res.pricePerKg.toFixed(2)}`;
         this.product.toBuy = true
+        console.log(this.product)
       })
     } else {
       this.productService.getByIdKg(this.product.id).subscribe((res:any) => {
@@ -80,6 +81,7 @@ export class CartProductCardComponent implements OnInit{
         }        this.product.imageUrl = res.imageUrl;
         this.product.price = res.pricePerKg;
         this.product.toBuy = true
+        console.log(this.product)
         /*
         if(res.name=="Torta Personalizzata"){
           this.product.attachment=res.attachment;
@@ -222,6 +224,11 @@ export class CartProductCardComponent implements OnInit{
         })
         break;
     }
+  }
+
+  extractFilename(url: string): string {
+    if (!url) return '';
+    return url.substring(url.lastIndexOf('/') + 1);
   }
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
   protected readonly ButtonTheme = ButtonTheme;
