@@ -1,0 +1,55 @@
+<div class="sticky-top">
+  <lib-nav
+    [logoWidth]="128"
+    [navbarNavigationUrl]="'/menu'"
+    [navbarLogo]="'assets/images/apa-full-white.svg'"
+    [navbarStyle]="NavbarTheme.Secondary"
+    [showLeftTitle]="false"
+    [logoCentered]="true"
+    [showSideMenu]="false"
+  ></lib-nav>
+</div>
+
+<div class="container" style="overflow-y: auto; max-height: calc(100vh - 100px);">
+
+  <div class="row" *ngFor="let section of sections; let i = index">
+    <div class="col-12 d-flex justify-content-center align-items-center mt-2 mb-4" *ngIf="categories[section.id]?.length">
+      <h2 style="color: #6C6029">{{ section.name }}</h2>
+    </div>
+
+    <div class="col-12" *ngIf="categories[section.id]?.length">
+      <div *ngFor="let category of categories[section.id]">
+        <div class="d-flex justify-content-between align-items-center mt-2">
+          <button class="btn btn-primary category-btn w-100" (click)="toggleItems(category.id)">
+            {{ category.name }}
+            <i [ngClass]="{'bi bi-chevron-down': !openCategories[category.id], 'bi bi-chevron-up': openCategories[category.id]}"></i>
+          </button>
+        </div>
+
+        <!-- CARD -->
+        <div class="card-body" *ngIf="openCategories[category.id]" [@cascadeInOut]="openCategories[category.id] ? 'in' : 'out'">
+          <div class="card empty-state mt-2" *ngIf="(items[category.id].length === 0)">
+            <i class="bi bi-emoji-smile-upside-down-fill"></i>
+            <h5>Qui non c'è nulla da vedere, pussa via!</h5>
+          </div>
+          <div class="item" *ngFor="let item of items[category.id]" [@cascadeInOut]="openCategories[category.id] ? 'in' : 'out'">
+            <div class="d-flex justify-content-center align-items-center w-100 my-2">
+              <app-generic-card
+                style="width: 100vw"
+                [title]="item.name"
+                [description]="item.description"
+                [price]="item.price"
+                [allergens]="item.allergens"
+                [imageUrl]="item.imageUrl"
+              ></app-generic-card>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Separazione tra sezioni -->
+      <div class="col-12 my-4">
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>

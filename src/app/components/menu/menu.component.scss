@@ -1,0 +1,40 @@
+.category-btn {
+  background-color: #CDBB6D;
+  color: white;
+  height: 4rem;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover {
+    background-color: #6C6029;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  &:focus {
+    outline: none; /* Nessun contorno */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  i {
+    margin-left: 10px;
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+}
+
+.empty-state img {
+  max-width: 200px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.empty-state h4 {
+  font-size: 18px;
+  color: #6C6029;
+}

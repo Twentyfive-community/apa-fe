@@ -61,6 +61,9 @@ import { SectionCardComponent } from './section-card/section-card.component';
     ApaSpinnerComponent,
     NoItemCardComponent,
     SectionCardComponent,
+    NgbDropdown,
+    NgbDropdownMenu,
+    NgbDropdownToggle,
   ]
 })
 export class SharedModule {
