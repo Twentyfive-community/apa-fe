@@ -70,6 +70,8 @@ export class CustomCakeComponent implements OnInit{
   selectedColor: string[]=[''];
 
   file: File | null;
+  acceptedFileTypes: string[] = ['image/png', 'image/jpeg', 'image/jpg'];
+
   abbreviatedFileName: string = '';
   price: string='';
   realPrice: number = 0;
@@ -689,22 +691,22 @@ export class CustomCakeComponent implements OnInit{
 
   handleFiles(files: FileList) {
     const file = files[0];
-    this.abbreviatedFileName = this.getAbbreviatedFileName(file.name);
-    this.file = file;
-  }
+    if (this.isValidFileType(file)) {
+      this.file = file;
+      this.productInPurchase.attachment = URL.createObjectURL(file);
 
-  getAbbreviatedFileName(fileName: string): string {
-    const maxFileNameLength = 15; // Lunghezza massima del nome del file
-    if (fileName.length > maxFileNameLength) {
-      return fileName.substring(0, maxFileNameLength) + '...';
+    } else {
+      this.toastrService.error('Tipo di file non valido. Accettiamo solo file .png, .jpg, .jpeg');
     }
-    return fileName;
   }
 
-
+  isValidFileType(file: File): boolean {
+    return this.acceptedFileTypes.includes(file.type);
+  }
   removeFile(event: Event) {
     event.stopPropagation();
     this.file = null;
+    this.productInPurchase.attachment = '';
     // Reimposta il valore dell'input del file a null per consentire la selezione dello stesso file
     this.fileInputRef.nativeElement.value = '';
   }

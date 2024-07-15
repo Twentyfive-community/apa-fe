@@ -59,12 +59,55 @@
   color: white; /* Colore del testo bianco */
 }
 
+
+
 .drop-zone {
-  border: 2px dashed #ccc; /* Bordo tratteggiato grigio */
-  padding: 20px; /* Spaziatura interna */
-  background-color: #f0f0f0; /* Sfondo grigio */
-  font-weight: bold; /* Testo in grassetto */
+  border: 2px dashed #ccc;
+  background-color: #f0f0f0;
+  font-weight: bold;
+  width: 400px;
+  height: 200px;
+  padding: 20px;
+  margin: 1px;
+  box-sizing: border-box; /* Assicura che padding e border siano inclusi nelle dimensioni totali */
+  position: relative;
+  overflow: hidden;
+  display: flex; /* Utilizzo di flex per centrare il contenuto verticalmente */
+  justify-content: center; /* Centra il contenuto orizzontalmente */
+  align-items: center; /* Centra il contenuto verticalmente */
 }
+
+.image-container {
+  max-width: 200px; /* Larghezza massima dell'immagine */
+  max-height: 200px; /* Altezza massima dell'immagine */
+  overflow: hidden; /* Nasconde l'overflow dell'immagine */
+}
+
+.image-preview {
+  width: 100%; /* Larghezza al 100% rispetto al contenitore */
+  height: auto; /* Altezza automatica per mantenere le proporzioni */
+  display: block; /* Imposta l'immagine come blocco */
+  object-fit: contain; /* Assicura che l'immagine si adatti mantenendo le proporzioni */
+}
+
+.position-absolute {
+  position: absolute; /* Posizione assoluta per il cestino */
+}
+
+.top-0 {
+  top: 0; /* Posiziona il cestino all'estremità superiore */
+}
+
+.end-0 {
+  right: 5px; /* Sposta il cestino a 5px dalla fine destra dell'immagine */
+}
+
+.translate-middle-x {
+  transform: translateX(50%); /* Centra il cestino orizzontalmente */
+}
+
+
+
 
 ::ng-deep lib-twentyfive-input label {
   font-size: 1.2rem !important; /* Imposta la dimensione del font simile a un h5 */

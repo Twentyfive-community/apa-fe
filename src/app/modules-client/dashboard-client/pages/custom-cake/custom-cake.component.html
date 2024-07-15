@@ -280,26 +280,29 @@
                 </div>
                 <div class="row mt-1 me-2">
                   <p style="font-size:medium ">Immagine</p>
-                  <div class="drop-zone rounded ms-3 mb-1 mt-1 me-3" #dropZone (drop)="handleDrop($event)" (dragover)="handleDragOver($event)" (click)="fileInput.click()">
+                  <div class="drop-zone rounded ms-3 mb-1 mt-1 me-3" #dropZone
+                       *ngIf="!file"
+                       (drop)="handleDrop($event)"
+                       (dragover)="handleDragOver($event)"
+                       (click)="fileInput.click()">
                     <div class="row">
                       <div class="mb-4 text-purple">
                         Trascina qui il file da caricare o clicca per selezionare un file
                       </div>
                     </div>
-                    <div *ngIf="file" class="row">
-                      <div class="col-10">
-                        <span>{{ abbreviatedFileName }}</span>
-                      </div>
-                      <div class="col-2">
-                        <button class="btn btn-link text-dark" (click)="removeFile($event)">
-                          <i class="bi bi-trash"></i>
-                        </button>
-                      </div>
+                  </div>
+
+                    <div *ngIf="file" class="image-container position-relative">
+                      <img [src]="productInPurchase.attachment" class="image-preview">
+                      <button class="btn btn-link text-dark position-absolute top-0 end-0 translate-middle-x" (click)="removeFile($event)">
+                        <i class="bi bi-trash"></i>
+                      </button>
                     </div>
                   </div>
-                </div>
 
-                <input type="file" #fileInput style="display: none;" (change)="handleFileSelect($event)" accept=".png, .jpg, .jpeg">
+                  <input type="file" #fileInput style="display: none;" (change)="handleFileSelect($event)" accept=".png, .jpg, .jpeg">
+
+
               </ng-container>
             </ng-container>
           </div>
