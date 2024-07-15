@@ -58,6 +58,7 @@
             <ng-container  *ngFor="let product of productListKg">
               <div class="col-sm-12 col-md-6 col-lg-4 mb-4"  >
                 <app-generic-card class="w-100"
+                                  [customStyles]="{'height':'200px'}"
                                   [title]="product.name"
                                   [description]="product.description"
                                   [ingredientList]="product.ingredients"
@@ -75,6 +76,7 @@
             <ng-container *ngFor="let tray of trayList">
               <div class="col-sm-12 col-md-6 col-lg-4 mb-4"  >
                 <app-generic-card class="w-100"
+                                  [customStyles]="{'height':'200px'}"
                                   [title]="tray.name"
                                   [description]="tray.description"
                                   [allergens]="tray.allergens"
