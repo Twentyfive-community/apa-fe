@@ -1,0 +1,44 @@
+.card {
+  border-radius: 0.5rem;
+  max-height: 140px;
+}
+
+.card-menu-icon-right {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.card-menu-icon-left {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+
+.card-body {
+  position: relative;
+}
+
+.dropdown-menu {
+  display: none;
+}
+
+.dropdown-menu.show {
+  display: block;
+  position: absolute;
+  top: 24px;
+  right: 0;
+  z-index: 1000;
+  min-width: 10rem;
+  padding: 0.5rem 0;
+  margin: 0.125rem 0 0;
+  font-size: 1rem;
+  color: #212529;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.25rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
+}

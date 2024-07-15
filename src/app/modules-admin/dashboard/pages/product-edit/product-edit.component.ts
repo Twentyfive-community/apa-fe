@@ -12,6 +12,7 @@ import {environment} from "../../../../../environments/environment";
 import {cloneDeep, isEqual} from "lodash";
 import {Allergen} from "../../../../models/Allergen";
 import {AllergenService} from "../../../../services/allergen.service";
+import {MenuitemService} from "../../../../services/menuitem.service";
 
 @Component({
   selector: 'app-product-edit',
@@ -41,7 +42,7 @@ export class ProductEditComponent implements OnInit {
   ];
   ingredientNames: any = [];
   selectedIngredients: string[] = [];
-
+  idSection:string | null;
   pricePerKg = 0;
   weight = 0;
   minWeight = 0;
@@ -55,6 +56,7 @@ export class ProductEditComponent implements OnInit {
   allergens: Allergen[] = [];
   selectedAllergens: Allergen[] = [];
   selectedAllergensNames: string[] = [];
+  price: number =0;
   constructor(private router: Router,
               private modalService: TwentyfiveModalService,
               private toastrService: ToastrService,
@@ -62,13 +64,15 @@ export class ProductEditComponent implements OnInit {
               private productService: ProductService,
               private categoryService: CategoryService,
               public ingredientService: IngredientService,
-              private allergenService: AllergenService
+              private allergenService: AllergenService,
+              private menuitemService: MenuitemService
   ) {
   }
 
   ngOnInit(): void {
     this.categoryId = this.activatedRoute.snapshot.queryParamMap.get('categoryId');
     this.productId = this.activatedRoute.snapshot.paramMap.get('id');
+    this.idSection = this.activatedRoute.snapshot.queryParamMap.get('idSection');
     if (this.categoryId) {
       this.categoryService.getById(this.categoryId).subscribe((response: any) => {
         this.category = response;
@@ -78,9 +82,9 @@ export class ProductEditComponent implements OnInit {
           this.productToAdd.categoryId = this.categoryId;
           this.originalProduct.categoryId = this.categoryId;
         }
-        if (!(this.category.type == "tray")) {
+        if (!(this.category.type == "tray" || this.category.idSection)) {
           this.getAllIngredients();
-        } else if (this.category.type == "tray"){
+        } else if (this.category.type == "tray" || this.category.idSection){
           this.getAllergens();
         }
       })
@@ -143,12 +147,33 @@ export class ProductEditComponent implements OnInit {
           this.getAllergens(); // Ensure allergens list is updated after setting selected allergens
         })
         break;
+      default:
+        this.menuitemService.getById(event).subscribe((response:any)=>{
+          this.productToAdd = response;
+          this.originalProduct = cloneDeep(response);
+          this.productToAdd.categoryId = this.categoryId;
+          this.originalProduct.categoryId = this.categoryId;
+          this.price = parseFloat(response.price.replace('€ ', ''));
+          this.productToAdd.price = this.price;
+          this.originalProduct.price = cloneDeep(this.price);
+          this.productToAdd.allergenNames=[];
+          for (const allergen of response.allergens) {
+            this.productToAdd.allergenNames.push(allergen.name);
+            this.selectedAllergens.push(allergen);
+          }
+          this.getAllergens(); // Ensure allergens list is updated after setting selected allergens
+        })
     }
   }
 
   close() {
-          this.navigationType="back";
-          this.router.navigate(['../dashboard/prodotti'], {queryParams: {activeTab: this.categoryId}});
+    this.navigationType="back";
+    if(this.idSection){
+      this.router.navigate([`../dashboard/menu/${this.idSection}`], {queryParams: {activeTab: this.categoryId}});
+    } else {
+      this.router.navigate([`../dashboard/prodotti`], {queryParams: {activeTab: this.categoryId}});
+
+    }
   }
 
   closeIconClicked(index: number) {
@@ -183,6 +208,9 @@ export class ProductEditComponent implements OnInit {
         break;
       case 'weightMeasure':
         this.measure[index ?? 0].weight = Number(event.target.value);
+        break;
+      case 'price':
+        this.productToAdd.price = Number(event.target.value);
         break;
     }
   }
@@ -276,6 +304,18 @@ export class ProductEditComponent implements OnInit {
             }
           })
           break;
+        default:
+          this.menuitemService.save(this.productToAdd).subscribe({
+            error: (errorResponse) => {
+              if (errorResponse.error.status === 'NOT_ACCEPTABLE') { // Controlla lo status code per l'errore specifico
+                this.toastrService.error("Esiste già un prodotto con questo nome!");
+              }
+            },
+            complete: () => {
+              this.toastrService.success("Prodotto salvato con successo");
+              this.router.navigate([`../dashboard/menu/${this.idSection}`], {queryParams: {activeTab: this.categoryId}});
+            }
+          })
       }
     }
   }

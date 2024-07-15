@@ -75,6 +75,13 @@ export class DashboardComponent implements OnInit{
       disableClick: true,
       labelColor: "",
       isLogout: true
+    },
+    {
+      title: "Menù QR Bar",
+      icon: "bi bi-qr-code-scan",
+      navigationUrl: "menu",
+      disableClick: false,
+      labelColor: "menu"
     }
   ];
 

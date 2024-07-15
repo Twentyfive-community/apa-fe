@@ -10,11 +10,19 @@ export class MenuItem {
   name: string;
   categoryId: string;
   description: string;
-  price: number;
+  price: string;
   allergens: Allergen[] ;
   imageUrl: string;
+  active: boolean;
 }
 
-export class MenuItemDetails {
-
+export class MenuItemToAdd {
+  id: string;
+  name: string;
+  categoryId: string;
+  description: string;
+  price: string;
+  allergenNames: string[] ;
+  imageUrl: string;
+  active: boolean;
 }

@@ -3,4 +3,5 @@ export class Category{
   type: string;
   name: string;
   enabled: boolean=true;
+  idSection: string;
 }

@@ -5,7 +5,7 @@
     <button type="button" class="btn-close" (click)="close()"></button>
   </div>
 
-  <div class="col-3">
+  <div class="col-6">
     <div class="row mt-4 ms-1">
       <lib-twentyfive-input
         labelText="Nome"
@@ -15,7 +15,7 @@
       ></lib-twentyfive-input>
     </div>
 
-    <div *ngIf="categoryType && categoryType.length > 0" class="row mt-4 ms-1">
+    <div *ngIf="categoryType && categoryType.length > 0 && !sectionMenu" class="row mt-4 ms-1">
       <div ngbDropdown class="nav-item" role="presentation">
         <div ngbDropdownToggle class="nav-link" id="dropdownMenuButton" role="button" aria-expanded="false">
           Seleziona una categoria
@@ -30,7 +30,7 @@
       </div>
     </div>
 
-  <div class="row mt-4 ms-1" *ngIf="categoryType || categoryId">
+  <div class="row mt-4 ms-1" *ngIf="(categoryType || categoryId) && !sectionMenu">
       <lib-twentyfive-input
         labelText="Tipo"
         placeholder="Tipo"
@@ -40,7 +40,7 @@
       ></lib-twentyfive-input>
     </div>
 
-    <div *ngIf="!categoryId && !categoryType" class="row mt-4 ms-1">
+    <div *ngIf="!categoryId && !categoryType && !sectionMenu" class="row mt-4 ms-1">
       <lib-twentyfive-input
         labelText="Tipo"
         placeholder="Tipo"

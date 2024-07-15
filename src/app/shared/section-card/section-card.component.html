@@ -1,0 +1,21 @@
+<div class="card text-white mb-3" style="cursor: pointer" [ngStyle]="{backgroundColor: disabledCard ? '#D9D9D9' : backgroundCardColor}" (click)="onCardClicked($event)">
+  <div class="card-body text-center p-3">
+    <div class="card-icon mb-2">
+      <i [ngClass]="icon" [ngStyle]="{color: iconColor, fontSize: fontSizeIcon}"></i>
+    </div>
+    <p [ngStyle]="{color: titleColor}">{{title}}</p>
+    <div *ngIf="showMenu" class="card-menu-icon-right">
+      <i class="bi bi-three-dots-vertical" [ngStyle]="{color: iconColor}" style="font-size: 24px" (click)="toggleDropdown($event)"></i>
+      <ul class="dropdown-menu" [class.show]="dropdownOpen">
+        <li *ngFor="let action of actions">
+          <a class="dropdown-item" (click)="action.action(menuItem); $event.stopPropagation()">
+            {{ action.actionName }}
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="disabledCard" class="card-menu-icon-left">
+      <i class="bi bi-eye-slash-fill" [ngStyle]="{color: iconColor}" style="font-size: 24px"></i>
+    </div>
+  </div>
+</div>

@@ -38,7 +38,16 @@
   ></lib-twentyfive-input>
 </div>
 
-<div *ngIf="category.type!='tray' && productToAdd.name!='Torta Personalizzata'">
+<div *ngIf="category.idSection" class="col-3 mt-4 mb-2" style="min-width: 100px">
+  <lib-twentyfive-input
+    labelText="Prezzo"
+    inputType="number"
+    [value]="price.toString()"
+    (input)="onInputChangeProduct($event, 'price')"
+  ></lib-twentyfive-input>
+</div>
+
+<div *ngIf="category.type!='tray' && productToAdd.name!='Torta Personalizzata' && !category.idSection">
   <div class="row mt-4">
     <h5>Ingredienti</h5>
     <div class="col-12">
@@ -155,26 +164,26 @@
     (click)="addMeasure()"
     [buttonStyle]="ButtonTheme.Primary"
   ></lib-generic-button-text-with-icon>
+</div>
 
-  <div class="row mt-4 mb-4" *ngIf="allergens.length > 0 && !productToAdd.customized">
-    <div class="col-12">
-      <label for="allergenDropdown" class="ms-1 form-label">Allergeni</label>
-      <div ngbDropdown class="dropdown mt-2">
-        <button ngbDropdownToggle class="btn btn-outline-dark" type="button" id="allergenDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-          Seleziona allergeni
-        </button>
+<div class="row mt-4 mb-4" *ngIf="(allergens.length > 0 && !productToAdd.customized) || category.idSection">
+  <div class="col-12">
+    <label for="allergenDropdown" class="ms-1 form-label">Allergeni</label>
+    <div ngbDropdown class="dropdown mt-2">
+      <button ngbDropdownToggle class="btn btn-outline-dark" type="button" id="allergenDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        Seleziona allergeni
+      </button>
 
-        <ul ngbDropdownMenu class="dropdown-menu" aria-labelledby="allergenDropdown" style="max-height: 200px; overflow-y: auto;">
-          <li *ngFor="let allergen of allergens" class="dropdown-item" (click)="toggleAllergen(allergen)">
-            <div class="form-check">
-              <input type="checkbox" [checked]="selectedAllergens.includes(allergen)" style="display: none;">
-              <label class="form-check-label" style="cursor: pointer;">
-                <img [src]="allergen.iconUrl" class="small-icon">{{ allergen.name }}
-              </label>
-            </div>
-          </li>
-        </ul>
-      </div>
+      <ul ngbDropdownMenu class="dropdown-menu" aria-labelledby="allergenDropdown" style="max-height: 200px; overflow-y: auto;">
+        <li *ngFor="let allergen of allergens" class="dropdown-item" (click)="toggleAllergen(allergen)">
+          <div class="form-check">
+            <input type="checkbox" [checked]="selectedAllergens.includes(allergen)" style="display: none;">
+            <label class="form-check-label" style="cursor: pointer;">
+              <img [src]="allergen.iconUrl" class="small-icon">{{ allergen.name }}
+            </label>
+          </div>
+        </li>
+      </ul>
     </div>
   </div>
 </div>

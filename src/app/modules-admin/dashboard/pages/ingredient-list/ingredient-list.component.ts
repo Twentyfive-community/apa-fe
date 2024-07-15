@@ -62,7 +62,7 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
   disabledCategories: Category[] = [];
   changeTab = false;
   selectedCategoryId: string;
- selectedCategoryToChange: string;
+  selectedCategoryToChange: string;
 
   constructor(private ingredientService: IngredientService,
               private categoryService: CategoryService,
@@ -232,6 +232,7 @@ export class IngredientListComponent implements OnInit, AfterViewInit{
 
 
   activeOrDisable(event: any) {
+    console.log(event);
     if (event.active) {
       this.disableStatus(event.id)
     } else {

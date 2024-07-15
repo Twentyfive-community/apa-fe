@@ -22,6 +22,9 @@ export class CategoryService {
   getAllByIdSection(id:string) {
     return this.http.get(`${this.baseUrl}/getAllByIdSection/${id}`);
   }
+  getAllDisabledByIdSection(id:string) {
+    return this.http.get(`${this.baseUrl}/getAllDisabledByIdSection/${id}`);
+  }
 
   getAllDisabled(types: string[]) {
     let p = Utils.createHttpParams({'types': types});

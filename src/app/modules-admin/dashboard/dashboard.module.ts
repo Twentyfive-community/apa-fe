@@ -26,6 +26,9 @@ import {TwentyfiveDatepickerModule} from "twentyfive-datepicker";
 import { EmployeeListComponent } from './pages/employee-list/employee-list.component';
 import { EmployeeEditComponent } from './pages/employee-edit/employee-edit.component';
 import { BakerListComponent } from './pages/baker-list/baker-list.component';
+import { MenuSectionListComponent } from './pages/menu-section-list/menu-section-list.component';
+import { MenuSectionEditComponent } from './pages/menu-section-edit/menu-section-edit.component';
+import { MenuSectionDetailsComponent } from './pages/menu-section-details/menu-section-details.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +47,9 @@ import { BakerListComponent } from './pages/baker-list/baker-list.component';
     EmployeeListComponent,
     EmployeeEditComponent,
     BakerListComponent,
+    MenuSectionListComponent,
+    MenuSectionEditComponent,
+    MenuSectionDetailsComponent,
   ],
   imports: [
     DashboardRoutingModule,

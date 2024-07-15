@@ -1,0 +1,22 @@
+<div class="row flex-wrap">
+  <div class="col-12 col-md-4">
+    <app-section-card
+      [title]="'Aggiungi sezione'"
+      [icon]="'bi bi-plus-circle'"
+      (cardClicked)="editMenu()"
+      [showMenu]="false"
+    ></app-section-card>
+  </div>
+  <div class="col-12 col-md-4" *ngFor="let m of menuList">
+    <app-section-card
+      (cardClicked)="navigateToDetail(m)"
+      [title]="m.name"
+      [menuItem]="m"
+      [disabledCard]="!m.active"
+      [iconColor]="'#FFF'"
+      [actions]="boxAction"
+      [backgroundCardColor]="'#000000'"
+      [titleColor]="'#FFF'"
+    ></app-section-card>
+  </div>
+</div>

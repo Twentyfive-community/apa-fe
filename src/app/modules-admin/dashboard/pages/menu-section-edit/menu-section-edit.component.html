@@ -1,0 +1,34 @@
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title">{{ title }}</h5>
+    <button type="button" class="btn-close" (click)="close()"></button>
+  </div>
+
+  <div class="modal-body ps-md-5 pe-md-5">
+    <div class="row">
+      <lib-twentyfive-input
+        [value]="menuSection.name"
+        [labelStyle]="LabelTheme.LabelBold"
+        [inputStyle]="InputTheme.Primary"
+        (input)="onInputChange($event)"
+        placeholder="Nome"
+        inputType="text"
+        labelText="Nome*"
+        [required]="true"
+      ></lib-twentyfive-input>
+    </div>
+
+    <div class="row mt-4">
+      <lib-generic-button
+        [type]="'submit'"
+        [buttonSize]="ButtonSizeTheme.FullWidth"
+        [buttonStyle]="ButtonTheme.Primary"
+        (click)="createMenu()"
+        buttonText="Salva Menu">
+      </lib-generic-button>
+    </div>
+
+  </div>
+
+</div>
+

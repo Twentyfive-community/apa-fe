@@ -18,6 +18,7 @@ import {TooltipModule} from "ngx-bootstrap/tooltip";
 import { ApaSpinnerComponent } from './apa-spinner/apa-spinner.component';
 import {TwentyfiveSpinnerModule} from "twentyfive-spinner";
 import { NoItemCardComponent } from './no-item-card/no-item-card.component';
+import { SectionCardComponent } from './section-card/section-card.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { NoItemCardComponent } from './no-item-card/no-item-card.component';
     CartProductCardComponent,
     ApaSpinnerComponent,
     NoItemCardComponent,
+    SectionCardComponent,
   ],
   imports: [
     CommonModule,
@@ -58,6 +60,7 @@ import { NoItemCardComponent } from './no-item-card/no-item-card.component';
     CartProductCardComponent,
     ApaSpinnerComponent,
     NoItemCardComponent,
+    SectionCardComponent,
   ]
 })
 export class SharedModule {

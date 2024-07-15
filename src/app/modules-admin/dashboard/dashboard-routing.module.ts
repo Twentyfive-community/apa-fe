@@ -15,6 +15,8 @@ import {EmployeeListComponent} from "./pages/employee-list/employee-list.compone
 import {EmployeeEditComponent} from "./pages/employee-edit/employee-edit.component";
 import {BakerListComponent} from "./pages/baker-list/baker-list.component";
 import {GenericDeactivateGuard} from "./guards/generic-deactivate.guard";
+import {MenuSectionListComponent} from "./pages/menu-section-list/menu-section-list.component";
+import {MenuSectionDetailsComponent} from "./pages/menu-section-details/menu-section-details.component";
 
 const routes: Routes = [
   {path: '', redirectTo: 'ordini', pathMatch: 'full'},
@@ -29,6 +31,9 @@ const routes: Routes = [
     {path: 'ordini-completati', component: CompletedOrderComponent, data:{title: 'Ordini Completati'}},
 
     {path: 'pasticceria', component: BakerListComponent, data:{title: 'Pasticceria'}},
+
+    {path: 'menu', component: MenuSectionListComponent, data:{title: 'Menù QR Bar'}},
+    {path: 'menu/:id', component: MenuSectionDetailsComponent, data:{title: 'Menù QR Bar'}},
 
     {path: 'clienti', component: CustomerListComponent, data: {title: 'Clienti'}},
     {path: 'dettagliClienti/:id', component: CustomerDetailsComponent, data: {title: 'Dettagli Cliente'}},

@@ -3,7 +3,7 @@ import {TwentyfiveModalGenericComponentService} from "twentyfive-modal-generic-c
 import {Category} from "../../models/Category";
 import {CategoryService} from "../../services/category.service";
 import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {ToastrService} from "ngx-toastr";
 
 @Component({
@@ -24,16 +24,21 @@ export class CategoryEditComponent implements OnInit{
   categoryType: string[] | null;
   category: Category = new Category();
   selectedCategoryName: string;
-
+  sectionMenu: boolean | null;
+  idSection: string | null;
   constructor(private modalService: TwentyfiveModalGenericComponentService,
               private categoryService: CategoryService,
               private router: Router,
+              private activatedRoute: ActivatedRoute,
               private toastrService: ToastrService) {
   }
 
   ngOnInit(): void {
     if(this.categoryId)
       this.findCategoryById()
+    if(this.sectionMenu && this.idSection){
+      this.category.idSection=this.idSection;
+    }
   }
 
   findCategoryById(){
@@ -56,7 +61,7 @@ export class CategoryEditComponent implements OnInit{
 
 
   saveNewCategory(){
-    if(this.categoryId=='' && !this.categoryType){
+    if(this.categoryId=='' && !this.categoryType && !this.sectionMenu){
       this.category.type="ingredienti"
     }
     if (this.isValid()){
@@ -81,7 +86,11 @@ export class CategoryEditComponent implements OnInit{
   }
 
   isValid(){
-    return this.category.name && this.category.type;
+    if(this.sectionMenu){
+      return this.category.name;
+    } else {
+      return this.category.name && this.category.type;
+    }
   }
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
   protected readonly ButtonTheme = ButtonTheme;

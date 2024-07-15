@@ -1,0 +1,120 @@
+<div class="row mb-4" xmlns="http://www.w3.org/1999/html">
+  <div class="col-12 col-lg-3">
+    <lib-generic-button-text-with-icon
+      buttonText="Torna Indietro"
+      [iconLeft]="true"
+      prefixIcon="bi bi-arrow-left"
+      [buttonStyle]="ButtonTheme.OnlyText"
+      (click)="close()"
+    ></lib-generic-button-text-with-icon>
+  </div>
+</div>
+
+<hr/>
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li *ngFor="let category of categories" class="nav-item" role="presentation" ngbDropdown>
+    <div (click)="setActiveTab(category)" class="nav-link" style="cursor: pointer" id="{{category.id}}-tab" data-bs-toggle="tab" [attr.data-bs-target]="'#'+category.id" role="tab" [class.active]="activeTab === category.id" [attr.aria-controls]="category.id" aria-selected="true">
+      {{category.name}}
+      <span ngbDropdownToggle class="dropdown-toggle" data-bs-toggle="dropdowns" role="button" aria-expanded="false"></span>
+    </div>
+    <ul ngbDropdownMenu class="dropdown-menu">
+      <li><a class="dropdown-item" (click)="changeCategoryOrder(category.id)">Scambia</a></li>
+      <li><a class="dropdown-item" (click)="editCategoryToModify()">Modifica</a></li>
+      <li><a class="dropdown-item" (click)="disableCategory()">Disattiva</a></li>
+      <li><a class="dropdown-item text-danger" (click)="deleteCategory(category.id)">Elimina</a></li>
+
+    </ul>
+  </li>
+  <li *ngFor="let category of disabledCategories" class="nav-item" role="presentation" ngbDropdown>
+    <div class="nav-link disattivo" style="cursor: default">
+      {{category.name}}
+      <span ngbDropdownToggle class="dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false"></span>
+    </div>
+    <ul ngbDropdownMenu class="dropdown-menu">
+      <li><a class="dropdown-item" (click)="enableCategory(category.id)">Riattiva</a></li>
+      <li><a class="dropdown-item text-danger" (click)="deleteCategory(category.id)">Elimina</a></li>
+    </ul>
+  </li>-
+  <i class="align-content-center ms-2 bi bi-plus-circle fs-6"
+     (click)="editCategory()"
+  ></i>
+</ul>
+<div class="tab-content row mt-5 ms-lg-3 me-lg-3" id="myTabContent">
+  <ng-container *ngFor="let category of categories">
+    <div *ngIf="activeTab === category.id" class="tab-pane fade show active" id="{{category.id}}-tab" role="tabpanel" [attr.aria-labelledby]="category.id + '-tab'">
+      <div class="pb-3 mb-3">
+        <lib-generic-button-text-with-icon
+          buttonText="Crea {{category.name}}"
+          suffixIcon="bi bi-plus-circle"
+          (click)="goToNew()"
+          [buttonSize]="ButtonSizeTheme.ExtraLarge"
+          [buttonStyle]="ButtonTheme.Primary"
+          [iconLeft]="false"
+          [customStyles]="{'display':'inline-block'}"
+        ></lib-generic-button-text-with-icon>
+      </div>
+
+      <div class="mt-4 row ">
+        <div class="col-12">
+          <lib-twentyfive-table
+            [showSwitch]="true"
+            (switchClick)="activeOrDisable($event)"
+            [maxWidthValue]="'6vw'"
+            [headers]="headers"
+            [dropdownElements]="paginationElements"
+            [checkedField]="'active'"
+            [rows]= "items"
+            [rotate]="true"
+            [sortable]="true"
+            [tableHeadStyle]="TableHeadTheme.Primary"
+            [tableStyle]="TableTheme.Web"
+            [pageSize]="pageSize"
+            [collectionSize]="maxSize"
+            [maxSize]="maxSize"
+            [model]="pageSize"
+            [isPaginated]="true"
+            [page]="currentPage"
+            [paginationStyle]="TableTheme.Web"
+            (rowClicked)="goToEdit($event)"
+            (pageChange)="changePage($event)"
+            (sortableChange)="sortingColumn($event)"
+            (modelChange)="selectSize($event)"
+            [columnTemplateRefs]="columnTemplateRefs"
+          ></lib-twentyfive-table>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #allergenColumnRef let-ingredients>
+  <ng-container *ngFor="let allergen of ingredients.allergens; let i = index">
+    <span *ngIf="i !== 0">&nbsp;</span>
+    <img [src]="allergen.iconUrl" style="max-width: 30px; height: auto; position: relative;" [tooltip]="allergen.name">
+  </ng-container>
+</ng-template>
+
+
+<div class="modal fade" id="changeOrderModal" tabindex="-1" aria-labelledby="changeOrderModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="changeOrderModalLabel">Scambia con ...</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label for="categorySelect">Seleziona la categoria:</label>
+        <select id="categorySelect" class="form-select" [(ngModel)]="selectedCategoryId">
+          <option *ngFor="let category of categories" [value]="category.id" >
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+        <button type="button" class="btn btn-primary" (click)="confirmChangeOrder()">Conferma</button>
+      </div>
+    </div>
+  </div>
+</div>

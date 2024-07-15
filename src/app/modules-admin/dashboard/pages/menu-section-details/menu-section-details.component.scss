@@ -1,0 +1,16 @@
+.disattivo {
+  color: #808080 !important; /* Colore grigio per il testo delle tab disabilitate */
+}
+
+.nav-link {
+  color: black;
+  text-decoration: none;
+}
+
+*::before{
+  cursor: pointer !important;
+}
+
+.text-danger {
+  color: red !important;
+}

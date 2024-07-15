@@ -44,6 +44,7 @@ export class ProductToEdit {
   imageUrl: string;
   active: boolean;
   weight: number;
+  price: number;
   allergenNames: string[]=[];
   stats: ProductStat;
   pricePerKg: number;
