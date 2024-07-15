@@ -1,4 +1,4 @@
-<div class="card custom-card">
+<div class="card custom-card" [ngStyle]="customStyles">
   <div class="row card-body p-0">
     <div *ngIf="imageLeft" class="col-4 d-flex justify-content-center">
       <img [src]="imageUrl" class="img-fluid" style="overflow:hidden; object-fit: cover; border-radius: 0.5rem">

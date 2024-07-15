@@ -28,14 +28,14 @@
 
         <!-- CARD -->
         <div class="card-body" *ngIf="openCategories[category.id]" [@cascadeInOut]="openCategories[category.id] ? 'in' : 'out'">
-          <div class="card empty-state mt-2" *ngIf="(items[category.id].length === 0)">
-            <i class="bi bi-emoji-smile-upside-down-fill"></i>
-            <h5>Qui non c'è nulla da vedere, pussa via!</h5>
+          <div class="mt-2" *ngIf="(items[category.id].length === 0)">
+            <app-no-item-card></app-no-item-card>
           </div>
           <div class="item" *ngFor="let item of items[category.id]" [@cascadeInOut]="openCategories[category.id] ? 'in' : 'out'">
             <div class="d-flex justify-content-center align-items-center w-100 my-2">
               <app-generic-card
                 style="width: 100vw"
+                [customStyles]="{'min-height':'200px'}"
                 [title]="item.name"
                 [description]="item.description"
                 [price]="item.price"

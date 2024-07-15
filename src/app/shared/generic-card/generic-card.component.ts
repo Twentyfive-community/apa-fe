@@ -21,6 +21,8 @@ export class GenericCardComponent implements OnInit {
   @Input() description?: string;
   @Input() price: string;
 
+  @Input() customStyles: {[p: string]: any} = {}
+
   private currentQuantity: number | undefined;
 
   ngOnInit(): void {
