@@ -25,7 +25,7 @@ export class GenericCardComponent implements OnInit {
 
   private currentQuantity: number | undefined;
 
-  noContent ='https://static.vecteezy.com/system/resources/previews/007/071/476/non_2x/hand-drawn-doodle-missing-puzzle-question-mark-icon-illustration-isolated-vector.jpg';
+  noContent ='http://80.211.123.141:8106/TwentyfiveMediaManager/twentyfiveserver/downloadkkk/apa/template/we.jpg';
   ngOnInit(): void {
     this.currentQuantity = this.quantity;
   }
