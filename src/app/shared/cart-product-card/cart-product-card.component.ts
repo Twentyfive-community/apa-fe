@@ -223,6 +223,11 @@ export class CartProductCardComponent implements OnInit{
         break;
     }
   }
+
+  extractFilename(url: string): string {
+    if (!url) return '';
+    return url.substring(url.lastIndexOf('/') + 1);
+  }
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
   protected readonly ButtonTheme = ButtonTheme;
 }

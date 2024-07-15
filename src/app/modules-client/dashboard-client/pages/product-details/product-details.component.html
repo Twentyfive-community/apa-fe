@@ -102,14 +102,27 @@
       </ng-container>
 
       <ng-container *ngIf="categoryName === 'Le Nostre Torte' || categoryName === 'Semifreddi' || fromEdit && productToEdit.notes">
-      <div class="row ms-1 mt-3 me-1 mb-3">
-        <lib-twentyfive-input
-          labelText="Aggiungi una frase"
-          placeholder="Tanti Auguri!"
-          [value]="productInPurchase.notes"
-          (input)="onInputChange($event)"
-        ></lib-twentyfive-input>
-      </div>
+        <div class="row ms-1 mt-3 me-1 mb-3">
+          <lib-twentyfive-input
+            labelText="Aggiungi una frase"
+            placeholder="Tanti Auguri!"
+            [value]="productInPurchase.notes"
+            (input)="onInputChange($event)"
+          ></lib-twentyfive-input>
+
+          <div ngbDropdown class="dropdown" style="margin-left: 12px">
+            <button ngbDropdownToggle class="row my-3 btn btn-outline-dark" [disabled]="decorativeText[0] === ''" id="colorDropdown">
+              {{ selectedColor[0] || 'Seleziona colore scritta' }}
+            </button>
+            <ul ngbDropdownMenu aria-labelledby="colorDropdown" class="dropdown-menu">
+              <li *ngFor="let color of colorOptions" class="dropdown-item">
+                <button class="dropdown-item" (click)="selectColor(color)">
+                  {{ color }}
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
       </ng-container>
 
       <ng-container *ngIf="categoryName === 'Le Nostre Torte' || fromEdit && productToEdit.attachment">
