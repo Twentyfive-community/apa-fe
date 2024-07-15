@@ -3,7 +3,7 @@ import {TwentyfiveModalGenericComponentService} from "twentyfive-modal-generic-c
 import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
 import {ToastrService} from "ngx-toastr";
 import {ProductService} from "../../../../services/product.service";
-import {ProductDetails, ProductInPurchase, TrayDetails} from "../../../../models/Product";
+import {Customization, ProductDetails, ProductInPurchase, TrayDetails} from "../../../../models/Product";
 import {environment} from "../../../../../environments/environment";
 import {BundleInPurchase} from "../../../../models/Bundle";
 import {Measure} from "../../../../models/Measure";
@@ -21,6 +21,8 @@ import {ItemInPurchase} from "../../../../models/Cart";
 export class ProductDetailsComponent implements OnInit{
   @ViewChild('dropZone') dropZoneRef!: ElementRef;
   @ViewChild('fileInput') fileInputRef!: ElementRef;
+
+  colorOptions = ['Nero','Rosso','Blu','Viola','Giallo'];
 
   fromEdit: boolean = false; //segnala che si tratta di una modifica
   productToEdit: ItemInPurchase = new ItemInPurchase(); //prodotto ricevuto dalla modale di modifica
@@ -41,6 +43,9 @@ export class ProductDetailsComponent implements OnInit{
   weightOptions: number[] = [];
   measureOptions: Measure[] = [];
   file: File | null;
+
+  decorativeText: string[] = [''];
+  selectedColor: string[] = [''];
 
   loading: boolean = true;
 
@@ -151,7 +156,11 @@ export class ProductDetailsComponent implements OnInit{
 
 
   onInputChange(event: any) {
-        this.productInPurchase.notes = event.target.value;
+    this.decorativeText[0] = event.target.value;
+  }
+
+  selectColor(color: string) {
+    this.selectedColor[0] = color;
   }
 
   handleDragOver(event: DragEvent) {
@@ -228,9 +237,17 @@ export class ProductDetailsComponent implements OnInit{
 
   saveNewProductInPurchase() {
     this.loading = true;
-      if (this.file) {
-        this.uploadImage();
-      }
+    if (this.file) {
+      this.uploadImage();
+    }
+    if (this.decorativeText[0]) {
+      this.productInPurchase.customization.push(new Customization("Testo Decorativo", this.decorativeText))
+    } if (this.selectedColor[0]!==''){
+      this.productInPurchase.customization.push(new Customization("Colore Testo", this.selectedColor))
+    } else {
+      this.selectedColor[0]='Nero';
+      this.productInPurchase.customization.push(new Customization("Colore Testo", this.selectedColor))
+    }
       switch (this.categoryType) {
         case 'productKg':
          this.productInPurchase.id=this.productDetails.id
