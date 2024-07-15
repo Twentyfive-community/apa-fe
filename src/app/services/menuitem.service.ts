@@ -38,4 +38,8 @@ export class MenuitemService {
   activateOrDisable(id: string) {
     return this.http.get(`${this.baseUrl}/activateOrDisable/${id}`);
   }
+  deleteById(id:string) {
+    return this.http.delete(`${this.baseUrl}/deleteById/${id}`);
+
+  }
 }

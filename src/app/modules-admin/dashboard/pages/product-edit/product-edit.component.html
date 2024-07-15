@@ -230,19 +230,23 @@
   <div class="row mt-4 mb-2">
     <h4>Immagine</h4>
   </div>
-<div class="col-8 drop-zone rounded mb-2 mt-3" #dropZone (drop)="handleDrop($event)" (dragover)="handleDragOver($event)" (click)="fileInput.click()">
+<div class="col-8 drop-zone rounded mb-2 mt-3" #dropZone
+     *ngIf="!file && !productToAdd.imageUrl"
+     (drop)="handleDrop($event)"
+     (dragover)="handleDragOver($event)"
+     (click)="fileInput.click()">
   <div class="row">
     <div class="mb-4 text-purple">
       Trascina qui il file da caricare o clicca per selezionare un file
     </div>
   </div>
-  <div *ngIf="file || productToAdd.imageUrl" class="row">
+</div>
+
+<div class="col-8 mb-2 mt-3" *ngIf="file || productToAdd.imageUrl">
+  <div class="row">
     <div class="col-10">
       <div *ngIf="productToAdd.imageUrl" class="image-container">
         <img [src]="productToAdd.imageUrl" class="image-preview">
-      </div>
-      <div *ngIf="file" class="image-container">
-        {{file.name}}
       </div>
     </div>
     <div class="col-2">
@@ -254,6 +258,9 @@
 </div>
 
 <input type="file" #fileInput style="display: none;" (change)="handleFileSelect($event)" accept=".png, .jpg, .jpeg">
+
+
+
 
 
 

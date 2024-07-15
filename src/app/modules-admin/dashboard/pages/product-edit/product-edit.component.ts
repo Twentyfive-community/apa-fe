@@ -29,6 +29,8 @@ export class ProductEditComponent implements OnInit {
   productId: string | null;
 
   file: File | null;
+  acceptedFileTypes: string[] = ['image/png', 'image/jpeg', 'image/jpg'];
+
 
   test: string = '';
 
@@ -161,6 +163,7 @@ export class ProductEditComponent implements OnInit {
             this.productToAdd.allergenNames.push(allergen.name);
             this.selectedAllergens.push(allergen);
           }
+          this.originalProduct.allergenNames = this.productToAdd.allergenNames;
           this.getAllergens(); // Ensure allergens list is updated after setting selected allergens
         })
     }
@@ -373,6 +376,11 @@ export class ProductEditComponent implements OnInit {
           }
         }
         break;
+      default:
+        if (!(this.productToAdd.price) || this.productToAdd.price <= 0) {
+          this.toastrService.error("Il prezzo non può essere inferiore o uguale a 0!");
+          return false;
+        }
     }
     return true;
   }
@@ -470,6 +478,28 @@ export class ProductEditComponent implements OnInit {
             })
           });
         break;
+      default:
+        this.modalService.openModal(
+          `ATTENZIONE! Procedendo si andra' ad eliminare definitivamente il prodotto "${this.productToAdd.name}" ! Procedere?`,
+          'Cancella Vassoio',
+          'Annulla',
+          'Conferma',
+          {
+            showIcon: true,
+            size: 'md',
+            onConfirm: (() => {
+              this.menuitemService.deleteById(this.productId!).subscribe({
+                error:(err) =>{
+                  console.error(err);
+                  this.toastrService.error('Errore nell\'eliminare il prodotto!');
+                },
+                complete:() => {
+                  this.toastrService.success('Prodotto eliminato con successo!');
+                  this.router.navigate([`../dashboard/menu/${this.idSection}`], {queryParams: {activeTab: this.categoryId}});
+                }
+              })
+            })
+          });
     }
   }
 
@@ -500,7 +530,7 @@ export class ProductEditComponent implements OnInit {
   hasChanges(): boolean {
     return !isEqual(this.productToAdd,this.originalProduct);
   }
-    handleDragOver(event: DragEvent) {
+  handleDragOver(event: DragEvent) {
     event.preventDefault(); // Impedisce il comportamento predefinito del browser
   }
 
@@ -521,9 +551,18 @@ export class ProductEditComponent implements OnInit {
   }
 
   handleFiles(files: FileList) {
-    this.file = files[0];
+    const file = files[0];
+    if (this.isValidFileType(file)) {
+      this.file = file;
+      this.productToAdd.imageUrl = URL.createObjectURL(file);
+    } else {
+      this.toastrService.error('Tipo di file non valido. Accettiamo solo file .png, .jpg, .jpeg');
+    }
   }
 
+  isValidFileType(file: File): boolean {
+    return this.acceptedFileTypes.includes(file.type);
+  }
   removeFile(event: Event) {
     event.stopPropagation();
     this.file = null;
@@ -531,6 +570,8 @@ export class ProductEditComponent implements OnInit {
     // Reimposta il valore dell'input del file a null per consentire la selezione dello stesso file
     this.fileInputRef.nativeElement.value = '';
   }
+
+
 
   protected readonly ButtonTheme = ButtonTheme;
   protected readonly ChipTheme = ChipTheme;
