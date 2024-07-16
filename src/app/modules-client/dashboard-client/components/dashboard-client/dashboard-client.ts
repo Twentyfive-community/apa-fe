@@ -91,8 +91,7 @@ export class DashboardClient implements OnInit{
 
   private loadUserProfile() {
     let keycloakService = this.signingKeycloakService as any;
-
-    this.customerIdkc = keycloakService.keycloakService._userProfile.id;
+    this.customerIdkc = keycloakService.keycloakService._userProfile?.id;
 
     if (this.customerIdkc) {
       this.customerService.getCustomerByKeycloakId(this.customerIdkc).subscribe((res: any) => {
