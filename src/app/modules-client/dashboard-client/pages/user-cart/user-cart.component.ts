@@ -224,6 +224,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
         r.componentInstance.customerId = this.customer.id;
         r.componentInstance.buyInfos = this.buyInfos;
         r.result.finally(() => {
+          this.loading = false;
           })
       } else {
         this.cartService.buyFromCart(this.customer.id,this.buyInfos).subscribe({
