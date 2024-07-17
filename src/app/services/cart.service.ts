@@ -6,6 +6,7 @@ import {Customer} from "../models/Customer";
 import {ProductInPurchase, ProductToEdit} from "../models/Product";
 import {BundleInPurchase} from "../models/Bundle";
 import {BuyInfos} from "../models/Cart";
+import {PaymentReq} from "../models/PaymentReq";
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +14,7 @@ import {BuyInfos} from "../models/Cart";
 export class CartService {
 
   private baseCartUrl: string = `${environment.backendUrl}/cart`;
+  kafkaTopic=`${environment.kafkaTopic}`;
 
   constructor(private http: HttpClient) {
   }
@@ -39,6 +41,10 @@ export class CartService {
 
   buyFromCart(customerId: string,buyInfos:BuyInfos) {
     return this.http.post(`${this.baseCartUrl}/buy-from-cart/${customerId}`, buyInfos);
+  }
+  prepareBuying(id: string,paymentReq:PaymentReq) {
+    let h=Utils.createHttpHeaders({'Payment-App-Id':this.kafkaTopic});
+    return this.http.post(`${this.baseCartUrl}/prepare-buying/${id}`, paymentReq,{headers: h});
   }
 
   modifyPipInCart(customerId: string, index: number, pIP: any) {

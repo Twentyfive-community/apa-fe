@@ -4,15 +4,18 @@ import {SigningKeycloakService} from "twentyfive-keycloak-new";
 import {Customer} from "../../../../models/Customer";
 import {CustomerService} from "../../../../services/customer.service";
 import {CartService} from "../../../../services/cart.service";
-import {BuyInfos, Cart} from "../../../../models/Cart";
+import {BuyInfos, Cart, ItemInPurchase} from "../../../../models/Cart";
 import {NgbDate} from "@ng-bootstrap/ng-bootstrap";
 import {ToastrService} from "ngx-toastr";
-import {Subscription, interval, takeWhile} from "rxjs";
-import {Router} from "@angular/router";
+import {Subscription, interval, takeWhile, filter} from "rxjs";
+import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {TwentyfiveModalService} from "twentyfive-modal";
 import {TwentyfiveModalGenericComponentService} from "twentyfive-modal-generic-component";
 import {CategoryEditComponent} from "../../../../shared/category-edit/category-edit.component";
 import {AdminCustomBuyComponent} from "../admin-custom-buy/admin-custom-buy.component";
+import {ItemPayment, PaymentReq, UnitAmount} from "../../../../models/PaymentReq";
+import {cloneDeep} from "lodash";
+import {PaymentService} from "../../../../services/payment.service";
 
 @Component({
   selector: 'app-user-cart',
@@ -36,10 +39,11 @@ export class UserCartComponent implements OnInit, OnDestroy{
   selectedDate: NgbDate | null = null; // Variabile per la data selezionata
   selectedTime! : any // Variabile per l'orario selezionato
   selectedPickupDateTime: string = ''; // Variabile per la data e l'orario combinati
-
+  paymentReq:PaymentReq = new PaymentReq();
   loading: boolean = true;
 
   isCollapsed: boolean = true;
+  onlinePayment: boolean = true;
 
   buyInfos: BuyInfos = new BuyInfos();
 
@@ -51,12 +55,13 @@ export class UserCartComponent implements OnInit, OnDestroy{
               private customerService:CustomerService,
               private toastrService: ToastrService,
               private cartService:CartService,
-              private router: Router) {
+              private activatedRoute: ActivatedRoute,
+              private router: Router,
+              private paymentService: PaymentService) {
   }
 
   ngOnInit(): void {
     this.getCustomer();
-
     this.cartReloadSubscription = interval(30 * 60 * 1000) // 30 minuti in millisecondi
       .pipe(takeWhile(() => this.loading))
       .subscribe(() => {
@@ -82,6 +87,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
       this.customerService.getCustomerByKeycloakId(customerIdkc).subscribe((res:any) =>{
         this.customer = res
         this.getCart()
+        this.confirmOrderAfterPayment();
       })
     }
     this.imAdmin=keycloackService.loggedUserRoles().includes('admin');
@@ -113,12 +119,10 @@ export class UserCartComponent implements OnInit, OnDestroy{
         type = 'Vassoio Personalizzato';
       } else if (product.measure) {
         type = 'tray';
-      } else if (product.customization.length == 0 ) {
+      } else  {
         type = 'productKg';
-      } else {
-        type = 'Altro';
       }
-      return { id: product.id, index, toBuy: true, type:type };
+      return { id: product.id, index, toBuy: true, type:type, quantity:product.quantity };
     });
   }
 
@@ -129,12 +133,13 @@ export class UserCartComponent implements OnInit, OnDestroy{
       .map(item => item.index);
 
     this.cartService.obtainMinimumPickupDateTime(this.customer.id, indexToBuy).subscribe((res: any) => {
-      this.slot = res
-
-      this.enabledDate = Object.keys(this.slot).map(date => {
-        const [year, month, day] = date.split('-').map(num => parseInt(num, 10));
-        return new NgbDate(year, month, day);
-      });
+      if(res){
+        this.slot = res
+        this.enabledDate = Object.keys(this.slot).map(date => {
+          const [year, month, day] = date.split('-').map(num => parseInt(num, 10));
+          return new NgbDate(year, month, day);
+        });
+      }
     });
   }
 
@@ -208,46 +213,54 @@ export class UserCartComponent implements OnInit, OnDestroy{
     this.cart.totalPrice = this.cart.purchases.reduce((sum, product) => {
       return product.toBuy ? sum + product.totalPrice : sum;
     }, 0);
-    //console.log(this.cart.totalPrice)
+    //this.paymentReq.items.reduce()
   }
 
   buyCart() {
-    this.loading = true;
+    //this.loading = true;
      this.buyInfos.positions = this.itemToBuy
       .filter(item => item.toBuy)
       .map(item => item.index);
-
     if (this.selectedDate && this.selectedTime) {
       this.buyInfos.selectedPickupDateTime = `${this.formatDate(this.selectedDate)}T${this.selectedTime}`;
       if(this.imAdmin){
-          let r = this.genericModalService.open(AdminCustomBuyComponent, "lg", {});
+        let r = this.genericModalService.open(AdminCustomBuyComponent, "lg", {});
         r.componentInstance.customerId = this.customer.id;
         r.componentInstance.buyInfos = this.buyInfos;
-        r.result.finally(() => {
-          })
-      } else {
-        this.cartService.buyFromCart(this.customer.id,this.buyInfos).subscribe({
-          next: () => {
-            this.toastrService.success('Ordine effettuato con successo')
-          },
-          error: (error) => {
-            console.error(error);
-            this.loading = false;
-            this.toastrService.error('Impossibile effettuare l\'ordine')
-          },
-          complete: () => {
-            this.isCollapsed = true
-            this.selectedDate = null;
-            this.selectedTime = '';
-            this.buyInfos.note = '';
-            this.loading = false;
-            this.getCart()
-          }
+      } else if (this.onlinePayment){
+        //TODO APRI MODALE CON SCELTA, SE PAGAMENTO ONLINE CONTINUARE CON QUI SOTTO SENNò VEDI ALTRO COMMENTO
+        this.paymentReq.buyInfos=this.buyInfos;
+        this.cartService.prepareBuying(this.customer.id,this.paymentReq).subscribe((response:any)=>{
+          window.location.href = response.content.links[1].href;
         })
+        localStorage.setItem('buyInfos', JSON.stringify(this.buyInfos));
       }
+      else {
+        this.completeBuyFromCart();
+      }//TODO COMPRARE DIRETTAMENTE, THIS.COMPLETEBUYFROMCART
     }
   }
 
+  completeBuyFromCart(){
+    this.cartService.buyFromCart(this.customer.id,this.buyInfos).subscribe({
+      next: () => {
+        this.toastrService.success('Ordine effettuato con successo')
+      },
+      error: (error) => {
+        console.error(error);
+        this.loading = false;
+        this.toastrService.error('Impossibile effettuare l\'ordine')
+      },
+      complete: () => {
+        this.isCollapsed = true
+        this.selectedDate = null;
+        this.selectedTime = '';
+        this.buyInfos.note = '';
+        this.loading = false;
+        this.getCart()
+      }
+    })
+  }
   isDisabled(from: string): boolean {
     switch (from) {
       case 'buy_button':
@@ -263,7 +276,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
 
   calculatePriceAndObtainDate() {
     this.calculateTotalPrice();
-
+    //this.wrapOnlyItemsToBuy();
     this.selectedDate = null;
     this.selectedTime = '';
     this.buyInfos.note = '';
@@ -271,7 +284,28 @@ export class UserCartComponent implements OnInit, OnDestroy{
     this.onDateChange(this.selectedDate)
   }
 
-
+  confirmOrderAfterPayment(){
+    const storedBuyInfos = localStorage.getItem('buyInfos');
+    if (storedBuyInfos) {
+      this.buyInfos = JSON.parse(storedBuyInfos);
+      // Pulisce i dati del carrello salvati una volta che sono stati usati
+      this.activatedRoute.queryParams.subscribe(params => {
+        if (params['token']) {
+          //TODO VEDERE SE FARE UN ULTERIORE CONFERMA, QUI SIAMO TORNATI DA PAYPAL!! LA CHIAMATA DI SOTTO FINALIZZA L'ORDINE
+          this.paymentService.capture(params['token']).subscribe({
+            next:()=>{
+            this.completeBuyFromCart();
+            },
+            error:(err:any)=>{
+              console.error(err);
+              this.toastrService.error("Pagamento annullato!");
+            }
+          })
+        }
+      });
+      localStorage.removeItem('buyInfos');
+    }
+  }
   protected readonly ButtonSizeTheme = ButtonSizeTheme;
   protected readonly ButtonTheme = ButtonTheme;
   protected readonly LabelTheme = LabelTheme;
