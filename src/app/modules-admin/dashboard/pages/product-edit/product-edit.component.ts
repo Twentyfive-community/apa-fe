@@ -354,6 +354,7 @@ export class ProductEditComponent implements OnInit {
         }
         if (!(this.productToAdd.weight) || this.productToAdd.weight <= 0) {
           this.toastrService.error("Il peso non può essere minore o uguale a 0!");
+          return false;
         }
         break;
       case "tray":
