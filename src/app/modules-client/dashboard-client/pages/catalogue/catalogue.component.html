@@ -1,109 +1,112 @@
-<div class="row tab-container">
-  <ul class="nav nav-tabs flex-grow-0" id="myTab" role="tablist">
-    <li *ngFor="let category of categories" class="nav-item" role="presentation" ngbDropdown>
-      <ng-container *ngIf="category.type !== 'productWeighted'">
-        <div (click)="setActiveTab(category)" style="cursor: pointer" class="nav-link " id="{{category.id}}-tab" data-bs-toggle="tab" [attr.data-bs-target]="'#'+category.id" role="tab" [class.active]="activeTab === category.id" [attr.aria-controls]="category.id" aria-selected="true">
-          {{category.name}}
-        </div>
-      </ng-container>
-    </li>
-  </ul>
-</div>
-
-
-<div class="tab-content" id="myTabContent">
-
-  <div *ngIf="loading">
-    <apa-spinner></apa-spinner>
-  </div>
-
-  <div *ngIf="!loading">
-
-  <div class="mt-5" *ngIf="trayList.length == 0 && productListKg.length == 0">
-    <app-no-item-card></app-no-item-card>
-  </div>
-
-  <ng-container *ngFor="let category of categories">
-    <div *ngIf="activeTab === category.id" style="cursor: pointer" class="tab-pane fade show active" id="{{category.id}}-tab" role="tabpanel" [attr.aria-labelledby]="category.id + '-tab'">
-      <!-- Bottone "Torta Personalizzata" o "Vassoio Personalizzato" -->
-      <div class="row mt-3 mb-3">
-        <div class="col-12 ">
-          <!-- Torta Personalizzata -->
-          <lib-generic-button-text-with-icon *ngIf="category.name === 'Le Nostre Torte'"
-                                             buttonText="Torta Personalizzata"
-                                             suffixIcon="bi bi-plus-circle"
-                                             [buttonSize]="ButtonSizeTheme.FullWidth"
-                                             [buttonStyle]="ButtonTheme.Secondary"
-                                             [customStyles]="{'height': '120px','color': 'white'}"
-                                             [iconLeft]="false"
-                                             (click) = "customerIdkc ? modalCustomCake() : goToLogin()"
-          ></lib-generic-button-text-with-icon>
-
-          <!-- Vassoio Personalizzata -->
-          <lib-generic-button-text-with-icon *ngIf="category.name === 'Vassoi'"
-                                             buttonText="Vassoio Personalizzato"
-                                             suffixIcon="bi bi-plus-circle"
-                                             [buttonSize]="ButtonSizeTheme.FullWidth"
-                                             [buttonStyle]="ButtonTheme.Secondary"
-                                             [customStyles]="{'height': '120px','color': 'white'}"
-                                             [iconLeft]="false"
-                                             (click)="customerIdkc ? customizedTray() : goToLogin()"
-          ></lib-generic-button-text-with-icon>
-        </div>
-      </div>
-      <!-- Contenuto dinamico della scheda -->
-      <div class="row">
-        <ng-container  [ngSwitch]="category.type">
-          <ng-container *ngSwitchCase="'productKg'">
-            <ng-container  *ngFor="let product of productListKg">
-              <div class="col-sm-12 col-md-6 col-lg-4 mb-4"  >
-                <app-generic-card class="w-100"
-                                  [customStyles]="{'height':'200px'}"
-                                  [title]="product.name"
-                                  [description]="product.description"
-                                  [ingredientList]="product.ingredients"
-                                  [allergens]="product.allergens"
-                                  [price]="product.pricePerKg+'/kg'"
-                                  [imageUrl]="product.imageUrl"
-                                  [imageLeft]="true"
-                                  (click)="customerIdkc ? modalProduct(product.id) : goToLogin()">
-                </app-generic-card>
-              </div>
-
-            </ng-container>
-          </ng-container>
-          <ng-container *ngSwitchCase="'tray'">
-            <ng-container *ngFor="let tray of trayList">
-              <div class="col-sm-12 col-md-6 col-lg-4 mb-4"  >
-                <app-generic-card class="w-100"
-                                  [customStyles]="{'height':'200px'}"
-                                  [title]="tray.name"
-                                  [description]="tray.description"
-                                  [allergens]="tray.allergens"
-                                  [price]="'€'+tray.pricePerKg+'/kg'"
-                                  [imageUrl]="tray.imageUrl"
-                                  [imageLeft]="true"
-                                  (click)="customerIdkc ? modalProduct(tray.id) : goToLogin()">
-                </app-generic-card>
-              </div>
-            </ng-container>
-          </ng-container>
+<div style="min-height: 100vh">
+  <div class="row tab-container">
+    <ul class="nav nav-tabs flex-grow-0" id="myTab" role="tablist">
+      <li *ngFor="let category of categories" class="nav-item" role="presentation" ngbDropdown>
+        <ng-container *ngIf="category.type !== 'productWeighted'">
+          <div (click)="setActiveTab(category)" style="cursor: pointer" class="nav-link " id="{{category.id}}-tab" data-bs-toggle="tab" [attr.data-bs-target]="'#'+category.id" role="tab" [class.active]="activeTab === category.id" [attr.aria-controls]="category.id" aria-selected="true">
+            {{category.name}}
+          </div>
         </ng-container>
-      </div>
+      </li>
+    </ul>
+  </div>
 
-      <hr class="mt-5">
+  <div class="tab-content" id="myTabContent">
 
-      <div class="d-flex justify-content-end align-items-center pagination-container" *ngIf="totalPages > 1">
-        <button class="pagination-button me-2" (click)="previousPage()" [disabled]="currentPage === 1">
-          <i class="bi bi-chevron-double-left pagination-icon"></i>
-        </button>
-        <span class="pagination-text">Pagina {{ currentPage }} di {{ totalPages }}</span>
-        <button class="pagination-button ms-2" (click)="nextPage()" [disabled]="currentPage === totalPages">
-          <i class="bi bi-chevron-double-right pagination-icon"></i>
-        </button>
-      </div>
+    <div *ngIf="loading">
+      <apa-spinner></apa-spinner>
+    </div> <!-- SPINNER -->
+
+    <div *ngIf="!loading" style="min-height: 100vh">
+
+      <div class="mt-5" *ngIf="trayList.length == 0 && productListKg.length == 0">
+        <app-no-item-card></app-no-item-card>
+      </div> <!-- NO ITEM CARD -->
+
+      <ng-container *ngFor="let category of categories">
+        <div *ngIf="activeTab === category.id" style="cursor: pointer" class="tab-pane fade show active" id="{{category.id}}-tab" role="tabpanel" [attr.aria-labelledby]="category.id + '-tab'">
+          <!-- Bottone "Torta Personalizzata" o "Vassoio Personalizzato" -->
+          <div class="row mt-3 mb-3">
+            <div class="col-12 ">
+              <!-- Torta Personalizzata -->
+              <lib-generic-button-text-with-icon *ngIf="category.name === 'Le Nostre Torte'"
+                                                 buttonText="Torta Personalizzata"
+                                                 suffixIcon="bi bi-plus-circle"
+                                                 [buttonSize]="ButtonSizeTheme.FullWidth"
+                                                 [buttonStyle]="ButtonTheme.Secondary"
+                                                 [customStyles]="{'height': '120px','color': 'white'}"
+                                                 [iconLeft]="false"
+                                                 (click) = "customerIdkc ? modalCustomCake() : goToLogin()"
+              ></lib-generic-button-text-with-icon>
+
+              <!-- Vassoio Personalizzata -->
+              <lib-generic-button-text-with-icon *ngIf="category.name === 'Vassoi'"
+                                                 buttonText="Vassoio Personalizzato"
+                                                 suffixIcon="bi bi-plus-circle"
+                                                 [buttonSize]="ButtonSizeTheme.FullWidth"
+                                                 [buttonStyle]="ButtonTheme.Secondary"
+                                                 [customStyles]="{'height': '120px','color': 'white'}"
+                                                 [iconLeft]="false"
+                                                 (click)="customerIdkc ? customizedTray() : goToLogin()"
+              ></lib-generic-button-text-with-icon>
+            </div>
+          </div>
+          <!-- Contenuto dinamico della scheda -->
+          <div class="row">
+            <ng-container  [ngSwitch]="category.type">
+              <ng-container *ngSwitchCase="'productKg'">
+                <ng-container  *ngFor="let product of productListKg">
+                  <div class="col-sm-12 col-md-6 col-lg-4 mb-4"  >
+                    <app-generic-card class="w-100"
+                                      [customStyles]="{'height':'200px'}"
+                                      [title]="product.name"
+                                      [description]="product.description"
+                                      [ingredientList]="product.ingredients"
+                                      [allergens]="product.allergens"
+                                      [price]="product.pricePerKg+'/kg'"
+                                      [imageUrl]="product.imageUrl"
+                                      [imageLeft]="true"
+                                      (click)="customerIdkc ? modalProduct(product.id) : goToLogin()">
+                    </app-generic-card>
+                  </div>
+
+                </ng-container>
+              </ng-container>
+              <ng-container *ngSwitchCase="'tray'">
+                <ng-container *ngFor="let tray of trayList">
+                  <div class="col-sm-12 col-md-6 col-lg-4 mb-4"  >
+                    <app-generic-card class="w-100"
+                                      [customStyles]="{'height':'200px'}"
+                                      [title]="tray.name"
+                                      [description]="tray.description"
+                                      [allergens]="tray.allergens"
+                                      [price]="'€'+tray.pricePerKg+'/kg'"
+                                      [imageUrl]="tray.imageUrl"
+                                      [imageLeft]="true"
+                                      (click)="customerIdkc ? modalProduct(tray.id) : goToLogin()">
+                    </app-generic-card>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </div>
+
+        </div>
+      </ng-container> <!-- CATALOGO -->
+
+    </div> <!-- NO LOADING -->
+
+    <hr class="mt-5" *ngIf="!loading">
+
+    <div class="d-flex justify-content-end align-items-center pagination-container" *ngIf="!loading && totalPages > 1">
+      <button class="pagination-button me-2" (click)="previousPage()" [disabled]="currentPage === 1">
+        <i class="bi bi-chevron-double-left pagination-icon"></i>
+      </button>
+      <span class="pagination-text">Pagina {{ currentPage }} di {{ totalPages }}</span>
+      <button class="pagination-button ms-2" (click)="nextPage()" [disabled]="currentPage === totalPages">
+        <i class="bi bi-chevron-double-right pagination-icon"></i>
+      </button>
     </div>
-  </ng-container>
-</div>
 
+  </div>
 </div>

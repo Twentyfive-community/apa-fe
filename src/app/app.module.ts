@@ -15,12 +15,15 @@ import {CommonModule} from "@angular/common";
 import {MenuComponent} from "./components/menu/menu.component";
 import {SharedModule} from "./shared/shared.module";
 import {NgbAccordionModule, NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import { NotFoundWrapperComponent } from './components/not-found-wrapper/not-found-wrapper.component';
+import {TwentyfiveNotFoundModule} from "twentyfive-not-found";
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    MenuComponent
+    MenuComponent,
+    NotFoundWrapperComponent
   ],
   imports: [
     BrowserModule,
@@ -32,6 +35,7 @@ import {NgbAccordionModule, NgbModule} from "@ng-bootstrap/ng-bootstrap";
     NgbModule,
     NgbAccordionModule,
     SharedModule,
+    TwentyfiveNotFoundModule,
   ],
   providers: [
 

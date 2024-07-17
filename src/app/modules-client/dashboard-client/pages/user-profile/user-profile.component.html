@@ -1,179 +1,183 @@
-<div *ngIf="loading">
-  <apa-spinner></apa-spinner>
-</div>
+<div style="min-height: 90vh">
 
-<div *ngIf="!loading">
-  <section>
-    <div class="row">
-      <div class="col-10">
-        <h3>Anagrafica</h3>
-      </div>
-      <div class="col-1 d-flex justify-content-end">
-        <i class="bi bi-pencil-fill" (click)="goToEdit()" style="cursor: pointer"></i>
-      </div>
-    </div>
+  <div *ngIf="loading">
+    <apa-spinner></apa-spinner>
+  </div>
 
-
-    <div class="column mt-2">
-      <div class="col-11 ms-2">
-        <h6>Nome</h6>
-        <p style="color: gray; ">{{ customer.firstName }}</p>
-
-      </div>
-      <div class="col-11 ms-2">
-        <h6>Cognome</h6>
-        <p style="color: gray;">{{ customer.lastName }}</p>
-      </div>
-      <div class="col-11 ms-2">
-        <h6>Email</h6>
-        <p style="color: gray;">{{ customer.email }}</p>
-      </div>
-      <div class="col-11 ms-2">
-        <h6>Telefono</h6>
-        <p style="color: gray;">{{ customer.phoneNumber }}</p>
-      </div>
-    </div>
-
-
-  </section>
-
-  <hr>
-
-  <section >
-    <h3 class="mb-2">I tuoi ordini</h3>
-    <div class="row mb-1">
-      <div class="col-10 d-flex align-items-center">
-        <lib-generic-button-text-with-icon
-          buttonText="In corso"
-          (click)="goToActiveOrders()"
-          [iconLeft]="true"
-          prefixIcon="bi bi-hourglass-split"
-          [buttonStyle]="ButtonTheme.OnlyText"
-        ></lib-generic-button-text-with-icon>
-        <span class="ms-2 small-text">( {{ customer.activeOrdersCount }} )</span>
-      </div>
-      <div class="col-1 d-flex align-items-center justify-content-end">
-        <i class="bi bi-chevron-right small-icon" ></i>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-10 d-flex align-items-center">
-        <lib-generic-button-text-with-icon
-          buttonText="Completati"
-          (click)="goToCompletedOrders()"
-          [iconLeft]="true"
-          prefixIcon="bi bi-clipboard-check"
-          [buttonStyle]="ButtonTheme.OnlyText"
-        ></lib-generic-button-text-with-icon>
-        <span class="ms-2 small-text">( {{ customer.completedOrdersCount }} )</span>
-      </div>
-      <div class="col-1 d-flex align-items-center justify-content-end">
-        <i class="bi bi-chevron-right small-icon" ></i>
-      </div>
-    </div>
-  </section>
-
-
-
-  <hr>
-
-
-  <section>
-    <h3 class="mb-2">Gestione</h3>
-    <div class="row mb-1">
-          <div class="col-10 d-flex align-items-center">
-            <lib-generic-button-text-with-icon
-              buttonText="Reset password"
-              [iconLeft]="true"
-              prefixIcon="bi bi-arrow-counterclockwise"
-              [buttonStyle]="ButtonTheme.OnlyText"
-              (click)="resetPassword()"
-            ></lib-generic-button-text-with-icon>
-          </div>
-          <div class="col-1 d-flex align-items-center justify-content-end">
-            <i class="bi bi-chevron-right small-icon"></i>
-          </div>
-    </div>
-
-
-        <div class="row">
-          <div class="col-10 d-flex align-items-center">
-            <lib-generic-button-text-with-icon
-              buttonText="Cancella Account"
-              [iconLeft]="true"
-              prefixIcon="bi bi-trash"
-              [buttonStyle]="ButtonTheme.OnlyText"
-              (click)="deleteAccount()"
-            ></lib-generic-button-text-with-icon>
-          </div>
-          <div class="col-1 d-flex align-items-center justify-content-end">
-            <i class="bi bi-chevron-right small-icon"></i>
-          </div>
+  <div *ngIf="!loading">
+    <section>
+      <div class="row">
+        <div class="col-10">
+          <h3>Anagrafica</h3>
         </div>
-  </section>
-
-
-  <div *ngIf="customerIdkc" class="row mt-5">
-    <lib-generic-button
-      buttonText="LOGOUT"
-      (click)="this.makeLogout()"
-      [buttonSize]="ButtonSizeTheme.FullWidth"
-      [buttonStyle]="ButtonTheme.Primary"
-
-    ></lib-generic-button>
-  </div>
-</div>
-
-<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="contactModalLabel">Avviso</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Nessun ordine presente
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="emailConfirmationModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="emailConfirmationModalLabel">Avviso</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body mb-0">
-        L'email è stata inviata con successo.
-      </div>
-      <div class="modal-body mt-0">
-        (se non riesci a vederla controlla anche la posta indesiderata)
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="delateConfirmationModal" tabindex="-1" aria-labelledby="delateConfirmationModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="delateConfirmationModalLabel">Cancella profilo</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body mb-0">
-        Attenzione, procedendo eliminerai il tuo profilo definitivamente. Per procedere inserisci qui sotto la tua e-mail e premi conferma.
-        <div class="mb-3 mt-3">
-          <label for="emailInput" class="form-label">Email</label>
-          <input type="email" class="form-control" id="emailInput" [(ngModel)]="emailInput">
+        <div class="col-1 d-flex justify-content-end">
+          <i class="bi bi-pencil-fill" (click)="goToEdit()" style="cursor: pointer"></i>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
-        <button type="button" class="btn btn-danger" (click)="confirmDeleteAccount()">Conferma</button>
+
+
+      <div class="column mt-2">
+        <div class="col-11 ms-2">
+          <h6>Nome</h6>
+          <p style="color: gray; ">{{ customer.firstName }}</p>
+
+        </div>
+        <div class="col-11 ms-2">
+          <h6>Cognome</h6>
+          <p style="color: gray;">{{ customer.lastName }}</p>
+        </div>
+        <div class="col-11 ms-2">
+          <h6>Email</h6>
+          <p style="color: gray;">{{ customer.email }}</p>
+        </div>
+        <div class="col-11 ms-2">
+          <h6>Telefono</h6>
+          <p style="color: gray;">{{ customer.phoneNumber }}</p>
+        </div>
+      </div>
+
+
+    </section>
+
+    <hr>
+
+    <section >
+      <h3 class="mb-2">I tuoi ordini</h3>
+      <div class="row mb-1">
+        <div class="col-10 d-flex align-items-center">
+          <lib-generic-button-text-with-icon
+            buttonText="In corso"
+            (click)="goToActiveOrders()"
+            [iconLeft]="true"
+            prefixIcon="bi bi-hourglass-split"
+            [buttonStyle]="ButtonTheme.OnlyText"
+          ></lib-generic-button-text-with-icon>
+          <span class="ms-2 small-text">( {{ customer.activeOrdersCount }} )</span>
+        </div>
+        <div class="col-1 d-flex align-items-center justify-content-end">
+          <i class="bi bi-chevron-right small-icon" ></i>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-10 d-flex align-items-center">
+          <lib-generic-button-text-with-icon
+            buttonText="Completati"
+            (click)="goToCompletedOrders()"
+            [iconLeft]="true"
+            prefixIcon="bi bi-clipboard-check"
+            [buttonStyle]="ButtonTheme.OnlyText"
+          ></lib-generic-button-text-with-icon>
+          <span class="ms-2 small-text">( {{ customer.completedOrdersCount }} )</span>
+        </div>
+        <div class="col-1 d-flex align-items-center justify-content-end">
+          <i class="bi bi-chevron-right small-icon" ></i>
+        </div>
+      </div>
+    </section>
+
+
+
+    <hr>
+
+
+    <section>
+      <h3 class="mb-2">Gestione</h3>
+      <div class="row mb-1">
+            <div class="col-10 d-flex align-items-center">
+              <lib-generic-button-text-with-icon
+                buttonText="Reset password"
+                [iconLeft]="true"
+                prefixIcon="bi bi-arrow-counterclockwise"
+                [buttonStyle]="ButtonTheme.OnlyText"
+                (click)="resetPassword()"
+              ></lib-generic-button-text-with-icon>
+            </div>
+            <div class="col-1 d-flex align-items-center justify-content-end">
+              <i class="bi bi-chevron-right small-icon"></i>
+            </div>
+      </div>
+
+
+          <div class="row">
+            <div class="col-10 d-flex align-items-center">
+              <lib-generic-button-text-with-icon
+                buttonText="Cancella Account"
+                [iconLeft]="true"
+                prefixIcon="bi bi-trash"
+                [buttonStyle]="ButtonTheme.OnlyText"
+                (click)="deleteAccount()"
+              ></lib-generic-button-text-with-icon>
+            </div>
+            <div class="col-1 d-flex align-items-center justify-content-end">
+              <i class="bi bi-chevron-right small-icon"></i>
+            </div>
+          </div>
+    </section>
+
+
+    <div *ngIf="customerIdkc" class="row mt-5">
+      <lib-generic-button
+        buttonText="LOGOUT"
+        (click)="this.makeLogout()"
+        [buttonSize]="ButtonSizeTheme.FullWidth"
+        [buttonStyle]="ButtonTheme.Primary"
+
+      ></lib-generic-button>
+    </div>
+  </div>
+
+  <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="contactModalLabel">Avviso</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Nessun ordine presente
+        </div>
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="emailConfirmationModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="emailConfirmationModalLabel">Avviso</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body mb-0">
+          L'email è stata inviata con successo.
+        </div>
+        <div class="modal-body mt-0">
+          (se non riesci a vederla controlla anche la posta indesiderata)
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="delateConfirmationModal" tabindex="-1" aria-labelledby="delateConfirmationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="delateConfirmationModalLabel">Cancella profilo</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body mb-0">
+          Attenzione, procedendo eliminerai il tuo profilo definitivamente. Per procedere inserisci qui sotto la tua e-mail e premi conferma.
+          <div class="mb-3 mt-3">
+            <label for="emailInput" class="form-label">Email</label>
+            <input type="email" class="form-control" id="emailInput" [(ngModel)]="emailInput">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+          <button type="button" class="btn btn-danger" (click)="confirmDeleteAccount()">Conferma</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>

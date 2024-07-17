@@ -26,12 +26,15 @@
 </div>
 
 <div class="wrapper">
-  <div class="container-fluid g-0 h-100">
+  <div class="container-fluid g-0 h-100" style="overflow-y: scroll">
     <!-- id is used as [id] in other projects -->
     <div id="content">
       <router-outlet></router-outlet>
       <div class="d-flex d-md-none" style="height: 20%"></div>
       <div class="d-md-flex d-none" style="height: 15%"></div>
+      <app-dashboard-footer class="no-padding-footer"></app-dashboard-footer>
+      <div class="d-flex" style="height: 10%"></div>
     </div>
+
   </div>
 </div>

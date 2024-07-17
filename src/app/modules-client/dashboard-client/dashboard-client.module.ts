@@ -20,6 +20,7 @@ import {TooltipModule} from "ngx-bootstrap/tooltip";
 import {TwentyfiveAutocompleteSyncAsyncModule} from "twentyfive-autocomplete-sync-async";
 import {TwentyfiveSpinnerModule} from "twentyfive-spinner";
 import { AdminCustomBuyComponent } from './pages/admin-custom-buy/admin-custom-buy.component';
+import { DashboardFooterComponent } from './components/dashboard-footer/dashboard-footer.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { AdminCustomBuyComponent } from './pages/admin-custom-buy/admin-custom-b
     CustomCakeComponent,
     TrayCustomizedComponent,
     UserCartComponent,
-    AdminCustomBuyComponent
+    AdminCustomBuyComponent,
+    DashboardFooterComponent
   ],
     imports: [
         DashboardClientRoutingModule,

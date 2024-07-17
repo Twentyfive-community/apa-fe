@@ -1,159 +1,161 @@
-<div *ngIf="loading">
-  <apa-spinner></apa-spinner>
-</div>
-
-<div *ngIf="cart.purchases.length > 0 && !loading">
-
-  <!-- CARD -->
-  <div class="row d-flex flex-wrap">
-    <div class="col-12 col-md-4" *ngFor="let product of cart.purchases; let i = index">
-      <app-cart-product-card
-        [product]="product"
-        [customerId]="customer.id"
-        [position]="[i]"
-        [type]="itemToBuy[i].type"
-        (selectionChange)="calculatePriceAndObtainDate()"
-        (toBuyChange)="toggleItemsToBuy($event)"
-        (removeFromCart)="removeFromCart($event)"
-      ></app-cart-product-card>
-    </div>
+<div style="min-height: 100vh">
+  <div *ngIf="loading">
+    <apa-spinner></apa-spinner>
   </div>
 
-  <!-- Inizio Stickybox -->
-  <div class="sticky-box p-3" style="cursor: pointer" [ngClass]="{'collapsed': isCollapsed}">
-    <!-- titolo -->
-    <div class="sticky-box-title" (click)="toggleStickyBox()">
-      <span>
-        <b>Finalizza Ordine</b>
-        <i class="mx-3" [ngClass]="isDisabled('buy_button') ? 'bi bi-exclamation-triangle-fill' : 'bi bi-check-circle-fill'"
-           [style.color]="isDisabled('buy_button') ? 'red' : 'green'"></i>
-        <button class="btn btn-link">
-          <i [ngClass]="{'bi bi-chevron-down': isCollapsed, 'bi bi-chevron-up': !isCollapsed}" style="font-size: 1rem; color: black"></i>
-        </button>
-      </span>
+  <div class="mb-4" *ngIf="cart.purchases.length > 0 && !loading">
+
+    <!-- CARD -->
+    <div class="row d-flex flex-wrap">
+      <div class="col-12 col-md-4" *ngFor="let product of cart.purchases; let i = index">
+        <app-cart-product-card
+          [product]="product"
+          [customerId]="customer.id"
+          [position]="[i]"
+          [type]="itemToBuy[i].type"
+          (selectionChange)="calculatePriceAndObtainDate()"
+          (toBuyChange)="toggleItemsToBuy($event)"
+          (removeFromCart)="removeFromCart($event)"
+        ></app-cart-product-card>
+      </div>
     </div>
 
-    <div class="sticky-box-body">
-      <!-- Date & Time picker -->
-      <div class="row mt-2 mb-3 d-flex align-content-center">
-        <h6>Data e ora ritiro:</h6>
-        <!-- datepicker -->
-        <div class="col-12 col-md-6">
-          <lib-twentyfive-datepicker
-            [disabledInput]="isDisabled('datepicker')"
-            [showLabel]="false"
-            [labelStyle]="LabelTheme.LabelBold"
-            [setMinDateToToday]="true"
-            [enabledDates]="enabledDate"
-            (dateSelected)="onDateChange($event)"
-          ></lib-twentyfive-datepicker>
-        </div>
-        <!-- timepicker -->
-        <div class="col-12 col-md-6 mt-2 mt-md-0">
-          <lib-twentyfive-generic-timepicker
-            [time]="selectedTime"
-            [showLabel]="false"
-            [timeOptions]="selectedSlots"
-            [disabled]="!selectedDate"
-            (changeTime)="onTimeSelected($event)"
-          ></lib-twentyfive-generic-timepicker>
-        </div>
+    <!-- Inizio Stickybox -->
+    <div class="sticky-box p-3" style="cursor: pointer" [ngClass]="{'collapsed': isCollapsed}">
+      <!-- titolo -->
+      <div class="sticky-box-title" (click)="toggleStickyBox()">
+        <span>
+          <b>Finalizza Ordine</b>
+          <i class="mx-3" [ngClass]="isDisabled('buy_button') ? 'bi bi-exclamation-triangle-fill' : 'bi bi-check-circle-fill'"
+             [style.color]="isDisabled('buy_button') ? 'red' : 'green'"></i>
+          <button class="btn btn-link">
+            <i [ngClass]="{'bi bi-chevron-down': isCollapsed, 'bi bi-chevron-up': !isCollapsed}" style="font-size: 1rem; color: black"></i>
+          </button>
+        </span>
       </div>
 
-      <!-- nota ordine -->
-      <div class="row mb-2">
-        <h6>Lascia una nota</h6>
-        <div>
-        <textarea [disabled]="isDisabled('textarea')" [(ngModel)]="buyInfos.note" [ngClass]="InputTheme.Primary" class="form-control"
-                  rows="3" placeholder="Inserisci una nota" style="max-height: 100px; resize: vertical;"></textarea>
-        </div>
-      </div>
-
-      <!-- totale -->
-      <div class="row" *ngIf="isCollapsed || !isCollapsed">
-        <h6>Totale da pagare:</h6>
-        <p>{{cart.totalPrice}} €</p>
-      </div>
-
-    </div>
-
-    <!--sticky box footer -->
-    <div class="sticky-box-footer">
-
-      <!-- Totale da visualizzare quando isCollapsed -->
-      <div class="row" *ngIf="isCollapsed">
-        <span> <p><b>Totale da pagare:</b> {{cart.totalPrice}} €</p></span>
-      </div>
-
-      <!-- bottoni -->
-      <div class="row">
-        <!-- Bottoni per schermi grandi -->
-        <div class="col-12 d-flex flex-md-row justify-content-end d-none d-md-flex">
-          <div class="mb-2 mb-md-0 me-md-2">
-            <lib-generic-button
-              (click)="removeFromCart()"
-              buttonText="Svuota carrello"
-              [buttonSize]="ButtonSizeTheme.Medium"
-              [buttonStyle]="ButtonTheme.Primary"
-              [customStyles]="{'color':'white'}"
-            ></lib-generic-button>
+      <div class="sticky-box-body">
+        <!-- Date & Time picker -->
+        <div class="row mt-2 mb-3 d-flex align-content-center">
+          <h6>Data e ora ritiro:</h6>
+          <!-- datepicker -->
+          <div class="col-12 col-md-6">
+            <lib-twentyfive-datepicker
+              [disabledInput]="isDisabled('datepicker')"
+              [showLabel]="false"
+              [labelStyle]="LabelTheme.LabelBold"
+              [setMinDateToToday]="true"
+              [enabledDates]="enabledDate"
+              (dateSelected)="onDateChange($event)"
+            ></lib-twentyfive-datepicker>
           </div>
+          <!-- timepicker -->
+          <div class="col-12 col-md-6 mt-2 mt-md-0">
+            <lib-twentyfive-generic-timepicker
+              [time]="selectedTime"
+              [showLabel]="false"
+              [timeOptions]="selectedSlots"
+              [disabled]="!selectedDate"
+              (changeTime)="onTimeSelected($event)"
+            ></lib-twentyfive-generic-timepicker>
+          </div>
+        </div>
+
+        <!-- nota ordine -->
+        <div class="row mb-2">
+          <h6>Lascia una nota</h6>
           <div>
-            <lib-generic-button
-              (click)="!isDisabled('buy_button') ? buyCart() : isCollapsed = false"
-              [disabled]="isDisabled('buy_button')"
-              buttonText="Ordina"
-              [buttonSize]="ButtonSizeTheme.Medium"
-              [buttonStyle]="ButtonTheme.Secondary"
-              [customStyles]="{'color':'white'}"
-            ></lib-generic-button>
+          <textarea [disabled]="isDisabled('textarea')" [(ngModel)]="buyInfos.note" [ngClass]="InputTheme.Primary" class="form-control"
+                    rows="3" placeholder="Inserisci una nota" style="max-height: 100px; resize: vertical;"></textarea>
           </div>
         </div>
 
-        <!-- Bottoni per schermi piccoli -->
-        <div class="col-12 d-flex flex-column justify-content-end d-md-none">
-          <div class="mb-2">
-            <lib-generic-button
-              (click)="removeFromCart()"
-              buttonText="Svuota carrello"
-              [buttonSize]="ButtonSizeTheme.FullWidth"
-              [buttonStyle]="ButtonTheme.Primary"
-              [customStyles]="{'color':'white'}"
-            ></lib-generic-button>
+        <!-- totale -->
+        <div class="row" *ngIf="isCollapsed || !isCollapsed">
+          <h6>Totale da pagare:</h6>
+          <p>{{cart.totalPrice}} €</p>
+        </div>
+
+      </div>
+
+      <!--sticky box footer -->
+      <div class="sticky-box-footer">
+
+        <!-- Totale da visualizzare quando isCollapsed -->
+        <div class="row" *ngIf="isCollapsed">
+          <span> <p><b>Totale da pagare:</b> {{cart.totalPrice}} €</p></span>
+        </div>
+
+        <!-- bottoni -->
+        <div class="row">
+          <!-- Bottoni per schermi grandi -->
+          <div class="col-12 d-flex flex-md-row justify-content-end d-none d-md-flex">
+            <div class="mb-2 mb-md-0 me-md-2">
+              <lib-generic-button
+                (click)="removeFromCart()"
+                buttonText="Svuota carrello"
+                [buttonSize]="ButtonSizeTheme.Medium"
+                [buttonStyle]="ButtonTheme.Primary"
+                [customStyles]="{'color':'white'}"
+              ></lib-generic-button>
+            </div>
+            <div>
+              <lib-generic-button
+                (click)="!isDisabled('buy_button') ? buyCart() : isCollapsed = false"
+                [disabled]="isDisabled('buy_button')"
+                buttonText="Ordina"
+                [buttonSize]="ButtonSizeTheme.Medium"
+                [buttonStyle]="ButtonTheme.Secondary"
+                [customStyles]="{'color':'white'}"
+              ></lib-generic-button>
+            </div>
           </div>
-          <div>
-            <lib-generic-button
-              (click)="!isDisabled('buy_button') ? buyCart() : null"
-              [disabled]="isDisabled('buy_button')"
-              buttonText="Ordina"
-              [buttonSize]="ButtonSizeTheme.FullWidth"
-              [buttonStyle]="ButtonTheme.Secondary"
-              [customStyles]="{'color':'white'}"
-            ></lib-generic-button>
+
+          <!-- Bottoni per schermi piccoli -->
+          <div class="col-12 d-flex flex-column justify-content-end d-md-none">
+            <div class="mb-2">
+              <lib-generic-button
+                (click)="removeFromCart()"
+                buttonText="Svuota carrello"
+                [buttonSize]="ButtonSizeTheme.FullWidth"
+                [buttonStyle]="ButtonTheme.Primary"
+                [customStyles]="{'color':'white'}"
+              ></lib-generic-button>
+            </div>
+            <div>
+              <lib-generic-button
+                (click)="!isDisabled('buy_button') ? buyCart() : null"
+                [disabled]="isDisabled('buy_button')"
+                buttonText="Ordina"
+                [buttonSize]="ButtonSizeTheme.FullWidth"
+                [buttonStyle]="ButtonTheme.Secondary"
+                [customStyles]="{'color':'white'}"
+              ></lib-generic-button>
+            </div>
           </div>
         </div>
       </div>
+
+
+
     </div>
-
-
-
+    <!-- Fine StickyBox -->
   </div>
-  <!-- Fine StickyBox -->
-</div>
 
-<!-- Sezione carrello vuoto-->
-<div *ngIf="cart.purchases.length == 0 && !loading" class="mb-5">
-  <div class="card">
-    <div class="card-body text-center">
-      <h5 class="card-title">Carrello Vuoto</h5>
-      <p class="card-text">Non hai ancora aggiunto nessun elemento al carrello.</p>
-      <div class="d-flex justify-content-center">
-        <lib-generic-button
-          routerLink=".."
-          buttonText="Ordina qualcosa"
-          [customStyles]="{'color':'blue'}"
-          [buttonStyle]="ButtonTheme.OnlyText"
-        ></lib-generic-button>
+  <!-- Sezione carrello vuoto-->
+  <div *ngIf="cart.purchases.length == 0 && !loading" class="mb-5">
+    <div class="card">
+      <div class="card-body text-center">
+        <h5 class="card-title">Carrello Vuoto</h5>
+        <p class="card-text">Non hai ancora aggiunto nessun elemento al carrello.</p>
+        <div class="d-flex justify-content-center">
+          <lib-generic-button
+            routerLink=".."
+            buttonText="Ordina qualcosa"
+            [customStyles]="{'color':'blue'}"
+            [buttonStyle]="ButtonTheme.OnlyText"
+          ></lib-generic-button>
+        </div>
       </div>
     </div>
   </div>

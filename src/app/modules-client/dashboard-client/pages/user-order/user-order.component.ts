@@ -25,7 +25,7 @@ export class UserOrderComponent implements OnInit, OnDestroy {
 
 
   currentPage: number = 1;
-  itemsPerPage: number = 15;
+  itemsPerPage: number = 9;
   totalPages: number = 1;
 
   loading: boolean = true;

@@ -1,104 +1,105 @@
-<div class="row mb-4">
-  <div class="col-12 col-lg-3">
-    <lib-generic-button-text-with-icon
-      buttonText="Torna Indietro"
-      [iconLeft]="true"
-      prefixIcon="bi bi-arrow-left"
-      [buttonStyle]="ButtonTheme.OnlyText"
-      (click)="goBack()"
-    ></lib-generic-button-text-with-icon>
-  </div>
-</div>
-<hr>
-
-<div class="row mt-2 mb-3">
-  <div class="col-10">
-    <div *ngIf="activeOrders == 'true'; else elseBlock">
-      <h3>Ordini in corso</h3>
+<div style="min-height: 100vh">
+  <div class="row mb-4">
+    <div class="col-12 col-lg-3">
+      <lib-generic-button-text-with-icon
+        buttonText="Torna Indietro"
+        [iconLeft]="true"
+        prefixIcon="bi bi-arrow-left"
+        [buttonStyle]="ButtonTheme.OnlyText"
+        (click)="goBack()"
+      ></lib-generic-button-text-with-icon>
     </div>
-    <ng-template #elseBlock>
-      <h3>Ordini completati</h3>
-    </ng-template>
   </div>
-</div>
+  <hr>
 
-<div *ngIf="loading">
-  <apa-spinner></apa-spinner>
-</div>
+  <div class="row mt-2 mb-3">
+    <div class="col-10">
+      <div *ngIf="activeOrders == 'true'; else elseBlock">
+        <h3>Ordini in corso</h3>
+      </div>
+      <ng-template #elseBlock>
+        <h3>Ordini completati</h3>
+      </ng-template>
+    </div>
+  </div>
 
-<div *ngIf="!loading" class="orders-container">
-  <div *ngFor="let order of orders" class="order-card">
-    <div class="card mt-4" style="cursor: pointer" (click)="goToDetail(order.id)">
-      <div class="card-header d-flex justify-content-between align-items-center">
-        <div>
-          <h5 class="card-title">Id ordine:</h5>
-          <h6 class="card-subtitle text-muted">#{{ order.id }}</h6>
+  <div *ngIf="loading">
+    <apa-spinner></apa-spinner>
+  </div>
+
+  <div *ngIf="!loading" class="orders-container" style="min-height: 100vh">
+    <div *ngFor="let order of orders" class="order-card">
+      <div class="card mt-4" style="cursor: pointer" (click)="goToDetail(order.id)">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="card-title">Id ordine:</h5>
+            <h6 class="card-subtitle text-muted">#{{ order.id }}</h6>
+          </div>
+          <i *ngIf="activeOrders=='true'" class="bi bi-trash clickable-icon" (click)="cancelOrder(order.id); $event.stopPropagation()"></i>
         </div>
-        <i *ngIf="activeOrders=='true'" class="bi bi-trash clickable-icon" (click)="cancelOrder(order.id); $event.stopPropagation()"></i>
+        <div class="card-body">
+          <p class="card-text"><strong>Data e ora ritiro:</strong> {{ order.formattedPickupDate }}</p>
+          <p class="card-text"><strong>Prezzo:</strong> {{ order.price }}</p>
+          <p class="card-text">
+            <strong>Stato: </strong>
+            <span
+              [style.fontWeight]="'bold'"
+              [style.color]="
+              order.status === 'Annullato' ? '#FF6F61' :
+              order.status === 'Ricevuto' ? '#FFD700' :
+              order.status === 'In preparazione' ? '#77DD77' :
+              order.status === 'Pronto' ? '#FFB347' :
+              order.status === 'Completo' ? '#89CFF0' :
+              'black'">
+          {{ order.status }}
+      </span>
+          </p>
+
+
+        </div>
       </div>
-      <div class="card-body">
-        <p class="card-text"><strong>Data e ora ritiro:</strong> {{ order.formattedPickupDate }}</p>
-        <p class="card-text"><strong>Prezzo:</strong> {{ order.price }}</p>
-        <p class="card-text">
-          <strong>Stato: </strong>
-          <span
-            [style.fontWeight]="'bold'"
-            [style.color]="
-            order.status === 'Annullato' ? '#FF6F61' :
-            order.status === 'Ricevuto' ? '#FFD700' :
-            order.status === 'In preparazione' ? '#77DD77' :
-            order.status === 'Pronto' ? '#FFB347' :
-            order.status === 'Completo' ? '#89CFF0' :
-            'black'">
-        {{ order.status }}
-    </span>
-        </p>
+    </div>
+  </div>
 
+  <hr class="mt-5" *ngIf="!loading">
+  <div class="d-flex justify-content-end align-items-center pagination-container" *ngIf="totalPages > 1 && !loading">
+    <button class="pagination-button me-2" (click)="previousPage()" [disabled]="currentPage === 1">
+      <i class="bi bi-chevron-double-left pagination-icon"></i>
+    </button>
+    <span class="pagination-text">Pagina {{ currentPage }} di {{ totalPages }}</span>
+    <button class="pagination-button ms-2" (click)="nextPage()" [disabled]="currentPage === totalPages">
+      <i class="bi bi-chevron-double-right pagination-icon"></i>
+    </button>
+  </div>
 
+  <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="cancelOrderModalLabel">Avviso</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body mb-0">
+          L'ordine è stato annullato con successo.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="impossibleCancelOrderModal" tabindex="-1" aria-labelledby="impossibleCancelOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="impossibleCancelOrderModalLabel">Avviso</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body mb-0">
+          Non è piu possibile cancellare l'ordine.
+        </div>
       </div>
     </div>
   </div>
 </div>
-
-<hr class="mt-5">
-<div class="d-flex justify-content-end align-items-center pagination-container" *ngIf="totalPages > 1">
-  <button class="pagination-button me-2" (click)="previousPage()" [disabled]="currentPage === 1">
-    <i class="bi bi-chevron-double-left pagination-icon"></i>
-  </button>
-  <span class="pagination-text">Pagina {{ currentPage }} di {{ totalPages }}</span>
-  <button class="pagination-button ms-2" (click)="nextPage()" [disabled]="currentPage === totalPages">
-    <i class="bi bi-chevron-double-right pagination-icon"></i>
-  </button>
-</div>
-
-<div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="cancelOrderModalLabel">Avviso</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body mb-0">
-        L'ordine è stato annullato con successo.
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="impossibleCancelOrderModal" tabindex="-1" aria-labelledby="impossibleCancelOrderModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="impossibleCancelOrderModalLabel">Avviso</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body mb-0">
-        Non è piu possibile cancellare l'ordine.
-      </div>
-    </div>
-  </div>
-</div>
-
 
 
 

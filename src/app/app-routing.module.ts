@@ -8,6 +8,7 @@ import {TwentyfiveNotFoundComponent} from "twentyfive-not-found";
 import {BakerListComponent} from "./modules-admin/dashboard/pages/baker-list/baker-list.component";
 import {catalogueGuard} from "./guard/catalogue.guard";
 import {MenuComponent} from "./components/menu/menu.component";
+import {NotFoundWrapperComponent} from "./components/not-found-wrapper/not-found-wrapper.component";
 
 const routes: Routes = [
 
@@ -23,7 +24,7 @@ const routes: Routes = [
   },
   {path: 'menu', component: MenuComponent},
   {path: '', redirectTo: 'catalogo', pathMatch: 'full'},
-  {path: '**', component: TwentyfiveNotFoundComponent}
+  {path: '**', component: NotFoundWrapperComponent, data: {routerLink: '/catalogo' }}
 
 ];
 
