@@ -8,15 +8,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-
       - uses: actions/setup-node@v3
         with:
-          node-version: '18'  # Specifichi una versione di Node.js compatibile con Angular
+          node-version: latest
 
-      - run: npm install -g npm@latest  # Assicurati di usare l'ultima versione di npm
-      - run: npm cache clean --force  # Pulisci la cache di npm
-      - run: npm install --legacy-peer-deps || (cat /home/runner/.npm/_logs/*-debug.log && exit 1)  # Debug di npm install
-
+      - run: npm install --legacy-peer-deps
       - run: npm run build
 
       - name: Install SSH Key
