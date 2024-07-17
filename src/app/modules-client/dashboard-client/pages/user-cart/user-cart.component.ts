@@ -241,7 +241,10 @@ export class UserCartComponent implements OnInit, OnDestroy{
     }
   }
 
-  completeBuyFromCart(){
+  completeBuyFromCart(payerId?:string){
+    if (payerId){
+      this.buyInfos.payerId=payerId;
+    }
     this.cartService.buyFromCart(this.customer.id,this.buyInfos).subscribe({
       next: () => {
         this.toastrService.success('Ordine effettuato con successo')
@@ -292,9 +295,10 @@ export class UserCartComponent implements OnInit, OnDestroy{
       this.activatedRoute.queryParams.subscribe(params => {
         if (params['token']) {
           //TODO VEDERE SE FARE UN ULTERIORE CONFERMA, QUI SIAMO TORNATI DA PAYPAL!! LA CHIAMATA DI SOTTO FINALIZZA L'ORDINE
-          this.paymentService.capture(params['token']).subscribe({
-            next:()=>{
-            this.completeBuyFromCart();
+          this.cartService.capture(params['token']).subscribe({
+            next:(res:any)=>{
+              console.log(res);
+              this.completeBuyFromCart(params['PayerID']);
             },
             error:(err:any)=>{
               console.error(err);

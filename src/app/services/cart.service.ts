@@ -46,7 +46,9 @@ export class CartService {
     let h=Utils.createHttpHeaders({'Payment-App-Id':this.kafkaTopic});
     return this.http.post(`${this.baseCartUrl}/prepare-buying/${id}`, paymentReq,{headers: h});
   }
-
+  capture(orderId: string) {
+    return this.http.get(`${this.baseCartUrl}/capture/${orderId}`);
+  }
   modifyPipInCart(customerId: string, index: number, pIP: any) {
     let p = Utils.createHttpParams({'index':index})
     return this.http.patch(`${this.baseCartUrl}/modify-pip-cart/${customerId}`, pIP, {params: p})
