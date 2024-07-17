@@ -16,8 +16,9 @@ export class BuyInfos {
   selectedPickupDateTime: string;
   note: string;
   customInfo: CustomInfo = new CustomInfo();
-  payerId: string;
+  paymentId: string;
 }
+
 
 export class CustomInfo {
   firstName: string;
