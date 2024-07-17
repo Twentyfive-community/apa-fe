@@ -55,9 +55,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
               private customerService:CustomerService,
               private toastrService: ToastrService,
               private cartService:CartService,
-              private activatedRoute: ActivatedRoute,
-              private router: Router,
-              private paymentService: PaymentService) {
+              private activatedRoute: ActivatedRoute) {
   }
 
   ngOnInit(): void {
@@ -241,9 +239,9 @@ export class UserCartComponent implements OnInit, OnDestroy{
     }
   }
 
-  completeBuyFromCart(payerId?:string){
-    if (payerId){
-      this.buyInfos.payerId=payerId;
+  completeBuyFromCart(paymentId?:string){
+    if (paymentId){
+      this.buyInfos.paymentId=paymentId;
     }
     this.cartService.buyFromCart(this.customer.id,this.buyInfos).subscribe({
       next: () => {
@@ -297,8 +295,9 @@ export class UserCartComponent implements OnInit, OnDestroy{
           //TODO VEDERE SE FARE UN ULTERIORE CONFERMA, QUI SIAMO TORNATI DA PAYPAL!! LA CHIAMATA DI SOTTO FINALIZZA L'ORDINE
           this.cartService.capture(params['token']).subscribe({
             next:(res:any)=>{
+              let paymentId =res.content.purchaseUnits[0].payments.captures[0].id;
               console.log(res);
-              this.completeBuyFromCart(params['PayerID']);
+              this.completeBuyFromCart(paymentId);
             },
             error:(err:any)=>{
               console.error(err);
