@@ -242,11 +242,12 @@ export class ProductDetailsComponent implements OnInit{
     }
     if (this.decorativeText[0]) {
       this.productInPurchase.customization.push(new Customization("Testo Decorativo", this.decorativeText))
-    } if (this.selectedColor[0]!==''){
-      this.productInPurchase.customization.push(new Customization("Colore Testo", this.selectedColor))
-    } else {
-      this.selectedColor[0]='Nero';
-      this.productInPurchase.customization.push(new Customization("Colore Testo", this.selectedColor))
+       if (this.selectedColor[0]!==''){
+        this.productInPurchase.customization.push(new Customization("Colore Testo", this.selectedColor))
+      } else {
+        this.selectedColor[0]='Nero';
+        this.productInPurchase.customization.push(new Customization("Colore Testo", this.selectedColor))
+     }
     }
       switch (this.categoryType) {
         case 'productKg':
