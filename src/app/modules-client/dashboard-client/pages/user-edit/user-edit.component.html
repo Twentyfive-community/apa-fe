@@ -1,65 +1,69 @@
-<div class="row mb-4">
-  <div class="col-12 col-lg-3">
-    <lib-generic-button-text-with-icon
-      buttonText="Torna Indietro"
-      [iconLeft]="true"
-      prefixIcon="bi bi-arrow-left"
-      [buttonStyle]="ButtonTheme.OnlyText"
-      (click)="close()"
-    ></lib-generic-button-text-with-icon>
-  </div>
-</div>
+<div style="min-height: 60vh">
 
-<hr/>
-
-<div *ngIf="loading">
-  <apa-spinner></apa-spinner>
-</div>
-
-<div *ngIf="!loading">
-  <div class="row mb-4 mt-4">
-    <h3 *ngIf="!customerIdkc">Crea Cliente</h3>
-    <h3 *ngIf="customerIdkc">Modifica Dati Personali</h3>
-  </div>
-
-  <div class="col-3 ms-2">
-    <div class="row mt-4">
-      <lib-twentyfive-input
-        labelText="Nome"
-        placeholder="Nome"
-        [value]="originalCustomer.firstName"
-        (input)="onInputChange($event, 'name')"
-      ></lib-twentyfive-input>
-    </div>
-    <div class="row mt-4">
-      <lib-twentyfive-input
-        labelText="Cognome"
-        placeholder="Cognome"
-        [value]="originalCustomer.lastName"
-        (input)="onInputChange($event, 'surname')"
-      ></lib-twentyfive-input>
-    </div>
-    <div class="row mt-4">
-      <lib-twentyfive-input
-        labelText="Numero di Telefono"
-        placeholder="Numero di Telefono"
-        [value]="originalCustomer.phoneNumber"
-        (input)="onInputChange($event, 'phoneNumber')"
-      ></lib-twentyfive-input>
+  <div class="row mb-4">
+    <div class="col-12 col-lg-3">
+      <lib-generic-button-text-with-icon
+        buttonText="Torna Indietro"
+        [iconLeft]="true"
+        prefixIcon="bi bi-arrow-left"
+        [buttonStyle]="ButtonTheme.OnlyText"
+        (click)="close()"
+      ></lib-generic-button-text-with-icon>
     </div>
   </div>
 
-  <div class="row mt-5">
-    <hr>
+  <hr/>
+
+  <div *ngIf="loading">
+    <apa-spinner></apa-spinner>
   </div>
 
+  <div *ngIf="!loading">
+    <div class="row mb-4 mt-4">
+      <h3 *ngIf="!customerIdkc">Crea Cliente</h3>
+      <h3 *ngIf="customerIdkc">Modifica Dati Personali</h3>
+    </div>
 
-  <div class="row float-end" *ngIf="customerIdkc">
-    <lib-generic-button
-      buttonText="Modifica"
-      (click)="saveNewCustomer()"
-      [buttonSize]="ButtonSizeTheme.Medium"
-      [buttonStyle]="ButtonTheme.Primary"
-    ></lib-generic-button>
+    <div class="col-3 ms-2">
+      <div class="row mt-4">
+        <lib-twentyfive-input
+          labelText="Nome"
+          placeholder="Nome"
+          [value]="originalCustomer.firstName"
+          (input)="onInputChange($event, 'name')"
+        ></lib-twentyfive-input>
+      </div>
+      <div class="row mt-4">
+        <lib-twentyfive-input
+          labelText="Cognome"
+          placeholder="Cognome"
+          [value]="originalCustomer.lastName"
+          (input)="onInputChange($event, 'surname')"
+        ></lib-twentyfive-input>
+      </div>
+      <div class="row mt-4">
+        <lib-twentyfive-input
+          labelText="Numero di Telefono"
+          placeholder="Numero di Telefono"
+          [value]="originalCustomer.phoneNumber"
+          (input)="onInputChange($event, 'phoneNumber')"
+        ></lib-twentyfive-input>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <hr>
+    </div>
+
+
+    <div class="row" *ngIf="customerIdkc">
+      <lib-generic-button class="row d-flex justify-content-end"
+        buttonText="Modifica"
+        (click)="saveNewCustomer()"
+        [buttonSize]="ButtonSizeTheme.Medium"
+        [buttonStyle]="ButtonTheme.Primary"
+      ></lib-generic-button>
+    </div>
   </div>
+
 </div>

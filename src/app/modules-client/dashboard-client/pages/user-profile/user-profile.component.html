@@ -1,4 +1,4 @@
-<div style="min-height: 90vh">
+<div class="mx-4" style="min-height: 85vh">
 
   <div *ngIf="loading">
     <apa-spinner></apa-spinner>
@@ -7,7 +7,7 @@
   <div *ngIf="!loading">
     <section>
       <div class="row">
-        <div class="col-10">
+        <div class="col-11">
           <h3>Anagrafica</h3>
         </div>
         <div class="col-1 d-flex justify-content-end">
@@ -44,7 +44,7 @@
     <section >
       <h3 class="mb-2">I tuoi ordini</h3>
       <div class="row mb-1">
-        <div class="col-10 d-flex align-items-center">
+        <div class="col-11 d-flex align-items-center">
           <lib-generic-button-text-with-icon
             buttonText="In corso"
             (click)="goToActiveOrders()"
@@ -60,7 +60,7 @@
       </div>
 
       <div class="row">
-        <div class="col-10 d-flex align-items-center">
+        <div class="col-11 d-flex align-items-center">
           <lib-generic-button-text-with-icon
             buttonText="Completati"
             (click)="goToCompletedOrders()"
@@ -84,7 +84,7 @@
     <section>
       <h3 class="mb-2">Gestione</h3>
       <div class="row mb-1">
-            <div class="col-10 d-flex align-items-center">
+            <div class="col-11 d-flex align-items-center">
               <lib-generic-button-text-with-icon
                 buttonText="Reset password"
                 [iconLeft]="true"
@@ -100,7 +100,7 @@
 
 
           <div class="row">
-            <div class="col-10 d-flex align-items-center">
+            <div class="col-11 d-flex align-items-center">
               <lib-generic-button-text-with-icon
                 buttonText="Cancella Account"
                 [iconLeft]="true"

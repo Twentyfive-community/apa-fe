@@ -43,7 +43,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
   loading: boolean = true;
 
   isCollapsed: boolean = true;
-  onlinePayment: boolean = true;
+  onlinePayment: boolean = false;
 
   buyInfos: BuyInfos = new BuyInfos();
 

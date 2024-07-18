@@ -1,215 +1,219 @@
-<div class="container-fluid order-details-container">
-  <div class="row mb-4">
-    <div class="col-12 col-lg-3">
-      <lib-generic-button-text-with-icon
-        buttonText="Torna Indietro"
-        [iconLeft]="true"
-        prefixIcon="bi bi-arrow-left"
-        [buttonStyle]="ButtonTheme.OnlyText"
-        (click)="close()"
-      ></lib-generic-button-text-with-icon>
+<div style="min-height: 80vh">
+
+  <div class="container-fluid order-details-container">
+    <div class="row mb-4">
+      <div class="col-12 col-lg-3">
+        <lib-generic-button-text-with-icon
+          buttonText="Torna Indietro"
+          [iconLeft]="true"
+          prefixIcon="bi bi-arrow-left"
+          [buttonStyle]="ButtonTheme.OnlyText"
+          (click)="close()"
+        ></lib-generic-button-text-with-icon>
+      </div>
     </div>
-  </div>
-  <hr>
+    <hr>
 
-  <div *ngIf="loading">
-    <apa-spinner></apa-spinner>
-  </div>
+    <div *ngIf="loading">
+      <apa-spinner></apa-spinner>
+    </div>
 
-  <div *ngIf="!loading" class="orders-container row row-cols-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-3 align-content-center justify-content-center g-4">    <!-- Product Card -->
-    <div *ngFor="let product of orderDetails.products" class="col px-2">
-      <div class="product-details card h-80 mt-2">
-        <div class="card-body">
-          <div class="row">
-            <div class="col-12 col-sm-4">
-              <img [src]="getImageOfProduct(product)" class="card-img img-fluid" alt="Product Image">
-            </div>
-            <div class="col-12 col-sm-8 mt-2">
-              <h4 class="mb-4">{{ product.name }}</h4>
-              <div class="row">
-                <div class="col-6">
-                  <h6>Quantità:</h6>
-                  <p class="text-muted">{{ product.quantity }}</p>
-                </div>
-                <div class="col-6">
-                  <h6>Peso:</h6>
-                  <p class="text-muted">{{ product.weight }} kg</p>
+    <div *ngIf="!loading" class="orders-container row row-cols-1 row-cols-md-2 row-cols-lg-2 row-cols-xl-2 row-cols-xxl-3 align-content-center justify-content-center g-4">    <!-- Product Card -->
+      <div *ngFor="let product of orderDetails.products" class="col px-2">
+        <div class="product-details card h-80 mt-2">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-12 col-sm-4">
+                <img [src]="getImageOfProduct(product)" class="card-img img-fluid" alt="Product Image">
+              </div>
+              <div class="col-12 col-sm-8 mt-2">
+                <h4 class="mb-4">{{ product.name }}</h4>
+                <div class="row">
+                  <div class="col-6">
+                    <h6>Quantità:</h6>
+                    <p class="text-muted">{{ product.quantity }}</p>
+                  </div>
+                  <div class="col-6">
+                    <h6>Peso:</h6>
+                    <p class="text-muted">{{ product.weight }} kg</p>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <hr>
-          <div >
-            <div class="mt-2 mb-1" *ngIf="product.customization.length > 0">
-              <h6>
-                <button (click)="toggleCustomization(product)" class="btn btn-link p-0 custom-button ms-2">
-                  Personalizzazioni
-                  <i [ngClass]="{'bi bi-chevron-down small-chevron': !getCustomizationVisible(product), 'bi bi-chevron-up small-chevron': getCustomizationVisible(product)}" style="font-size: 1rem; width: 1rem; height: 1rem;"></i>
-                </button>
-              </h6>
-              <ul *ngIf="getCustomizationVisible(product)" class="list-unstyled ms-3 text-muted">
-                <li *ngFor="let customization of product.customization">
-                  <b>{{ customization.name }}:</b> {{ customization.value }}
-                </li>
-                <hr>
-              </ul>
+            <hr>
+            <div >
+              <div class="mt-2 mb-1" *ngIf="product.customization.length > 0">
+                <h6>
+                  <button (click)="toggleCustomization(product)" class="btn btn-link p-0 custom-button ms-2">
+                    Personalizzazioni
+                    <i [ngClass]="{'bi bi-chevron-down small-chevron': !getCustomizationVisible(product), 'bi bi-chevron-up small-chevron': getCustomizationVisible(product)}" style="font-size: 1rem; width: 1rem; height: 1rem;"></i>
+                  </button>
+                </h6>
+                <ul *ngIf="getCustomizationVisible(product)" class="list-unstyled ms-3 text-muted">
+                  <li *ngFor="let customization of product.customization">
+                    <b>{{ customization.name }}:</b> {{ customization.value }}
+                  </li>
+                  <hr>
+                </ul>
 
+              </div>
+              <div *ngIf="product.notes" class="col-6 ms-2">
+                <h6>Note:</h6>
+                <p class="ms-2">{{ product.notes }}</p>
+              </div>
+              <div class="ms-2">
+                <h6>Prezzo del prodotto:</h6>
+                <p class="text-muted ms-2">€ {{ product.totalPrice }}</p>
+              </div>
             </div>
-            <div *ngIf="product.notes" class="col-6 ms-2">
-              <h6>Note:</h6>
-              <p class="ms-2">{{ product.notes }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bundle Card -->
+      <div *ngFor="let bundle of orderDetails.bundles" class="col px-lg-5">
+        <div class="product-details card h-100 mt-2 p-3">
+          <div class="card-body d-flex flex-column">
+            <div class="row flex-grow-1">
+              <div class="col-12 col-sm-4">
+                <img [src]="getImageOfBundle(bundle)" class="card-img img-fluid" alt="Bundle Image">
+              </div>
+              <div class="col-12 col-sm-8">
+                <h4 class="mb-4">{{ bundle.name }}</h4>
+                <div class="row">
+                  <div class="col-6">
+                    <h6>Quantità:</h6>
+                    <p class="text-muted">{{ bundle.quantity }}</p>
+                  </div>
+                  <div class="col-6">
+                    <h6>Misura:</h6>
+                    <p class="text-muted">{{ bundle.measure.label }} kg</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="ms-2">
+            <hr>
+            <div class="">
               <h6>Prezzo del prodotto:</h6>
-              <p class="text-muted ms-2">€ {{ product.totalPrice }}</p>
+              <p class="text-muted">€ {{ bundle.totalPrice }}</p>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Bundle Card -->
-    <div *ngFor="let bundle of orderDetails.bundles" class="col px-lg-5">
-      <div class="product-details card h-100 mt-2 p-3">
-        <div class="card-body d-flex flex-column">
-          <div class="row flex-grow-1">
-            <div class="col-12 col-sm-4">
-              <img [src]="getImageOfBundle(bundle)" class="card-img img-fluid" alt="Bundle Image">
-            </div>
-            <div class="col-12 col-sm-8">
-              <h4 class="mb-4">{{ bundle.name }}</h4>
-              <div class="row">
-                <div class="col-6">
-                  <h6>Quantità:</h6>
-                  <p class="text-muted">{{ bundle.quantity }}</p>
-                </div>
-                <div class="col-6">
-                  <h6>Misura:</h6>
-                  <p class="text-muted">{{ bundle.measure.label }} kg</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <hr>
-          <div class="">
-            <h6>Prezzo del prodotto:</h6>
-            <p class="text-muted">€ {{ bundle.totalPrice }}</p>
-          </div>
+    <!-- Order Summary -->
+    <div *ngIf="!loading" class="order-summary sticky-bottom mt-5 pt-4 border-top">
+      <div class="row align-items-center mb-3">
+        <div class="col-6">
+          <h6>Data e ora ritiro:</h6>
+          <p>{{ orderDetails.formattedPickupDate }}</p>
+        </div>
+        <div class="col-6 text-end">
+          <h6>Totale:</h6>
+          <p>{{ orderDetails.totalPrice }} €</p>
+        </div>
+      </div>
+      <div class="row align-items-center mb-3">
+
+        <div class="col-6 text-start">
+          <h6>Status:</h6>
+          <span
+            [style.fontWeight]="'bold'"
+            [style.color]="
+              orderDetails.status === 'Annullato' ? '#FF6F61' :
+              orderDetails.status === 'Ricevuto' ? '#FFD700' :
+              orderDetails.status === 'In preparazione' ? '#77DD77' :
+              orderDetails.status === 'Pronto' ? '#FFB347' :
+              orderDetails.status === 'Completo' ? '#89CFF0' :
+              'black'">
+          {{ orderDetails.status }}
+      </span>
+
+        </div>
+
+        <div class="col-6 text-end">
+          <h6>Note:</h6>
+          <p>{{ orderDetails.orderNote }}</p>
+        </div>
+      </div>
+      <div class="row justify-content-end">
+        <div *ngIf="activeOrders=='true'" class="col-auto">
+          <lib-generic-button
+            (click)="cancelOrder(orderId)"
+            buttonText="Annulla Ordine"
+            [buttonSize]="ButtonSizeTheme.Medium"
+            [buttonStyle]="ButtonTheme.Primary"
+          ></lib-generic-button>
+        </div>
+        <div *ngIf="activeOrders=='false'" class="col-auto">
+          <lib-generic-button
+            (click)="addFromCompletedOrder()"
+            buttonText="Riaggiungi al carrello"
+            [buttonSize]="ButtonSizeTheme.Medium"
+            [buttonStyle]="ButtonTheme.Primary"
+          ></lib-generic-button>
+        </div>
+        <div class="col-auto">
+          <lib-generic-button
+            (click)="contactUs()"
+            buttonText="Contattaci"
+            [buttonSize]="ButtonSizeTheme.Medium"
+            [buttonStyle]="ButtonTheme.Primary"
+          ></lib-generic-button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Contact Us Modal -->
+  <div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" style="border-radius: 8px;">
+        <div class="modal-header">
+          <h5 class="modal-title" id="contactModalLabel">I nostri contatti</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Contatta la nostra pasticceria al numero:
+        </div>
+        <div class="modal-body">
+          +39 012 345 6789
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Order Summary -->
-  <div *ngIf="!loading" class="order-summary sticky-bottom mt-5 pt-4 border-top">
-    <div class="row align-items-center mb-3">
-      <div class="col-6">
-        <h6>Data e ora ritiro:</h6>
-        <p>{{ orderDetails.formattedPickupDate }}</p>
-      </div>
-      <div class="col-6 text-end">
-        <h6>Totale:</h6>
-        <p>{{ orderDetails.totalPrice }} €</p>
-      </div>
-    </div>
-    <div class="row align-items-center mb-3">
-
-      <div class="col-6 text-start">
-        <h6>Status:</h6>
-        <span
-          [style.fontWeight]="'bold'"
-          [style.color]="
-            orderDetails.status === 'Annullato' ? '#FF6F61' :
-            orderDetails.status === 'Ricevuto' ? '#FFD700' :
-            orderDetails.status === 'In preparazione' ? '#77DD77' :
-            orderDetails.status === 'Pronto' ? '#FFB347' :
-            orderDetails.status === 'Completo' ? '#89CFF0' :
-            'black'">
-        {{ orderDetails.status }}
-    </span>
-
-      </div>
-
-      <div class="col-6 text-end">
-        <h6>Note:</h6>
-        <p>{{ orderDetails.orderNote }}</p>
-      </div>
-    </div>
-    <div class="row justify-content-end">
-      <div *ngIf="activeOrders=='true'" class="col-auto">
-        <lib-generic-button
-          (click)="cancelOrder(orderId)"
-          buttonText="Annulla Ordine"
-          [buttonSize]="ButtonSizeTheme.Medium"
-          [buttonStyle]="ButtonTheme.Primary"
-        ></lib-generic-button>
-      </div>
-      <div *ngIf="activeOrders=='false'" class="col-auto">
-        <lib-generic-button
-          (click)="addFromCompletedOrder()"
-          buttonText="Riaggiungi al carrello"
-          [buttonSize]="ButtonSizeTheme.Medium"
-          [buttonStyle]="ButtonTheme.Primary"
-        ></lib-generic-button>
-      </div>
-      <div class="col-auto">
-        <lib-generic-button
-          (click)="contactUs()"
-          buttonText="Contattaci"
-          [buttonSize]="ButtonSizeTheme.Medium"
-          [buttonStyle]="ButtonTheme.Primary"
-        ></lib-generic-button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<!-- Contact Us Modal -->
-<div class="modal fade" id="contactModal" tabindex="-1" aria-labelledby="contactModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content" style="border-radius: 8px;">
-      <div class="modal-header">
-        <h5 class="modal-title" id="contactModalLabel">I nostri contatti</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        Contatta la nostra pasticceria al numero:
-      </div>
-      <div class="modal-body">
-        +39 012 345 6789
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+  <div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="cancelOrderModalLabel">Avviso</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body mb-0">
+          L'ordine è stato annullato con successo.
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="modal fade" id="cancelOrderModal" tabindex="-1" aria-labelledby="cancelOrderModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="cancelOrderModalLabel">Avviso</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body mb-0">
-        L'ordine è stato annullato con successo.
+  <div class="modal fade" id="impossibleCancelOrderModal" tabindex="-1" aria-labelledby="impossibleCancelOrderModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="impossibleCancelOrderModalLabel">Avviso</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body mb-0">
+          Non è piu possibile cancellare l'ordine.
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="modal fade" id="impossibleCancelOrderModal" tabindex="-1" aria-labelledby="impossibleCancelOrderModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="impossibleCancelOrderModalLabel">Avviso</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body mb-0">
-        Non è piu possibile cancellare l'ordine.
-      </div>
-    </div>
-  </div>
 </div>
