@@ -11,7 +11,7 @@
   ></lib-nav>
 </div>
 
-<div class="wrapper">
+<div class="wrapper" (keydown)="handleKeyDown($event)">
   <lib-twentyfive-sidebar [sidebarItems]="sidebarItems" (onClick)="makeLogout($event)"></lib-twentyfive-sidebar>
 
   <div class="container-fluid g-0 h-100">

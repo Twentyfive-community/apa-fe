@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, HostListener, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {TwentyfiveModalService} from "twentyfive-modal";
 import {filter, map, mergeMap} from "rxjs";
@@ -116,6 +116,13 @@ export class DashboardComponent implements OnInit{
     this.router.navigate(['../home']);
   }
 
+  @HostListener('document:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Tab') {
+      // Evita la propagazione dell'evento di pressione del tasto TAB
+      event.preventDefault();
+    }
+  }
 
   protected readonly NavbarTheme = NavbarTheme;
 }
