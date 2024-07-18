@@ -244,7 +244,7 @@ export class ProductListComponent implements OnInit, AfterViewInit{
                   showIcon: true,
                   size: 'md',
                   onConfirm: (() => {
-                    this.productService.activateByIdWeighted(event.id,true).subscribe({
+                    this.productService.activateByIdKg(event.id,true).subscribe({
                       complete:() =>{
                         this.toastrService.success("Prodotto riattivato correttamente!");
                       }
