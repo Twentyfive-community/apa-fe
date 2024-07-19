@@ -16,7 +16,7 @@ export const environment = {
   cancelUrl:'http:localhost:4200/catalogo/carrello',
   returnUrl:'http:localhost:4200/catalogo/carrello',
   kafkaTopic:'twentyfive_dev_preorders',
-  paymentUrl:'http://localhost:8081',
+  paymentUrl:'http://80.211.123.141:8106/groypal-deamon',
 
   ftpUrl: 'http://80.211.123.141:8106/TwentyfiveMediaManager/twentyfiveserver',
   ftpDownloadUrl: 'http://80.211.123.141:8106/TwentyfiveMediaManager/twentyfiveserver/downloadkkk/apa/products/'
