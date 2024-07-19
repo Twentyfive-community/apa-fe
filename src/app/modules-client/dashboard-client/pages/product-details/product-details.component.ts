@@ -22,6 +22,8 @@ export class ProductDetailsComponent implements OnInit{
   @ViewChild('dropZone') dropZoneRef!: ElementRef;
   @ViewChild('fileInput') fileInputRef!: ElementRef;
 
+  noContent ='http://80.211.123.141:8106/TwentyfiveMediaManager/twentyfiveserver/downloadkkk/apa/template/no-img-paceholder.jpg';
+
   colorOptions = ['Nero','Rosso','Blu','Viola','Giallo'];
 
   fromEdit: boolean = false; //segnala che si tratta di una modifica
