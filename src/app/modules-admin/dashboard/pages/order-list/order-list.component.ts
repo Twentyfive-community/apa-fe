@@ -49,6 +49,7 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
     {name: 'Nome', value: 'firstName', sortable: true},
     {name: 'Data Ritiro', value: 'formattedPickupDate', sortable: true},
     {name: 'Prezzo', value: 'price', sortable: true},
+    {name: 'Pagamento', value: 'methodPayment', sortable: true},
     {name: 'Status', value: 'status', sortable: true},
   ];
   data: Order[] = []

@@ -105,7 +105,9 @@
       <p><b>Note sull'ordine:</b> {{ orderDetails.orderNote ? orderDetails.orderNote : 'Nessuna nota' }}</p>
       <p *ngIf="orderDetails.email"><b>E-mail:</b> {{ orderDetails.email }}</p>
       <p *ngIf="orderDetails.phoneNumber"><b>Numero di Telefono:</b> {{ orderDetails.phoneNumber }}</p>
-    </div>
+      <p *ngIf="orderDetails.paymentId"><b>ID Pagamento:</b> {{ orderDetails.paymentId }}</p>
+
+  </div>
   </ng-template>
 
 

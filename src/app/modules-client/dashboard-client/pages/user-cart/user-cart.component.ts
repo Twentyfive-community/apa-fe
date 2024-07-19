@@ -43,7 +43,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
   loading: boolean = true;
 
   isCollapsed: boolean = true;
-  onlinePayment: boolean = false;
+  onlinePayment: boolean = true;
 
   buyInfos: BuyInfos = new BuyInfos();
 
@@ -228,6 +228,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
       } else if (this.onlinePayment){
         //TODO APRI MODALE CON SCELTA, SE PAGAMENTO ONLINE CONTINUARE CON QUI SOTTO SENNò VEDI ALTRO COMMENTO
         this.paymentReq.buyInfos=this.buyInfos;
+        //TODO GESTIRE L'ERRORE CON LA MODALE (ERRORE NEL COMPRARE ONLINE O ROBA COSI)
         this.cartService.prepareBuying(this.customer.id,this.paymentReq).subscribe((response:any)=>{
           window.location.href = response.content.links[1].href;
         })

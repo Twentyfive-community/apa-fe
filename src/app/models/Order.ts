@@ -9,6 +9,7 @@ export class Order {
   status: string;
   formattedPickupDate: string;
   unread: boolean;
+  methodPayment: string;
 }
 
 export class OrderDetails {
@@ -23,6 +24,7 @@ export class OrderDetails {
   totalPrice: number;
   formattedPickupDate: string;
   status: string;
+  paymentId: string
 }
 
 export class OrderRedoReq {

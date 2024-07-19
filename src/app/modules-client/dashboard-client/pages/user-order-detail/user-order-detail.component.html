@@ -115,24 +115,27 @@
         </div>
       </div>
       <div class="row align-items-center mb-3">
-
         <div class="col-6 text-start">
           <h6>Status:</h6>
           <span
             [style.fontWeight]="'bold'"
             [style.color]="
-              orderDetails.status === 'Annullato' ? '#FF6F61' :
-              orderDetails.status === 'Ricevuto' ? '#FFD700' :
-              orderDetails.status === 'In preparazione' ? '#77DD77' :
-              orderDetails.status === 'Pronto' ? '#FFB347' :
-              orderDetails.status === 'Completo' ? '#89CFF0' :
-              'black'">
-          {{ orderDetails.status }}
+          orderDetails.status === 'Annullato' ? '#FF6F61' :
+          orderDetails.status === 'Ricevuto' ? '#FFD700' :
+          orderDetails.status === 'In preparazione' ? '#77DD77' :
+          orderDetails.status === 'Pronto' ? '#FFB347' :
+          orderDetails.status === 'Completo' ? '#89CFF0' :
+          'black'">
+        {{ orderDetails.status }}
       </span>
-
         </div>
-
-        <div class="col-6 text-end">
+        <div *ngIf="orderDetails.paymentId" class="col-6 text-end">
+          <h6>ID Pagamento:</h6>
+          <p>{{ orderDetails.paymentId }}</p>
+        </div>
+      </div>
+      <div class="row align-items-center mb-3">
+        <div *ngIf="orderDetails.orderNote" class="col-12 text-end">
           <h6>Note:</h6>
           <p>{{ orderDetails.orderNote }}</p>
         </div>
@@ -163,7 +166,6 @@
           ></lib-generic-button>
         </div>
       </div>
-
     </div>
   </div>
 
