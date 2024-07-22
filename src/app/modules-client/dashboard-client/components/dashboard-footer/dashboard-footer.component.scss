@@ -65,7 +65,7 @@ a {
 }
 
 //media query sm
-@media (max-width: 576px) {
+@media (min-width: 0px) and (max-width: 768px) {
   .footer {
     display: block;
   }
