@@ -225,6 +225,9 @@ export class UserCartComponent implements OnInit, OnDestroy{
         let r = this.genericModalService.open(AdminCustomBuyComponent, "lg", {});
         r.componentInstance.customerId = this.customer.id;
         r.componentInstance.buyInfos = this.buyInfos;
+        r.result.finally(() => {
+          this.loading = false;
+          })
       } else {
         // Apre modale scelta metodo pagamento
         let r = this.genericModalService.open(UserCartCheckoutComponent, "md", {})

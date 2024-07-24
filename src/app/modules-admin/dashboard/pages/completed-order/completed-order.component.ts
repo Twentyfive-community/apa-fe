@@ -167,7 +167,6 @@ export class CompletedOrderComponent implements OnInit{
 
   orderRedo(order: any){
     let r = this.genericModalService.open(OrderRedoComponent, "md", {});
-    console.log(order.id);
     r.componentInstance.orderId = order.id;
     r.result.finally(() => {
       this.getAll();

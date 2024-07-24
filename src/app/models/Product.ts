@@ -108,6 +108,7 @@ export class ProductInPurchase {
   weight: number;
   quantity: number;
   shape: string;
+  ingredients: any;
   customization: Customization[] =[];
   notes: string;
   attachment: string;

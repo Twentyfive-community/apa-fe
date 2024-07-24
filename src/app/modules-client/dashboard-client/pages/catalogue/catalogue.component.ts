@@ -121,7 +121,6 @@ export class CatalogueComponent implements OnInit {
     r.componentInstance.categoryType = this.categoryActive;
     r.componentInstance.categoryName = this.categoryName;
     r.result.finally(() => {
-      this.getAll()
     })
   }
 
@@ -140,7 +139,6 @@ export class CatalogueComponent implements OnInit {
   modalCustomCake(){
     let r = this.genericModalService.open(CustomCakeComponent, "lg", {});
     r.result.finally( () => {
-      this.getAll()
     })
   }
 

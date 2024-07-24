@@ -42,6 +42,8 @@
   <ng-template #templateRef>
     <div>
       <div class="m-2 mt-0 mb-0" *ngFor="let product of orderDetails.products">
+        <h3 class="mb-4">{{ product.name.toUpperCase() }}</h3>
+        <p *ngIf="product.weight && product.customization.length==0"><b>Peso:</b> {{ product.weight }} Kg</p>
         <div class="d-flex justify-content-between align-items-center">
           <h3 class="mb-4">{{ product.name.toUpperCase() }}</h3>
           <div ngbDropdown class="dropdown">
@@ -57,6 +59,7 @@
         </div>
         <p *ngIf="product.weight && !product.customization"><b>Peso:</b> {{ product.weight }} Kg</p>
         <p *ngIf="product.quantity"><b>Quantità:</b> {{ product.quantity }}</p>
+        <p *ngIf="product.shape && product.customization.length==0"><b>Forma:</b> {{ product.shape }}</p>
         <p><b>Luogo:</b> {{ product.location ? product.location : 'NESSUN LUOGO SELEZIONATO' }}</p>
         <p *ngIf="product.shape && !product.customization"><b>Forma:</b> {{ product.shape }}</p>
         <div *ngIf="product.customization && product.customization.length>0">
@@ -67,7 +70,12 @@
             <li class="mb-3" *ngIf="item.name == 'Base'"><b>Forma:</b> {{ product.shape }}</li>
           </ul>
         </div>
-
+        <div *ngIf="product.ingredients && product.ingredients.length>0">
+          <p><b>Ingredienti:</b></p>
+          <ul *ngFor="let item of product.ingredients">
+            <li><b>{{ item.categoryName }}:</b> {{ item.ingredientsName }}</li>
+          </ul>
+        </div>
         <p *ngIf="product.totalPrice"><b>Prezzo totale prodotto:</b> {{ product.totalPrice }} €</p>
         <p class="flex-grow-1"><b>ALLEGATO:</b></p>
         <div *ngIf="product.attachment" class="d-flex align-items-center">
