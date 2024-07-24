@@ -172,6 +172,7 @@ export class OrderListComponent implements OnInit, AfterViewInit, OnDestroy{
     this.unreadStatus[orderId] = false;
     this.orderService.getOrderDetails(orderId).subscribe((res: any) => {
       this.orderDetails = res
+      console.log(this.orderDetails.products[0].customization)
     })
   }
 
