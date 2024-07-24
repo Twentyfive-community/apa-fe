@@ -87,7 +87,7 @@ export class CustomCakeComponent implements OnInit{
   fruttaOptions: string[] = ['Nessuna frutta'];
   gocceOptions: string[] = ['Nessuna goccia'];
   granelleOptions: string[] = ['Nessuna granella'];
-  colorOptions = ['Nero','Rosso','Blu','Viola','Giallo'];
+  colorOptions = ['Nero','Rosso','Blu','Viola','Giallo', 'Rosa'];
 
   allergens: Allergen[] = [];
 
@@ -211,14 +211,14 @@ export class CustomCakeComponent implements OnInit{
          }
        }
 
-       else if(this.selectedBase[0] == 'Red Velvet'){
+       else if(this.selectedBase[0] == 'Pan di Spagna Red Velvet'){
          this.currentWeight=0.5;
          this.weightOptions = [];
          while (this.currentWeight < 3) {
            this.weightOptions.push(Number(this.currentWeight.toFixed(3)));
            this.currentWeight += 0.25;
          }
-         while (this.currentWeight <= 5) {
+         while (this.currentWeight <= 4) {
            this.weightOptions.push(Number(this.currentWeight.toFixed(3)));
            this.currentWeight += 0.5;
          }
@@ -272,7 +272,7 @@ export class CustomCakeComponent implements OnInit{
        break;
 
      case 'Torta classica':
-       if (this.selectedBase[0] == 'Mimosa' || this.selectedBase[0] == 'Saint Honorè' || this.selectedBase[0] == 'Red Velvet') {
+       if (this.selectedBase[0] == 'Mimosa' || this.selectedBase[0] == 'Saint Honorè' || this.selectedBase[0] == 'Pan di Spagna Red Velvet') {
          this.formaOptions = ['Rotonda'];
          this.selectedForma = this.formaOptions[0]
        }
@@ -383,8 +383,8 @@ export class CustomCakeComponent implements OnInit{
         else if(this.selectedBase[0]=='Mimosa'){
           this.coperturaOptions=['Pan di Spagna sbriciolato']
         }
-        else if(this.selectedBase[0]=='Red Velvet'){
-          this.coperturaOptions=['Panna'];
+        else if(this.selectedBase[0]=='Pan di Spagna Red Velvet'){
+          this.coperturaOptions=['Panna', 'Nuda con frutti di bosco', 'Nuda'];
         }
         else{
           this.ingredientService.getAllByNameCategories('Coperture', 'ingredienti').subscribe((response: any) =>{
@@ -740,7 +740,8 @@ export class CustomCakeComponent implements OnInit{
     //this.productInPurchase.notes = this.note;
     this.productInPurchase.weight=this.selectedWeight
     this.productInPurchase.shape=this.selectedForma
-    this.productInPurchase.totalPrice=this.realPrice //la quantità è 1 di default, basta peso * priceAlKG
+
+    // Price viene gestito da BE
 
     //le customizzazioni sono base, farciture, frutte, bagna, gocce, copertura, granelle)
     //this.productInPurchase.customization = {};

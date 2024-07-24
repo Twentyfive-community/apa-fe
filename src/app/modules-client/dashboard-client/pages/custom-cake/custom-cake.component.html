@@ -259,12 +259,11 @@
 
 
               <ng-container *ngIf="step === 'Decorazioni'">
-                <div class="row mt-2 mb-3 me-1">
-                  <div class="col">
-                    <label for="fraseInput" class="form-label">Aggiungi una frase</label>
-                    <input type="text" class="form-control" id="fraseInput" placeholder="Tanti auguri!" (input)="onInputChange($event)">
-                  </div>
-                  <label for="fraseInput" class="form-label">Aggiungi un colore alla frase</label>
+                <div class="mt-2">
+                  <label for="fraseInput" class="form-label mb-0">Aggiungi una frase</label>
+                  <input type="text" class="form-control" id="fraseInput" placeholder="Tanti auguri!" (input)="onInputChange($event)">
+
+                  <label for="fraseInput" class="form-label mb-0">Scegli colore della frase</label>
                   <div ngbDropdown class="dropdown">
                     <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedNote[0] === ''" id="colorDropdown">
                       {{ selectedColor[0] || 'Seleziona colore scritta' }}
@@ -278,9 +277,11 @@
                     </ul>
                   </div>
                 </div>
-                <div class="row mt-1 me-2">
-                  <p style="font-size:medium ">Immagine</p>
-                  <div class="drop-zone rounded ms-3 mb-1 mt-1 me-3" #dropZone (drop)="handleDrop($event)" (dragover)="handleDragOver($event)" (click)="fileInput.click()">
+
+                <div>
+                  <p class="mt-2 mb-0" style="font-size:medium ">Immagine</p>
+                  <p style="font-size: smaller">NB. La stampa dell'ostia ha un costo di 5€ da aggiungere al totale.</p>
+                  <div class="drop-zone rounded" #dropZone (drop)="handleDrop($event)" (dragover)="handleDragOver($event)" (click)="fileInput.click()">
                     <div class="row">
                       <div class="mb-4 text-purple">
                         Trascina qui il file da caricare o clicca per selezionare un file
@@ -298,7 +299,6 @@
                     </div>
                   </div>
                 </div>
-
                 <input type="file" #fileInput style="display: none;" (change)="handleFileSelect($event)" accept=".png, .jpg, .jpeg">
               </ng-container>
             </ng-container>
@@ -309,12 +309,35 @@
       <hr>
 
       <div class="row ms-1 mt-3 me-1 mb-3">
-      <span class="col-6 d-flex justify-content-start">
-        Prezzo ({{this.price}}€/kg)
-      </span>
+        <span class="col-6 d-flex justify-content-start">
+          Prezzo ({{this.price}}€/kg)
+        </span>
+          <span class="col-6 d-flex justify-content-end">
+            € {{this.realPrice}}
+        </span>
+      </div>
+
+      <div *ngIf="file" class="row ms-1 mt-3 me-1 mb-3">
+        <span class="col-6 d-flex justify-content-start">
+          Costo ostia:
+        </span>
         <span class="col-6 d-flex justify-content-end">
-          {{this.realPrice}} €
-      </span>
+          € 5.00
+        </span>
+      </div>
+
+      <hr>
+
+      <div class="row ms-1 mt-3 me-1 mb-3">
+        <span class="col-6 d-flex justify-content-start" style="font-weight: bold">
+          TOTALE:
+        </span>
+        <span *ngIf="!file" class="col-6 d-flex justify-content-end">
+          € {{ this.realPrice }}
+        </span>
+        <span *ngIf="file" class="col-6 d-flex justify-content-end">
+          € {{ this.realPrice + 5 }}
+        </span>
       </div>
 
       <div class="row ms-1 mt-5 me-1 mb-5">
