@@ -11,7 +11,7 @@
       <apa-spinner></apa-spinner>
     </div>
     <div *ngIf="!loading">
-      <div class="row mt-4 ms-2 me-2 mb-2">
+      <div class="row mb-3">
         <div class="d-flex justify-content-center">
           <ng-container *ngIf="categoryName != 'Vassoi'">
             <div class="col-12">
@@ -126,7 +126,8 @@
 
       <ng-container *ngIf="categoryName === 'Le Nostre Torte' || fromEdit && productToEdit.attachment">
       <div class="row ms-2 mt-2 me-3">
-        <p style="font-size:larger ">Immagine</p>
+        <p class="mb-0" style="font-size:larger">Immagine</p>
+        <p style="font-size: smaller">NB. La stampa dell'ostia ha un costo di 5€ da aggiungere al totale.</p>
         <div class="drop-zone rounded  ms-1 mb-2 mt-1" #dropZone (drop)="handleDrop($event)" (dragover)="handleDragOver($event)" (click)="fileInput.click()">
           <div class="row">
             <div class="mb-4 text-purple">
@@ -166,8 +167,28 @@
         <span class="col-6 d-flex justify-content-end">
           {{getRealPrice()}}
         </span>
-
       </div>
+
+      <div *ngIf="file" class="row ms-1 mt-3 me-1 mb-3">
+        <span class="col-6 d-flex justify-content-start">
+          Costo ostia:
+        </span>
+        <span class="col-6 d-flex justify-content-end">
+          € 5.00
+        </span>
+      </div>
+
+      <hr>
+
+      <div class="row ms-1 mt-3 me-1 mb-3">
+        <span class="col-6 d-flex justify-content-start" style="font-weight: bold">
+          TOTALE:
+        </span>
+        <span class="col-6 d-flex justify-content-end">
+          {{ getTotalPrice() }}
+        </span>
+      </div>
+
 
       <div *ngIf="!fromEdit" class="row ms-1 mt-3 me-1 mb-3">
           <lib-generic-button

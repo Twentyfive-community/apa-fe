@@ -24,7 +24,7 @@ export class ProductDetailsComponent implements OnInit{
 
   noContent ='http://80.211.123.141:8106/TwentyfiveMediaManager/twentyfiveserver/downloadkkk/apa/template/no-img-paceholder.jpg';
 
-  colorOptions = ['Nero','Rosso','Blu','Viola','Giallo'];
+  colorOptions = ['Nero','Rosso','Blu','Viola','Giallo', 'Rosa'];
 
   fromEdit: boolean = false; //segnala che si tratta di una modifica
   productToEdit: ItemInPurchase = new ItemInPurchase(); //prodotto ricevuto dalla modale di modifica
@@ -226,6 +226,16 @@ export class ProductDetailsComponent implements OnInit{
     }
   }
 
+  getTotalPrice() {
+    if (this.file) {
+      let totalCakePrice = this.getRealPrice()
+      const priceString = totalCakePrice.replace(/[^\d.-]/g, '');
+      const price = parseFloat(priceString);
+      return ('€ ' +(price + 5.00).toFixed(2))
+    }
+    return this.getRealPrice()
+  }
+
   getCustomer(){
     let keycloakService=(this.keycloackService)as any;
     this.customerIdkc=keycloakService.keycloakService._userProfile.id;
@@ -253,20 +263,20 @@ export class ProductDetailsComponent implements OnInit{
     }
       switch (this.categoryType) {
         case 'productKg':
-         this.productInPurchase.id=this.productDetails.id
-         this.productInPurchase.name = this.productDetails.name
-         this.productInPurchase.quantity = 1
-         this.cartService.addToCartProductInPurchase(this.customer.id, this.productInPurchase).subscribe({
-           error: (error:any) => {
-             console.error(error);
-             this.loading = false;
-             this.toastrService.error("Errore nell'aggiunta del prodotto nel carrello!");
-          },
-           complete: () => {
-            this.toastrService.success("Prodotto aggiunto al carrello con successo");
-             this.loading = false;
-             this.close();
-          }
+          this.productInPurchase.id=this.productDetails.id
+          this.productInPurchase.name = this.productDetails.name
+          this.productInPurchase.quantity = 1
+          this.cartService.addToCartProductInPurchase(this.customer.id, this.productInPurchase).subscribe({
+            error: (error:any) => {
+              console.error(error);
+              this.loading = false;
+              this.toastrService.error("Errore nell'aggiunta del prodotto nel carrello!");
+              },
+            complete: () => {
+              this.toastrService.success("Prodotto aggiunto al carrello con successo");
+              this.loading = false;
+              this.close();
+            }
           })
           break;
         case 'tray':
