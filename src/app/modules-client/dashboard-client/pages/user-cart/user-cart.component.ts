@@ -16,6 +16,7 @@ import {AdminCustomBuyComponent} from "../admin-custom-buy/admin-custom-buy.comp
 import {ItemPayment, PaymentReq, UnitAmount} from "../../../../models/PaymentReq";
 import {cloneDeep} from "lodash";
 import {PaymentService} from "../../../../services/payment.service";
+import {UserCartCheckoutComponent} from "../user-cart-checkout/user-cart-checkout.component";
 
 @Component({
   selector: 'app-user-cart',
@@ -43,7 +44,7 @@ export class UserCartComponent implements OnInit, OnDestroy{
   loading: boolean = true;
 
   isCollapsed: boolean = true;
-  onlinePayment: boolean = true;
+  onlinePayment: boolean = false;
 
   buyInfos: BuyInfos = new BuyInfos();
 
@@ -203,7 +204,6 @@ export class UserCartComponent implements OnInit, OnDestroy{
           })
         }
       );
-
     }
   }
 
@@ -221,24 +221,48 @@ export class UserCartComponent implements OnInit, OnDestroy{
       .map(item => item.index);
     if (this.selectedDate && this.selectedTime) {
       this.buyInfos.selectedPickupDateTime = `${this.formatDate(this.selectedDate)}T${this.selectedTime}`;
-      if(this.imAdmin){
+      if(this.imAdmin) {
         let r = this.genericModalService.open(AdminCustomBuyComponent, "lg", {});
         r.componentInstance.customerId = this.customer.id;
         r.componentInstance.buyInfos = this.buyInfos;
-      } else if (this.onlinePayment){
-        //TODO APRI MODALE CON SCELTA, SE PAGAMENTO ONLINE CONTINUARE CON QUI SOTTO SENNò VEDI ALTRO COMMENTO
-        this.paymentReq.buyInfos=this.buyInfos;
-        //TODO GESTIRE L'ERRORE CON LA MODALE (ERRORE NEL COMPRARE ONLINE O ROBA COSI)
-        this.cartService.prepareBuying(this.customer.id,this.paymentReq).subscribe((response:any)=>{
-          window.location.href = response.content.links[1].href;
-        })
-        localStorage.setItem('buyInfos', JSON.stringify(this.buyInfos));
+      } else {
+        // Apre modale scelta metodo pagamento
+        let r = this.genericModalService.open(UserCartCheckoutComponent, "md", {})
+        r.componentInstance.type = 'Payment';
+
+        r.dismissed.subscribe((res) => {
+          if (res.method === 'close') {
+            return
+          } else if (res.method === 'paypal') {
+            this.paymentReq.buyInfos=this.buyInfos;
+            this.cartService.prepareBuying(this.customer.id,this.paymentReq).subscribe((response:any)=>{
+              window.location.href = response.content.links[1].href;
+            })
+            localStorage.setItem('buyInfos', JSON.stringify(this.buyInfos));
+          } else {
+            this.completeBuyFromCart();
+          }
+        });
       }
-      else {
-        this.completeBuyFromCart();
-      }//TODO COMPRARE DIRETTAMENTE, THIS.COMPLETEBUYFROMCART
     }
   }
+
+  // openCheckout() {
+  //
+  //   console.log('sono qui')
+  //   if (this.onlinePayment){
+  //     //TODO APRI MODALE CON SCELTA, SE PAGAMENTO ONLINE CONTINUARE CON QUI SOTTO SENNò VEDI ALTRO COMMENTO
+  //     this.paymentReq.buyInfos=this.buyInfos;
+  //     //TODO GESTIRE L'ERRORE CON LA MODALE (ERRORE NEL COMPRARE ONLINE O ROBA COSI)
+  //     this.cartService.prepareBuying(this.customer.id,this.paymentReq).subscribe((response:any)=>{
+  //       window.location.href = response.content.links[1].href;
+  //     })
+  //     localStorage.setItem('buyInfos', JSON.stringify(this.buyInfos));
+  //   }
+  //   else {
+  //     this.completeBuyFromCart();
+  //   }//TODO COMPRARE DIRETTAMENTE, THIS.COMPLETEBUYFROMCART
+  // }
 
   completeBuyFromCart(paymentId?:string){
     if (paymentId){
@@ -293,18 +317,26 @@ export class UserCartComponent implements OnInit, OnDestroy{
       // Pulisce i dati del carrello salvati una volta che sono stati usati
       this.activatedRoute.queryParams.subscribe(params => {
         if (params['token']) {
-          //TODO VEDERE SE FARE UN ULTERIORE CONFERMA, QUI SIAMO TORNATI DA PAYPAL!! LA CHIAMATA DI SOTTO FINALIZZA L'ORDINE
-          this.cartService.capture(params['token']).subscribe({
-            next:(res:any)=>{
-              let paymentId =res.content.purchaseUnits[0].payments.captures[0].id;
-              console.log(res);
-              this.completeBuyFromCart(paymentId);
-            },
-            error:(err:any)=>{
-              console.error(err);
-              this.toastrService.error("Pagamento annullato!");
-            }
-          })
+
+          let r = this.genericModalService.open(UserCartCheckoutComponent, "md", {})
+          r.componentInstance.type = 'Summary';
+          r.componentInstance.id = this.customer.id
+          r.componentInstance.buyInfos = this.buyInfos
+
+          //TODO VEDERE SE FARE UN ULTERIORE CONFERMA, QUI SIAMO TORNATI DA PAYPAL!!
+          // CONTINUARE DA QUI, TUTTO QUELLO QUI SOTTO DEVE PARTIRE AL RITORNO DELLA MODALE DI RIPEILOGO
+
+          // this.cartService.capture(params['token']).subscribe({
+          //   next:(res:any)=>{
+          //     let paymentId =res.content.purchaseUnits[0].payments.captures[0].id;
+          //     console.log(res);
+          //     this.completeBuyFromCart(paymentId);
+          //   },
+          //   error:(err:any)=>{
+          //     console.error(err);
+          //     this.toastrService.error("Pagamento annullato!");
+          //   }
+          // })
         }
       });
       localStorage.removeItem('buyInfos');

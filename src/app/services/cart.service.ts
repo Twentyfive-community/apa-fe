@@ -65,4 +65,8 @@ export class CartService {
     let p = Utils.createHttpParams({'idOrder':orderId});
     return this.http.get(`${this.baseCartUrl}/add-from-completed-order/${customerId}`, {params: p})
   }
+
+  getSummary(customerId: string, buyInfos: any) {
+    return this.http.post(`${this.baseCartUrl}/summary/${customerId}`, buyInfos);
+  }
 }

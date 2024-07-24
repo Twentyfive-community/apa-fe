@@ -1,0 +1,60 @@
+<div *ngIf="type == 'Payment'" class="modal-content">
+
+  <div class="modal-header">
+    <h5 class="modal-title">Metodi di pagamento</h5>
+    <button type="button" class="btn-close" (click)="close()"></button>
+  </div>
+
+  <div class="modal-body">
+
+    <div class="row">
+      <div class="col-12 col-md-6 mb-2">
+        <lib-generic-button-text-with-icon
+          buttonText="Paga con PayPal"
+          suffixIcon="bi bi-phone"
+          [buttonSize]="ButtonSizeTheme.ExtraLarge"
+          [buttonStyle]="ButtonTheme.Secondary"
+          [iconLeft]="false"
+          [customStyles]="{'font-weight':'bold', 'color':'white', 'width':'100%'}"
+          (click)="paymentMethod('paypal')"
+        ></lib-generic-button-text-with-icon>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <lib-generic-button-text-with-icon
+          [ngStyle]="{cursor: 'pointer'}"
+          buttonText="Paga al ritiro"
+          suffixIcon="bi bi-shop"
+          [buttonSize]="ButtonSizeTheme.ExtraLarge"
+          [buttonStyle]="ButtonTheme.Disabled"
+          [iconLeft]="false"
+          [customStyles]="{'font-weight':'bold', 'width':'100%'}"
+          (click)="paymentMethod('store')"
+        ></lib-generic-button-text-with-icon>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div *ngIf="type == 'Summary'" class="modal-content">
+
+  <div class="modal-header">
+    <h5 class="modal-title">Riepilogo</h5>
+    <button type="button" class="btn-close" (click)="close()"></button>
+  </div>
+
+  <div class="modal-body">
+    RIEPILOGO
+    DATA E ORA: {{buyInfos.selectedPickupDateTime}}
+    <p *ngFor="let p of summary" >
+      {{p.name}} : {{p.price}}
+    </p>
+    TATAL PRICE:
+  </div>
+
+</div>
+
+
+

@@ -21,6 +21,7 @@ import {TwentyfiveAutocompleteSyncAsyncModule} from "twentyfive-autocomplete-syn
 import {TwentyfiveSpinnerModule} from "twentyfive-spinner";
 import { AdminCustomBuyComponent } from './pages/admin-custom-buy/admin-custom-buy.component';
 import { DashboardFooterComponent } from './components/dashboard-footer/dashboard-footer.component';
+import { UserCartCheckoutComponent } from './pages/user-cart-checkout/user-cart-checkout.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { DashboardFooterComponent } from './components/dashboard-footer/dashboar
     TrayCustomizedComponent,
     UserCartComponent,
     AdminCustomBuyComponent,
-    DashboardFooterComponent
+    DashboardFooterComponent,
+    UserCartCheckoutComponent
   ],
     imports: [
         DashboardClientRoutingModule,
