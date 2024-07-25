@@ -60,7 +60,7 @@
                 <app-generic-card class="w-100"
                                   [title]="product.name"
                                   [description]="product.description"
-                                  [ingredientList]="product.ingredients"
+                                  [ingredientList]="category.name === 'Semifreddi' ? [] : product.ingredients"
                                   [allergens]="product.allergens"
                                   [price]="product.pricePerKg+'/kg'"
                                   [imageUrl]="product.imageUrl"
