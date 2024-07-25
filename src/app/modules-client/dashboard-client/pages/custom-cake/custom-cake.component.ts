@@ -364,18 +364,15 @@ export class CustomCakeComponent implements OnInit{
         break;
       case 'Torta a forma':
         if(this.selectedBase[0]=='Millefoglie'){
-          this.coperturaOptions=['Cream tart (Fiori, Frutta e Macaron)'];
+          this.coperturaOptions=['Cream tart (Frutta e Macarons)'];
         }
         else{
-          this.coperturaOptions=['Panna','Cream tart (Fiori, Frutta e Macaron)'];
+          this.coperturaOptions=['Panna','Cream tart (Frutta e Macarons)'];
         }
         break;
       case 'Torta classica':
         if(this.selectedBase[0]=='Millefoglie'){
-          this.coperturaOptions=['NO COPERTURE'];
-          this.selectedCopertura[0]='NO COPERTURE';
-          this.getGranelleOptions();
-          this.goToNextStep(8)
+          this.coperturaOptions=['Cream Tart (Frutta e Macarons)'];
         }
         else if(this.selectedBase[0]=='Diplomatica'){
           this.coperturaOptions=['Zucchero a velo'];
@@ -391,6 +388,9 @@ export class CustomCakeComponent implements OnInit{
             this.ingredientsObject=response;
             for(let ingrediente of this.ingredientsObject){
               this.coperturaOptions.push(ingrediente.name);
+            }
+            if (this.selectedBase[0]=='Pan di Spagna Classico' || this.selectedBase[0]=='Pan di Spagna al Cacao') {
+              this.coperturaOptions.push('Cream Tart (Frutta e Macarons)')
             }
           })
           this.coperturaOptions.push('Crema Chantilly Leggera');
