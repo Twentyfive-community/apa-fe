@@ -313,10 +313,10 @@
 
       <div class="row ms-1 mt-3 me-1 mb-3">
         <span class="col-6 d-flex justify-content-start">
-          Prezzo ({{this.price}}€/kg)
+          Prezzo ( {{getPrice()}}€/kg)
         </span>
           <span class="col-6 d-flex justify-content-end">
-            € {{this.realPrice}}
+            € {{getTotalPrice()}}
         </span>
       </div>
 
@@ -336,10 +336,10 @@
           TOTALE:
         </span>
         <span *ngIf="!file" class="col-6 d-flex justify-content-end">
-          € {{ this.realPrice }}
+          € {{ this.totalPrice }}
         </span>
         <span *ngIf="file" class="col-6 d-flex justify-content-end">
-          € {{ this.realPrice + 5 }}
+          € {{ this.totalPrice + 5 }}
         </span>
       </div>
 

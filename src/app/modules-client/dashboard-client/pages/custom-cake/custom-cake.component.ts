@@ -72,7 +72,7 @@ export class CustomCakeComponent implements OnInit{
   file: File | null;
   abbreviatedFileName: string = '';
   price: string='';
-  realPrice: number = 0;
+  totalPrice: number = 0;
 
   cakeId: string = "6679566c03d8511e7a0d449c";
   loading:boolean = true;
@@ -424,8 +424,20 @@ export class CustomCakeComponent implements OnInit{
     }
   }
 
-  getPrice(){
-    this.realPrice = this.selectedWeight * parseFloat(this.price);
+  getPrice() {
+    if(this.selectedType[0] === 'Drip Cake' || this.selectedType[0] === 'Torta a forma') {
+       this.price = String(25.00);
+    } else {
+      this.price = String(22.00);
+    }
+    return this.price
+  }
+  getTotalPrice(){
+    this.totalPrice = this.selectedWeight * parseFloat(this.price);
+    if (isNaN(this.totalPrice)) {
+      this.totalPrice = 0;
+    }
+    return this.totalPrice;
   }
 
   selectType(type: string){
@@ -463,6 +475,7 @@ export class CustomCakeComponent implements OnInit{
 
   resetSelectionFromBase(){
     this.selectedWeight = 0;
+    this.price = ''
     this.selectedForma = '';
     this.selectedBagna = [];
     this.selectedFarciture = [];
@@ -476,7 +489,7 @@ export class CustomCakeComponent implements OnInit{
 
   selectWeight(weight: number){
     this.selectedWeight = weight;
-    this.getPrice();
+    this.getTotalPrice();
     this.resetSelectionFromWeight()
     //this.stepCompleted[3]=true;
     this.getFormeOptions();
@@ -741,7 +754,11 @@ export class CustomCakeComponent implements OnInit{
     this.productInPurchase.weight=this.selectedWeight
     this.productInPurchase.shape=this.selectedForma
 
-    // Price viene gestito da BE
+    if (!this.productInPurchase.attachment) {
+      this.productInPurchase.totalPrice = this.getTotalPrice();
+    } else {
+      this.productInPurchase.totalPrice = this.getTotalPrice() + 5;
+    }
 
     //le customizzazioni sono base, farciture, frutte, bagna, gocce, copertura, granelle)
     //this.productInPurchase.customization = {};
