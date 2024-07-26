@@ -75,7 +75,7 @@ export class CustomerEditComponent implements OnInit{
           this.toastrService.error("dominio email inesistente!");
         },
         complete:() =>{
-          this.toastrService.success("Customer salvato con successo");
+          this.toastrService.success(`Cliente salvato con successo. Una email di conferma è stata inviata a ${this.customer.email}`);
           this.router.navigate(['../dashboard/clienti']);
         }
       });

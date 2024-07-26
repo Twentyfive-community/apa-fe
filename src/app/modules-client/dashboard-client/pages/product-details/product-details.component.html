@@ -26,7 +26,7 @@
         </div>
       </div>
 
-      <div class="row m-2">
+      <div class="row">
         <ng-container *ngIf="categoryName != 'Vassoi'">
         <h4>{{ productDetails.name }}</h4>
         </ng-container>
@@ -54,7 +54,7 @@
       </div>
 
       <div class="row m-1">
-        <ng-container *ngIf="categoryName != 'Vassoi'">
+        <ng-container *ngIf="categoryName != 'Vassoi' && categoryName != 'Semifreddi' ">
         <p class="mb-1" style="font-size: large">Ingredienti</p>
           <p style="font-size: small; color: grey;">{{productDetails.ingredients}}</p>
         </ng-container>
@@ -79,6 +79,7 @@
               {{ weight }} kg
             </li>
           </ul>
+          <p style="font-size: smaller">Generalmente si consigliano 100gr di torta a persona</p>
         </div>
       </div>
       </ng-container>

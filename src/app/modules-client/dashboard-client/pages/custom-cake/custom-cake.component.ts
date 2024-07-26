@@ -75,7 +75,7 @@ export class CustomCakeComponent implements OnInit{
 
   abbreviatedFileName: string = '';
   price: string='';
-  realPrice: number = 0;
+  totalPrice: number = 0;
 
   cakeId: string = "6679566c03d8511e7a0d449c";
   loading:boolean = true;
@@ -90,7 +90,7 @@ export class CustomCakeComponent implements OnInit{
   fruttaOptions: string[] = ['Nessuna frutta'];
   gocceOptions: string[] = ['Nessuna goccia'];
   granelleOptions: string[] = ['Nessuna granella'];
-  colorOptions = ['Nero','Rosso','Blu','Viola','Giallo'];
+  colorOptions = ['Nero','Rosso','Blu','Viola','Giallo', 'Rosa'];
 
   allergens: Allergen[] = [];
 
@@ -214,14 +214,14 @@ export class CustomCakeComponent implements OnInit{
          }
        }
 
-       else if(this.selectedBase[0] == 'Red Velvet'){
+       else if(this.selectedBase[0] == 'Pan di Spagna Red Velvet'){
          this.currentWeight=0.5;
          this.weightOptions = [];
          while (this.currentWeight < 3) {
            this.weightOptions.push(Number(this.currentWeight.toFixed(3)));
            this.currentWeight += 0.25;
          }
-         while (this.currentWeight <= 5) {
+         while (this.currentWeight <= 4) {
            this.weightOptions.push(Number(this.currentWeight.toFixed(3)));
            this.currentWeight += 0.5;
          }
@@ -275,7 +275,7 @@ export class CustomCakeComponent implements OnInit{
        break;
 
      case 'Torta classica':
-       if (this.selectedBase[0] == 'Mimosa' || this.selectedBase[0] == 'Saint Honorè' || this.selectedBase[0] == 'Red Velvet') {
+       if (this.selectedBase[0] == 'Mimosa' || this.selectedBase[0] == 'Saint Honorè' || this.selectedBase[0] == 'Pan di Spagna Red Velvet') {
          this.formaOptions = ['Rotonda'];
          this.selectedForma = this.formaOptions[0]
        }
@@ -366,18 +366,15 @@ export class CustomCakeComponent implements OnInit{
         break;
       case 'Torta a forma':
         if(this.selectedBase[0]=='Millefoglie'){
-          this.coperturaOptions=['Cream tart (Fiori, Frutta e Macaron)'];
+          this.coperturaOptions=['Cream tart (Frutta e Macarons)'];
         }
         else{
-          this.coperturaOptions=['Panna','Cream tart (Fiori, Frutta e Macaron)'];
+          this.coperturaOptions=['Panna','Cream tart (Frutta e Macarons)'];
         }
         break;
       case 'Torta classica':
         if(this.selectedBase[0]=='Millefoglie'){
-          this.coperturaOptions=['NO COPERTURE'];
-          this.selectedCopertura[0]='NO COPERTURE';
-          this.getGranelleOptions();
-          this.goToNextStep(8)
+          this.coperturaOptions=['Cream Tart (Frutta e Macarons)'];
         }
         else if(this.selectedBase[0]=='Diplomatica'){
           this.coperturaOptions=['Zucchero a velo'];
@@ -389,10 +386,9 @@ export class CustomCakeComponent implements OnInit{
           this.selectedCopertura.push(this.coperturaOptions[0]);
 
         }
-        else if(this.selectedBase[0]=='Red Velvet'){
-          this.coperturaOptions=['Panna'];
+        else if(this.selectedBase[0]=='Pan di Spagna Red Velvet'){
+          this.coperturaOptions=['Panna', 'Nuda con frutti di bosco', 'Nuda'];
           this.selectedCopertura.push(this.coperturaOptions[0]);
-
         }
         else {
           const coperturaObservable = this.ingredientService.getAllByNameCategories('Coperture', 'ingredienti');
@@ -418,6 +414,9 @@ export class CustomCakeComponent implements OnInit{
             error: (error) => {
               console.error('Errore generico nella forkJoin', error);
               // Gestisci l'errore generico, se necessario
+            }
+            if (this.selectedBase[0]=='Pan di Spagna Classico' || this.selectedBase[0]=='Pan di Spagna al Cacao') {
+              this.coperturaOptions.push('Cream Tart (Frutta e Macarons)')
             }
           });
         }
@@ -447,8 +446,20 @@ export class CustomCakeComponent implements OnInit{
     }
   }
 
-  getPrice(){
-    this.realPrice = this.selectedWeight * parseFloat(this.price);
+  getPrice() {
+    if(this.selectedType[0] === 'Drip Cake' || this.selectedType[0] === 'Torta a forma') {
+       this.price = String(25.00);
+    } else {
+      this.price = String(22.00);
+    }
+    return this.price
+  }
+  getTotalPrice(){
+    this.totalPrice = this.selectedWeight * parseFloat(this.price);
+    if (isNaN(this.totalPrice)) {
+      this.totalPrice = 0;
+    }
+    return this.totalPrice;
   }
 
   selectType(type: string){
@@ -486,6 +497,7 @@ export class CustomCakeComponent implements OnInit{
 
   resetSelectionFromBase(){
     this.selectedWeight = 0;
+    this.price = ''
     this.selectedForma = '';
     this.selectedBagna = [];
     this.selectedFarciture = [];
@@ -499,7 +511,7 @@ export class CustomCakeComponent implements OnInit{
 
   selectWeight(weight: number){
     this.selectedWeight = weight;
-    this.getPrice();
+    this.getTotalPrice();
     this.resetSelectionFromWeight()
     //this.stepCompleted[3]=true;
     this.getFormeOptions();
@@ -763,7 +775,12 @@ export class CustomCakeComponent implements OnInit{
     //this.productInPurchase.notes = this.note;
     this.productInPurchase.weight=this.selectedWeight
     this.productInPurchase.shape=this.selectedForma
-    this.productInPurchase.totalPrice=this.realPrice //la quantità è 1 di default, basta peso * priceAlKG
+
+    if (!this.productInPurchase.attachment) {
+      this.productInPurchase.totalPrice = this.getTotalPrice();
+    } else {
+      this.productInPurchase.totalPrice = this.getTotalPrice() + 5;
+    }
 
     //le customizzazioni sono base, farciture, frutte, bagna, gocce, copertura, granelle)
     //this.productInPurchase.customization = {};

@@ -70,7 +70,6 @@ export class CartProductCardComponent implements OnInit{
         this.product.imageUrl = res.imageUrl;
         this.product.price = `€ ${res.pricePerKg.toFixed(2)}`;
         this.product.toBuy = true
-        console.log(this.product)
       })
     } else {
       this.productService.getByIdKg(this.product.id).subscribe((res:any) => {
@@ -81,22 +80,6 @@ export class CartProductCardComponent implements OnInit{
         }        this.product.imageUrl = res.imageUrl;
         this.product.price = res.pricePerKg;
         this.product.toBuy = true
-        console.log(this.product)
-        /*
-        if(res.name=="Torta Personalizzata"){
-          this.product.attachment=res.attachment;
-          this.product.customization.Type =res.customization.Type;
-          this.product.customization.Bagna=res.customization.Bagna!;
-          this.product.customization.Copertura=res.customization.Copertura!;
-          this.product.customization.Frutta=res.customization.Frutta!;
-          this.product.customization.Gocce=res.customization.Gocce!;
-          this.product.customization.Farciture=res.customization.Farciture!;
-          this.product.customization.Granelle=res.customization.Granelle!;
-          this.product.weight=res.weight!;
-          this.product.shape=res.shape!;
-        }
-        console.log("Weeeeee " +this.product.customization.Type)
-         */
       })
     }
   }
@@ -158,15 +141,17 @@ export class CartProductCardComponent implements OnInit{
     const priceWithoutEuro = this.product.price.replace(/[^\d.-]/g, '');
     const priceAsNumber = parseFloat(priceWithoutEuro);
 
-    if (this.product.weightedProducts !== undefined && this.product.weightedProducts !== null) {
-      // vassoio personalizzato
-      this.product.totalPrice = (priceAsNumber * this.product.totalWeight) * this.product.quantity;
-    } else if (this.product.weightedProducts === null) {
-      // vassoio standard
+    if (this.product.measure) {
+      // vassoio (personalizzato e standard)
       this.product.totalPrice = (priceAsNumber * this.product.measure.weight) * this.product.quantity;
     } else {
       //torte
-      this.product.totalPrice = (priceAsNumber * this.product.weight) * this.product.quantity;
+      if(this.product.attachment) {
+        this.product.totalPrice = ((priceAsNumber * this.product.weight) +5) * this.product.quantity;
+      } else {
+        this.product.totalPrice = (priceAsNumber * this.product.weight) * this.product.quantity;
+      }
+
     }
   }
 

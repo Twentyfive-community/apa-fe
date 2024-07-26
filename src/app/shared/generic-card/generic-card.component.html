@@ -12,8 +12,10 @@
         <ng-container *ngIf="weight">
           <p class="card-text text-truncate" style="font-size: small; color: gray">Peso: {{ weight }} Kg</p>
         </ng-container>
-        <ng-container *ngIf="ingredientList">
-          <p class="card-text text-truncate" style="font-size: small; color: gray">Ingredienti: {{ ingredientList.join(', ') }}</p>
+        <ng-container *ngIf="ingredientList && ingredientList.length > 0">
+          <p class="card-text text-truncate" style="font-size: small; color: gray">
+            Ingredienti: {{ ingredientList.join(', ') }}
+          </p>
         </ng-container>
         <ng-container *ngIf="allergens">
           <ng-container *ngFor="let allergen of allergens; let i = index">

@@ -71,6 +71,8 @@
                       {{ weight }} kg
                     </li>
                   </ul>
+                  <p style="font-size: smaller">Generalmente si consigliano 100gr di torta a persona</p>
+                  <b style="font-size: smaller">NB. Essendo prodotti artigianali, potrebbe esserci <br> una piccola tolleranza d'errore nelle misure.</b>
                 </div>
               </ng-container>
 
@@ -220,7 +222,7 @@
                 <!-- Utilizza la tua dropdown personalizzata qui -->
                 <div ngbDropdown class="dropdown">
                   <button class="btn btn-outline-dark" ngbDropdownToggle id="coperturaDropdown" [disabled]="coperturaOptions[0] === 'NO COPERTURE'">
-                    {{ selectedCopertura[0] }}
+                    {{ selectedCopertura[0] || 'Seleziona una copertura'}}
                   </button>
                   <ul ngbDropdownMenu aria-labelledby="coperturaDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
                     <li *ngFor="let copertura of coperturaOptions" class="dropdown-item" (click)="selectCopertura(copertura)">
@@ -229,6 +231,7 @@
                   </ul>
                 </div>
                 <small *ngIf="coperturaOptions[0] === 'NO COPERTURE'" class="text-muted">Non è possibile selezionare coperture per questa tipologia di torta</small>
+                <p *ngIf="selectedCopertura[0] === 'Cream Tart (Frutta e Macarons)'" style="font-size: smaller">NB. Per la Cream Tart verranno utilizzati frutti rossi <br> eventuali allergie o rimozione comunicarlo nelle note</p>
               </ng-container>
 
 
@@ -259,12 +262,11 @@
 
 
               <ng-container *ngIf="step === 'Decorazioni'">
-                <div class="row mt-2 mb-3 me-1">
-                  <div class="col">
-                    <label for="fraseInput" class="form-label">Aggiungi una frase</label>
-                    <input type="text" class="form-control" id="fraseInput" placeholder="Tanti auguri!" (input)="onInputChange($event)">
-                  </div>
-                  <label for="fraseInput" class="form-label">Aggiungi un colore alla frase</label>
+                <div class="mt-2">
+                  <label for="fraseInput" class="form-label mb-0">Aggiungi una frase</label>
+                  <input type="text" class="form-control" id="fraseInput" placeholder="Tanti auguri!" (input)="onInputChange($event)">
+
+                  <label for="fraseInput" class="form-label mb-0">Scegli colore della frase</label>
                   <div ngbDropdown class="dropdown">
                     <button class="btn btn-outline-dark" ngbDropdownToggle [disabled]="selectedNote[0] === ''" id="colorDropdown">
                       {{ selectedColor[0] || 'Seleziona colore scritta' }}
@@ -278,6 +280,11 @@
                     </ul>
                   </div>
                 </div>
+
+                <div>
+                  <p class="mt-2 mb-0" style="font-size:medium ">Immagine</p>
+                  <p style="font-size: smaller">NB. La stampa dell'ostia ha un costo di 5€ da aggiungere al totale.</p>
+                  <div class="drop-zone rounded" #dropZone (drop)="handleDrop($event)" (dragover)="handleDragOver($event)" (click)="fileInput.click()">
                 <div class="row mt-1 me-2">
                   <p style="font-size:medium ">Immagine</p>
                   <div class="drop-zone rounded ms-3 mb-1 mt-1 me-3" #dropZone
@@ -312,12 +319,35 @@
       <hr>
 
       <div class="row ms-1 mt-3 me-1 mb-3">
-      <span class="col-6 d-flex justify-content-start">
-        Prezzo ({{this.price}}€/kg)
-      </span>
+        <span class="col-6 d-flex justify-content-start">
+          Prezzo ( {{getPrice()}}€/kg)
+        </span>
+          <span class="col-6 d-flex justify-content-end">
+            € {{getTotalPrice()}}
+        </span>
+      </div>
+
+      <div *ngIf="file" class="row ms-1 mt-3 me-1 mb-3">
+        <span class="col-6 d-flex justify-content-start">
+          Costo ostia:
+        </span>
         <span class="col-6 d-flex justify-content-end">
-          {{this.realPrice}} €
-      </span>
+          € 5.00
+        </span>
+      </div>
+
+      <hr>
+
+      <div class="row ms-1 mt-3 me-1 mb-3">
+        <span class="col-6 d-flex justify-content-start" style="font-weight: bold">
+          TOTALE:
+        </span>
+        <span *ngIf="!file" class="col-6 d-flex justify-content-end">
+          € {{ this.totalPrice }}
+        </span>
+        <span *ngIf="file" class="col-6 d-flex justify-content-end">
+          € {{ this.totalPrice + 5 }}
+        </span>
       </div>
 
       <div class="row ms-1 mt-5 me-1 mb-5">
