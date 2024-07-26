@@ -13,8 +13,8 @@ export const environment = {
 
   //payment things.
   currency:'EUR',
-  cancelUrl:'http:localhost:4200/catalogo/carrello',
-  returnUrl:'http:localhost:4200/catalogo/carrello',
+  cancelUrl:'http://80.211.123.141:5564/catalogo/carrello',
+  returnUrl:'http://80.211.123.141:5564/catalogo/carrello',
   kafkaTopic:'twentyfive_dev_preorders',
   paymentUrl:'http://80.211.123.141:8106/groypal-deamon',
 };
