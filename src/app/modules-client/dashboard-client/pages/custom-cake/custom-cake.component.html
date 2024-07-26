@@ -50,7 +50,7 @@
                 <!-- Utilizza la tua dropdown personalizzata qui -->
                 <div ngbDropdown class="dropdown">
                   <button class="btn btn-outline-dark" ngbDropdownToggle id="baseDropdown">
-                   {{selectedBase[0]}}
+                    {{selectedBase[0]}}
                   </button>
                   <ul ngbDropdownMenu aria-labelledby="baseDropdown" class="dropdown-menu" style="max-height: 150px; overflow-y: auto;">
                     <li *ngFor="let base of baseOptions" class="dropdown-item" (click)="selectBase(base)">
@@ -285,31 +285,24 @@
                   <p class="mt-2 mb-0" style="font-size:medium ">Immagine</p>
                   <p style="font-size: smaller">NB. La stampa dell'ostia ha un costo di 5€ da aggiungere al totale.</p>
                   <div class="drop-zone rounded" #dropZone (drop)="handleDrop($event)" (dragover)="handleDragOver($event)" (click)="fileInput.click()">
-                <div class="row mt-1 me-2">
-                  <p style="font-size:medium ">Immagine</p>
-                  <div class="drop-zone rounded ms-3 mb-1 mt-1 me-3" #dropZone
-                       *ngIf="!file"
-                       (drop)="handleDrop($event)"
-                       (dragover)="handleDragOver($event)"
-                       (click)="fileInput.click()">
                     <div class="row">
                       <div class="mb-4 text-purple">
                         Trascina qui il file da caricare o clicca per selezionare un file
                       </div>
                     </div>
-                  </div>
-
-                    <div *ngIf="file" class="image-container position-relative">
-                      <img [src]="productInPurchase.attachment" class="image-preview">
-                      <button class="btn btn-link text-dark position-absolute top-0 end-0 translate-middle-x" (click)="removeFile($event)">
-                        <i class="bi bi-trash"></i>
-                      </button>
+                    <div *ngIf="file" class="row">
+                      <div class="col-10">
+                        <span>{{ abbreviatedFileName }}</span>
+                      </div>
+                      <div class="col-2">
+                        <button class="btn btn-link text-dark" (click)="removeFile($event)">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </div>
                     </div>
                   </div>
-
-                  <input type="file" #fileInput style="display: none;" (change)="handleFileSelect($event)" accept=".png, .jpg, .jpeg">
-
-
+                </div>
+                <input type="file" #fileInput style="display: none;" (change)="handleFileSelect($event)" accept=".png, .jpg, .jpeg">
               </ng-container>
             </ng-container>
           </div>
@@ -322,7 +315,7 @@
         <span class="col-6 d-flex justify-content-start">
           Prezzo ( {{getPrice()}}€/kg)
         </span>
-          <span class="col-6 d-flex justify-content-end">
+        <span class="col-6 d-flex justify-content-end">
             € {{getTotalPrice()}}
         </span>
       </div>
@@ -363,4 +356,3 @@
   </div>
 
 </div>
-

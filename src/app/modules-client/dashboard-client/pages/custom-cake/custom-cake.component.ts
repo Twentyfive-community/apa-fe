@@ -415,9 +415,6 @@ export class CustomCakeComponent implements OnInit{
               console.error('Errore generico nella forkJoin', error);
               // Gestisci l'errore generico, se necessario
             }
-            if (this.selectedBase[0]=='Pan di Spagna Classico' || this.selectedBase[0]=='Pan di Spagna al Cacao') {
-              this.coperturaOptions.push('Cream Tart (Frutta e Macarons)')
-            }
           });
         }
     }
@@ -745,8 +742,9 @@ export class CustomCakeComponent implements OnInit{
   }
 
   uploadImage(){
-    this.productService.uploadPic(this.file!,this.productInPurchase.name).subscribe();
-    this.productInPurchase.attachment = `${environment.ftpDownloadUrl}${this.productInPurchase.name}`+'/'+`${this.file!.name}`
+    let folderName = this.productDetails.name + this.productInPurchase.deliveryDate;
+    this.productService.uploadPic(this.file!,folderName).subscribe();
+    this.productInPurchase.attachment = `${environment.ftpDownloadUrl}${folderName}`+'/'+`${this.file!.name}`
   }
   getCustomer(){
     let keycloakService=(this.keycloackService)as any;

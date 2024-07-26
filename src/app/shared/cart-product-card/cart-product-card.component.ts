@@ -15,6 +15,7 @@ import {
 import {
   ProductDetailsComponent
 } from "../../modules-client/dashboard-client/pages/product-details/product-details.component";
+import {Customization} from "../../models/Product";
 
 @Component({
   selector: 'app-cart-product-card',
@@ -77,8 +78,13 @@ export class CartProductCardComponent implements OnInit{
         // se è una torta personalizzato allora ha gli allergeni direttamente nel productinpurchase e non con l'id del prodotto
         if (this.product.allergens==null){
           this.product.allergens = res.allergens
-        }        this.product.imageUrl = res.imageUrl;
-        this.product.price = res.pricePerKg;
+        }
+        this.product.imageUrl = res.imageUrl;
+        if (this.type == 'Torta Personalizzata'){
+          this.getPrice();
+        } else {
+          this.product.price = res.pricePerKg;
+        }
         this.product.toBuy = true
       })
     }
@@ -208,6 +214,15 @@ export class CartProductCardComponent implements OnInit{
           this.selectionChange.emit()
         })
         break;
+    }
+  }
+
+  getPrice() {
+    let customization:Customization = this.product.customization.find(customization => customization.name === 'Tipo')!;
+    if(customization.value.includes('Drip Cake') || customization.value.includes('Torta a forma')) {
+      this.product.price = String(25.00 )+' €';
+    } else {
+      this.product.price = String(22.00)+' €';
     }
   }
 
