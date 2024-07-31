@@ -17,6 +17,8 @@ import {SharedModule} from "./shared/shared.module";
 import {NgbAccordionModule, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { NotFoundWrapperComponent } from './components/not-found-wrapper/not-found-wrapper.component';
 import {TwentyfiveNotFoundModule} from "twentyfive-not-found";
+import {DashboardClientModule} from "./modules-client/dashboard-client/dashboard-client.module";
+
 
 @NgModule({
   declarations: [
@@ -36,6 +38,7 @@ import {TwentyfiveNotFoundModule} from "twentyfive-not-found";
     NgbAccordionModule,
     SharedModule,
     TwentyfiveNotFoundModule,
+    DashboardClientModule,
   ],
   providers: [
 

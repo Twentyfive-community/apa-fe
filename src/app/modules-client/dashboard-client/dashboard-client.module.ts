@@ -24,21 +24,24 @@ import { DashboardFooterComponent } from './components/dashboard-footer/dashboar
 import { UserCartCheckoutComponent } from './pages/user-cart-checkout/user-cart-checkout.component';
 
 @NgModule({
-  declarations: [
-    DashboardClient,
-    CatalogueComponent,
-    UserProfileComponent,
-    UserEditComponent,
-    UserOrderComponent,
-    UserOrderDetailComponent,
-    ProductDetailsComponent,
-    CustomCakeComponent,
-    TrayCustomizedComponent,
-    UserCartComponent,
-    AdminCustomBuyComponent,
-    DashboardFooterComponent,
-    UserCartCheckoutComponent
-  ],
+    declarations: [
+        DashboardClient,
+        CatalogueComponent,
+        UserProfileComponent,
+        UserEditComponent,
+        UserOrderComponent,
+        UserOrderDetailComponent,
+        ProductDetailsComponent,
+        CustomCakeComponent,
+        TrayCustomizedComponent,
+        UserCartComponent,
+        AdminCustomBuyComponent,
+        DashboardFooterComponent,
+        UserCartCheckoutComponent
+    ],
+    exports: [
+        DashboardFooterComponent
+    ],
     imports: [
         DashboardClientRoutingModule,
         SharedModule,
