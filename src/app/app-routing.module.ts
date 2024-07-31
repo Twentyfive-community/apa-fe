@@ -22,10 +22,9 @@ const routes: Routes = [
     loadChildren: () => import('./modules-client/dashboard-client/dashboard-client.module').then(m => m.DashboardClientModule),
     canActivate: [CustomAuthGuard, catalogueGuard]
   },
-  {path: 'home', component: HomeComponent},
+  {path: '', component: HomeComponent},
   {path: 'menu', component: MenuComponent},
-  {path: '', redirectTo: 'home', pathMatch: 'full'},
-  {path: '**', component: NotFoundWrapperComponent, data: {routerLink: '/catalogo' }}
+  {path: '**', component: NotFoundWrapperComponent, data: {routerLink: '/home' }}
 
 ];
 
