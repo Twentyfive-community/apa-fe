@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {Router} from "@angular/router";
+import {ButtonSizeTheme, ButtonTheme} from "twentyfive-style";
 
 @Component({
   selector: 'app-home',
@@ -14,4 +15,7 @@ export class HomeComponent {
   goTo() {
     this.router.navigate(['../dashboard']);
   }
+
+  protected readonly ButtonTheme = ButtonTheme;
+  protected readonly ButtonSizeTheme = ButtonSizeTheme;
 }
