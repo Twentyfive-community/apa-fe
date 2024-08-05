@@ -46,13 +46,48 @@
   </div>
 
   <div class="modal-body">
-    RIEPILOGO
-    DATA E ORA: {{buyInfos.selectedPickupDateTime}}
-    <p *ngFor="let p of summary" >
-      {{p.name}} : {{p.price}}
-    </p>
-    TATAL PRICE:
+    <div class="pickup-info">
+      <span class="fw-bold">Data e ora ritiro: </span>
+      <span>{{buyInfos.selectedPickupDateTime | date:'dd/MM/yyyy - HH:mm' }}</span>
+    </div>
+
+    <hr>
+
+    <div class="items">
+      <h6 class="fw-bold">Articoli:</h6>
+      <div *ngFor="let p of summary" class="item">
+
+        <span><span *ngIf="p.quantity > 1">x{{p.quantity}}</span> {{p.name}}</span>
+        <span>{{p.price | currency:'EUR':'symbol':'1.2-2'}}</span>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="total">
+      <span>Totale da pagare</span>
+      <span>{{getTotalPrice() | currency:'EUR':'symbol':'1.2-2'}}</span>
+    </div>
   </div>
+
+  <div class="modal-footer">
+    <lib-generic-button
+      buttonText="Conferma pagamento"
+      [buttonSize]="ButtonSizeTheme.ExtraLarge"
+      [buttonStyle]="ButtonTheme.Secondary"
+      [customStyles]="{'font-weight':'bold', 'color':'white', 'width':'100%'}"
+      (click)="confirmPayment()"
+    ></lib-generic-button>
+    <lib-generic-button
+      buttonText="Annulla"
+      [ngStyle]="{cursor: 'pointer'}"
+      [buttonSize]="ButtonSizeTheme.ExtraLarge"
+      [buttonStyle]="ButtonTheme.Disabled"
+      [customStyles]="{'font-weight':'bold', 'width':'100%'}"
+      (click)="close()"
+    ></lib-generic-button>
+  </div>
+
 
 </div>
 

@@ -1,0 +1,21 @@
+.pickup-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.items {
+  margin-bottom: 1rem;
+}
+
+.item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+}

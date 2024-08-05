@@ -43,6 +43,14 @@ export class UserCartCheckoutComponent implements OnInit {
     })
   }
 
+  getTotalPrice(): number {
+    return this.summary?.reduce((total: any, item: { price: any; }) => total + item.price, 0) || 0;
+  }
+
+  confirmPayment() {
+    this.genericModalService.close({ method: 'confirm' });
+  }
+
   close(){
     this.genericModalService.close(
       {

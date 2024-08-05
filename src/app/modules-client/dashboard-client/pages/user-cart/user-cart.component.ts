@@ -329,17 +329,26 @@ export class UserCartComponent implements OnInit, OnDestroy{
           //TODO VEDERE SE FARE UN ULTERIORE CONFERMA, QUI SIAMO TORNATI DA PAYPAL!!
           // CONTINUARE DA QUI, TUTTO QUELLO QUI SOTTO DEVE PARTIRE AL RITORNO DELLA MODALE DI RIPEILOGO
 
-          // this.cartService.capture(params['token']).subscribe({
-          //   next:(res:any)=>{
-          //     let paymentId =res.content.purchaseUnits[0].payments.captures[0].id;
-          //     console.log(res);
-          //     this.completeBuyFromCart(paymentId);
-          //   },
-          //   error:(err:any)=>{
-          //     console.error(err);
-          //     this.toastrService.error("Pagamento annullato!");
-          //   }
-          // })
+          r.dismissed.subscribe(((res) => {
+            if (res.method === 'close') {
+              this.toastrService.error('L\'ordine è stato annullato!')
+              return
+            } else if (res.method === 'confirm') {
+              this.cartService.capture(params['token']).subscribe({
+                next:(res:any)=>{
+                  let paymentId =res.content.purchaseUnits[0].payments.captures[0].id;
+                  console.log(res);
+                  this.completeBuyFromCart(paymentId);
+                },
+                error:(err:any)=>{
+                  console.error(err);
+                  this.toastrService.error("Pagamento annullato!");
+                }
+              })
+              this.toastrService.success('Ordine effettuato con successo!')
+            }
+          }))
+
         }
       });
       localStorage.removeItem('buyInfos');
