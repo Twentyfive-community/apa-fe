@@ -127,7 +127,7 @@
 
       </ng-container>
 
-      <ng-container *ngIf="categoryName === 'Le Nostre Torte' || fromEdit && productToEdit.attachment">
+      <ng-container *ngIf="categoryName === 'Le Nostre Torte' || fromEdit && !this.productToEdit.measure ">
       <div class="row ms-2 mt-2 me-3">
         <p class="mb-0" style="font-size:larger">Immagine</p>
         <p style="font-size: smaller">NB. La stampa dell'ostia ha un costo di 5€ da aggiungere al totale.</p>

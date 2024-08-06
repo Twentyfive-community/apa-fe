@@ -194,11 +194,20 @@ export class ProductDetailsComponent implements OnInit{
     this.file = null;
     // Reimposta il valore dell'input del file a null per consentire la selezione dello stesso file
     this.fileInputRef.nativeElement.value = '';
+
+    if (this.productInPurchase.attachment) {
+      this.productInPurchase.attachment = ''
+    }
   }
 
   uploadImage(){
     this.productService.uploadPic(this.file!,this.productInPurchase.name).subscribe();
     this.productInPurchase.attachment = `${environment.ftpDownloadUrl}${this.productInPurchase.name}`+'/'+`${this.file!.name}`
+
+    if (this.fromEdit) {
+      this.productService.uploadPic(this.file!,this.productInPurchase.name).subscribe();
+      this.productToEdit.attachment = `${environment.ftpDownloadUrl}${this.productInPurchase.name}`+'/'+`${this.file!.name}`
+    }
   }
 
 
@@ -306,12 +315,22 @@ export class ProductDetailsComponent implements OnInit{
 
   setProductDetailsForEdit() {
     if (this.categoryType === 'productKg') {
+      console.log('product to Edit ricevuto in details',this.productToEdit)
       this.getProductDetails(this.productToEdit.id)
       this.productDetails.name  = this.productToEdit.name;
       this.productDetails.imageUrl = this.productToEdit.imageUrl;
       this.productDetails.pricePerKg = this.productToEdit.price;
       this.productInPurchase.notes = this.productToEdit.notes;
-      this.productInPurchase.attachment = this.productToEdit.attachment
+
+      if (this.productToEdit.attachment) {
+        this.convertUrlToFile(this.productToEdit.attachment).then(file => {
+          this.file = file;
+          this.productInPurchase.attachment = this.productToEdit.attachment;
+        }).catch(error => {
+          console.error("Error converting URL to file", error);
+        });
+      }
+
       this.initializeWeightOptions();
       this.selectedWeight = this.productToEdit.weight;
     } else if (this.categoryType === 'tray') {
@@ -328,6 +347,12 @@ export class ProductDetailsComponent implements OnInit{
     }
   }
 
+  private async convertUrlToFile(url: string): Promise<File> {
+    const response = await fetch(url);
+    const data = await response.blob();
+    const filename = url.split('/').pop() || 'file';
+    return new File([data], filename, { type: data.type });
+  }
 
 
 
@@ -342,6 +367,12 @@ export class ProductDetailsComponent implements OnInit{
         this.productToEdit.notes = this.productInPurchase.notes
         this.productToEdit.attachment = this.productInPurchase.attachment
         this.productToEdit.totalPrice = Number(this.getRealPrice())
+
+        if (this.file) {
+          this.uploadImage();
+        }
+
+        //ToDo: GESTIRE MODIFCA DEL PREZZO IN BE (attualmente mette sempre il prezzo senza ostia
         this.cartService.modifyPipInCart(this.customer.id, this.index!, this.productToEdit).subscribe({
           next: () => {
             this.toastrService.success("Prodotto modificato con successo!");
