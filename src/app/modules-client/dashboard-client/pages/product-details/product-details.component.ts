@@ -24,7 +24,7 @@ export class ProductDetailsComponent implements OnInit{
 
   noContent ='http://80.211.123.141:8106/TwentyfiveMediaManager/twentyfiveserver/downloadkkk/apa/template/no-img-paceholder.jpg';
 
-  colorOptions = ['Nero','Rosso','Blu','Viola','Giallo'];
+  colorOptions = ['Nero','Rosso','Blu','Viola','Giallo', 'Rosa'];
 
   fromEdit: boolean = false; //segnala che si tratta di una modifica
   productToEdit: ItemInPurchase = new ItemInPurchase(); //prodotto ricevuto dalla modale di modifica
