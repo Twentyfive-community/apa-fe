@@ -1,6 +1,7 @@
-<div class="card shadow mb-3" style="min-height: 500px;">
+<div class="card shadow mb-3" style="min-height: 701px;">
   <div class="card-body d-flex flex-column">
 
+    <!-- HEADER -->
     <div class="row mb-2">
       <div class="col-12">
         <img [src]="product.imageUrl" style="min-width:125px; min-height: 152px; max-height:152px; object-fit: cover; border-radius: 0.375rem" class="card-img" alt="Product Image">
@@ -25,56 +26,61 @@
 
     </div>
 
-    <div *ngIf="product.weight">
-      <p><b>Peso:</b> {{product.weight}} kg</p>
-      <p *ngIf="product.shape"><b>Forma:</b> {{product.shape}}</p>
-    </div>
+    <!-- BODY -->
+    <div style="flex-grow: 1">
+      <div *ngIf="product.weight">
+        <p><b>Peso:</b> {{product.weight}} kg</p>
+        <p *ngIf="product.shape"><b>Forma:</b> {{product.shape}}</p>
+      </div>
 
-    <div *ngIf="product.customization && product.customization.length > 0">
-      <div>
+      <div *ngIf="product.customization && product.customization.length > 0">
+        <div>
+          <p>
+            <b class="prevent-select" style="cursor: pointer" (click)="toggleCustomizations()">Personalizzazioni</b>
+            <button class="btn btn-link" (click)="toggleCustomizations()">
+              <i [ngClass]="{'bi bi-chevron-down': !showCustomizations, 'bi bi-chevron-up': showCustomizations}" style="font-size: 1rem; color: black"></i>
+            </button>
+          </p>
+          <ul *ngIf="showCustomizations">
+            <li class="my-2" *ngFor="let item of product.customization">
+              <b>{{item.name}}:</b><br>{{item.value}}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mb-3" *ngIf="product.attachment">
+        <b>Ostia:</b><br>
+        <a [href]="product.attachment" target="_blank">{{ extractFilename(product.attachment) }}</a>
+      </div>
+
+      <!-- Specific details for Vassoio -->
+      <div *ngIf="product.totalWeight">
+        <p><b>Misura:</b> {{product.measure.label}} ({{product.measure.weight}} kg)</p>
+        <p><b>Peso totale:</b> {{ product.totalWeight }} kg</p>
         <p>
-          <b class="prevent-select" style="cursor: pointer" (click)="toggleCustomizations()">Personalizzazioni</b>
+          <b class="prevent-select" style="cursor: pointer" (click)="toggleCustomizations()">Pezzi singoli</b>
           <button class="btn btn-link" (click)="toggleCustomizations()">
             <i [ngClass]="{'bi bi-chevron-down': !showCustomizations, 'bi bi-chevron-up': showCustomizations}" style="font-size: 1rem; color: black"></i>
           </button>
         </p>
         <ul *ngIf="showCustomizations">
-          <li class="my-2" *ngFor="let item of product.customization">
-            <b>{{item.name}}:</b><br>{{item.value}}
+          <li *ngFor="let item of product.weightedProducts">
+            <p><b>x{{item.quantity}}</b> {{item.name}}</p>
           </li>
-          <li *ngIf="product.attachment">
-            <b>Ostia:</b><br>
-            <a [href]="product.attachment" target="_blank">{{ extractFilename(product.attachment) }}</a>          </li>
         </ul>
+      </div>
+
+      <div *ngIf="product.allergens">
+        <b>ALLERGENI:</b><br>
+        <ng-container *ngFor="let allergen of product.allergens; let i = index">
+          <span *ngIf="i !== 0">&nbsp;</span>
+          <img [src]="allergen.iconUrl" style="max-width: 25px; height: auto; position: relative;" [tooltip]="allergen.name">
+        </ng-container>
       </div>
     </div>
 
-
-        <!-- Specific details for Vassoio -->
-    <div *ngIf="product.totalWeight">
-      <p><b>Misura:</b> {{product.measure.label}} ({{product.measure.weight}} kg)</p>
-      <p><b>Peso totale:</b> {{ product.totalWeight }} kg</p>
-      <p>
-        <b class="prevent-select" style="cursor: pointer" (click)="toggleCustomizations()">Pezzi singoli</b>
-        <button class="btn btn-link" (click)="toggleCustomizations()">
-          <i [ngClass]="{'bi bi-chevron-down': !showCustomizations, 'bi bi-chevron-up': showCustomizations}" style="font-size: 1rem; color: black"></i>
-        </button>
-      </p>
-      <ul *ngIf="showCustomizations">
-        <li *ngFor="let item of product.weightedProducts">
-          <p><b>x{{item.quantity}}</b> {{item.name}}</p>
-        </li>
-      </ul>
-    </div>
-
-    <div *ngIf="product.allergens">
-      <b>ALLERGENI:</b><br>
-      <ng-container *ngFor="let allergen of product.allergens; let i = index">
-        <span *ngIf="i !== 0">&nbsp;</span>
-        <img [src]="allergen.iconUrl" style="max-width: 25px; height: auto; position: relative;" [tooltip]="allergen.name">
-      </ng-container>
-    </div>
-
+    <!-- FOOTER -->
     <div>
       <hr/>
 
