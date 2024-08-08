@@ -12,6 +12,8 @@ import {NotFoundWrapperComponent} from "./components/not-found-wrapper/not-found
 
 const routes: Routes = [
 
+  {path: '', redirectTo: 'home', pathMatch: 'full'},
+  {path: 'home', component: HomeComponent},
   {
     path: 'dashboard',
     loadChildren: () => import('./modules-admin/dashboard/dashboard.module').then(m => m.DashboardModule),
@@ -22,7 +24,6 @@ const routes: Routes = [
     loadChildren: () => import('./modules-client/dashboard-client/dashboard-client.module').then(m => m.DashboardClientModule),
     canActivate: [CustomAuthGuard, catalogueGuard]
   },
-  {path: '', component: HomeComponent},
   {path: 'menu', component: MenuComponent},
   {path: '**', component: NotFoundWrapperComponent, data: {routerLink: '/home' }}
 
