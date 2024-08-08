@@ -84,6 +84,7 @@
     <div>
       <hr/>
 
+      <!-- ToDo: Tornato dalla modifica il prezzo si modifica non tenendo conto dell'attachment, nonostante sia calcolata in BE -->
       <p><b>Data e ora di ritiro minime:</b> {{ product.deliveryDate | date:'dd/MM/yyyy' }} {{minTime}}</p>
       <p *ngIf="type=='tray'"><b>Peso Scelto: </b>{{product.measure.label}} ({{product.measure.weight}} kg)</p>
       <p><b>Prezzo Totale Prodotto:</b> {{product.totalPrice}} €</p>

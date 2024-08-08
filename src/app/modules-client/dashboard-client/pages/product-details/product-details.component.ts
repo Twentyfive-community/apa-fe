@@ -315,7 +315,6 @@ export class ProductDetailsComponent implements OnInit{
 
   setProductDetailsForEdit() {
     if (this.categoryType === 'productKg') {
-      console.log('product to Edit ricevuto in details',this.productToEdit)
       this.getProductDetails(this.productToEdit.id)
       this.productDetails.name  = this.productToEdit.name;
       this.productDetails.imageUrl = this.productToEdit.imageUrl;
@@ -372,7 +371,6 @@ export class ProductDetailsComponent implements OnInit{
           this.uploadImage();
         }
 
-        //ToDo: GESTIRE MODIFCA DEL PREZZO IN BE (attualmente mette sempre il prezzo senza ostia
         this.cartService.modifyPipInCart(this.customer.id, this.index!, this.productToEdit).subscribe({
           next: () => {
             this.toastrService.success("Prodotto modificato con successo!");
